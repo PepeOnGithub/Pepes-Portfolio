@@ -5,31 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resource Pack Converter</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Resource Pack Converter</h1>
+        <h1>🎨 Resource Pack Converter</h1>
         <div class="converter">
-            <div class="java-pack">
-                <label for="javaPack">Java Pack</label>
-                <input type="file" id="javaPack" accept=".zip">
-            </div>
-            <button id="convertBtn">Convert Pack</button>
-            <div class="bedrock-pack">
-                <label for="bedrockPack">Bedrock Pack</label>
-                <a id="downloadLink" href="#" download="bedrock_pack.mcpack">Download</a>
-            </div>
+            <button id="selectJavaPackButton">Select Java Pack</button>
+            <input type="file" id="javaPack" accept=".zip" style="display: none;">
+            <p id="fileName">No file selected</p>
+            <button id="convertButton">Convert Pack</button>
         </div>
-        <div class="progress-bar">
-            <div class="progress"></div>
+        <div class="progress">
+            <label for="progressBar">Progress</label>
+            <progress id="progressBar" value="0" max="100"></progress>
         </div>
-        <div class="converted-files">
-            <h2>Converted Files</h2>
-            <ul id="convertedFilesList"></ul>
+        <div class="download">
+            <label for="bedrockPack">Bedrock Pack</label>
+            <a id="downloadLink" href="#" download="bedrock_pack.mcpack" style="display: none;">Download</a>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
 </html>
-
