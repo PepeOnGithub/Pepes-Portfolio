@@ -1,0 +1,2 @@
+*.mcpack filter=lfs diff=lfs merge=lfs -text
+*.mcaddon filter=lfs diff=lfs merge=lfs -text
