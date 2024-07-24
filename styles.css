@@ -1,7 +1,7 @@
 body {
-    font-family: Arial, sans-serif;
     background-color: #1e1e1e;
     color: white;
+    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,50 +11,43 @@ body {
 
 .container {
     text-align: center;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.converter {
-    margin: 20px 0;
-}
-
-label {
-    display: block;
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     margin: 10px 0;
 }
 
-input[type="file"] {
-    display: none;
+button:hover {
+    background-color: #45a049;
 }
 
-button, a {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px;
-    background-color: #333;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
+p {
+    margin: 10px 0;
 }
 
-button:hover, a:hover {
-    background-color: #555;
-}
-
-.progress-bar {
+progress {
     width: 100%;
-    background-color: #333;
-    border-radius: 5px;
-    overflow: hidden;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
-.progress {
-    height: 20px;
-    width: 0;
+a {
     background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
 }
 
-.converted-files {
-    margin-top: 20px;
+a:hover {
+    background-color: #45a049;
 }
-
