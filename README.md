@@ -12,7 +12,7 @@ This project provides a web-based interface to convert Minecraft Java Edition re
 
 To get started with the Resource Pack Converter, follow these steps:
 
-- Go to this website:
+- Go to this website: https://pepeongithub.github.io/Pepe-s-Resource-Packs-Porter/
 
 ## 📖 Usage
 - Select the Java Pack:
