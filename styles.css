@@ -1,53 +1,72 @@
 body {
-    background-color: #1e1e1e;
-    color: white;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #FFFFFF;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    padding: 0;
 }
-
 .container {
-    text-align: center;
-    background-color: #333;
-    padding: 20px;
+    background-color: #1e1e1e;
+    padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 400px;
 }
-
-button {
-    background-color: #4CAF50;
+.container h1 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+.btn {
+    border: 2px solid #5a5a5a;
     color: white;
+    background-color: #282828;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+.btn:hover {
+    background-color: #393939;
+    border-color: #717171;
+}
+.upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.convert-btn {
+    margin-top: 1rem;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
+    background-color: #03DAC6;
+    color: #121212;
+    font-weight: 700;
+    font-size: 16px;
     cursor: pointer;
-    margin: 10px 0;
+    transition: background-color 0.3s;
 }
-
-button:hover {
-    background-color: #45a049;
+.convert-btn:hover {
+    background-color: #00BFA5;
 }
-
-p {
-    margin: 10px 0;
-}
-
-progress {
-    width: 100%;
-    margin: 10px 0;
-}
-
-a {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-}
-
-a:hover {
-    background-color: #45a049;
+.output {
+    margin-top: 1rem;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #292929;
 }
