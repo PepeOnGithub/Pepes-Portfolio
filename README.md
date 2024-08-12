@@ -17,7 +17,7 @@ To get started with the Resource Pack Converter, follow these steps:
 ## 📖 Usage
 - Select the Java Pack:
 
-- Click the "Upload Pack" button and choose the Java Edition resource pack (ZIP file) you want to convert.
+- Click the "Upload Java Texture Pack" button and choose the Java Edition resource pack (ZIP file) you want to convert.
 Convert the Pack:
 
 - Click the "Convert Pack" button to start the conversion process. The progress bar will indicate the progress.
