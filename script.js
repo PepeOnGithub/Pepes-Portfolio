@@ -1,58 +1,130 @@
-document.getElementById('convertBtn').addEventListener('click', () => {
-    const javaPackInput = document.getElementById('javaPack');
-    if (!javaPackInput.files.length) {
-        alert('Please select a Java pack ZIP file.');
+document.getElementById('fileInput').addEventListener('change', function() {
+    const outputDiv = document.getElementById('output');
+    const fileInput = document.getElementById('fileInput');
+
+    if (fileInput.files.length > 0) {
+        const fileName = fileInput.files[0].name;
+        outputDiv.textContent = `Selected file: ${fileName}`;
+    }
+});
+
+function convertPack() {
+    const fileInput = document.getElementById('fileInput');
+    const outputDiv = document.getElementById('output');
+
+    if (fileInput.files.length === 0) {
+        outputDiv.textContent = "Please upload a Java Texture Pack first.";
         return;
     }
 
-    const javaPackFile = javaPackInput.files[0];
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(javaPackFile);
-    reader.onload = (event) => {
-        const arrayBuffer = event.target.result;
-        JSZip.loadAsync(arrayBuffer).then((zip) => {
-            convertPack(zip);
-        });
-    };
-});
+    const file = fileInput.files[0];
+    if (!file.name.endsWith('.zip')) {
+        outputDiv.textContent = "Invalid file format. Please upload a .zip file.";
+        return;
+    }
 
-function convertPack(zip) {
-    const bedrockPackZip = new JSZip();
-    const totalFiles = Object.keys(zip.files).length;
-    let convertedFilesCount = 0;
+    const zip = new JSZip();
+    const startTime = performance.now();
+    zip.loadAsync(file).then(async function(contents) {
+        updateOutput("ZIP file loaded successfully.");
 
-    zip.forEach((relativePath, zipEntry) => {
-        if (zipEntry.name.endsWith('.png')) {
-            zipEntry.async('blob').then((content) => {
-                const newPath = relativePath.replace('assets/minecraft/textures/', '');
-                bedrockPackZip.file(newPath, content);
-                updateProgress(++convertedFilesCount / totalFiles * 100);
-            });
+        const bedrockZip = new JSZip();
+        let manifestDescription = "Converted from Java Edition";
+        let foundAssets = false;
+
+        for (let fileName in contents.files) {
+            if (fileName.includes("assets/minecraft/textures/")) {
+                foundAssets = true;
+                break;
+            }
         }
+
+        if (!foundAssets) {
+            outputDiv.textContent = "The assets/minecraft/textures folder was not found in the ZIP.";
+            return;
+        }
+
+        for (let fileName in contents.files) {
+            const file = contents.files[fileName];
+
+            if (!file.dir) {
+                if (fileName.includes("assets/minecraft/textures/entity/") ||
+                    fileName.includes("assets/minecraft/textures/gui/") ||
+                    fileName.includes("assets/minecraft/textures/font/")) {
+                    continue;
+                }
+
+                if (fileName.endsWith("pack.png")) {
+                    const data = await file.async("blob");
+                    bedrockZip.file("pack_icon.png", data);
+                } else if (fileName.endsWith("pack.mcmeta")) {
+                    const mcmetaContent = await file.async("text");
+                    const mcmeta = JSON.parse(mcmetaContent);
+                    manifestDescription = mcmeta.pack.description;
+                } else if (fileName.includes("assets/minecraft/textures/")) {
+                    let newFileName = fileName.replace(/.*assets\/minecraft\/textures\//, "textures/");
+
+                    if (fileName.includes("assets/minecraft/textures/models/armor")) {
+                        if (fileName.endsWith("leather_layer_1.png")) {
+                            newFileName = newFileName.replace("leather_layer_1.png", "cloth_1.png");
+                        } else if (fileName.endsWith("leather_layer_2.png")) {
+                            newFileName = newFileName.replace("leather_layer_2.png", "cloth_2.png");
+                        } else {
+                            newFileName = newFileName.replace("_layer_", "_");
+                        }
+                    }
+
+                    const data = await file.async("blob");
+                    bedrockZip.file(newFileName, data);
+                }
+            }
+        }
+
+        const manifest = generateManifest(manifestDescription);
+        bedrockZip.file("manifest.json", JSON.stringify(manifest, null, 4));
+
+        bedrockZip.generateAsync({ type: "blob" }).then(function(blob) {
+            const endTime = performance.now();
+            const duration = ((endTime - startTime) / 1000).toFixed(2);
+            saveAs(blob, "bedrock_pack.zip");
+            updateOutput(`Conversion complete! Your download should start shortly. Time taken: ${duration} seconds.`);
+        });
+    }).catch(function(error) {
+        updateOutput("Error loading ZIP file: " + error);
     });
+}
 
-    bedrockPackZip.generateAsync({ type: 'blob' }).then((blob) => {
-        const url = URL.createObjectURL(blob);
-        const downloadLink = document.getElementById('downloadLink');
-        downloadLink.href = url;
-        downloadLink.style.display = 'inline-block';
-        addConvertedFile(downloadLink.download);
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
     });
 }
 
-function updateProgress(progress) {
-    const progressBar = document.querySelector('.progress');
-    progressBar.style.width = progress + '%';
+function generateManifest(description) {
+    return {
+        "format_version": 2,
+        "header": {
+            "name": "Converted Java Pack",
+            "description": description || "This texture pack was converted from Java Edition to Bedrock Edition.",
+            "uuid": generateUUID(),
+            "version": [1, 0, 0],
+            "min_engine_version": [1, 20, 0],
+            "author": "Converted using MC Java to Bedrock Converter"
+        },
+        "modules": [
+            {
+                "type": "resources",
+                "uuid": generateUUID(),
+                "version": [1, 0, 0]
+            }
+        ]
+    };
 }
 
-function addConvertedFile(fileName) {
-    const listItem = document.createElement('li');
-    listItem.textContent = fileName;
-    document.getElementById('convertedFilesList').appendChild(listItem);
+function updateOutput(message) {
+    const outputDiv = document.getElementById('output');
+    const p = document.createElement('p');
+    p.textContent = message;
+    outputDiv.appendChild(p);
 }
-
-document.getElementById('javaPack').addEventListener('change', (event) => {
-    const fileName = event.target.files[0].name;
-    const label = event.target.previousElementSibling;
-    label.textContent = `Selected file: ${fileName}`;
-});
