@@ -1,6 +1,6 @@
 # 🎨 Pepe's-Resource-Packs-Porter
 
-This project provides a web-based interface to convert Minecraft Java Edition resource packs to Bedrock Edition resource packs
+This project provides a web-based interface to convert Minecraft Java Edition resource packs to Bedrock Edition resource packs.
 
 ## ✨ Features
 
