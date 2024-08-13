@@ -126,8 +126,6 @@ function generateManifest(name, description) {
             "uuid": generateUUID(),
             "version": [1, 0, 0],
             "min_engine_version": [1, 20, 0],
-            "author": "Converted using MC Java to Bedrock Converter"
-        },
         "modules": [
             {
                 "type": "resources",
