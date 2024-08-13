@@ -1,4 +1,5 @@
-document.getElementById('fileInput').addEventListener('change', function() {
+document.getElementById('fileInput')
+    .addEventListener('change', function() {
     const outputDiv = document.getElementById('output');
     const fileInput = document.getElementById('fileInput');
 
@@ -54,9 +55,7 @@ async function convertPack() {
             const file = contents.files[fileName];
 
             if (!file.dir) {
-                if (fileName.includes("assets/minecraft/textures/entity/") ||
-                    fileName.includes("assets/minecraft/textures/gui/") ||
-                    fileName.includes("assets/minecraft/textures/font/")) {
+                if (fileName.includes("assets/minecraft/textures/entity/") || fileName.includes("assets/minecraft/textures/gui/") || fileName.includes("assets/minecraft/textures/font/")) {
                     continue;
                 }
 
@@ -82,7 +81,8 @@ async function convertPack() {
                         }
                     }
 
-                    newFileName = newFileName.replace("/block/", "/blocks/").replace("/item/", "/items/");
+                    newFileName = newFileName.replace("/block/", "/blocks/")
+                        .replace("/item/", "/items/");
 
                     const data = await file.async("blob");
                     bedrockZip.file(newFileName, data);
@@ -98,17 +98,53 @@ async function convertPack() {
         bedrockZip.file("manifest.json", JSON.stringify(manifest, null, 4));
         console.log("manifest.json file created.");
 
-        const blob = await bedrockZip.generateAsync({ type: "blob" });
+        const blob = await bedrockZip.generateAsync({
+            type: "blob"
+        });
         const endTime = performance.now();
-        const duration = ((endTime - startTime) / 1000).toFixed(2);
-        
+        const duration = ((endTime - startTime) / 1000)
+            .toFixed(2);
+
         const newFileName = file.name.replace('.zip', ' [Converted].zip');
         saveAs(blob, newFileName);
-        
+
         updateOutput(`Conversion complete! Your download should start shortly. Time taken: ${duration} seconds.`);
         console.log(`Conversion complete! Time taken: ${duration} seconds.`);
     } catch (error) {
         updateOutput("Error loading ZIP file: " + error);
         console.error("Error loading ZIP file: " + error);
     }
+}
+
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function generateManifest(name, description) {
+    return {
+        "format_version": 2,
+        "header": {
+            "name": name,
+            "description": description,
+            "uuid": generateUUID(),
+            "version": [1, 0, 0],
+            "min_engine_version": [1, 20, 0]
+        },
+        "modules": [{
+            "type": "resources",
+            "uuid": generateUUID(),
+            "version": [1, 0, 0]
+        }]
+    };
+}
+
+function updateOutput(message) {
+    const outputDiv = document.getElementById('output');
+    const p = document.createElement('p');
+    p.textContent = message;
+    outputDiv.appendChild(p);
+    console.log(message);
 }
