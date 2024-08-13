@@ -1,24 +1,22 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MC Java to Bedrock Texture Pack Converter</title>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <div class="container">
-            <h1>MC Java to Bedrock Converter</h1>
-            <div class="upload-btn-wrapper">
-                <button class="btn">Upload Java Texture Pack</button>
-                <input type="file" id="fileInput" accept=".zip">
-            </div>
-            <button class="convert-btn" onclick="convertPack()">Convert to Bedrock</button>
-            <div id="output" class="output"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MC Java to Bedrock Texture Pack Converter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MC Java to Bedrock Converter</h1>
+        <div class="upload-btn-wrapper">
+            <button class="btn">Upload Java Texture Pack</button>
+            <input type="file" id="fileInput" accept=".zip">
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-        <script src="script.js"></script>
-    </body>
+        <button class="convert-btn" onclick="convertPack()">Convert to Bedrock</button>
+        <div id="output" class="output"></div>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
 </html>
