@@ -1,3 +1,14 @@
+document.getElementById('fileInput').addEventListener('change', function() {
+    const outputDiv = document.getElementById('output');
+    const fileInput = document.getElementById('fileInput');
+
+    if (fileInput.files.length > 0) {
+        const fileName = fileInput.files[0].name;
+        outputDiv.textContent = `Selected file: ${fileName}`;
+        console.log(`File selected: ${fileName}`);
+    }
+});
+
 async function convertPack() {
     const fileInput = document.getElementById('fileInput');
     const outputDiv = document.getElementById('output');
@@ -56,7 +67,7 @@ async function convertPack() {
                 } else if (fileName.endsWith("pack.mcmeta")) {
                     const mcmetaContent = await file.async("text");
                     const mcmeta = JSON.parse(mcmetaContent);
-                    manifestDescription = mcmeta.pack.description; // Using the description from pack.mcmeta
+                    manifestDescription = mcmeta.pack.description;
                     console.log("pack.mcmeta file found and description updated.");
                 } else if (fileName.includes("assets/minecraft/textures/")) {
                     let newFileName = fileName.replace(/.*assets\/minecraft\/textures\//, "textures/");
@@ -90,32 +101,14 @@ async function convertPack() {
         const blob = await bedrockZip.generateAsync({ type: "blob" });
         const endTime = performance.now();
         const duration = ((endTime - startTime) / 1000).toFixed(2);
+        
         const newFileName = file.name.replace('.zip', ' [Converted].zip');
-saveAs(blob, newFileName);
+        saveAs(blob, newFileName);
+        
         updateOutput(`Conversion complete! Your download should start shortly. Time taken: ${duration} seconds.`);
         console.log(`Conversion complete! Time taken: ${duration} seconds.`);
     } catch (error) {
         updateOutput("Error loading ZIP file: " + error);
         console.error("Error loading ZIP file: " + error);
     }
-}
-
-function generateManifest(name, description) {
-    return {
-        "format_version": 2,
-        "header": {
-            "name": name,
-            "description": description,
-            "uuid": generateUUID(),
-            "version": [1, 0, 0],
-            "min_engine_version": [1, 20, 0]
-        },
-        "modules": [
-            {
-                "type": "resources",
-                "uuid": generateUUID(),
-                "version": [1, 0, 0]
-            }
-        ]
-    };
 }
