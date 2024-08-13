@@ -1,14 +1,3 @@
-document.getElementById('fileInput').addEventListener('change', function() {
-    const outputDiv = document.getElementById('output');
-    const fileInput = document.getElementById('fileInput');
-
-    if (fileInput.files.length > 0) {
-        const fileName = fileInput.files[0].name;
-        outputDiv.textContent = `Selected file: ${fileName}`;
-        console.log(`File selected: ${fileName}`);
-    }
-});
-
 async function convertPack() {
     const fileInput = document.getElementById('fileInput');
     const outputDiv = document.getElementById('output');
@@ -67,7 +56,7 @@ async function convertPack() {
                 } else if (fileName.endsWith("pack.mcmeta")) {
                     const mcmetaContent = await file.async("text");
                     const mcmeta = JSON.parse(mcmetaContent);
-                    manifestDescription = mcmeta.pack.description;
+                    manifestDescription = mcmeta.pack.description; // Using the description from pack.mcmeta
                     console.log("pack.mcmeta file found and description updated.");
                 } else if (fileName.includes("assets/minecraft/textures/")) {
                     let newFileName = fileName.replace(/.*assets\/minecraft\/textures\//, "textures/");
@@ -92,7 +81,7 @@ async function convertPack() {
         }
 
         const packName = file.name.replace('.zip', '');
-        const fullDescription = `${manifestDescription}\nThis texture pack was converted from Java Edition to Bedrock Edition.`;
+        const fullDescription = `${manifestDescription}\nPorted by Pepe's Pack Porter.`;
 
         const manifest = generateManifest(packName, fullDescription);
         bedrockZip.file("manifest.json", JSON.stringify(manifest, null, 4));
@@ -101,20 +90,14 @@ async function convertPack() {
         const blob = await bedrockZip.generateAsync({ type: "blob" });
         const endTime = performance.now();
         const duration = ((endTime - startTime) / 1000).toFixed(2);
-        saveAs(blob, "bedrock_pack.zip");
+        const newFileName = file.name.replace('.zip', ' [Converted].zip');
+saveAs(blob, newFileName);
         updateOutput(`Conversion complete! Your download should start shortly. Time taken: ${duration} seconds.`);
         console.log(`Conversion complete! Time taken: ${duration} seconds.`);
     } catch (error) {
         updateOutput("Error loading ZIP file: " + error);
         console.error("Error loading ZIP file: " + error);
     }
-}
-
-function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
 }
 
 function generateManifest(name, description) {
@@ -135,12 +118,4 @@ function generateManifest(name, description) {
             }
         ]
     };
-}
-
-function updateOutput(message) {
-    const outputDiv = document.getElementById('output');
-    const p = document.createElement('p');
-    p.textContent = message;
-    outputDiv.appendChild(p);
-    console.log(message);
 }
