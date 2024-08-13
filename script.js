@@ -125,7 +125,8 @@ function generateManifest(name, description) {
             "description": description,
             "uuid": generateUUID(),
             "version": [1, 0, 0],
-            "min_engine_version": [1, 20, 0],
+            "min_engine_version": [1, 20, 0]
+        },
         "modules": [
             {
                 "type": "resources",
