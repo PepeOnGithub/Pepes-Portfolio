@@ -1,4 +1,6 @@
-document.getElementById('fileInput').addEventListener('change', function() {
+import { fileMappings } from './mappings.js';
+
+document.getElementById('fileInput').addEventListener('change', function () {
     const outputDiv = document.getElementById('output');
     const fileInput = document.getElementById('fileInput');
 
@@ -72,22 +74,39 @@ async function convertPack() {
                 } else if (fileName.includes("assets/minecraft/textures/")) {
                     let newFileName = fileName.replace(/.*assets\/minecraft\/textures\//, "textures/");
 
-                    if (fileName.includes("assets/minecraft/textures/models/armor")) {
-                        if (fileName.endsWith("leather_layer_1.png")) {
-                            newFileName = newFileName.replace("leather_layer_1.png", "cloth_1.png");
-                        } else if (fileName.endsWith("leather_layer_2.png")) {
-                            newFileName = newFileName.replace("leather_layer_2.png", "cloth_2.png");
-                        } else {
-                            newFileName = newFileName.replace("_layer_", "_");
+                    // Handle block, item, and entity path changes
+                    newFileName = newFileName.replace("/block/", "/blocks/").replace("/item/", "/items/").replace("/entity/", "/entity/");
+
+                    // Handle specific file name changes using mappings from mappings.js
+                    for (const [javaName, bedrockName] of Object.entries(fileMappings)) {
+                        if (newFileName.includes(javaName)) {
+                            newFileName = newFileName.replace(javaName, bedrockName);
+                            break;
                         }
                     }
-
-                    newFileName = newFileName.replace("/block/", "/blocks/").replace("/item/", "/items/");
 
                     const data = await file.async("blob");
                     bedrockZip.file(newFileName, data);
                     console.log(`File converted: ${fileName} -> ${newFileName}`);
                 }
+            }
+        }
+
+        // Process entity folder separately
+        for (let fileName in contents.files) {
+            if (fileName.includes("assets/minecraft/textures/entity/")) {
+                let newFileName = fileName.replace(/.*assets\/minecraft\/textures\/entity\//, "textures/entity/");
+
+                for (const [javaName, bedrockName] of Object.entries(fileMappings)) {
+                    if (newFileName.includes(javaName)) {
+                        newFileName = newFileName.replace(javaName, bedrockName);
+                        break;
+                    }
+                }
+
+                const data = await contents.files[fileName].async("blob");
+                bedrockZip.file(newFileName, data);
+                console.log(`Entity File converted: ${fileName} -> ${newFileName}`);
             }
         }
 
@@ -114,7 +133,7 @@ async function convertPack() {
 }
 
 function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
