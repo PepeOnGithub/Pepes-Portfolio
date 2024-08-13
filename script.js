@@ -9,7 +9,7 @@ document.getElementById('fileInput').addEventListener('change', function() {
     }
 });
 
-function convertPack() {
+async function convertPack() {
     const fileInput = document.getElementById('fileInput');
     const outputDiv = document.getElementById('output');
 
@@ -28,12 +28,13 @@ function convertPack() {
 
     const zip = new JSZip();
     const startTime = performance.now();
-    zip.loadAsync(file).then(async function(contents) {
+    try {
+        const contents = await zip.loadAsync(file);
         updateOutput("ZIP file loaded successfully.");
         console.log("ZIP file loaded successfully.");
 
         const bedrockZip = new JSZip();
-        let manifestDescription = "Converted from Java Edition";
+        let manifestDescription = "";
         let foundAssets = false;
 
         for (let fileName in contents.files) {
@@ -90,21 +91,23 @@ function convertPack() {
             }
         }
 
-        const manifest = generateManifest(manifestDescription);
+        const packName = file.name.replace('.zip', '');
+        const fullDescription = `${manifestDescription}\nThis texture pack was converted from Java Edition to Bedrock Edition.`;
+
+        const manifest = generateManifest(packName, fullDescription);
         bedrockZip.file("manifest.json", JSON.stringify(manifest, null, 4));
         console.log("manifest.json file created.");
 
-        bedrockZip.generateAsync({ type: "blob" }).then(function(blob) {
-            const endTime = performance.now();
-            const duration = ((endTime - startTime) / 1000).toFixed(2);
-            saveAs(blob, "bedrock_pack.zip");
-            updateOutput(`Conversion complete! Your download should start shortly. Time taken: ${duration} seconds.`);
-            console.log(`Conversion complete! Time taken: ${duration} seconds.`);
-        });
-    }).catch(function(error) {
+        const blob = await bedrockZip.generateAsync({ type: "blob" });
+        const endTime = performance.now();
+        const duration = ((endTime - startTime) / 1000).toFixed(2);
+        saveAs(blob, "bedrock_pack.zip");
+        updateOutput(`Conversion complete! Your download should start shortly. Time taken: ${duration} seconds.`);
+        console.log(`Conversion complete! Time taken: ${duration} seconds.`);
+    } catch (error) {
         updateOutput("Error loading ZIP file: " + error);
-        console.log("Error loading ZIP file: " + error);
-    });
+        console.error("Error loading ZIP file: " + error);
+    }
 }
 
 function generateUUID() {
@@ -114,12 +117,12 @@ function generateUUID() {
     });
 }
 
-function generateManifest(description) {
+function generateManifest(name, description) {
     return {
         "format_version": 2,
         "header": {
-            "name": "Converted Java Pack",
-            "description": description || "This texture pack was converted from Java Edition to Bedrock Edition.",
+            "name": name,
+            "description": description,
             "uuid": generateUUID(),
             "version": [1, 0, 0],
             "min_engine_version": [1, 20, 0],
