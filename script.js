@@ -68,6 +68,8 @@ function convertPack() {
                 return;
             }
 
+            let filePromises = [];
+
             Object.keys(zip.files).forEach(function(fileName) {
                 if (!fileName.startsWith(assetPath)) return;
                 let newFileName = fileName.replace(assetPath, '');
@@ -98,27 +100,33 @@ function convertPack() {
                 }
 
                 if (newFileName === 'pack.mcmeta') {
-                    zip.files[fileName].async('text').then(function(content) {
-                        const mcmeta = JSON.parse(content);
-                        packDescription = mcmeta.pack.description || 'Converted Java Texture Pack';
-                        packName = mcmeta.pack.pack_format || packName;
+                    filePromises.push(
+                        zip.files[fileName].async('text').then(function(content) {
+                            const mcmeta = JSON.parse(content);
+                            packDescription = mcmeta.pack.description || 'Converted Java Texture Pack';
+                            packName = mcmeta.pack.pack_format || packName;
 
-                        const manifest = createManifest(packName, packDescription);
-                        convertedZip.file('manifest.json', manifest);
-                    });
+                            const manifest = createManifest(packName, packDescription);
+                            convertedZip.file('manifest.json', manifest);
+                        })
+                    );
                     return;
                 }
 
-                zip.files[fileName].async('blob').then(function(content) {
-                    convertedZip.file(newFileName, content);
-                });
+                filePromises.push(
+                    zip.files[fileName].async('blob').then(function(content) {
+                        convertedZip.file(newFileName, content);
+                    })
+                );
             });
 
-            convertedZip.generateAsync({type: 'blob'}).then(function(content) {
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(content);
-                link.download = `${file.name.replace('.zip', '')}.mcpack`;
-                link.click();
+            Promise.all(filePromises).then(function() {
+                convertedZip.generateAsync({ type: 'blob' }).then(function(content) {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(content);
+                    link.download = `${file.name.replace('.zip', '')}.mcpack`;
+                    link.click();
+                });
             });
 
             document.getElementById('output').innerText = 'Conversion successful!';
