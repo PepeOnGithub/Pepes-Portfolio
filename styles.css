@@ -1,72 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #121212;
-    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1f4037, #99f2c8);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
-    padding: 0;
 }
+
 .container {
-    background-color: #1e1e1e;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     text-align: center;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     width: 400px;
 }
-.container h1 {
-    font-weight: 700;
-    margin-bottom: 1rem;
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
 }
-.upload-btn-wrapper {
-    position: relative;
-    overflow: hidden;
-    display: inline-block;
+
+.upload-section {
+    margin-bottom: 20px;
 }
-.btn {
-    border: 2px solid #5a5a5a;
-    color: white;
-    background-color: #282828;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
-}
-.btn:hover {
-    background-color: #393939;
-    border-color: #717171;
-}
-.upload-btn-wrapper input[type=file] {
-    font-size: 100px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    cursor: pointer;
-}
-.convert-btn {
-    margin-top: 1rem;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    background-color: #03DAC6;
-    color: #121212;
-    font-weight: 700;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-.convert-btn:hover {
-    background-color: #00BFA5;
-}
-.output {
-    margin-top: 1rem;
+
+input[type="file"] {
     padding: 10px;
-    border-radius: 8px;
-    background-color: #292929;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+button {
+    padding: 10px 20px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #218838;
+}
+
+#output {
+    margin-top: 20px;
+    color: #333;
 }
