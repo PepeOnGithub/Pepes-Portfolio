@@ -1,22 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MC Java to Bedrock Texture Pack Converter</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Minecraft Texture Pack Converter</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>MC Java to Bedrock Converter</h1>
-        <div class="upload-btn-wrapper">
-            <button class="btn">Upload Java Texture Pack</button>
-            <input type="file" id="fileInput" accept=".zip">
+        <h1>Minecraft Java to Bedrock Texture Pack Converter</h1>
+        <div class="upload-section">
+            <input type="file" id="javaPack" accept=".zip">
+            <button onclick="convertPack()">Convert Pack</button>
         </div>
-        <button class="convert-btn" onclick="convertPack()">Convert to Bedrock</button>
-        <div id="output" class="output"></div>
+        <div id="output"></div>
     </div>
-    <script type="module" src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
