@@ -1,168 +1,97 @@
-import { fileMappings } from './mappings.js';
-
-document.getElementById('fileInput').addEventListener('change', function () {
-    const outputDiv = document.getElementById('output');
-    const fileInput = document.getElementById('fileInput');
-
-    if (fileInput.files.length > 0) {
-        const fileName = fileInput.files[0].name;
-        outputDiv.textContent = `Selected file: ${fileName}`;
-        console.log(`File selected: ${fileName}`);
-    }
-});
-
-async function convertPack() {
-    const fileInput = document.getElementById('fileInput');
-    const outputDiv = document.getElementById('output');
-
-    if (fileInput.files.length === 0) {
-        outputDiv.textContent = "Please upload a Java Texture Pack first.";
-        console.log("No file uploaded.");
-        return;
-    }
-
+function convertPack() {
+    const fileInput = document.getElementById('javaPack');
     const file = fileInput.files[0];
-    if (!file.name.endsWith('.zip')) {
-        outputDiv.textContent = "Invalid file format. Please upload a .zip file.";
-        console.log("Invalid file format: " + file.name);
+
+    if (!file) {
+        document.getElementById('output').innerText = 'Please select a Java texture pack (.zip)';
         return;
     }
 
-    const zip = new JSZip();
-    const startTime = performance.now();
-    try {
-        const contents = await zip.loadAsync(file);
-        updateOutput("ZIP file loaded successfully.");
-        console.log("ZIP file loaded successfully.");
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const zip = new JSZip();
+        zip.loadAsync(e.target.result).then(function(zip) {
+            const convertedZip = new JSZip();
+            let packName = file.name.replace('.zip', '');
+            let packDescription = '';
 
-        const bedrockZip = new JSZip();
-        let manifestDescription = "";
-        let foundAssets = false;
+            Object.keys(zip.files).forEach(function(fileName) {
+                let newFileName = fileName;
 
-        for (let fileName in contents.files) {
-            if (fileName.includes("assets/minecraft/textures/")) {
-                foundAssets = true;
-                break;
-            }
-        }
-
-        if (!foundAssets) {
-            outputDiv.textContent = "The assets/minecraft/textures folder was not found in the ZIP.";
-            console.log("assets/minecraft/textures folder not found.");
-            return;
-        }
-
-        for (let fileName in contents.files) {
-            const file = contents.files[fileName];
-
-            if (!file.dir) {
-                if (fileName.includes("assets/minecraft/textures/entity/") ||
-                    fileName.includes("assets/minecraft/textures/gui/") ||
-                    fileName.includes("assets/minecraft/textures/font/")) {
-                    continue;
+                if (fileName.startsWith('assets/minecraft/textures/block/')) {
+                    newFileName = fileName.replace('assets/minecraft/textures/block/', 'textures/blocks/');
+                } else if (fileName.startsWith('assets/minecraft/textures/item/')) {
+                    newFileName = fileName.replace('assets/minecraft/textures/item/', 'textures/items/');
+                } else if (fileName.startsWith('assets/minecraft/textures/entity/')) {
+                    newFileName = fileName.replace('assets/minecraft/textures/entity/', 'textures/entity/');
+                } else if (fileName.startsWith('assets/minecraft/textures/painting/')) {
+                    newFileName = fileName.replace('assets/minecraft/textures/painting/', 'textures/painting/');
+                } else if (fileName.startsWith('assets/minecraft/textures/particle/')) {
+                    newFileName = fileName.replace('assets/minecraft/textures/particle/', 'textures/particle/');
+                } else if (fileName.startsWith('assets/minecraft/textures/mob_effect/')) {
+                    newFileName = fileName.replace('assets/minecraft/textures/mob_effect/', 'textures/ui/mob_effect/');
+                } else if (fileName.startsWith('assets/minecraft/textures/map_icon/')) {
+                    newFileName = fileName.replace('assets/minecraft/textures/map_icon/', 'textures/map/map_icons/');
                 }
 
-                if (fileName.endsWith("pack.png")) {
-                    const data = await file.async("blob");
-                    bedrockZip.file("pack_icon.png", data);
-                    console.log("pack.png file added as pack_icon.png");
-                } else if (fileName.endsWith("pack.mcmeta")) {
-                    const mcmetaContent = await file.async("text");
-                    const mcmeta = JSON.parse(mcmetaContent);
-                    manifestDescription = mcmeta.pack.description;
-                    console.log("pack.mcmeta file found and description updated.");
-                } else if (fileName.includes("assets/minecraft/textures/")) {
-                    let newFileName = fileName.replace(/.*assets\/minecraft\/textures\//, "textures/");
-
-                    // Handle block, item, and entity path changes
-                    newFileName = newFileName.replace("/block/", "/blocks/").replace("/item/", "/items/").replace("/entity/", "/entity/");
-
-                    // Handle specific file name changes using mappings from mappings.js
-                    for (const [javaName, bedrockName] of Object.entries(fileMappings)) {
-                        if (newFileName.includes(javaName)) {
-                            newFileName = newFileName.replace(javaName, bedrockName);
-                            break;
-                        }
-                    }
-
-                    const data = await file.async("blob");
-                    bedrockZip.file(newFileName, data);
-                    console.log(`File converted: ${fileName} -> ${newFileName}`);
-                }
-            }
-        }
-
-        // Process entity folder separately
-        for (let fileName in contents.files) {
-            if (fileName.includes("assets/minecraft/textures/entity/")) {
-                let newFileName = fileName.replace(/.*assets\/minecraft\/textures\/entity\//, "textures/entity/");
-
-                for (const [javaName, bedrockName] of Object.entries(fileMappings)) {
-                    if (newFileName.includes(javaName)) {
-                        newFileName = newFileName.replace(javaName, bedrockName);
-                        break;
-                    }
+                if (fileName === 'pack.png') {
+                    newFileName = 'pack_icon.png';
                 }
 
-                const data = await contents.files[fileName].async("blob");
-                bedrockZip.file(newFileName, data);
-                console.log(`Entity File converted: ${fileName} -> ${newFileName}`);
-            }
-        }
+                if (fileName === 'pack.mcmeta') {
+                    zip.files[fileName].async('text').then(function(content) {
+                        const mcmeta = JSON.parse(content);
+                        packDescription = mcmeta.pack.description || 'Converted Java Texture Pack';
+                        packName = mcmeta.pack.pack_format || packName;
 
-        const packName = file.name.replace('.zip', '');
-        const fullDescription = `${manifestDescription}\nPorted by Pepe's Pack Porter.`;
+                        const manifest = createManifest(packName, packDescription);
+                        convertedZip.file('manifest.json', manifest);
+                    });
+                    return;
+                }
 
-        const manifest = generateManifest(packName, fullDescription);
-        bedrockZip.file("manifest.json", JSON.stringify(manifest, null, 4));
-        console.log("manifest.json file created.");
+                zip.files[fileName].async('blob').then(function(content) {
+                    convertedZip.file(newFileName, content);
+                });
+            });
 
-        const blob = await bedrockZip.generateAsync({ type: "blob" });
-        const endTime = performance.now();
-        const duration = ((endTime - startTime) / 1000).toFixed(2);
-        
-        const newFileName = file.name.replace('.zip', ' [Converted].zip');
-        saveAs(blob, newFileName);
-        
-        updateOutput(`Conversion complete! Your download should start shortly. Time taken: ${duration} seconds.`);
-        console.log(`Conversion complete! Time taken: ${duration} seconds.`);
-    } catch (error) {
-        updateOutput("Error loading ZIP file: " + error);
-        console.error("Error loading ZIP file: " + error);
-    }
+            convertedZip.generateAsync({type: 'blob'}).then(function(content) {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = `${file.name.replace('.zip', '')}.mcpack`;
+                link.click();
+            });
+
+            document.getElementById('output').innerText = 'Conversion successful!';
+        });
+    };
+    reader.readAsArrayBuffer(file);
 }
 
-function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
-function generateManifest(name, description) {
-    return {
-        "format_version": 2,
-        "header": {
-            "name": name,
-            "description": description,
-            "uuid": generateUUID(),
-            "version": [1, 0, 0],
-            "min_engine_version": [1, 20, 0]
+function createManifest(name, description) {
+    const manifestTemplate = {
+        format_version: 2,
+        header: {
+            description: description,
+            name: name,
+            uuid: generateUUID(),
+            version: [1, 0, 0]
         },
-        "modules": [
+        modules: [
             {
-                "type": "resources",
-                "uuid": generateUUID(),
-                "version": [1, 0, 0]
+                description: description,
+                type: 'resources',
+                uuid: generateUUID(),
+                version: [1, 0, 0]
             }
         ]
     };
+    return JSON.stringify(manifestTemplate, null, 2);
 }
 
-function updateOutput(message) {
-    const outputDiv = document.getElementById('output');
-    const p = document.createElement('p');
-    p.textContent = message;
-    outputDiv.appendChild(p);
-    console.log(message);
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
