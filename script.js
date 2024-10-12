@@ -62,35 +62,42 @@ function convertPack() {
             let packName = file.name.replace('.zip', '');
             let packDescription = '';
 
+            const assetPath = findAssetsFolder(zip.files);
+            if (!assetPath) {
+                document.getElementById('output').innerText = 'Assets folder not found in the pack.';
+                return;
+            }
+
             Object.keys(zip.files).forEach(function(fileName) {
-                let newFileName = fileName;
+                if (!fileName.startsWith(assetPath)) return;
+                let newFileName = fileName.replace(assetPath, '');
 
-                if (fileName.startsWith('assets/minecraft/textures/block/')) {
-                    newFileName = fileName.replace('assets/minecraft/textures/block/', 'textures/blocks/');
-                } else if (fileName.startsWith('assets/minecraft/textures/item/')) {
-                    newFileName = fileName.replace('assets/minecraft/textures/item/', 'textures/items/');
-                } else if (fileName.startsWith('assets/minecraft/textures/entity/')) {
-                    newFileName = fileName.replace('assets/minecraft/textures/entity/', 'textures/entity/');
-                } else if (fileName.startsWith('assets/minecraft/textures/painting/')) {
-                    newFileName = fileName.replace('assets/minecraft/textures/painting/', 'textures/painting/');
-                } else if (fileName.startsWith('assets/minecraft/textures/particle/')) {
-                    newFileName = fileName.replace('assets/minecraft/textures/particle/', 'textures/particle/');
-                } else if (fileName.startsWith('assets/minecraft/textures/mob_effect/')) {
-                    newFileName = fileName.replace('assets/minecraft/textures/mob_effect/', 'textures/ui/mob_effect/');
-                } else if (fileName.startsWith('assets/minecraft/textures/map_icon/')) {
-                    newFileName = fileName.replace('assets/minecraft/textures/map_icon/', 'textures/map/map_icons/');
+                if (newFileName.startsWith('textures/block/')) {
+                    newFileName = newFileName.replace('textures/block/', 'textures/blocks/');
+                } else if (newFileName.startsWith('textures/item/')) {
+                    newFileName = newFileName.replace('textures/item/', 'textures/items/');
+                } else if (newFileName.startsWith('textures/entity/')) {
+                    newFileName = newFileName.replace('textures/entity/', 'textures/entity/');
+                } else if (newFileName.startsWith('textures/painting/')) {
+                    newFileName = newFileName.replace('textures/painting/', 'textures/painting/');
+                } else if (newFileName.startsWith('textures/particle/')) {
+                    newFileName = newFileName.replace('textures/particle/', 'textures/particle/');
+                } else if (newFileName.startsWith('textures/mob_effect/')) {
+                    newFileName = newFileName.replace('textures/mob_effect/', 'textures/ui/mob_effect/');
+                } else if (newFileName.startsWith('textures/map_icon/')) {
+                    newFileName = newFileName.replace('textures/map_icon/', 'textures/map/map_icons/');
                 }
 
-                if (fileMappings.hasOwnProperty(fileName.split('/').pop().split('.')[0])) {
-                    const fileBaseName = fileName.split('/').pop().split('.')[0];
-                    newFileName = fileName.replace(fileBaseName, fileMappings[fileBaseName]);
+                if (fileMappings.hasOwnProperty(newFileName.split('/').pop().split('.')[0])) {
+                    const fileBaseName = newFileName.split('/').pop().split('.')[0];
+                    newFileName = newFileName.replace(fileBaseName, fileMappings[fileBaseName]);
                 }
 
-                if (fileName === 'pack.png') {
+                if (newFileName === 'pack.png') {
                     newFileName = 'pack_icon.png';
                 }
 
-                if (fileName === 'pack.mcmeta') {
+                if (newFileName === 'pack.mcmeta') {
                     zip.files[fileName].async('text').then(function(content) {
                         const mcmeta = JSON.parse(content);
                         packDescription = mcmeta.pack.description || 'Converted Java Texture Pack';
@@ -118,6 +125,12 @@ function convertPack() {
         });
     };
     reader.readAsArrayBuffer(file);
+}
+
+function findAssetsFolder(files) {
+    const possiblePaths = Object.keys(files).filter(path => path.endsWith('assets/minecraft/'));
+    if (possiblePaths.length === 0) return null;
+    return possiblePaths[0].split('assets/minecraft/')[0] + 'assets/minecraft/';
 }
 
 function createManifest(name, description) {
