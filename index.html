@@ -1,21 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Texture Pack Converter</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oliwaka's Launcher</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Minecraft Java to Bedrock Texture Pack Converter</h1>
-        <div class="upload-section">
-            <input type="file" id="javaPack" accept=".zip">
-            <button onclick="convertPack()">Convert Pack</button>
-        </div>
-        <div id="output"></div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
-    <script src="script.js"></script>
+  <div class="container">
+    <header>
+      <h1>Oliwaka's Launcher</h1>
+    </header>
+    <main>
+      <div class="login-box">
+        <h2>Login with Microsoft</h2>
+        <button id="login-microsoft">Login</button>
+      </div>
+      <div class="launch-box">
+        <h2>Launch Minecraft</h2>
+        <button id="launch-minecraft">Play Now</button>
+      </div>
+    </main>
+    <footer>
+      <p>© 2024 Oliwaka's Launcher</p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
