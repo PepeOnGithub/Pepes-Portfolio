@@ -1,3 +1,12 @@
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    const fileLabel = document.querySelector('.custom-file-label');
+    if (this.files.length > 0) {
+        fileLabel.textContent = this.files[0].name; // Show uploaded file name
+    } else {
+        fileLabel.textContent = "Choose a Texture Pack (.zip)";
+    }
+});
+
 document.getElementById('upload-form').addEventListener('submit', async function(event) {
     event.preventDefault();
 
