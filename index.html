@@ -3,27 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Java ➝ Bedrock Converter</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>Pack Converter - Java to Bedrock</title>
+    <!-- Include JSZip for ZIP handling -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root {
+            --primary: #2196f3;
+            --secondary: #64b5f6;
+            --background: #1a1a1a;
+            --text: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--background), #2a2a2a);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            font-size: 2.5rem;
+        }
+
+        .converter-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--secondary);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+            margin: 1rem auto;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        #status {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--secondary);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Java to Bedrock Texture Pack Converter</h1>
-        <p>Upload your Java Edition texture pack (.zip) and convert it into a Bedrock .mcpack file.</p>
-
-        <form id="upload-form">
-    <label for="fileInput" class="custom-file-label">Choose a Texture Pack (.zip)</label>
-    <input type="file" id="fileInput" accept=".zip">
-    <button type="submit">Convert</button>
-</form>
-
-        <div id="download-link">
-            <a href="#" download>Download Converted Pack</a>
+        <h1>Pack Converter</h1>
+        <div class="converter-box">
+            <div class="drop-zone" onclick="document.getElementById('fileInput').click()">
+                <p>Drag & Drop Java Pack ZIP here or Click to Select</p>
+                <input type="file" id="fileInput" accept=".zip">
+            </div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <button id="downloadBtn">Download Bedrock Pack</button>
+            <div id="status"></div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="scripts.js"></script>
+    <script>
+        const dropZone = document.querySelector('.drop-zone');
+        const fileInput = document.getElementById('fileInput');
+        const progressBar = document.querySelector('.progress-bar');
+        const progress = document.querySelector('.progress');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const status = document.getElementById('status');
+
+        // Handle drag & drop events
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#64b5f6';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#2196f3';
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.style.borderColor = '#2196f3';
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        async function handleFile(file) {
+            if (!file) return;
+
+            status.textContent = 'Processing pack...';
+            progressBar.style.display = 'block';
+            
+            try {
+                const zip = await JSZip.loadAsync(file);
+                const bedrockZip = new JSZip();
+                let processedFiles = 0;
+                const totalFiles = Object.keys(zip.files).length;
+
+                // Process each file in the zip
+                zip.forEach(async (relativePath, file) => {
+                    if (file.dir) return;
+
+                    let newPath = relativePath;
+                    
+                    // Convert Java paths to Bedrock format
+                    newPath = newPath.replace(/textures\/blocks\//g, 'textures/block/');
+                    newPath = newPath.replace(/textures\/items\//g, 'textures/item/');
+                    newPath = newPath.replace(/\.mcmeta$/, '');
+
+                    // Handle manifest conversion
+                    if (relativePath === 'pack.mcmeta') {
+                        const content = await file.async('text');
+                        const javaManifest = JSON.parse(content);
+                        const bedrockManifest = convertManifest(javaManifest);
+                        bedrockZip.file('manifest.json', JSON.stringify(bedrockManifest, null, 2));
+                    } else {
+                        bedrockZip.file(newPath, file.async('arraybuffer'));
+                    }
+
+                    processedFiles++;
+                    progress.style.width = `${(processedFiles / totalFiles) * 100}%`;
+                });
+
+                // Create download button when ready
+                bedrockZip.generateAsync({ type: 'blob' }).then(content => {
+                    const url = URL.createObjectURL(content);
+                    downloadBtn.style.display = 'block';
+                    downloadBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'converted_bedrock_pack.mcpack';
+                        a.click();
+                        status.textContent = 'Conversion complete!';
+                    };
+                    status.textContent = 'Ready for download!';
+                });
+
+            } catch (error) {
+                status.textContent = 'Error processing file: ' + error.message;
+                console.error(error);
+            }
+        }
+
+        function convertManifest(javaManifest) {
+            // Generate UUIDs for Bedrock manifest
+            const generateUUID = () => {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            };
+
+            return {
+                format_version: 2,
+                header: {
+                    description: javaManifest.pack.description || 'Converted Pack',
+                    name: javaManifest.pack.description || 'Java Converted Pack',
+                    uuid: generateUUID(),
+                    version: [1, 0, 0],
+                    min_engine_version: [1, 16, 0]
+                },
+                modules: [{
+                    description: javaManifest.pack.description || 'Converted Pack',
+                    type: 'resources',
+                    uuid: generateUUID(),
+                    version: [1, 0, 0]
+                }]
+            };
+        }
+    </script>
 </body>
 </html>
