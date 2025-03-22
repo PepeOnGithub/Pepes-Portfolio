@@ -1,135 +1,183 @@
-document.getElementById('fileInput').addEventListener('change', function(event) {
-    const fileLabel = document.querySelector('.custom-file-label');
-    if (this.files.length > 0) {
-        fileLabel.textContent = this.files[0].name; // Show uploaded file name
-    } else {
-        fileLabel.textContent = "Choose a Texture Pack (.zip)";
-    }
-});
-
-document.getElementById('upload-form').addEventListener('submit', async function(event) {
-    event.preventDefault();
-
-    const fileInput = document.getElementById('fileInput');
-    if (fileInput.files.length === 0) {
-        alert('Please select a file.');
-        return;
-    }
-
-    const file = fileInput.files[0];
-    const jszip = new JSZip();
-    const zip = await jszip.loadAsync(file);
-    const bedrockZip = new JSZip();
-
-    // Convert Java texture pack to Bedrock format
-    await convertTexturePack(zip, bedrockZip);
-
-    // Generate and add manifest.json
-    const manifest = generateManifest();
-    bedrockZip.file('manifest.json', JSON.stringify(manifest, null, 2));
-
-    // Create the .mcpack file
-    const content = await bedrockZip.generateAsync({ type: 'blob' });
-    const downloadLink = document.getElementById('download-link');
-    const link = downloadLink.querySelector('a');
-    link.href = URL.createObjectURL(content);
-    link.download = 'ConvertedTexturePack.mcpack';
-    downloadLink.style.display = 'block';
-});
-
-async function convertTexturePack(inputZip, outputZip) {
-    const texturePathJava = 'assets/minecraft/textures/';
-    const texturePathBedrock = 'textures/';
-
-    inputZip.forEach(async (relativePath, file) => {
-        if (!file.dir) {
-            const content = await file.async('uint8array');
-            let newPath = relativePath;
-
-            // Convert paths from Java Edition to Bedrock Edition
-            if (relativePath.startsWith(texturePathJava)) {
-                newPath = relativePath.replace(texturePathJava, texturePathBedrock);
+class NovaClicker {
+    constructor() {
+        this.nova = 0;
+        this.nps = 0;
+        this.multiplier = 1;
+        this.prestige = 0;
+        
+        this.upgrades = {
+            quantum: { 
+                level: 0, 
+                cost: 50, 
+                baseNPS: 1 
+            },
+            singularity: {
+                level: 0,
+                cost: 200,
+                baseNPS: 5
+            },
+            chronosphere: {
+                level: 0,
+                cost: 1000,
+                baseNPS: 15
             }
+        };
 
-            // Apply texture name mappings
-            newPath = renameTextures(newPath);
+        this.achievements = {
+            firstClick: { unlocked: false, title: "Big Bang", desc: "Create your first nova" },
+            quantumLeap: { unlocked: false, title: "Quantum Pioneer", desc: "Purchase 10 quantum upgrades" }
+        };
 
-            outputZip.file(newPath, content);
-        }
-    });
-}
+        this.init();
+    }
 
-// **🔹 Texture Name Mapping Between Java and Bedrock**
-function renameTextures(path) {
-    const renameMap = {
-        // ✅ Mobs
-        'entity/creeper/creeper.png': 'textures/entity/creeper.png',
-        'entity/zombie/zombie.png': 'textures/entity/zombie.png',
-        'entity/skeleton/skeleton.png': 'textures/entity/skeleton.png',
-        'entity/spider/spider.png': 'textures/entity/spider.png',
-        'entity/enderman/enderman.png': 'textures/entity/enderman/enderman.png',
-        'entity/villager/villager.png': 'textures/entity/villager/villager.png',
-        'entity/iron_golem/iron_golem.png': 'textures/entity/iron_golem.png',
+    init() {
+        this.loadGame();
+        this.createUpgradeCards();
+        this.setupEventListeners();
+        this.gameLoop();
+    }
 
-        // ✅ Blocks
-        'block/stone.png': 'textures/blocks/stone.png',
-        'block/dirt.png': 'textures/blocks/dirt.png',
-        'block/grass_block_top.png': 'textures/blocks/grass_top.png',
-        'block/grass_block_side.png': 'textures/blocks/grass_side.png',
-        'block/oak_planks.png': 'textures/blocks/planks_oak.png',
-        'block/cobblestone.png': 'textures/blocks/cobblestone.png',
-        'block/diamond_ore.png': 'textures/blocks/diamond_ore.png',
-        'block/diamond_block.png': 'textures/blocks/diamond_block.png',
-        'block/obsidian.png': 'textures/blocks/obsidian.png',
+    createUpgradeCards() {
+        const container = document.getElementById('upgrades');
+        
+        Object.entries(this.upgrades).forEach(([id, upgrade]) => {
+            const card = document.createElement('div');
+            card.className = 'upgrade-card';
+            card.innerHTML = `
+                <div>
+                    <h3>${id.toUpperCase()}</h3>
+                    <p>+${upgrade.baseNPS * this.multiplier} NPS</p>
+                </div>
+                <button class="buy-btn" data-upgrade="${id}">
+                    Buy (${Math.floor(upgrade.cost)})
+                </button>
+            `;
+            container.appendChild(card);
+        });
+    }
 
-        // ✅ Items
-        'item/diamond_sword.png': 'textures/items/diamond_sword.png',
-        'item/diamond_pickaxe.png': 'textures/items/diamond_pickaxe.png',
-        'item/iron_sword.png': 'textures/items/iron_sword.png',
-        'item/apple.png': 'textures/items/apple.png',
-        'item/golden_apple.png': 'textures/items/golden_apple.png',
-        'item/ender_pearl.png': 'textures/items/ender_pearl.png',
-        'item/bow.png': 'textures/items/bow_standby.png',
-
-        // ✅ UI Elements
-        'gui/widgets.png': 'textures/ui/widgets.png',
-        'gui/title/minecraft.png': 'textures/ui/title.png',
-    };
-
-    for (const [javaPath, bedrockPath] of Object.entries(renameMap)) {
-        if (path.endsWith(javaPath)) {
-            return bedrockPath;
+    buyUpgrade(upgradeId) {
+        const upgrade = this.upgrades[upgradeId];
+        if (this.nova >= upgrade.cost) {
+            this.nova -= upgrade.cost;
+            upgrade.level++;
+            upgrade.cost *= 1.15;
+            this.nps += upgrade.baseNPS * this.multiplier;
+            this.checkAchievements();
+            this.updateUI();
         }
     }
 
-    return path;
-}
+    prestige() {
+        if (this.nova >= 1e15) {
+            this.prestige++;
+            this.multiplier *= 2;
+            this.resetGame();
+            this.showAchievement("Ascended", "Reached cosmic enlightenment", "🌟");
+        }
+    }
 
-// **🔹 Generate a Bedrock manifest.json file**
-function generateManifest() {
-    return {
-        format_version: 2,
-        header: {
-            description: 'Converted Java Texture Pack',
-            name: 'Converted Texture Pack',
-            uuid: generateUUID(),
-            version: [1, 0, 0]
-        },
-        modules: [
-            {
-                description: 'Converted Java Texture Pack',
-                type: 'resources',
-                uuid: generateUUID(),
-                version: [1, 0, 0]
+    showAchievement(title, desc, icon) {
+        const popup = document.querySelector('.achievement-popup');
+        popup.querySelector('.achievement-icon').textContent = icon;
+        popup.querySelector('.achievement-title').textContent = title;
+        popup.querySelector('.achievement-desc').textContent = desc;
+        popup.style.display = 'flex';
+        setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    createParticles(x, y) {
+        for (let i = 0; i < 10; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            document.querySelector('.particle-container').appendChild(particle);
+            setTimeout(() => particle.remove(), 1000);
+        }
+    }
+
+    updateUI() {
+        document.getElementById('nova-count').textContent = Math.floor(this.nova);
+        document.getElementById('nps').textContent = this.nps.toFixed(1);
+        document.getElementById('multiplier').textContent = `${this.multiplier}x`;
+        
+        document.querySelectorAll('.buy-btn').forEach(btn => {
+            const upgrade = this.upgrades[btn.dataset.upgrade];
+            btn.disabled = this.nova < upgrade.cost;
+            btn.innerHTML = `Buy (${Math.floor(upgrade.cost)})`;
+        });
+    }
+
+    gameLoop() {
+        setInterval(() => {
+            this.nova += this.nps / 10;
+            this.updateUI();
+            this.saveGame();
+        }, 100);
+    }
+
+    saveGame() {
+        localStorage.setItem('novaClickerSave', JSON.stringify({
+            nova: this.nova,
+            nps: this.nps,
+            multiplier: this.multiplier,
+            prestige: this.prestige,
+            upgrades: this.upgrades
+        }));
+    }
+
+    loadGame() {
+        const save = JSON.parse(localStorage.getItem('novaClickerSave'));
+        if (save) {
+            Object.assign(this, save);
+            this.updateUI();
+        }
+    }
+
+    resetGame() {
+        this.nova = 0;
+        this.nps = 0;
+        this.upgrades = {
+            quantum: { level: 0, cost: 50, baseNPS: 1 },
+            singularity: { level: 0, cost: 200, baseNPS: 5 },
+            chronosphere: { level: 0, cost: 1000, baseNPS: 15 }
+        };
+        this.updateUI();
+    }
+
+    setupEventListeners() {
+        // Core Click
+        document.getElementById('core').addEventListener('click', (e) => {
+            this.nova += 1 * this.multiplier;
+            this.createParticles(e.clientX, e.clientY);
+            if (!this.achievements.firstClick.unlocked) {
+                this.showAchievement(this.achievements.firstClick.title, 
+                                  this.achievements.firstClick.desc, "🚀");
+                this.achievements.firstClick.unlocked = true;
             }
-        ]
-    };
+            this.updateUI();
+        });
+
+        // Buy Buttons
+        document.querySelectorAll('.buy-btn').forEach(btn => {
+            btn.addEventListener('click', () => this.buyUpgrade(btn.dataset.upgrade));
+        });
+
+        // Tabs
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.toggle('active', 
+                        content.id === tab.dataset.tab);
+                });
+            });
+        });
+    }
 }
 
-// **🔹 Generate UUIDs for manifest.json**
-function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
+// Start Game
+const game = new NovaClicker();
