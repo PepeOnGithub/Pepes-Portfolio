@@ -3,66 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Clicker | Cosmic Edition</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Nova Clicker ∞</title>
+    <style>
+        :root {
+            --primary: #00ff9d;
+            --secondary: #7a72ff;
+            --background: #0f0f1f;
+            --glass: rgba(255, 255, 255, 0.05);
+            --gradient: linear-gradient(45deg, var(--primary), var(--secondary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui;
+        }
+
+        body {
+            background: var(--background);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--glass);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-btn.active {
+            background: var(--glass);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* Core */
+        .core-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 2rem auto;
+        }
+
+        .core {
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 50px var(--primary);
+        }
+
+        .core-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, 
+                rgba(255,255,255,0.3) 0%, 
+                transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+            background: var(--glass);
+            border-radius: 15px;
+        }
+
+        /* Store */
+        .store-tabs {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .store-category {
+            background: var(--glass);
+            padding: 2rem;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .store-category.active {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .upgrade-card {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid var(--secondary);
+            transition: 0.3s;
+        }
+
+        .upgrade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(122, 114, 255, 0.3);
+        }
+
+        /* Prestige */
+        .prestige-panel {
+            background: var(--glass);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
-    <div class="particle-container"></div>
-    
-    <!-- Main Container -->
-    <div class="game-container">
-        <!-- Header -->
-        <header class="cosmic-header">
-            <div class="resource-panel">
-                <div class="nova-counter">
-                    <span class="nova-icon">🌌</span>
-                    <h1 id="nova-count">0</h1>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="nav">
+            <button class="nav-btn active" data-page="main">Nova</button>
+            <button class="nav-btn" data-page="store">Store</button>
+            <button class="nav-btn" data-page="stats">Stats</button>
+            <button class="nav-btn" data-page="prestige">Prestige</button>
+            <button class="nav-btn" data-page="settings">Settings</button>
+        </nav>
+
+        <!-- Main Page -->
+        <div class="page active" id="main">
+            <div class="stats-grid">
+                <div class="stat">
+                    <h2>Nova Clusters</h2>
+                    <p id="novaCount">0</p>
                 </div>
-                <div class="stats">
-                    <p>NPS: <span id="nps">0</span></p>
-                    <p>Multiplier: <span id="multiplier">1x</span></p>
+                <div class="stat">
+                    <h2>NPS</h2>
+                    <p id="nps">0</p>
                 </div>
             </div>
-        </header>
 
-        <!-- Main Cosmic Core -->
-        <div class="cosmic-core" id="core">
-            <div class="core-glow"></div>
-            <div class="quantum-particles"></div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="tab-system">
-            <button class="tab active" data-tab="upgrades">Quantum Upgrades</button>
-            <button class="tab" data-tab="prestige">Prestige</button>
-            <button class="tab" data-tab="minigames">Mini-Games</button>
-        </div>
-
-        <!-- Upgrade Sections -->
-        <div class="tab-content active" id="upgrades">
-            <!-- Dynamically populated -->
-        </div>
-
-        <!-- Prestige Section -->
-        <div class="tab-content" id="prestige">
-            <div class="prestige-card">
-                <h3>Quantum Leap</h3>
-                <p>Reset everything for permanent 2x multiplier</p>
-                <button class="prestige-btn" onclick="prestige()">Ascend (1Qa Nova)</button>
+            <div class="core-container">
+                <div class="core" id="core">
+                    <div class="core-effect" id="coreEffect"></div>
+                </div>
             </div>
         </div>
 
-        <!-- Achievement Popup -->
-        <div class="achievement-popup">
-            <div class="achievement-glow"></div>
-            <span class="achievement-icon">🏆</span>
-            <div class="achievement-text">
-                <h3 class="achievement-title"></h3>
-                <p class="achievement-desc"></p>
+        <!-- Store Page -->
+        <div class="page" id="store">
+            <div class="store-tabs">
+                <button class="nav-btn active" data-category="buildings">Buildings</button>
+                <button class="nav-btn" data-category="upgrades">Upgrades</button>
+                <button class="nav-btn" data-category="powerups">Powerups</button>
+            </div>
+
+            <div class="store-category active" data-category="buildings"></div>
+            <div class="store-category" data-category="upgrades"></div>
+            <div class="store-category" data-category="powerups"></div>
+        </div>
+
+        <!-- Stats Page -->
+        <div class="page" id="stats">
+            <div class="stats-grid">
+                <!-- Detailed stats will be populated by JS -->
+            </div>
+        </div>
+
+        <!-- Prestige Page -->
+        <div class="page" id="prestige">
+            <div class="prestige-panel">
+                <h2>Quantum Ascension</h2>
+                <p id="prestigeRequirement">Requires 1e18 Nova</p>
+                <button class="prestige-btn" id="prestigeBtn">Ascend</button>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div class="page" id="settings">
+            <div class="settings-grid">
+                <div class="setting">
+                    <h3>Volume</h3>
+                    <input type="range" id="volume" min="0" max="1" step="0.1">
+                </div>
+                <div class="setting">
+                    <button onclick="saveGame()">Save Game</button>
+                    <button onclick="resetGame()">Reset Progress</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        class NovaClicker {
+            constructor() {
+                this.nova = 0;
+                this.nps = 0;
+                this.multiplier = 1;
+                this.prestige = 0;
+                
+                this.upgrades = {
+                    buildings: {
+                        cursor: { count: 0, baseCost: 50, costMultiplier: 1.15, baseNPS: 1 },
+                        quantumFarm: { count: 0, baseCost: 1e3, costMultiplier: 1.2, baseNPS: 10 },
+                        singularity: { count: 0, baseCost: 1e5, costMultiplier: 1.25, baseNPS: 50 }
+                    },
+                    upgrades: {
+                        multiplier: { level: 0, baseCost: 1e4, costMultiplier: 3, effect: 2 },
+                        autoClicker: { level: 0, baseCost: 5e3, costMultiplier: 2.5, effect: 1 }
+                    }
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.loadGame();
+                this.setupEventListeners();
+                this.renderStore();
+                this.gameLoop();
+            }
+
+            renderStore() {
+                const categories = {
+                    buildings: [
+                        { id: 'cursor', name: 'Cursor', icon: '🖱️' },
+                        { id: 'quantumFarm', name: 'Quantum Farm', icon: '🌌' },
+                        { id: 'singularity', name: 'Singularity', icon: '⚫' }
+                    ],
+                    upgrades: [
+                        { id: 'multiplier', name: 'Multiplier', icon: '✨' },
+                        { id: 'autoClicker', name: 'Auto-Clicker', icon: '🤖' }
+                    ]
+                };
+
+                Object.entries(categories).forEach(([category, items]) => {
+                    const container = document.querySelector(`[data-category="${category}"]`);
+                    container.innerHTML = items.map(item => `
+                        <div class="upgrade-card">
+                            <h3>${item.icon} ${item.name}</h3>
+                            <p>+${this.getUpgradeEffect(category, item.id)}/s</p>
+                            <button class="buy-btn" 
+                                    data-category="${category}" 
+                                    data-id="${item.id}"
+                                    ${this.nova < this.getUpgradeCost(category, item.id) ? 'disabled' : ''}>
+                                Buy (${this.formatNumber(this.getUpgradeCost(category, item.id))})
+                            </button>
+                        </div>
+                    `).join('');
+                });
+            }
+
+            getUpgradeCost(category, id) {
+                const upgrade = this.upgrades[category][id];
+                return upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.count);
+            }
+
+            buyUpgrade(category, id) {
+                const cost = this.getUpgradeCost(category, id);
+                if (this.nova >= cost) {
+                    this.nova -= cost;
+                    this.upgrades[category][id].count++;
+                    this.updateNPS();
+                    this.renderStore();
+                }
+            }
+
+            updateNPS() {
+                this.nps = Object.values(this.upgrades.buildings).reduce((acc, building) => 
+                    acc + (building.count * building.baseNPS * this.multiplier), 0);
+            }
+
+            formatNumber(num) {
+                if (num >= 1e6) return `${(num / 1e6).toFixed(1)}M`;
+                if (num >= 1e3) return `${(num / 1e3).toFixed(1)}K`;
+                return num.toFixed(0);
+            }
+
+            setupEventListeners() {
+                // Core Click
+                document.getElementById('core').addEventListener('click', (e) => {
+                    this.nova += 1 * this.multiplier;
+                    this.createClickEffect(e);
+                    this.updateUI();
+                });
+
+                // Store Buy Buttons
+                document.querySelectorAll('.buy-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.buyUpgrade(btn.dataset.category, btn.dataset.id);
+                    });
+                });
+
+                // Navigation
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                        document.getElementById(btn.dataset.page).classList.add('active');
+                    });
+                });
+            }
+
+            createClickEffect(e) {
+                const effect = document.getElementById('coreEffect');
+                effect.style.left = `${e.offsetX}px`;
+                effect.style.top = `${e.offsetY}px`;
+                effect.style.opacity = '1';
+                setTimeout(() => effect.style.opacity = '0', 200);
+            }
+
+            gameLoop() {
+                setInterval(() => {
+                    this.nova += this.nps / 10;
+                    this.updateUI();
+                }, 100);
+            }
+
+            updateUI() {
+                document.getElementById('novaCount').textContent = this.formatNumber(this.nova);
+                document.getElementById('nps').textContent = this.formatNumber(this.nps);
+            }
+
+            saveGame() {
+                localStorage.setItem('novaClicker', JSON.stringify(this));
+            }
+
+            loadGame() {
+                const save = localStorage.getItem('novaClicker');
+                if (save) Object.assign(this, JSON.parse(save));
+            }
+
+            resetGame() {
+                if (confirm('Are you sure?')) {
+                    localStorage.clear();
+                    window.location.reload();
+                }
+            }
+        }
+
+        // Initialize Game
+        const game = new NovaClicker();
+    </script>
 </body>
 </html>
