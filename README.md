@@ -5,7 +5,7 @@
 
 A modern, responsive portfolio website featuring projects, social links, and an about section. Built with pure HTML/CSS and deployed via GitHub Pages.
 
-![Portfolio Preview](https://pepeongithub.github.io/Pepes-Portfolio/)
+[Portfolio Preview](https://pepeongithub.github.io/Pepes-Portfolio/)
 
 ## Features ✨
 
