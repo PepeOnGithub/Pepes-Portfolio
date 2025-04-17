@@ -105,10 +105,6 @@
             transform: translateY(-5px);
         }
 
-        .project-card p {
-            margin-bottom: 6rem; /* Added space under description */
-        }
-
         .card-image {
             width: 100%;
             height: 65%; /* 65% of card height */
@@ -117,11 +113,15 @@
         }
 
         .card-content {
-            padding: 1.5rem;
+            padding: 4rem;
             height: 35%; /* Remaining 35% */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+        }
+
+        .card-content p {
+            margin-bottom: 1rem; /* or more if you want more breathing room */
         }
 
         .project-card h3 {
