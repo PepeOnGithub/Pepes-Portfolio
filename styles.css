@@ -92,6 +92,7 @@ nav {
     margin-top: 2rem;
 }
 
+/* Consistent Project Card Styling */
 .project-card {
     background-color: var(--secondary);
     border-radius: 15px;
@@ -101,6 +102,14 @@ nav {
     display: flex;
     flex-direction: column;
     height: 400px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-card h3,
+.project-card p {
+    margin: 0.5rem 0;
+    color: inherit;
 }
 
 .project-card:hover {
@@ -139,6 +148,13 @@ nav {
     align-self: flex-start;
 }
 
+/* Remove Default Link Underline */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     body {
         padding-top: 70px;
