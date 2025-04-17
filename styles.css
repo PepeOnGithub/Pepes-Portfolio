@@ -28,7 +28,7 @@
         /* Sticky Header */
         header {
             background-color: var(--secondary);
-            padding: 1.2rem 0;
+            padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
