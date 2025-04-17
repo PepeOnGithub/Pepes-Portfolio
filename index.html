@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +24,7 @@
             background-color: var(--primary);
             color: var(--text);
             line-height: 1.6;
-            padding-top: 70px; /* Space for fixed header */
+            padding-top: 80px;
         }
 
         .container {
@@ -36,7 +36,7 @@
         /* Sticky Header */
         header {
             background-color: var(--secondary);
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             position: fixed;
             width: 100%;
             top: 0;
@@ -93,6 +93,7 @@
             overflow: hidden;
             transition: transform 0.3s;
             cursor: pointer;
+            height: 400px; /* Fixed card height */
         }
 
         .project-card:hover {
@@ -101,32 +102,57 @@
 
         .card-image {
             width: 100%;
-            height: 200px;
+            height: 65%; /* 65% of card height */
             object-fit: cover;
             border-bottom: 3px solid var(--accent);
         }
 
         .card-content {
             padding: 1.5rem;
+            height: 35%; /* Remaining 35% */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .project-card h3 {
             color: var(--accent);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .module-badge {
+            background: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            align-self: flex-start;
         }
 
         @media (max-width: 768px) {
             body {
-                padding-top: 60px;
+                padding-top: 70px;
             }
             
+            header {
+                padding: 1.2rem 0;
+            }
+            
+            nav h1 {
+                font-size: 1.8rem; /* Bigger header text on mobile */
+            }
+
             .social-icons a {
                 margin-left: 1rem;
+                font-size: 1.3rem;
             }
-            
+
             .profile-img {
                 width: 150px;
                 height: 150px;
+            }
+
+            .project-card {
+                height: 350px; /* Slightly smaller cards on mobile */
             }
         }
     </style>
@@ -158,11 +184,14 @@
                 <div class="project-card">
                     <img src="glacier-client.jpg" alt="Glacier Client" class="card-image">
                     <div class="card-content">
-                        <h3>Glacier Client</h3>
-                        <p>A high-performance Minecraft client with modern features and optimized gameplay experience.</p>
+                        <div>
+                            <h3>Glacier Client</h3>
+                            <p>A high-performance Minecraft client with modern features and optimized gameplay experience.</p>
+                        </div>
+                        <span class="module-badge">24+ Modules</span>
                     </div>
                 </div>
-                <div class="project-card">
+               <div class="project-card">
                     <img src="project-light.jpg" alt="Project Light" class="card-image">
                     <div class="card-content">
                         <h3>Project Light</h3>
