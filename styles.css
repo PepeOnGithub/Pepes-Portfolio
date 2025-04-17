@@ -35,6 +35,18 @@
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
         nav {
             display: flex;
@@ -90,6 +102,10 @@
 
         .project-card:hover {
             transform: translateY(-5px);
+        }
+
+        .project-card p {
+            margin-bottom: 1rem; /* Added space under description */
         }
 
         .card-image {
