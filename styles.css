@@ -189,7 +189,7 @@ nav {
 
 footer {
     background-color: var(--secondary);
-    padding: 3rem 1rem 1rem;
+    padding: 1rem 1rem; /* Reduced padding */
     border-top: 3px solid var(--accent);
     color: var(--text);
 }
@@ -197,20 +197,20 @@ footer {
 .footer-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
+    gap: 1.5rem; /* Reduced gap between elements */
     max-width: 1200px;
     margin: 0 auto;
-    padding-bottom: 2rem;
+    padding-bottom: 1rem; /* Reduced bottom padding */
 }
 
 .footer-col h4 {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem; /* Reduced margin */
     color: var(--accent);
+    font-size: 1rem; /* Smaller font size */
 }
 
-.footer-col ul {
-    list-style: none;
-    line-height: 1.8;
+.footer-col ul li {
+    font-size: 0.9rem; /* Smaller font size for list items */
 }
 
 .footer-col ul li a {
@@ -225,45 +225,33 @@ footer {
 
 .footer-bottom {
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.8rem; /* Reduced font size */
     opacity: 0.8;
+    padding-top: 1rem; /* Reduced padding top */
 }
 
-.footer-links ul {
-  list-style: none;
-  padding: 0;
-}
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    footer {
+        padding: 1rem 0.5rem; /* Reduced padding for mobile */
+    }
 
-.footer-links ul li {
-  margin-bottom: 0.5rem;
-}
+    .footer-grid {
+        grid-template-columns: 1fr; /* Stack elements vertically on mobile */
+        gap: 1rem; /* Reduced gap for mobile */
+    }
 
-.footer-links ul li a {
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s;
-}
+    .footer-col h4 {
+        font-size: 0.9rem; /* Smaller header font on mobile */
+    }
 
-.footer-links ul li a:hover {
-  color: var(--accent);
-}
+    .footer-col ul li {
+        font-size: 0.8rem; /* Even smaller font size for mobile */
+    }
 
-.footer-social {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.footer-social a {
-  color: var(--text);
-  font-size: 1.5rem;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer-social a:hover {
-  color: var(--accent);
+    .footer-bottom {
+        font-size: 0.7rem; /* Smaller font size for footer bottom */
+    }
 }
 
 body.light-theme {
