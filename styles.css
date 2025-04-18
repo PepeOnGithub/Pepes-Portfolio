@@ -229,6 +229,16 @@ footer {
     opacity: 0.8;
 }
 
+.footer-social a {
+    color: var(--text);
+    font-size: 1.3rem;
+    transition: color 0.3s;
+}
+
+.footer-social a:hover {
+    color: var(--accent);
+}
+
 body.light-theme {
     --primary: #f5f5f5;
     --secondary: #ffffff;
