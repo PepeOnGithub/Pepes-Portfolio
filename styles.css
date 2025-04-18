@@ -49,33 +49,69 @@ header {
 }
 
 /* Projects Section */
+.profile-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 2rem;
+    border: 4px solid var(--accent);
+}
+
+.projects {
+    padding: 4rem 0;
+}
+
+.projects h2 {
+    margin-bottom: 2rem;
+}
+
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+    gap: 2rem;
     margin-top: 2rem;
 }
 
 .project-card {
     background-color: var(--secondary);
-    border-radius: 1rem;
+    border-radius: 15px;
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-origin: center;
+    transition: transform 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
     text-decoration: none;
     color: inherit;
 }
 
 .project-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+    transform: translateY(-5px);
 }
 
 .card-image {
-    height: 200px;
+    flex-shrink: 0;
+    height: 65%;
     object-fit: cover;
-    width: 100%;
     border-bottom: 3px solid var(--accent);
+    width: 100%;
+}
+
+.card-content {
+    flex-grow: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-content p {
+    margin-bottom: 3rem;
+}
+
+.project-card h3 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
 }
 
 /* Tech Stack Redesign */
@@ -146,20 +182,31 @@ footer {
         padding: 0.8rem 0;
     }
     
-    .projects-grid {
-        grid-template-columns: 1fr;
+    .profile-img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .project-card {
+        height: 400px;
+    }
+
+    .card-image {
+        height: 65%;
+    }
+
+    .card-content {
+        height: 35%;
+        padding: 1rem;
+    }
+
+    .card-content p {
+        margin-bottom: 1rem;
+        flex-grow: 1;
     }
     
     .tech-grid {
         grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .project-card {
-        height: auto;
-    }
-    
-    .card-image {
-        height: 150px;
     }
     
     footer {
