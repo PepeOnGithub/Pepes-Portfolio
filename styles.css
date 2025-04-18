@@ -168,12 +168,4 @@ nav {
         width: 150px;
         height: 150px;
     }
-
-    .project-card {
-        height: 350px;
-    }
-
-    .card-content p {
-        margin-bottom: 0.5rem;
-    }
 }
