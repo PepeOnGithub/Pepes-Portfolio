@@ -172,4 +172,8 @@ nav {
     .project-card {
         height: 350px;
     }
+
+    .card-content p {
+        margin-bottom: 0.5rem;
+    }
 }
