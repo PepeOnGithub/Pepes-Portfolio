@@ -229,3 +229,13 @@ body.light-theme {
     box-shadow: var(--shadow);
     z-index: 1000;
 }
+
+.crab-icon-container {
+    filter: invert(48%) sepia(93%) satia(1518%) hue-rotate(202deg) brightness(93%) contrast(94%);
+    width: 32px;
+    height: 32px;
+}
+
+.light-theme .crab-icon-container {
+    filter: invert(38%) sepia(93%) satia(1518%) hue-rotate(202deg) brightness(93%) contrast(94%);
+}
