@@ -67,16 +67,23 @@ nav {
     color: var(--accent);
 }
 
+.social-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .theme-toggle {
     background: none;
     border: none;
     color: var(--text);
     cursor: pointer;
     font-size: 1.5rem;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+    transition: color 0.3s;
+}
+
+.theme-toggle:hover {
+    color: var(--accent);
 }
 
 .info-section {
