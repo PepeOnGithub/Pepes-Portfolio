@@ -102,6 +102,7 @@ nav {
     cursor: pointer;
     display: flex;
     flex-direction: column;
+    height: 400px;
     text-decoration: none;
     color: inherit;
 }
@@ -120,10 +121,10 @@ nav {
 
 .card-content {
     flex-grow: 1;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1rem;
 }
 
 .card-content p {
@@ -164,5 +165,9 @@ nav {
     .profile-img {
         width: 150px;
         height: 150px;
+    }
+
+    .project-card {
+        height: 350px;
     }
 }
