@@ -3,6 +3,8 @@
     --secondary: #1A1A1A;
     --accent: #7289DA;
     --text: #FFFFFF;
+    --text-secondary: #CCCCCC;
+    --shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 * {
@@ -10,6 +12,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 html {
@@ -21,6 +24,7 @@ body {
     color: var(--text);
     line-height: 1.6;
     padding-top: 80px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -36,7 +40,7 @@ header {
     width: 100%;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow);
     border-bottom: 3px solid var(--accent);
     padding: 1rem 0;
 }
@@ -57,6 +61,7 @@ header {
     margin-bottom: 2rem;
     text-align: center;
     font-size: 2rem;
+    color: var(--accent);
 }
 
 .projects-grid {
@@ -103,7 +108,7 @@ header {
 
 .card-content p {
     margin-bottom: 1rem;
-    color: #ddd;
+    color: var(--text-secondary);
 }
 
 .project-card h3 {
@@ -112,7 +117,7 @@ header {
     font-size: 1.25rem;
 }
 
-/* Tech Stack Redesign */
+/* Tech Stack */
 .tech-stack {
     padding: 4rem 0;
     background-color: var(--secondary);
@@ -127,6 +132,7 @@ header {
 
 .tech-item {
     background: var(--primary);
+    color: var(--text);
     border-radius: 1rem;
     padding: 1.5rem;
     transition: all 0.3s ease;
@@ -137,6 +143,7 @@ header {
 .tech-item:hover {
     transform: translateY(-5px);
     background: var(--secondary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .tech-item i {
@@ -145,7 +152,7 @@ header {
     color: var(--accent);
 }
 
-/* Compact Footer */
+/* Footer */
 footer {
     background-color: var(--secondary);
     padding: 1rem 0 0.5rem;
@@ -153,7 +160,7 @@ footer {
 }
 
 .footer-links a {
-    color: white;
+    color: var(--text);
     text-decoration: none;
     transition: color 0.3s;
 }
@@ -168,6 +175,7 @@ footer {
     margin-top: 1rem;
     font-size: 0.8rem;
     opacity: 0.8;
+    color: var(--text-secondary);
 }
 
 /* Mobile Support */
@@ -175,45 +183,25 @@ footer {
     body {
         padding-top: 70px;
     }
-    
+
     header {
         padding: 0.8rem 0;
-    }
-    
-    .profile-img {
-        width: 150px;
-        height: 150px;
     }
 
     .project-card {
         height: 350px;
     }
-    
+
     .card-image {
         height: 60%;
     }
 
     .card-content {
-        height: 35%;
         padding: 1rem;
     }
 
-    .card-content p {
-        margin-bottom: 1rem;
-        flex-grow: 1;
-    }
-    
     .tech-grid {
         grid-template-columns: repeat(3, 1fr);
-    }
-    
-    footer {
-        padding: 1rem 0 0.2rem;
-    }
-    
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
     }
 }
 
@@ -223,9 +211,21 @@ body.light-theme {
     --secondary: #ffffff;
     --accent: #5865F2;
     --text: #2A2A2A;
+    --text-secondary: #666666;
+    --shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* AOS Animations */
-[data-aos] {
-    transition-property: transform, opacity;
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    z-index: 1000;
 }
