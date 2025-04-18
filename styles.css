@@ -152,7 +152,7 @@ nav {
     }
     
     header {
-        padding: 2rem 0;
+        padding: 1.5rem 0;
     }
     
     nav h1 {
@@ -171,5 +171,8 @@ nav {
 
     .project-card {
         height: 350px;
+    }
+    .card-content p {
+        margin-bottom: 3rem;
     }
 }
