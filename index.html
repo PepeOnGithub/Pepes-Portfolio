@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pepe | Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,6 +15,9 @@
                 <img src="assets/pepe-profile.png" alt="Pepe Logo" class="logo-img">
                 <h1>Pepe</h1>
             </div>
+            <button id="theme-toggle" class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
             <div class="social-icons">
                 <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank"><i class="fab fa-discord"></i></a>
                 <a href="https://youtube.com/@PepeOnYoutube" target="_blank"><i class="fab fa-youtube"></i></a>
@@ -27,17 +31,17 @@
 
     <section class="info-section">
         <div class="container">
-            <img src="assets/pepe-profile.png" alt="Pepe" class="profile-img">
-            <h2>About Me</h2>
-            <p>Hi, I’m Pepe! I’m a web developer, Minecraft pack creator, and I do random projects. I work with languages like HTML, CSS, JavaScript, Python, and a bit of Rust. Aside from coding, I enjoy playing mobile and Chromebook games.</p>
+            <img src="assets/pepe-profile.png" alt="Pepe" class="profile-img" data-aos="fade-up">
+            <h2 data-aos="fade-up">About Me</h2>
+            <p data-aos="fade-up">Hi, I’m Pepe! I’m a web developer, Minecraft pack creator, and I do random projects. I work with languages like HTML, CSS, JavaScript, Python, and a bit of Rust. Aside from coding, I enjoy playing mobile and Chromebook games.</p>
         </div>
     </section>
 
     <section class="projects">
         <div class="container">
-            <h2>My Projects:</h2>
+            <h2 data-aos="fade-up">My Projects:</h2>
             <div class="projects-grid">
-                <a href="https://discord.gg/8bXvT8fUzK" target="_blank" class="project-card">
+                <a href="https://discord.gg/8bXvT8fUzK" target="_blank" class="project-card" data-aos="fade-up">
                     <img src="assets/glacier-client.png" alt="Glacier Client" class="card-image">
                     <div class="card-content">
                         <div>
@@ -47,7 +51,7 @@
                     </div>
                 </a>
 
-                <a href="https://www.mediafire.com/folder/ce0ptwtsg1zwz/ProjectLight" target="_blank" class="project-card">
+                <a href="https://www.mediafire.com/folder/ce0ptwtsg1zwz/ProjectLight" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="200">
                     <img src="assets/project-light.png" alt="Project Light" class="card-image">
                     <div class="card-content">
                         <div>
@@ -57,7 +61,7 @@
                     </div>
                 </a>
 
-                <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="project-card">
+                <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="300">
                     <img src="assets/pepe-projects.png" alt="Pepe's Projects" class="card-image">
                     <div class="card-content">
                         <h3>Pepe's Projects</h3>
@@ -65,7 +69,7 @@
                     </div>
                 </a>
 
-                <a href="https://pepeongithub.github.io/Pepes-Manifest-Generator/" target="_blank" class="project-card">
+                <a href="https://pepeongithub.github.io/Pepes-Manifest-Generator/" target="_blank" class="project-card" data-aos="fade-up">
                     <img src="assets/pepe-manifest-generator.png" alt="Manifest Generator" class="card-image">
                     <div class="card-content">
                         <div>
@@ -74,8 +78,8 @@
                         </div>                   
                     </div>
                 </a>
-                
-                <a href="https://pepeongithub.github.io/JSON-Obfuscator-MCBE/" target="_blank" class="project-card">
+
+                <a href="https://pepeongithub.github.io/JSON-Obfuscator-MCBE/" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="200">
                     <img src="assets/pepe-json-obfuscator.png" alt="JSON Obfuscator" class="card-image">
                     <div class="card-content">
                         <h3>JSON Obfuscator</h3>
@@ -83,7 +87,7 @@
                     </div>
                 </a>
 
-                <a href="https://pepeongithub.github.io/Cape-Generator/" target="_blank" class="project-card">
+                <a href="https://pepeongithub.github.io/Cape-Generator/" target="_blank" class="project-card" data-aos="fade-up" data-aos-delay="300">
                     <img src="assets/cape-generator.png" alt="Cape Generator" class="card-image">
                     <div class="card-content">
                         <h3>Cape Generator</h3>
@@ -93,5 +97,61 @@
             </div>
         </div>
     </section>
+
+    <section class="tech-stack">
+        <div class="container">
+            <h2 data-aos="fade-up">Tech Stack</h2>
+            <div class="tech-grid" data-aos="fade-up" data-aos-delay="200">
+                <div class="tech-item">
+                    <i class="fab fa-html5"></i>
+                    <span>HTML5</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-css3-alt"></i>
+                    <span>CSS3</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-js"></i>
+                    <span>JavaScript</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-python"></i>
+                    <span>Python</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-database"></i>
+                    <span>Rust</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Pepe. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            themeToggle.querySelector('i').classList.toggle('fa-moon');
+            themeToggle.querySelector('i').classList.toggle('fa-sun');
+            localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        });
+
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-theme');
+            themeToggle.querySelector('i').classList.add('fa-sun');
+            themeToggle.querySelector('i').classList.remove('fa-moon');
+        }
+    </script>
 </body>
 </html>
