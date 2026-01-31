@@ -3,738 +3,741 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pepe | Web & Minecraft Dev Portfolio</title>
+    <title>Pepe's Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <style>
-        :root {
-            --primary: #2A2A2A;
-            --secondary: #1A1A1A;
-            --accent: #7289DA;
-            --text: #FFFFFF;
-            --text-secondary: #CCCCCC;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-            --font-family: 'Inter', sans-serif;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;700;900&family=Lexend:wght@400;700;900&family=Noto+Sans+Arabic:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&display=swap');
 
-        body.light-theme {
-            --primary: #f5f5f5;
-            --secondary: #ffffff;
-            --text: #2A2A2A;
-            --text-secondary: #666666;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        body.font-mono { --font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; }
-        body.font-serif { --font-family: 'Georgia', serif; }
-        
-        * {
-            font-family: var(--font-family);
-            box-sizing: border-box;
+        :root {
+            --blurple: #7289da;
+            --deep-dark: #0f1113;
+            --glass-opacity: 0.6;
+            --card-radius: 2rem;
+            --font-main: 'Inter', sans-serif;
         }
 
         body {
-            background-color: var(--primary);
-            color: var(--text);
-            line-height: 1.6;
-            transition: background-color 0.5s ease, color 0.5s ease;
-            min-height: 100vh;
+            background-color: var(--deep-dark);
+            color: #ffffff;
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease;
+            cursor: none;
         }
 
-        .bg-primary { background-color: var(--primary); }
-        .bg-secondary { background-color: var(--secondary); }
-        .text-accent { color: var(--accent); }
-        .border-accent { border-color: var(--accent); }
-        .shadow-custom { box-shadow: var(--shadow); }
-        
-        .header-pill {
-            border-radius: 3rem; 
-            box-shadow: 0 8px 30px rgba(114, 137, 218, 0.4), 
-                        0 4px 0 0 var(--accent);
-            transition: border-radius 0.3s ease-out, box-shadow 0.5s ease;
-            overflow: hidden;
-        }
-        
-        .header-pill.menu-expanded {
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            box-shadow: 0 8px 30px rgba(114, 137, 218, 0.4); 
-        }
-
-        .profile-img {
-            width: 150px;
-            height: 150px;
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--blurple);
             border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--accent);
-            box-shadow: 0 0 30px rgba(114, 137, 218, 0.8), 0 0 10px rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-accent-glow {
-            box-shadow: 0 0 15px rgba(114, 137, 218, 0.6);
-            transition: all 0.3s ease;
-        }
-        .btn-accent-glow:hover {
-            box-shadow: 0 0 25px rgba(114, 137, 218, 0.9);
-            filter: brightness(1.1);
-        }
-
-        .project-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(114, 137, 218, 0.3);
-        }
-        
-        #mobile-menu {
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            background-color: var(--secondary);
-            border-radius: 0 0 2.5rem 2.5rem;
-        }
-        #mobile-menu.open {
-            max-height: 300px; 
-            opacity: 1;
-            box-shadow: 0 4px 0 0 var(--accent);
-        }
-
-        .view-section {
-            transition: opacity 0.4s ease-in-out;
-            min-height: 50vh; 
-        }
-        .view-section.hidden {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease-out;
             display: none;
-            opacity: 0;
         }
 
-        .clean-toggle-wrapper {
-            display: inline-block;
+        @media (pointer: fine) {
+            .custom-cursor { display: block; }
+        }
+
+        .header-rounded {
+            margin: 1rem;
+            border-radius: 2rem;
+            width: calc(100% - 2rem);
+        }
+
+        .glass {
+            background: rgba(30, 33, 38, var(--glass-opacity));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glow-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glow-card:hover {
+            box-shadow: 0 0 30px var(--blurple);
+            border-color: var(--blurple);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .btn-interact {
+            transition: all 0.2s ease;
             position: relative;
+            overflow: hidden;
         }
-        .clean-toggle-checkbox {
-            appearance: none;
-            position: absolute;
-            height: 100%;
+
+        .btn-interact:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.2);
+        }
+
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pill-tab.active {
+            background-color: var(--blurple);
+            color: white;
+            box-shadow: 0 10px 25px rgba(114, 137, 218, 0.4);
+        }
+
+        .accent-bg { background-color: var(--blurple); }
+        .accent-text { color: var(--blurple); }
+        .accent-border { border-color: var(--blurple); }
+
+        .setting-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+        }
+
+        .thick-slider {
+            -webkit-appearance: none;
             width: 100%;
-            margin: 0;
+            height: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            outline: none;
             cursor: pointer;
-            opacity: 0; 
+            margin: 15px 0;
         }
-        .clean-toggle-container {
-            width: 48px;
-            height: 24px;
-            background-color: var(--text-secondary); 
-            border-radius: 9999px;
+
+        .thick-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            background: var(--blurple);
+            border-radius: 50%;
             cursor: pointer;
-            transition: background-color 0.3s;
+            border: 5px solid #1a1d21;
+            box-shadow: 0 0 15px var(--blurple);
+            transition: transform 0.2s ease;
         }
-        .clean-toggle-checkbox:checked + .clean-toggle-container {
-            background-color: var(--accent); 
+
+        .thick-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
         }
-        .clean-toggle-checkbox:checked + .clean-toggle-container .clean-toggle-slider {
-            transform: translateX(24px); 
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
         }
-        .clean-toggle-slider {
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider-round {
             position: absolute;
-            content: '';
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.1);
+            transition: .4s;
+            border-radius: 34px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .slider-round:before {
+            position: absolute;
+            content: "";
             height: 20px;
             width: 20px;
-            background-color: var(--secondary); 
+            left: 4px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
             border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s, background-color 0.3s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
         }
 
-        #close-settings {
-            transition: transform 0.3s ease-out;
-        }
-        #close-settings:hover {
-            transform: rotate(-90deg);
-        }
-        #logo-link {
-             align-items: center;
-             gap: 0.75rem;
-        }
-        #logo-link img {
-            position: relative; 
-            z-index: 10;
-        }
-        #logo-link h1 {
-            margin-left: -5px; 
-            padding-left: 5px;
-            position: relative; 
-            z-index: 5;
+        input:checked + .slider-round {
+            background-color: var(--blurple);
         }
 
-        #menu-toggle {
-            width: 44px;
-            height: 44px;
+        input:checked + .slider-round:before {
+            transform: translateX(24px);
+        }
+
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
             transition: all 0.3s ease;
         }
-        #menu-toggle:hover {
-            background-color: rgba(114, 137, 218, 0.1);
+
+        .popup-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .popup-content {
+            width: 90%;
+            max-width: 400px;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .popup-overlay.open .popup-content {
+            transform: scale(1) translateY(0);
         }
     </style>
 </head>
-<body class="bg-primary pt-24 md:pt-28">
-    
-    <header id="main-header" class="fixed top-3 left-0 right-0 z-50 transition-all duration-500">
-        <div id="header-container" class="header-pill bg-secondary shadow-custom mx-4 md:mx-auto max-w-lg lg:max-w-3xl transition-all duration-500">
-            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <a href="#" id="logo-link" class="flex items-center">
-                        <img src="assets/pepe-profile.png" alt="Pepe Logo" class="w-10 h-10 rounded-full object-cover border-2 border-accent shadow-glow">
-                        <h1 class="text-2xl font-extrabold text-accent ml-3">Pepe</h1>
-                    </a>
-                    
-                    <div class="hidden md:flex items-center gap-6">
-                        <nav class="flex space-x-4">
-                            <a href="#info-section" class="nav-link text-text-secondary hover:text-accent font-medium transition-colors">About & Tech</a>
-                            <a href="#projects-section" id="desktop-projects-link" class="nav-link text-text-secondary hover:text-accent font-medium transition-colors">Projects</a>
-                        </nav>
-                        <div class="flex gap-4 text-xl">
-                            <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="text-text hover:text-accent transition-colors"><i class="fab fa-discord"></i></a>
-                            <a href="https://youtube.com/@PepeOnYoutube" target="_blank" class="text-text hover:text-accent transition-colors"><i class="fab fa-youtube"></i></a>
-                            <a href="https://github.com/PepeOnGithub" target="_blank" class="text-text hover:text-accent transition-colors"><i class="fab fa-github"></i></a>
-                            <a href="https://paypal.me/PepeOnPayPal" target="_blank" class="text-text hover:text-accent transition-colors"><i class="fab fa-paypal"></i></a>
-                        </div>
-                        <button id="open-settings-desktop" class="p-2 text-xl rounded-full text-accent hover:text-white hover:bg-accent transition-all btn-accent-glow">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                    </div>
+<body class="min-h-screen pb-32 md:pb-10">
 
-                    <div class="md:hidden flex items-center gap-2">
-                        <button id="open-settings-mobile" class="p-2 text-xl rounded-full text-accent hover:text-white hover:bg-accent transition-all btn-accent-glow">
-                            <i class="fas fa-cog"></i>
-                        </button>
-                        <button id="menu-toggle" class="text-xl text-accent hover:text-white hover:bg-accent transition-all">
-                            <i class="fas fa-bars" id="menu-icon"></i>
-                        </button>
-                    </div>
-                </div>
+    <div id="cursor" class="custom-cursor"></div>
+
+    <div id="languagePopup" class="popup-overlay" onclick="closePopup(event)">
+        <div class="popup-content glass p-6 rounded-[2.5rem] shadow-2xl" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-black uppercase tracking-tight">Select Language</h3>
+                <button onclick="closePopup(null)" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-500/20 hover:text-red-500 transition-all"><i class="fas fa-times"></i></button>
             </div>
-
-            <div id="mobile-menu" class="md:hidden w-full">
-                <nav class="flex flex-col items-center py-4 space-y-3">
-                    <a href="#info-section" class="nav-link text-text-secondary hover:text-accent font-medium w-full text-center py-2 transition-colors" onclick="closeMenu()">About & Tech</a>
-                    <a href="#projects-section" id="mobile-projects-link" class="nav-link text-text-secondary hover:text-accent font-medium w-full text-center py-2 transition-colors" onclick="closeMenu()">Projects</a>
-                    <div class="flex gap-6 pt-3 text-2xl">
-                        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="text-text hover:text-accent transition-colors"><i class="fab fa-discord"></i></a>
-                        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" class="text-text hover:text-accent transition-colors"><i class="fab fa-youtube"></i></a>
-                        <a href="https://github.com/PepeOnGithub" target="_blank" class="text-text hover:text-accent transition-colors"><i class="fab fa-github"></i></a>
-                        <a href="https://paypal.me/PepeOnPayPal" target="_blank" class="text-text hover:text-accent transition-colors"><i class="fab fa-paypal"></i></a>
-                    </div>
-                </nav>
-            </div>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 min-h-[70vh]">
-        <section id="info-section" class="view-section py-16">
-            <div class="max-w-4xl mx-auto text-center mb-16">
-                <img src="assets/pepe-profile.png" alt="Pepe" class="mx-auto profile-img mb-8" data-aos="zoom-in">
-                <h2 class="text-5xl font-extrabold mb-4 mt-6 text-accent" data-aos="fade-up" data-aos-delay="200">Hello, I'm Pepe.</h2>
-                <p class="text-xl max-w-2xl mx-auto text-text-secondary" data-aos="fade-up" data-aos-delay="400">             
-                    I'm a Web Developer, Minecraft Pack Creator, and random project enthusiast. I love working with languages like HTML, CSS, JavaScript, Python, and a bit of Rust. When I'm not coding, you'll likely find me playing video games.
-                </p>
-                <button id="open-projects-view-button" class="mt-8 inline-block px-8 py-3 bg-accent text-white font-semibold rounded-lg shadow-lg hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 btn-accent-glow" data-aos="fade-up" data-aos-delay="600">
-                    See My Work <i class="fas fa-briefcase ml-2"></i>
-                </button>
-            </div>
-
-            <div class="py-10">
-                <h2 class="text-4xl font-bold mb-10 text-center text-accent" data-aos="fade-up">My Tech Stack</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 max-w-4xl mx-auto">
-                    
-                    <div class="flex flex-col items-center justify-center p-6 bg-secondary rounded-xl shadow-custom border-2 border-accent transition-all duration-300 hover:scale-[1.02]" data-aos="zoom-in" data-aos-delay="100">
-                        <i class="fab fa-html5 text-4xl text-accent mb-3"></i>
-                        <p class="font-semibold text-lg">HTML5</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center justify-center p-6 bg-secondary rounded-xl shadow-custom border-2 border-accent transition-all duration-300 hover:scale-[1.02]" data-aos="zoom-in" data-aos-delay="200">
-                        <i class="fab fa-css3-alt text-4xl text-accent mb-3"></i>
-                        <p class="font-semibold text-lg">CSS3</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center justify-center p-6 bg-secondary rounded-xl shadow-custom border-2 border-accent transition-all duration-300 hover:scale-[1.02]" data-aos="zoom-in" data-aos-delay="300">
-                        <i class="fab fa-js text-4xl text-accent mb-3"></i>
-                        <p class="font-semibold text-lg">JavaScript</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center justify-center p-6 bg-secondary rounded-xl shadow-custom border-2 border-accent transition-all duration-300 hover:scale-[1.02]" data-aos="zoom-in" data-aos-delay="400">
-                        <i class="fab fa-python text-4xl text-accent mb-3"></i>
-                        <p class="font-semibold text-lg">Python</p>
-                    </div>
-                    
-                    <div class="flex flex-col items-center justify-center p-6 bg-secondary rounded-xl shadow-custom border-2 border-accent transition-all duration-300 hover:scale-[1.02]" data-aos="zoom-in" data-aos-delay="500">
-                        <i class="fas fa-code text-4xl text-accent mb-3"></i>
-                        <p class="font-semibold text-lg">Rust</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects-section" class="view-section hidden py-16">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
-                <h2 class="text-4xl font-bold text-accent" data-aos="fade-right">My Projects</h2>
-                <button id="back-to-info-button" class="inline-block px-5 py-2 bg-accent text-white font-semibold rounded-full shadow-lg hover:bg-opacity-90 transition-all btn-accent-glow" data-aos="fade-left">
-                    <i class="fas fa-arrow-left mr-2"></i> Go Back
-                </button>
-            </div>
-            
-            <div class="mb-10 max-w-2xl mx-auto" data-aos="fade-up">
-                <div class="relative">
-                    <input type="text" id="project-search" placeholder="Search projects by name or description..." class="w-full p-3 pl-12 bg-secondary text-text border border-accent rounded-full shadow-custom focus:outline-none focus:ring-2 focus:ring-accent transition-all duration-300 placeholder-text-secondary/70">
-                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-accent"></i>
-                </div>
-            </div>
-
-            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                 <a href="https://discord.gg/8bXvT8fUzK" target="_blank" class="project-card bg-secondary rounded-xl overflow-hidden shadow-custom transition-all duration-300 flex flex-col h-[400px]" 
-                   data-aos="fade-up" data-aos-delay="100" data-title="Glacier Client" data-description="A Minecraft Bedrock client offering customizability, a clean UI, and optimized gameplay features.">
-                    <img src="assets/glacier-client.png" alt="Glacier Client" class="w-full h-2/3 object-cover border-b-4 border-accent flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1A1A1A/7289DA?text=Glacier+Client'" />
-                    <div class="p-4 flex flex-col justify-between flex-grow">
-                        <h3 class="text-2xl font-bold text-accent mb-2">Glacier Client</h3>
-                        <p class="text-text-secondary">A Minecraft Bedrock client offering customizability, a clean UI, and optimized gameplay features.</p>
-                        <span class="text-sm font-light mt-2 text-gray-500">Minecraft Bedrock Client</span>
-                    </div>
-                </a>
-
-                <a href="https://www.mediafire.com/folder/ce0ptwtsg1zwz/ProjectLight" target="_blank" class="project-card bg-secondary rounded-xl overflow-hidden shadow-custom transition-all duration-300 flex flex-col h-[400px]" 
-                   data-aos="fade-up" data-aos-delay="200" data-title="Project Light" data-description="A discontinued yet impactful Minecraft Bedrock client with performance-focused enhancements.">
-                    <img src="assets/project-light.png" alt="Project Light" class="w-full h-2/3 object-cover border-b-4 border-accent flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1A1A1A/7289DA?text=Project+Light'" />
-                    <div class="p-4 flex flex-col justify-between flex-grow">
-                        <h3 class="text-2xl font-bold text-accent mb-2">Project Light</h3>
-                        <p class="text-text-secondary">A discontinued yet impactful Minecraft Bedrock client with performance-focused enhancements.</p>
-                        <span class="text-sm font-light mt-2 text-gray-500">Archived Minecraft Client</span>
-                    </div>
-                </a>
-
-                <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="project-card bg-secondary rounded-xl overflow-hidden shadow-custom transition-all duration-300 flex flex-col h-[400px]" 
-                   data-aos="fade-up" data-aos-delay="300" data-title="Pepe's Projects Hub" data-description="A growing collection of Minecraft packs, web tools, and standalone utilities.">
-                    <img src="assets/pepe-projects.png" alt="Pepe's Projects" class="w-full h-2/3 object-cover border-b-4 border-accent flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1A1A1A/7289DA?text=Projects+Hub'" />
-                    <div class="p-4 flex flex-col justify-between flex-grow">
-                        <h3 class="text-2xl font-bold text-accent mb-2">Pepe's Projects Hub</h3>
-                        <p class="text-text-secondary">A growing collection of Minecraft packs, web tools, and standalone utilities.</p>
-                        <span class="text-sm font-light mt-2 text-gray-500">Community & Utility Hub</span>
-                    </div>
-                </a>
-
-                <a href="https://pepeongithub.github.io/Pepes-Manifest-Generator/" target="_blank" class="project-card bg-secondary rounded-xl overflow-hidden shadow-custom transition-all duration-300 flex flex-col h-[400px]" 
-                   data-aos="fade-up" data-aos-delay="400" data-title="Manifest Generator" data-description="A sleek tool to generate manifest.json files for Minecraft Bedrock resource and behavior packs.">
-                    <img src="assets/pepe-manifest-generator.png" alt="Manifest Generator" class="w-full h-2/3 object-cover border-b-4 border-accent flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1A1A1A/7289DA?text=Manifest+Generator'" />
-                    <div class="p-4 flex flex-col justify-between flex-grow">
-                        <h3 class="text-2xl font-bold text-accent mb-2">Manifest Generator</h3>
-                        <p class="text-text-secondary">A sleek tool to generate manifest.json files for Minecraft Bedrock resource and behavior packs.</p>
-                        <span class="text-sm font-light mt-2 text-gray-500">Web Utility (JS)</span>
-                    </div>
-                </a>
-
-                <a href="https://pepeongithub.github.io/JSON-Obfuscator-MCBE/" target="_blank" class="project-card bg-secondary rounded-xl overflow-hidden shadow-custom transition-all duration-300 flex flex-col h-[400px]" 
-                   data-aos="fade-up" data-aos-delay="500" data-title="JSON Obfuscator" data-description="A web-based utility for obfuscating JSON files used in Minecraft Bedrock Edition packs.">
-                    <img src="assets/pepe-json-obfuscator.png" alt="JSON Obfuscator" class="w-full h-2/3 object-cover border-b-4 border-accent flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1A1A1A/7289DA?text=JSON+Obfuscator'" />
-                    <div class="p-4 flex flex-col justify-between flex-grow">
-                        <h3 class="text-2xl font-bold text-accent mb-2">JSON Obfuscator</h3>
-                        <p class="text-text-secondary">A web-based utility for obfuscating JSON files used in Minecraft Bedrock Edition packs.</p>
-                        <span class="text-sm font-light mt-2 text-gray-500">Web Utility (JS)</span>
-                    </div>
-                </a>
-
-                <a href="https://pepeongithub.github.io/Cape-Generator/" target="_blank" class="project-card bg-secondary rounded-xl overflow-hidden shadow-custom transition-all duration-300 flex flex-col h-[400px]" 
-                   data-aos="fade-up" data-aos-delay="600" data-title="Cape Generator" data-description="Create custom capes for Minecraft Bedrock Edition and download them as .mcpack files.">
-                    <img src="assets/cape-generator.png" alt="Cape Generator" class="w-full h-2/3 object-cover border-b-4 border-accent flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1A1A1A/7289DA?text=Cape+Generator'" />
-                    <div class="p-4 flex flex-col justify-between flex-grow">
-                        <h3 class="text-2xl font-bold text-accent mb-2">Cape Generator</h3>
-                        <p class="text-text-secondary">Create custom capes for Minecraft Bedrock Edition and download them as .mcpack files.</p>
-                        <span class="text-sm font-light mt-2 text-gray-500">Web Tool (.mcpack)</span>
-                    </div>
-                </a>
-                
-                <a href="https://pepeongithub.github.io/Pepe-s-Calculator/" target="_blank" class="project-card bg-secondary rounded-xl overflow-hidden shadow-custom transition-all duration-300 flex flex-col h-[400px]" 
-                   data-aos="fade-up" data-aos-delay="700" data-title="Pepe's Calculator" data-description="A sleek, glassy, all-in-one calculator with scientific functions right in your browser.">
-                    <img src="assets/pepe-calc.png" alt="Calculator" class="w-full h-2/3 object-cover border-b-4 border-accent flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1A1A1A/7289DA?text=Calculator'" />
-                    <div class="p-4 flex flex-col justify-between flex-grow">
-                        <h3 class="text-2xl font-bold text-accent mb-2">Pepe's Calculator</h3>
-                        <p class="text-text-secondary">A sleek, glassy, all-in-one calculator with scientific functions right in your browser.</p>
-                        <span class="text-sm font-light mt-2 text-gray-500">Web App (JS)</span>
-                    </div>
-                </a>
-                
-                <a href="https://pepeongithub.github.io/Pepes-MCBE-Translator/" target="_blank" class="project-card bg-secondary rounded-xl overflow-hidden shadow-custom transition-all duration-300 flex flex-col h-[400px]" 
-                   data-aos="fade-up" data-aos-delay="800" data-title="MCBE Translator" data-description="A powerful tool for translating Minecraft Bedrock Edition content easily and efficiently.">
-                    <img src="assets/lang-translator.png" alt="MCBE Translator" class="w-full h-2/3 object-cover border-b-4 border-accent flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1A1A1A/7289DA?text=Translator'" />
-                    <div class="p-4 flex flex-col justify-between flex-grow">
-                        <h3 class="text-2xl font-bold text-accent mb-2">Pepe's MCBE Translator</h3>
-                        <p class="text-text-secondary">A powerful tool for translating Minecraft Bedrock Edition content easily and efficiently.</p>
-                        <span class="text-sm font-light mt-2 text-gray-500">Web Utility (JS)</span>
-                    </div>
-                </a>
-            </div>
-        </section>
-    </main>
-
-    <footer class="mt-12 bg-secondary border-t-4 border-accent">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center md:text-left">
-                <div>
-                    <h4 class="text-xl font-bold mb-3 text-accent">Pepe</h4>
-                    <p class="text-sm text-text-secondary">Web developer & Minecraft Developer. Building tools for the community.</p>
-                </div>
-                <div>
-                    <h4 class="text-xl font-bold mb-3 text-accent">Navigation</h4>
-                    <ul class="space-y-2 text-text-secondary text-sm">
-                        <li><a href="#info-section" class="nav-link hover:text-accent transition-colors">About & Tech</a></li>
-                        <li><a href="#projects-section" class="nav-link hover:text-accent transition-colors">Projects</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-xl font-bold mb-3 text-accent">Connect</h4>
-                    <div class="flex justify-center md:justify-start gap-4 text-xl">
-                        <a href="https://github.com/PepeOnGithub" target="_blank" class="hover:text-accent transition-colors"><i class="fab fa-github"></i></a>
-                        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="hover:text-accent transition-colors"><i class="fab fa-discord"></i></a>
-                        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" class="hover:text-accent transition-colors"><i class="fab fa-youtube"></i></a>
-                        <a href="https://paypal.me/PepeOnPayPal" target="_blank" class="hover:text-accent transition-colors"><i class="fab fa-paypal"></i></a>
-                    </div>
-                </div>
-                 <div>
-                    <h4 class="text-xl font-bold mb-3 text-accent">Support</h4>
-                    <p class="text-sm text-text-secondary">If you enjoy my work, consider supporting my projects!</p>
-                    <a href="https://paypal.me/PepeOnPayPal" target="_blank" class="mt-3 inline-block px-4 py-2 bg-accent text-white font-medium rounded-lg text-sm hover:opacity-90 transition-opacity btn-accent-glow">
-                        <i class="fas fa-heart mr-2"></i> Donate
-                    </a>
-                </div>
-            </div>
-            <div class="mt-10 pt-4 border-t border-gray-700 text-center text-sm text-text-secondary opacity-70">
-                © <span id="current-year"></span> PepeOnGitHub. All rights reserved.
-            </div>
-        </div>
-    </footer>
-
-    <div id="settings-modal" class="fixed inset-0 bg-black bg-opacity-70 z-[100] hidden items-center justify-center p-4 transition-opacity duration-300 opacity-0">
-        <div class="bg-secondary rounded-xl shadow-2xl w-full max-w-md p-6 transform transition-all duration-300 scale-95 border-2 border-accent">
-            <div class="flex justify-between items-center pb-4 border-b border-gray-700">
-                <h3 class="text-2xl font-bold text-accent">Settings</h3>
-                <button id="close-settings" class="text-text hover:text-red-500 text-2xl p-1 transition-all duration-300">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-            </div>
-            
-            <div class="space-y-6 pt-4">
-                <div class="flex justify-between items-center p-3 bg-primary rounded-lg">
-                    <label for="theme-checkbox" class="text-lg font-medium">Dark Mode / Light Mode</label>
-                    <div class="clean-toggle-wrapper">
-                        <input type="checkbox" id="theme-checkbox" class="clean-toggle-checkbox">
-                        <div class="clean-toggle-container">
-                            <span class="clean-toggle-slider"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-center p-3 bg-primary rounded-lg">
-                    <label for="motion-checkbox" class="text-lg font-medium">Reduce Animations (AOS)</label>
-                    <div class="clean-toggle-wrapper">
-                        <input type="checkbox" id="motion-checkbox" class="clean-toggle-checkbox">
-                        <div class="clean-toggle-container">
-                            <span class="clean-toggle-slider"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-3 bg-primary rounded-lg">
-                    <p class="text-lg font-medium mb-3">Font Selection</p>
-                    <div id="font-selector" class="flex flex-wrap gap-3">
-                        <button data-font="inter" class="px-3 py-1 text-sm rounded-full bg-accent text-white font-sans transition-all hover:ring-2 ring-offset-2 ring-accent">Inter (Default)</button>
-                        <button data-font="mono" class="px-3 py-1 text-sm rounded-full bg-secondary text-text font-mono transition-all hover:ring-2 ring-offset-2 ring-accent">Monospace</button>
-                        <button data-font="serif" class="px-3 py-1 text-sm rounded-full bg-secondary text-text font-serif transition-all hover:ring-2 ring-offset-2 ring-accent">Serif</button>
-                    </div>
-                </div>
-
-                 <div class="p-3 bg-primary rounded-lg">
-                    <p class="text-lg font-medium mb-3">Accent Color</p>
-                    <div id="accent-selector" class="flex flex-wrap gap-4">
-                        <button data-color="#7289DA" class="w-8 h-8 rounded-full bg-[#7289DA] transition-transform transform hover:scale-110 border-2 border-white/50"></button>
-                        <button data-color="#34D399" class="w-8 h-8 rounded-full bg-[#34D399] transition-transform transform hover:scale-110 border-2 border-white/50"></button>
-                        <button data-color="#FF5C5C" class="w-8 h-8 rounded-full bg-[#FF5C5C] transition-transform transform hover:scale-110 border-2 border-white/50"></button>
-                        <button data-color="#FBBF24" class="w-8 h-8 rounded-full bg-[#FBBF24] transition-transform transform hover:scale-110 border-2 border-white/50"></button>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 gap-2 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar" id="langOptionsGrid">
             </div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <header id="mainHeader" class="sticky top-4 z-50 header-rounded glass px-8 py-5 flex justify-between items-center shadow-2xl">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 accent-bg rounded-2xl flex items-center justify-center font-black text-2xl shadow-xl rotate-3">P</div>
+            <span class="text-2xl font-black tracking-tighter">Pepe's Portfolio<span class="accent-text">.</span></span>
+        </div>
+
+        <nav class="hidden lg:flex bg-[#00000050] p-1.5 rounded-full border border-white/10">
+            <button onclick="showPage('home', this)" class="pill-tab active px-6 py-2.5 rounded-full text-sm font-bold transition-all btn-interact" data-lang="navHome">Home</button>
+            <button onclick="showPage('projects', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navProjects">Projects</button>
+            <button onclick="showPage('websites', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navWeb">Websites</button>
+            <button onclick="showPage('packs', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navPacks">Packs</button>
+            <button onclick="showPage('settings', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navSettings">Settings</button>
+        </nav>
+        
+        <div class="hidden lg:block">
+            <div class="px-4 py-2 bg-white/5 rounded-xl border border-white/10 text-xs font-bold accent-text">v2.1 Stable</div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 mt-12">
+        
+        <section id="home" class="page active">
+            <div class="flex flex-col items-center text-center py-20" data-aos="fade-up">
+                <div class="relative mb-8 group">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=PepeMain" class="w-40 h-40 rounded-[3rem] border-4 accent-border bg-[#1e2124] shadow-2xl relative z-10 transition-transform group-hover:scale-105 duration-500">
+                    <div class="absolute -inset-4 bg-blurple opacity-20 blur-3xl accent-bg animate-pulse"></div>
+                </div>
+                <h1 class="text-7xl md:text-9xl font-black mb-6 uppercase tracking-tighter leading-none">PEPE</h1>
+                <p class="text-gray-400 text-xl md:text-3xl max-w-3xl mb-12 font-medium" data-lang="heroSub">
+                    Owner of <span class="text-white">Glacier Productions</span> & <span class="text-white">Nyxora Studios</span>.
+                </p>
+                
+                <div class="flex flex-wrap justify-center gap-6 mb-16">
+                    <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="w-16 h-16 glass rounded-2xl flex items-center justify-center text-2xl social-icon btn-interact"><i class="fab fa-discord"></i></a>
+                    <a href="https://youtube.com/@PepeOnYoutube" target="_blank" class="w-16 h-16 glass rounded-2xl flex items-center justify-center text-2xl social-icon btn-interact"><i class="fab fa-youtube"></i></a>
+                    <a href="https://github.com/PepeOnGithub" target="_blank" class="w-16 h-16 glass rounded-2xl flex items-center justify-center text-2xl social-icon btn-interact"><i class="fab fa-github"></i></a>
+                    <a href="https://paypal.me/PepeOnPayPal" target="_blank" class="w-16 h-16 glass rounded-2xl flex items-center justify-center text-2xl social-icon btn-interact"><i class="fab fa-paypal"></i></a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+                    <div class="glass p-10 rounded-[var(--card-radius)] text-left glow-card" data-aos="fade-right">
+                        <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center accent-text mb-6 text-3xl"><i class="fas fa-crown"></i></div>
+                        <h3 class="text-3xl font-black mb-4 tracking-tight">Glacier Productions</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-lang="glacierDesc">Managing Glacier Client and the Projects HUB ecosystem.</p>
+                    </div>
+                    <div class="glass p-10 rounded-[var(--card-radius)] text-left glow-card" data-aos="fade-left">
+                        <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-purple-400 mb-6 text-3xl"><i class="fas fa-microchip"></i></div>
+                        <h3 class="text-3xl font-black mb-4 tracking-tight">Nyxora Studios</h3>
+                        <p class="text-gray-400 text-lg leading-relaxed" data-lang="nyxoraDesc">Developing advanced web tools for MCBE and Minecraft Java.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="page">
+            <h2 class="text-5xl font-black mb-12 tracking-tighter" data-lang="projectsTitle">My Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-[var(--card-radius)] glow-card border-l-8 accent-border">
+                    <h4 class="text-2xl font-black mb-2">Glacier Client</h4>
+                    <p class="text-gray-400 mb-6" data-lang="glacierShort">Performance-driven client for MCBE.</p>
+                    <a href="https://discord.glacierclient.xyz/" target="_blank" class="inline-block px-6 py-3 bg-white/5 rounded-xl text-sm font-bold accent-text hover:bg-white/10 transition-all btn-interact" data-lang="visitDiscord">Visit Discord <i class="fas fa-arrow-right ml-2"></i></a>
+                </div>
+                <div class="glass p-8 rounded-[var(--card-radius)] glow-card border-l-8 border-white/20">
+                    <h4 class="text-2xl font-black mb-2">Project Light</h4>
+                    <p class="text-gray-400 mb-6" data-lang="lightShort">Visual and lighting enhancement repository.</p>
+                    <a href="https://www.mediafire.com/folder/ce0ptwtsg1zwz/ProjectLight" target="_blank" class="inline-block px-6 py-3 bg-white/5 rounded-xl text-sm font-bold text-gray-400 hover:bg-white/10 transition-all btn-interact" data-lang="download">Download <i class="fas fa-download ml-2"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section id="websites" class="page">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+                <div>
+                    <h2 class="text-5xl font-black tracking-tighter" data-lang="webTitle">Web Directory</h2>
+                    <p class="text-gray-500 text-lg" data-lang="webSub">Live platforms and utilities developed by me.</p>
+                </div>
+                <div class="relative w-full md:w-80">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" onkeyup="filterWebsites(this.value)" placeholder="Search tools..." class="bg-white/5 rounded-2xl py-4 pl-12 pr-6 text-sm w-full outline-none focus:ring-2 focus:ring-[#7289da] transition-all border border-white/10 glass">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="toolsGrid"></div>
+        </section>
+
+        <section id="packs" class="page">
+            <div class="max-w-3xl mx-auto py-10">
+                <div class="glass p-12 rounded-[4rem] text-center border-b-8 accent-border">
+                    <div class="w-24 h-24 accent-bg rounded-[2rem] flex items-center justify-center mx-auto mb-10 shadow-2xl rotate-12">
+                        <i class="fas fa-archive text-4xl"></i>
+                    </div>
+                    <h2 class="text-5xl font-black mb-6 tracking-tighter" data-lang="packsTitle">Packs Hub</h2>
+                    <p class="text-gray-400 text-lg mb-12" data-lang="packsSub">Official source for all resource and behavior packs.</p>
+                    <div class="grid grid-cols-1 gap-4">
+                        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="flex items-center justify-between p-8 bg-white/5 rounded-3xl hover:accent-bg transition-all btn-interact group">
+                            <span class="font-black uppercase text-lg tracking-tight" data-lang="discordComm">Discord Community</span>
+                            <i class="fab fa-discord text-2xl"></i>
+                        </a>
+                        <a href="#" class="flex items-center justify-between p-8 bg-white/5 rounded-3xl hover:bg-orange-600 transition-all btn-interact">
+                            <span class="font-black uppercase text-lg tracking-tight">CurseForge</span>
+                            <i class="fas fa-fire text-2xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="settings" class="page">
+            <h2 class="text-5xl font-black mb-12 tracking-tighter" data-lang="settingsTitle">App Customization</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="glass p-10 rounded-[3rem] space-y-10">
+                        <div>
+                            <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="setAccent">Visual Theme</h4>
+                            <div class="flex flex-wrap gap-6">
+                                <button onclick="updateAccent('#7289da')" class="w-14 h-14 rounded-2xl bg-[#7289da] border-4 border-white/10 btn-interact shadow-lg"></button>
+                                <button onclick="updateAccent('#ff4757')" class="w-14 h-14 rounded-2xl bg-[#ff4757] border-4 border-white/10 btn-interact shadow-lg"></button>
+                                <button onclick="updateAccent('#2ed573')" class="w-14 h-14 rounded-2xl bg-[#2ed573] border-4 border-white/10 btn-interact shadow-lg"></button>
+                                <button onclick="updateAccent('#ffa502')" class="w-14 h-14 rounded-2xl bg-[#ffa502] border-4 border-white/10 btn-interact shadow-lg"></button>
+                                <button onclick="updateAccent('#a29bfe')" class="w-14 h-14 rounded-2xl bg-[#a29bfe] border-4 border-white/10 btn-interact shadow-lg"></button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="setTypo">Interface Typography</h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                <button onclick="updateFont('Inter')" class="bg-white/5 py-4 rounded-2xl text-sm font-black hover:accent-bg btn-interact">INTER</button>
+                                <button onclick="updateFont('Outfit')" class="bg-white/5 py-4 rounded-2xl text-sm font-black hover:accent-bg btn-interact">OUTFIT</button>
+                                <button onclick="updateFont('Lexend')" class="bg-white/5 py-4 rounded-2xl text-sm font-black hover:accent-bg btn-interact">LEXEND</button>
+                                <button onclick="updateFont('JetBrains Mono')" class="bg-white/5 py-4 rounded-2xl text-sm font-black hover:accent-bg btn-interact">MONO</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="setLang">Language / Idioma</h4>
+                            <button onclick="openPopup()" class="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-6 flex justify-between items-center group btn-interact">
+                                <span id="currentLangDisplay" class="font-black text-lg">English (US)</span>
+                                <i class="fas fa-chevron-right text-gray-500 group-hover:accent-text transition-colors"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass p-10 rounded-[3rem] space-y-8">
+                    <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-2" data-lang="ctrlPanel">Control Panel</h4>
+                    
+                    <div class="setting-card">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="font-black text-sm" data-lang="glassStr">Glass Strength</p>
+                            <span id="opacityLabel" class="text-xs accent-text font-black">60%</span>
+                        </div>
+                        <input type="range" min="0.1" max="0.9" step="0.1" value="0.6" oninput="updateTransparency(this.value)" class="thick-slider">
+                    </div>
+
+                    <div class="setting-card flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-sm" data-lang="motionOpt">Motion (AOS)</p>
+                            <p class="text-[10px] text-gray-500 font-bold" data-lang="motionOptSub">UI animations</p>
+                        </div>
+                        <label class="switch btn-interact">
+                            <input type="checkbox" id="motionToggle" checked onchange="toggleMotion(this.checked)">
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-card flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-sm" data-lang="cursorOpt">Cursor FX</p>
+                            <p class="text-[10px] text-gray-500 font-bold" data-lang="cursorOptSub">Fluid interactions</p>
+                        </div>
+                        <label class="switch btn-interact">
+                            <input type="checkbox" id="cursorToggle" checked onchange="toggleCursor(this.checked)">
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+
+                    <div class="pt-6">
+                        <button onclick="resetSettings()" class="w-full py-5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all btn-interact shadow-lg" data-lang="factoryReset">
+                            Factory Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] z-50">
+        <nav class="glass p-3 rounded-[2rem] flex justify-between items-center shadow-2xl border border-white/10">
+            <button onclick="showPage('home', this)" class="mobile-tab active w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-home text-xl"></i>
+            </button>
+            <button onclick="showPage('projects', this)" class="mobile-tab w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-tasks text-xl"></i>
+            </button>
+            <button onclick="showPage('websites', this)" class="mobile-tab w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-globe text-xl"></i>
+            </button>
+            <button onclick="showPage('packs', this)" class="mobile-tab w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-cubes text-xl"></i>
+            </button>
+            <button onclick="showPage('settings', this)" class="mobile-tab w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-cog text-xl"></i>
+            </button>
+        </nav>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            AOS.init({ duration: 800, once: true });
-            
-            const body = document.body;
-            const headerContainer = document.getElementById('header-container');
-            const menuToggle = document.getElementById('menu-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuIcon = document.getElementById('menu-icon');
-            
-            const settingsModal = document.getElementById('settings-modal');
-            const openSettingsButtons = [
-                document.getElementById('open-settings-desktop'), 
-                document.getElementById('open-settings-mobile')
-            ];
-            const closeSettingsButton = document.getElementById('close-settings');
-            
-            const themeCheckbox = document.getElementById('theme-checkbox');
-            const motionCheckbox = document.getElementById('motion-checkbox');
-            const fontSelector = document.getElementById('font-selector');
-            const accentSelector = document.getElementById('accent-selector');
+        const translations = {
+            en: {
+                label: "English (US)",
+                navHome: "Home", navProjects: "Projects", navWeb: "Websites", navPacks: "Packs", navSettings: "Settings",
+                heroSub: "Owner of Glacier Productions & Nyxora Studios.", glacierDesc: "Managing Glacier Client and the Projects HUB ecosystem.",
+                nyxoraDesc: "Developing advanced web tools for MCBE and Minecraft Java.", projectsTitle: "My Projects",
+                webTitle: "Web Directory", webSub: "Live platforms and utilities developed by me.", packsTitle: "Packs Hub",
+                packsSub: "Official source for all resource and behavior packs.", settingsTitle: "App Customization", setAccent: "Visual Theme",
+                setTypo: "Interface Typography", setLang: "Language / Idioma", ctrlPanel: "Control Panel", glassStr: "Glass Strength",
+                motionOpt: "Motion (AOS)", motionOptSub: "UI animations", cursorOpt: "Cursor FX", cursorOptSub: "Fluid interactions",
+                factoryReset: "Factory Reset", glacierShort: "Performance-driven client for MCBE.", lightShort: "Visual and lighting enhancement repository.",
+                visitDiscord: "Visit Discord", download: "Download", discordComm: "Discord Community"
+            },
+            es: {
+                label: "Español (ES)",
+                navHome: "Inicio", navProjects: "Proyectos", navWeb: "Sitios Web", navPacks: "Packs", navSettings: "Ajustes",
+                heroSub: "Dueño de Glacier Productions y Nyxora Studios.", glacierDesc: "Gestionando Glacier Client y el ecosistema Projects HUB.",
+                nyxoraDesc: "Desarrollando herramientas web para MCBE y Minecraft Java.", projectsTitle: "Mis Proyectos",
+                webTitle: "Directorio Web", webSub: "Plataformas en vivo y utilidades desarrolladas por mí.", packsTitle: "Centro de Packs",
+                packsSub: "Fuente oficial de todos los paquetes de recursos y comportamiento.", settingsTitle: "Personalización", setAccent: "Tema Visual",
+                setTypo: "Tipografía de Interfaz", setLang: "Idioma / Language", ctrlPanel: "Panel de Control", glassStr: "Fuerza del Cristal",
+                motionOpt: "Movimiento (AOS)", motionOptSub: "Animaciones de UI", cursorOpt: "Efecto de Cursor", cursorOptSub: "Interacciones fluidas",
+                factoryReset: "Restablecer", glacierShort: "Cliente enfocado en rendimiento para MCBE.", lightShort: "Repositorio de mejoras visuales.",
+                visitDiscord: "Ir a Discord", download: "Descargar", discordComm: "Comunidad de Discord"
+            },
+            hi: {
+                label: "हिन्दी (IN)",
+                navHome: "मुख्य", navProjects: "प्रोजेक्ट्स", navWeb: "वेबसाइट्स", navPacks: "पैक्स", navSettings: "सेटिंग्स",
+                heroSub: "ग्लेशियर प्रोडक्शंस और निक्ज़ोरा स्टूडियो के मालिक।", glacierDesc: "ग्लेशियर क्लाइंट और प्रोजेक्ट्स हब इकोसिस्टम का प्रबंधन।",
+                nyxoraDesc: "MCBE और माइनक्राफ्ट जावा के लिए उन्नत वेब टूल विकसित करना।", projectsTitle: "मेरे प्रोजेक्ट्स",
+                webTitle: "वेब निर्देशिका", webSub: "मेरे द्वारा विकसित लाइव प्लेटफॉर्म और उपयोगिताएं।", packsTitle: "पैक्स हब",
+                packsSub: "सभी संसाधन और व्यवहार पैक्स के लिए आधिकारिक स्रोत।", settingsTitle: "ऐप अनुकूलन", setAccent: "विज़ुअल थीम",
+                setTypo: "इंटरफ़ेस टाइपोग्राफी", setLang: "भाषा", ctrlPanel: "कंट्रोल पैनल", glassStr: "ग्लास स्ट्रेंथ",
+                motionOpt: "मोशन (AOS)", motionOptSub: "UI एनिमेशन", cursorOpt: "कर्सर प्रभाव", cursorOptSub: "तरल बातचीत",
+                factoryReset: "फैक्टरी रीसेट", glacierShort: "MCBE के लिए प्रदर्शन-संचालित क्लाइंट।", lightShort: "दृश्य और प्रकाश वृद्धि भंडार।",
+                visitDiscord: "डिस्कॉर्ड देखें", download: "डाउनलोड", discordComm: "डिस्कॉर्ड समुदाय"
+            },
+            de: {
+                label: "Deutsch (DE)",
+                navHome: "Start", navProjects: "Projekte", navWeb: "Webseiten", navPacks: "Packs", navSettings: "Einstellungen",
+                heroSub: "Inhaber von Glacier Productions & Nyxora Studios.", glacierDesc: "Verwaltung von Glacier Client und dem Projects HUB Ökosystem.",
+                nyxoraDesc: "Entwicklung fortschrittlicher Web-Tools für MCBE und Minecraft Java.", projectsTitle: "Meine Projekte",
+                webTitle: "Web-Verzeichnis", webSub: "Live-Plattformen und Tools, die von mir entwickelt wurden.", packsTitle: "Packs Hub",
+                packsSub: "Offizielle Quelle für alle Ressourcen- und Verhaltenspakete.", settingsTitle: "App-Anpassung", setAccent: "Visuelles Thema",
+                setTypo: "Schnittstellen-Typografie", setLang: "Sprache", ctrlPanel: "Kontrollzentrum", glassStr: "Glasstärke",
+                motionOpt: "Animationen (AOS)", motionOptSub: "UI-Animationen", cursorOpt: "Cursor-Effekt", cursorOptSub: "Flüssige Interaktionen",
+                factoryReset: "Werkseinstellungen", glacierShort: "Leistungsstarker Client für MCBE.", lightShort: "Repository für visuelle Verbesserungen.",
+                visitDiscord: "Discord besuchen", download: "Herunterladen", discordComm: "Discord-Community"
+            },
+            fr: {
+                label: "Français (FR)",
+                navHome: "Accueil", navProjects: "Projets", navWeb: "Sites Web", navPacks: "Packs", navSettings: "Paramètres",
+                heroSub: "Propriétaire de Glacier Productions & Nyxora Studios.", glacierDesc: "Gestion du Glacier Client et de l'écosystème Projects HUB.",
+                nyxoraDesc: "Développement d'outils web avancés pour MCBE et Minecraft Java.", projectsTitle: "Mes Projets",
+                webTitle: "Répertoire Web", webSub: "Plateformes et utilitaires en direct développés par moi.", packsTitle: "Hub de Packs",
+                packsSub: "Source officielle pour tous les packs de ressources et de comportement.", settingsTitle: "Personnalisation", setAccent: "Thème Visuel",
+                setTypo: "Typographie d'interface", setLang: "Langue", ctrlPanel: "Panneau de contrôle", glassStr: "Force du verre",
+                motionOpt: "Mouvement (AOS)", motionOptSub: "Animations UI", cursorOpt: "Effet de curseur", cursorOptSub: "Interactions fluides",
+                factoryReset: "Réinitialisation", glacierShort: "Client performant pour MCBE.", lightShort: "Dépôt d'améliorations visuelles.",
+                visitDiscord: "Voir Discord", download: "Télécharger", discordComm: "Communauté Discord"
+            },
+            it: {
+                label: "Italiano (IT)",
+                navHome: "Home", navProjects: "Progetti", navWeb: "Siti Web", navPacks: "Pacchetti", navSettings: "Impostazioni",
+                heroSub: "Proprietario di Glacier Productions & Nyxora Studios.", glacierDesc: "Gestione di Glacier Client e dell'ecosistema Projects HUB.",
+                nyxoraDesc: "Sviluppo di strumenti web avanzati per MCBE e Minecraft Java.", projectsTitle: "I Miei Progetti",
+                webTitle: "Directory Web", webSub: "Piattaforme e utility live sviluppate da me.", packsTitle: "Hub Pacchetti",
+                packsSub: "Fonte ufficiale per tutti i pacchetti di risorse e comportamento.", settingsTitle: "Personalizzazione", setAccent: "Tema Visualivo",
+                setTypo: "Tipografia Interfaccia", setLang: "Lingua", ctrlPanel: "Pannello di Controllo", glassStr: "Forza del Vetro",
+                motionOpt: "Movimento (AOS)", motionOptSub: "Animazioni UI", cursorOpt: "Effetto Cursore", cursorOptSub: "Interazioni fluide",
+                factoryReset: "Ripristino", glacierShort: "Client orientato alle prestazioni per MCBE.", lightShort: "Repository di miglioramenti visivi.",
+                visitDiscord: "Visita Discord", download: "Scarica", discordComm: "Community Discord"
+            },
+            nl: {
+                label: "Nederlands (NL)",
+                navHome: "Home", navProjects: "Projecten", navWeb: "Websites", navPacks: "Packs", navSettings: "Instellingen",
+                heroSub: "Eigenaar van Glacier Productions & Nyxora Studios.", glacierDesc: "Beheer van Glacier Client en het Projects HUB ecosysteem.",
+                nyxoraDesc: "Ontwikkeling van geavanceerde webtools voor MCBE and Minecraft Java.", projectsTitle: "Mijn Projecten",
+                webTitle: "Weboverzicht", webSub: "Live platforms en hulpprogramma's door mij ontwikkeld.", packsTitle: "Packs Hub",
+                packsSub: "Officiële bron voor alle resource- en gedragspakketten.", settingsTitle: "App-aanpassing", setAccent: "Visueel Thema",
+                setTypo: "Interface Typografie", setLang: "Taal", ctrlPanel: "Controlepaneel", glassStr: "Glassterkte",
+                motionOpt: "Beweging (AOS)", motionOptSub: "UI-animaties", cursorOpt: "Cursoreffect", cursorOptSub: "Vloeiende interacties",
+                factoryReset: "Fabrieksinstellingen", glacierShort: "Prestatiegerichte client voor MCBE.", lightShort: "Opslagplaats voor visuele verbeteringen.",
+                visitDiscord: "Bezoek Discord", download: "Downloaden", discordComm: "Discord Community"
+            },
+            da: {
+                label: "Dansk (DK)",
+                navHome: "Hjem", navProjects: "Projekter", navWeb: "Hjemmesider", navPacks: "Pakker", navSettings: "Indstillinger",
+                heroSub: "Ejer af Glacier Productions & Nyxora Studios.", glacierDesc: "Håndtering af Glacier Client og Projects HUB økosystemet.",
+                nyxoraDesc: "Udvikling af avancerede webværktøjer til MCBE og Minecraft Java.", projectsTitle: "Mine Projekter",
+                webTitle: "Web-oversigt", webSub: "Live platforme og værktøjer udviklet af mig.", packsTitle: "Pakke Hub",
+                packsSub: "Officiel kilde til alle ressource- og adfærdspakker.", settingsTitle: "App Tilpasning", setAccent: "Visuelt Tema",
+                setTypo: "Grænseflade Typografi", setLang: "Sprog", ctrlPanel: "Kontrolpanel", glassStr: "Glasstyrke",
+                motionOpt: "Bevægelse (AOS)", motionOptSub: "UI-animationer", cursorOpt: "Cursor Effet", cursorOptSub: "Flydende interaktioner",
+                factoryReset: "Nulstil", glacierShort: "Ydelsesorienteret klient til MCBE.", lightShort: "Arkiv for visuelle forbedringer.",
+                visitDiscord: "Besøg Discord", download: "Download", discordComm: "Discord Fællesskab"
+            },
+            ar: {
+                label: "العربية (SA)",
+                navHome: "الرئيسية", navProjects: "المشاريع", navWeb: "المواقع", navPacks: "الحزم", navSettings: "الإعدادات",
+                heroSub: "مالك Glacier Productions و Nyxora Studios.", glacierDesc: "إدارة Glacier Client ونظام Projects HUB.",
+                nyxoraDesc: "تطوير أدوات ويب متقدمة لـ MCBE و Minecraft Java.", projectsTitle: "مشاريعي",
+                webTitle: "دليل الويب", webSub: "المنصات والأدوات الحية التي قمت بتطويرها.", packsTitle: "مركز الحزم",
+                packsSub: "المصدر الرسمي لجميع حزم الموارد والسلوك.", settingsTitle: "تخصيص التطبيق", setAccent: "المظهر المرئي",
+                setTypo: "خط الواجهة", setLang: "اللغة", ctrlPanel: "لوحة التحكم", glassStr: "قوة الزجاج",
+                motionOpt: "الحركة (AOS)", motionOptSub: "تحريك الواجهة", cursorOpt: "تأثير المؤشر", cursorOptSub: "تفاعلات سلسة",
+                factoryReset: "إعادة ضبط المصنع", glacierShort: "عميل يركز على الأداء لـ MCBE.", lightShort: "مستودع التحسينات البصرية والإضاءة.",
+                visitDiscord: "زيارة ديسكورد", download: "تحميل", discordComm: "مجتمع ديسكورد"
+            },
+            pt: {
+                label: "Português (PT)",
+                navHome: "Início", navProjects: "Projetos", navWeb: "Websites", navPacks: "Packs", navSettings: "Definições",
+                heroSub: "Proprietário de Glacier Productions & Nyxora Studios.", glacierDesc: "Gestão do Glacier Client e do ecossistema Projects HUB.",
+                nyxoraDesc: "Desenvolvimento de ferramentas web avançadas para MCBE e Minecraft Java.", projectsTitle: "Os Meus Projetos",
+                webTitle: "Diretório Web", webSub: "Plataformas e utilitários live desenvolvidos por mim.", packsTitle: "Centro de Packs",
+                packsSub: "Fonte oficial para todos os packs de recursos e comportamento.", settingsTitle: "Personalização", setAccent: "Tema Visual",
+                setTypo: "Tipografía de Interface", setLang: "Idioma", ctrlPanel: "Painel de Controlo", glassStr: "Força do Vidro",
+                motionOpt: "Movimento (AOS)", motionOptSub: "Animações UI", cursorOpt: "Efeito de Cursor", cursorOptSub: "Interações fluidas",
+                factoryReset: "Repor Fábrica", glacierShort: "Cliente focado em desempenho para MCBE.", lightShort: "Repositório de melhorias visuais.",
+                visitDiscord: "Visitar Discord", download: "Descarregar", discordComm: "Comunidade Discord"
+            },
+            zh: {
+                label: "中文 (CN)",
+                navHome: "首页", navProjects: "项目", navWeb: "网站", navPacks: "资源包", navSettings: "设置",
+                heroSub: "Glacier Productions 和 Nyxora Studios 的所有者。", glacierDesc: "管理 Glacier Client 和 Projects HUB 生态系统。",
+                nyxoraDesc: "为 MCBE 和 Minecraft Java 开发先进的 Web 工具。", projectsTitle: "我的项目",
+                webTitle: "网络目录", webSub: "我开发的在线平台和实用工具。", packsTitle: "资源中心",
+                packsSub: "所有资源包和行为包的官方来源。", settingsTitle: "应用自定义", setAccent: "视觉主题",
+                setTypo: "界面字体", setLang: "语言", ctrlPanel: "控制面板", glassStr: "玻璃强度",
+                motionOpt: "动态 (AOS)", motionOptSub: "UI 动画", cursorOpt: "光标效果", cursorOptSub: "流体交互",
+                factoryReset: "恢复出厂设置", glacierShort: "为 MCBE 设计的高性能客户端。", lightShort: "视觉和灯光增强库。",
+                visitDiscord: "访问 Discord", download: "下载", discordComm: "Discord 社区"
+            },
+            ru: {
+                label: "Русский (RU)",
+                navHome: "Главная", navProjects: "Проекты", navWeb: "Веб-сайты", navPacks: "Паки", navSettings: "Настройки",
+                heroSub: "Владелец Glacier Productions и Nyxora Studios.", glacierDesc: "Управление Glacier Client и экосистемой Projects HUB.",
+                nyxoraDesc: "Разработка продвинутых веб-инструментов для MCBE и Minecraft Java.", projectsTitle: "Мои проекты",
+                webTitle: "Веб-каталог", webSub: "Живые платформы и утилиты, разработанные мной.", packsTitle: "Центр паков",
+                packsSub: "Официальный источник для всех ресурс-паков и паков поведения.", settingsTitle: "Кастомизация", setAccent: "Визуальная тема",
+                setTypo: "Типографика интерфейса", setLang: "Язык", ctrlPanel: "Панель управления", glassStr: "Прозрачность",
+                motionOpt: "Движение (AOS)", motionOptSub: "UI анимации", cursorOpt: "Эффект курсора", cursorOptSub: "Плавные взаимодействия",
+                factoryReset: "Сброс настроек", glacierShort: "Производительный клиент для MCBE.", lightShort: "Репозиторий визуальных улучшений.",
+                visitDiscord: "Перейти в Discord", download: "Скачать", discordComm: "Сообщество Discord"
+            }
+        };
 
-            const projectsViewButton = document.getElementById('open-projects-view-button');
-            const backToInfoButton = document.getElementById('back-to-info-button');
-            const navLinks = document.querySelectorAll('.nav-link');
-            const logoLink = document.getElementById('logo-link');
-            const infoSection = document.getElementById('info-section');
-            const projectsSection = document.getElementById('projects-section');
-            
-            const projectSearchInput = document.getElementById('project-search');
-            const projectCards = document.querySelectorAll('.project-card');
+        const webTools = [
+            { name: "Glacier Client Web", url: "https://glacierclient.xyz" },
+            { name: "Manifest Generator", url: "https://pepeongithub.github.io/Pepes-Manifest-Generator/" },
+            { name: "JSON Obfuscator", url: "https://pepeongithub.github.io/JSON-Obfuscator-MCBE/" },
+            { name: "Cape Generator", url: "https://pepeongithub.github.io/Cape-Generator/" },
+            { name: "Pepe's Calculator", url: "https://pepeongithub.github.io/Pepe-s-Calculator/" },
+            { name: "MCBE Translator", url: "https://pepeongithub.github.io/Pepes-MCBE-Translator/" }
+        ];
 
-            const toggleMenu = () => {
-                const isOpen = mobileMenu.classList.toggle('open');
-                menuIcon.classList.toggle('fa-bars', !isOpen);
-                menuIcon.classList.toggle('fa-times', isOpen);
+        let settings = JSON.parse(localStorage.getItem('pepe_hybrid_v3')) || {
+            accent: '#7289da',
+            opacity: 0.6,
+            radius: '2rem',
+            motion: true,
+            cursor: true,
+            font: 'Inter',
+            lang: 'en'
+        };
 
-                if (isOpen) {
-                    headerContainer.classList.add('menu-expanded');
-                } else {
-                    setTimeout(() => {
-                        headerContainer.classList.remove('menu-expanded');
-                    }, 300);
-                }
-            };
+        const cursor = document.getElementById('cursor');
+        let cursorX = 0, cursorY = 0;
+        let targetX = 0, targetY = 0;
 
-            window.closeMenu = () => {
-                if (mobileMenu.classList.contains('open')) {
-                    toggleMenu();
-                }
-            };
-            menuToggle.addEventListener('click', toggleMenu);
-
-            const showView = (viewElement, smoothScroll = true) => {
-                if (viewElement.id === infoSection.id) {
-                    projectsSection.classList.add('hidden');
-                    projectsSection.style.display = 'none';
-                    
-                    infoSection.style.display = 'block'; 
-                    setTimeout(() => infoSection.classList.remove('hidden'), 10);
-                } else if (viewElement.id === projectsSection.id) {
-                    infoSection.classList.add('hidden');
-                    infoSection.style.display = 'none';
-
-                    projectsSection.style.display = 'block';
-                    setTimeout(() => projectsSection.classList.remove('hidden'), 10);
-                }
-                
-                AOS.refresh();
-
-                if (smoothScroll) {
-                    const mainTop = document.querySelector('main').offsetTop - 80;
-                    window.scrollTo({ top: mainTop, behavior: 'smooth' });
-                }
-            };
-
-            projectsViewButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                showView(projectsSection);
-            });
-
-            backToInfoButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                showView(infoSection);
-            });
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const viewId = link.getAttribute('href').substring(1); 
-                    const targetElement = document.getElementById(viewId);
-                    if(targetElement) showView(targetElement);
-                    closeMenu();
-                });
-            });
-
-            logoLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                showView(infoSection);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-            const filterProjects = (searchTerm) => {
-                const query = searchTerm.toLowerCase();
-
-                projectCards.forEach(card => {
-                    const title = card.getAttribute('data-title').toLowerCase();
-                    const description = card.getAttribute('data-description').toLowerCase();
-                    
-                    const isVisible = title.includes(query) || description.includes(query);
-
-                    if (isVisible) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            };
-
-            projectSearchInput.addEventListener('input', (e) => {
-                filterProjects(e.target.value);
-            });
-
-            const openModal = (modalElement) => {
-                modalElement.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; 
-                setTimeout(() => {
-                    modalElement.classList.add('opacity-100');
-                    modalElement.querySelector('div').classList.remove('scale-95');
-                    modalElement.querySelector('div').classList.add('scale-100');
-                }, 10);
-            };
-
-            const closeModal = (modalElement) => {
-                modalElement.classList.remove('opacity-100');
-                modalElement.querySelector('div').classList.add('scale-95');
-                modalElement.querySelector('div').classList.remove('scale-100');
-                document.body.style.overflow = 'auto';
-                setTimeout(() => {
-                    modalElement.style.display = 'none';
-                }, 300);
-            };
-
-            openSettingsButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    openModal(settingsModal);
-                });
-            });
-
-            closeSettingsButton.addEventListener('click', () => {
-                closeModal(settingsModal);
-            });
-
-            settingsModal.addEventListener('click', (e) => {
-                if (e.target === settingsModal) {
-                    closeModal(settingsModal);
-                }
-            });
-
-            const saveSetting = (key, value) => localStorage.setItem(key, value);
-            const getSetting = (key) => localStorage.getItem(key);
-
-            const applyTheme = (isLight) => {
-                if (isLight) {
-                    body.classList.add('light-theme');
-                } else {
-                    body.classList.remove('light-theme');
-                }
-                saveSetting('theme', isLight ? 'light' : 'dark');
-            };
-
-            const applyMotion = (isReduced) => {
-                if (isReduced) {
-                    body.classList.add('aos-disabled');
-                    AOS.refreshHard();
-                } else {
-                    body.classList.remove('aos-disabled');
-                    AOS.init({ duration: 800, once: true });
-                }
-                saveSetting('reduceMotion', isReduced);
-            };
-
-            const applyFont = (fontClass) => {
-                ['font-mono', 'font-serif'].forEach(cls => body.classList.remove(cls));
-                
-                if (fontClass !== 'inter') {
-                    body.classList.add(`font-${fontClass}`);
-                }
-                saveSetting('font', fontClass);
-                updateFontButtons(fontClass);
-            };
-            
-            const updateFontButtons = (activeFont) => {
-                 fontSelector.querySelectorAll('button').forEach(btn => {
-                    const font = btn.getAttribute('data-font');
-                    if (font === activeFont) {
-                        btn.classList.add('bg-accent', 'text-white');
-                        btn.classList.remove('bg-secondary', 'text-text');
-                    } else {
-                        btn.classList.remove('bg-accent', 'text-white');
-                        btn.classList.add('bg-secondary', 'text-text');
-                    }
-                });
-            };
-
-            const applyAccent = (color) => {
-                document.documentElement.style.setProperty('--accent', color);
-                saveSetting('accentColor', color);
-                updateAccentButtons(color);
-            };
-
-            const updateAccentButtons = (activeColor) => {
-                 accentSelector.querySelectorAll('button').forEach(btn => {
-                    const color = btn.getAttribute('data-color');
-                    if (color === activeColor) {
-                        btn.classList.add('scale-125', 'ring-4', 'ring-white/80');
-                        btn.classList.remove('scale-110', 'border-2', 'border-white/50');
-                    } else {
-                        btn.classList.remove('scale-125', 'ring-4', 'ring-white/80');
-                        btn.classList.add('scale-110', 'border-2', 'border-white/50');
-                    }
-                });
-            };
-
-            const loadSettings = () => {
-                const savedTheme = getSetting('theme');
-                const isLight = savedTheme === 'light';
-                applyTheme(isLight);
-                themeCheckbox.checked = isLight;
-
-                const savedMotion = getSetting('reduceMotion');
-                const isReduced = savedMotion === 'true';
-                applyMotion(isReduced);
-                motionCheckbox.checked = isReduced;
-
-                const savedFont = getSetting('font') || 'inter';
-                applyFont(savedFont);
-
-                const savedAccent = getSetting('accentColor') || '#7289DA';
-                applyAccent(savedAccent);
-            };
-
-            themeCheckbox.addEventListener('change', (e) => applyTheme(e.target.checked));
-            motionCheckbox.addEventListener('change', (e) => applyMotion(e.target.checked));
-
-            fontSelector.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON') {
-                    applyFont(e.target.getAttribute('data-font'));
-                }
-            });
-
-            accentSelector.addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON') {
-                    applyAccent(e.target.getAttribute('data-color'));
-                }
-            });
-
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-
-            loadSettings();
+        document.addEventListener('mousemove', e => {
+            targetX = e.clientX;
+            targetY = e.clientY;
         });
+
+        function animateCursor() {
+            if (settings.cursor) {
+                cursorX += (targetX - cursorX) * 0.2;
+                cursorY += (targetY - cursorY) * 0.2;
+                cursor.style.left = `${cursorX}px`;
+                cursor.style.top = `${cursorY}px`;
+            }
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        document.addEventListener('mousedown', () => { if(settings.cursor) cursor.style.transform = 'scale(0.7)'; });
+        document.addEventListener('mouseup', () => { if(settings.cursor) cursor.style.transform = 'scale(1)'; });
+
+        function applySettings() {
+            const r = document.documentElement;
+            r.style.setProperty('--blurple', settings.accent);
+            r.style.setProperty('--glass-opacity', settings.opacity);
+            r.style.setProperty('--card-radius', settings.radius);
+            
+            let currentFont = settings.font;
+            if(settings.lang === 'ar') currentFont = 'Noto Sans Arabic';
+            if(settings.lang === 'zh') currentFont = 'Noto Sans SC';
+            r.style.setProperty('--font-main', `'${currentFont}', sans-serif`);
+
+            document.body.dir = settings.lang === 'ar' ? 'rtl' : 'ltr';
+
+            document.getElementById('motionToggle').checked = settings.motion;
+            document.getElementById('cursorToggle').checked = settings.cursor;
+            document.getElementById('opacityLabel').innerText = `${Math.round(settings.opacity * 100)}%`;
+            document.getElementById('currentLangDisplay').innerText = translations[settings.lang].label;
+            
+            cursor.style.display = (settings.cursor && window.matchMedia('(pointer: fine)').matches) ? 'block' : 'none';
+
+            Object.keys(translations[settings.lang]).forEach(key => {
+                const els = document.querySelectorAll(`[data-lang="${key}"]`);
+                els.forEach(el => el.innerText = translations[settings.lang][key]);
+            });
+
+            localStorage.setItem('pepe_hybrid_v3', JSON.stringify(settings));
+            updateActiveTabColor();
+            renderPopupOptions();
+        }
+
+        function openPopup() {
+            document.getElementById('languagePopup').classList.add('open');
+            renderPopupOptions();
+        }
+
+        function closePopup(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('languagePopup').classList.remove('open');
+        }
+
+        function renderPopupOptions() {
+            const grid = document.getElementById('langOptionsGrid');
+            grid.innerHTML = Object.keys(translations).map(key => {
+                const isActive = settings.lang === key;
+                return `
+                    <button onclick="updateLang('${key}')" class="w-full text-left p-4 rounded-2xl transition-all flex items-center justify-between group ${isActive ? 'accent-bg text-white' : 'bg-white/5 hover:bg-white/10 text-gray-300'}">
+                        <span class="font-bold">${translations[key].label}</span>
+                        ${isActive ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-circle text-white/10 group-hover:text-white/20"></i>'}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function updateAccent(c) { settings.accent = c; applySettings(); }
+        function updateFont(f) { settings.font = f; applySettings(); }
+        function updateLang(l) { 
+            settings.lang = l; 
+            applySettings(); 
+            setTimeout(() => closePopup(null), 150);
+        }
+        function updateTransparency(v) { settings.opacity = v; applySettings(); }
+        function toggleMotion(v) { settings.motion = v; applySettings(); }
+        function toggleCursor(v) { settings.cursor = v; applySettings(); }
+
+        function resetSettings() {
+            settings = { accent: '#7289da', opacity: 0.6, radius: '2rem', motion: true, cursor: true, font: 'Inter', lang: 'en' };
+            applySettings();
+            renderWebsites();
+        }
+
+        function renderWebsites() {
+            const grid = document.getElementById('toolsGrid');
+            grid.innerHTML = webTools.map(tool => `
+                <a href="${tool.url}" target="_blank" class="glass p-6 rounded-[2rem] glow-card flex items-center group transition-all website-item btn-interact">
+                    <div class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center mx-3 group-hover:accent-bg transition-all">
+                        <i class="fas fa-external-link-alt text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-md font-black tool-name tracking-tight">${tool.name}</h4>
+                        <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest mt-1">Live Environment</p>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        function updateActiveTabColor() {
+            document.querySelectorAll('.mobile-tab.active').forEach(t => t.style.color = settings.accent);
+            document.querySelectorAll('.pill-tab.active').forEach(t => t.style.backgroundColor = settings.accent);
+        }
+
+        function showPage(id, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('.pill-tab, .mobile-tab').forEach(t => {
+                t.classList.remove('active');
+                t.style.color = '';
+                t.style.backgroundColor = '';
+                t.classList.add(t.classList.contains('mobile-tab') ? 'text-gray-500' : 'text-gray-400');
+            });
+
+            document.querySelectorAll(`button[onclick*="'${id}'"]`).forEach(t => {
+                t.classList.add('active');
+                if(t.classList.contains('mobile-tab')) {
+                    t.style.color = settings.accent;
+                    t.classList.remove('text-gray-500');
+                }
+            });
+
+            if (id === 'websites') renderWebsites();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterWebsites(v) {
+            const q = v.toLowerCase();
+            document.querySelectorAll('.website-item').forEach(i => {
+                i.style.display = i.querySelector('.tool-name').innerText.toLowerCase().includes(q) ? 'flex' : 'none';
+            });
+        }
+
+        window.onload = () => {
+            AOS.init({ duration: 800, once: true });
+            applySettings();
+            renderWebsites();
+        };
     </script>
 </body>
 </html>
+
