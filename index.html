@@ -126,10 +126,6 @@
             transition: transform 0.2s ease;
         }
 
-        .thick-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
-        }
-
         .switch {
             position: relative;
             display: inline-block;
@@ -165,85 +161,149 @@
             background-color: var(--blurple);
         }
 
-        input:checked + .slider-round:before {
-            transform: translateX(24px);
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+            z-index: 50;
         }
 
-        .popup-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
+        .custom-select-trigger {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.25rem 1.5rem;
+            border-radius: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .custom-options {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            right: 0;
+            background: #1e2124;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.25rem;
+            overflow: hidden;
+            display: none;
+            z-index: 999;
+            max-height: 250px;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .custom-options.show { display: block; }
+
+        .custom-option {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .custom-option:hover {
+            background: var(--blurple);
+        }
+
+        .tech-badge {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.6rem 1.2rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
+            gap: 0.6rem;
             transition: all 0.3s ease;
         }
 
-        .popup-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
+        .mcpedl-btn {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .popup-content {
-            width: 90%;
-            max-width: 400px;
-            transform: scale(0.9) translateY(20px);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+        .settings-pane { display: none; animation: slideIn 0.3s ease-out; }
+        .settings-pane.active { display: block; }
 
-        .popup-overlay.open .popup-content {
-            transform: scale(1) translateY(0);
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
     </style>
 </head>
-<body class="min-h-screen pb-32 md:pb-10">
+<body class="min-h-screen pb-40 md:pb-10">
 
     <div id="cursor" class="custom-cursor"></div>
 
-    <div id="languagePopup" class="popup-overlay" onclick="closePopup(event)">
-        <div class="popup-content glass p-6 rounded-[2.5rem] shadow-2xl" onclick="event.stopPropagation()">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-black uppercase tracking-tight">Select Language</h3>
-                <button onclick="closePopup(null)" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-500/20 hover:text-red-500 transition-all"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="grid grid-cols-1 gap-2 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar" id="langOptionsGrid">
-            </div>
-        </div>
-    </div>
-
     <header id="mainHeader" class="sticky top-4 z-50 header-rounded glass px-8 py-5 flex justify-between items-center shadow-2xl">
         <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 accent-bg rounded-2xl flex items-center justify-center font-black text-2xl shadow-xl rotate-3">P</div>
-            <span class="text-2xl font-black tracking-tighter">Pepe's Portfolio<span class="accent-text">.</span></span>
+            <div class="w-10 h-10 md:w-12 md:h-12 accent-bg rounded-2xl flex items-center justify-center font-black text-xl md:text-2xl shadow-xl rotate-3">P</div>
+            <span class="text-xl md:text-2xl font-black tracking-tighter">Pepe<span class="accent-text">.</span></span>
         </div>
 
-        <nav class="hidden lg:flex bg-[#00000050] p-1.5 rounded-full border border-white/10">
+        <nav class="hidden md:flex bg-[#00000050] p-1.5 rounded-full border border-white/10">
             <button onclick="showPage('home', this)" class="pill-tab active px-6 py-2.5 rounded-full text-sm font-bold transition-all btn-interact" data-lang="navHome">Home</button>
             <button onclick="showPage('projects', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navProjects">Projects</button>
-            <button onclick="showPage('websites', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navWeb">Websites</button>
-            <button onclick="showPage('packs', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navPacks">Packs</button>
+            <button onclick="showPage('websites', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navWeb">Web</button>
             <button onclick="showPage('settings', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navSettings">Settings</button>
         </nav>
         
-        <div class="hidden lg:block">
+        <div class="hidden md:block">
             <div class="px-4 py-2 bg-white/5 rounded-xl border border-white/10 text-xs font-bold accent-text">v2.1 Stable</div>
         </div>
+
+        <div class="md:hidden px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-[10px] font-bold accent-text">v2.1</div>
     </header>
 
     <main class="max-w-6xl mx-auto px-6 mt-12">
         
         <section id="home" class="page active">
-            <div class="flex flex-col items-center text-center py-20" data-aos="fade-up">
+            <div class="flex flex-col items-center text-center py-10" data-aos="fade-up">
                 <div class="relative mb-8 group">
-                    <img src="assets/pepe-profile.png" class="w-40 h-40 rounded-[3rem] border-4 accent-border bg-[#1e2124] shadow-2xl relative z-10 transition-transform group-hover:scale-105 duration-500">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=PepeMain" class="w-40 h-40 rounded-[3rem] border-4 accent-border bg-[#1e2124] shadow-2xl relative z-10 transition-transform group-hover:scale-105 duration-500">
                     <div class="absolute -inset-4 bg-blurple opacity-20 blur-3xl accent-bg animate-pulse"></div>
                 </div>
-                <h1 class="text-7xl md:text-9xl font-black mb-6 uppercase tracking-tighter leading-none">PEPE</h1>
-                <p class="text-gray-400 text-xl md:text-3xl max-w-3xl mb-12 font-medium" data-lang="heroSub">
+                
+                <h1 class="text-7xl md:text-9xl font-black mb-4 uppercase tracking-tighter leading-none">PEPE</h1>
+                
+                <div class="glass px-6 py-3 rounded-2xl mb-8 border-white/10">
+                    <p class="text-gray-300 text-sm md:text-lg font-bold">
+                        MCBE Texture Pack Creator • Glacier Client Owner • Website & Discord Bot Maker
+                    </p>
+                </div>
+
+                <div class="w-full max-w-2xl mb-12">
+                    <div class="mb-10">
+                        <div class="flex items-center justify-center gap-3 mb-6">
+                            <div class="h-[1px] w-12 bg-white/10"></div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.4em] text-gray-400" data-lang="langsMastered">Core Proficiencies</p>
+                            <div class="h-[1px] w-12 bg-white/10"></div>
+                        </div>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <div class="tech-badge border-white/10 bg-white/5"><i class="fab fa-html5 text-orange-500"></i> HTML5</div>
+                            <div class="tech-badge border-white/10 bg-white/5"><i class="fab fa-css3-alt text-blue-500"></i> CSS3</div>
+                            <div class="tech-badge border-white/10 bg-white/5"><i class="fab fa-js text-yellow-500"></i> JavaScript</div>
+                            <div class="tech-badge accent-border accent-text bg-white/5"><i class="fab fa-python"></i> Python</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="flex items-center justify-center gap-3 mb-6">
+                            <div class="h-[1px] w-8 bg-white/5"></div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.4em] text-gray-600" data-lang="langsLearning">Acquiring Expertise</p>
+                            <div class="h-[1px] w-8 bg-white/5"></div>
+                        </div>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <div class="tech-badge opacity-40 grayscale hover:grayscale-0 hover:opacity-100"><i class="fab fa-java text-red-500"></i> Java SE</div>
+                            <div class="tech-badge opacity-40 grayscale hover:grayscale-0 hover:opacity-100"><i class="fab fa-rust text-orange-700"></i> Rust Lang</div>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-gray-400 text-xl md:text-2xl max-w-3xl mb-12 font-medium" data-lang="heroSub">
                     Owner of <span class="text-white">Glacier Productions</span> & <span class="text-white">Nyxora Studios</span>.
                 </p>
                 
@@ -277,10 +337,10 @@
                     <p class="text-gray-400 mb-6" data-lang="glacierShort">Performance-driven client for MCBE.</p>
                     <a href="https://discord.glacierclient.xyz/" target="_blank" class="inline-block px-6 py-3 bg-white/5 rounded-xl text-sm font-bold accent-text hover:bg-white/10 transition-all btn-interact" data-lang="visitDiscord">Visit Discord <i class="fas fa-arrow-right ml-2"></i></a>
                 </div>
-                <div class="glass p-8 rounded-[var(--card-radius)] glow-card border-l-8 border-white/20">
-                    <h4 class="text-2xl font-black mb-2">Project Light</h4>
-                    <p class="text-gray-400 mb-6" data-lang="lightShort">Visual and lighting enhancement repository.</p>
-                    <a href="https://www.mediafire.com/folder/ce0ptwtsg1zwz/ProjectLight" target="_blank" class="inline-block px-6 py-3 bg-white/5 rounded-xl text-sm font-bold text-gray-400 hover:bg-white/10 transition-all btn-interact" data-lang="download">Download <i class="fas fa-download ml-2"></i></a>
+                <div onclick="showPage('packs', this)" class="glass p-8 rounded-[var(--card-radius)] glow-card border-l-8 border-white/20 cursor-pointer">
+                    <h4 class="text-2xl font-black mb-2">Packs Hub</h4>
+                    <p class="text-gray-400 mb-6" data-lang="packsShort">All my MCBE Texture Packs in one place.</p>
+                    <span class="inline-block px-6 py-3 bg-white/5 rounded-xl text-sm font-bold text-gray-400 hover:bg-white/10 transition-all btn-interact">View Library <i class="fas fa-archive ml-2"></i></span>
                 </div>
             </div>
         </section>
@@ -308,11 +368,15 @@
                     <h2 class="text-5xl font-black mb-6 tracking-tighter" data-lang="packsTitle">Packs Hub</h2>
                     <p class="text-gray-400 text-lg mb-12" data-lang="packsSub">Official source for all resource and behavior packs.</p>
                     <div class="grid grid-cols-1 gap-4">
+                        <a href="https://mcpedl.com/user/pepe/" target="_blank" class="flex items-center justify-between p-8 mcpedl-btn rounded-3xl hover:brightness-125 transition-all btn-interact group shadow-xl">
+                            <span class="font-black uppercase text-lg tracking-tight">MCPEDL Profile</span>
+                            <i class="fas fa-download text-2xl"></i>
+                        </a>
                         <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" class="flex items-center justify-between p-8 bg-white/5 rounded-3xl hover:accent-bg transition-all btn-interact group">
                             <span class="font-black uppercase text-lg tracking-tight" data-lang="discordComm">Discord Community</span>
                             <i class="fab fa-discord text-2xl"></i>
                         </a>
-                        <a href="#" class="flex items-center justify-between p-8 bg-white/5 rounded-3xl hover:bg-orange-600 transition-all btn-interact">
+                        <a href="https://www.curseforge.com/members/pepe/projects" target="_blank" class="flex items-center justify-between p-8 bg-white/5 rounded-3xl hover:bg-orange-600 transition-all btn-interact">
                             <span class="font-black uppercase text-lg tracking-tight">CurseForge</span>
                             <i class="fas fa-fire text-2xl"></i>
                         </a>
@@ -322,68 +386,110 @@
         </section>
 
         <section id="settings" class="page">
-            <h2 class="text-5xl font-black mb-12 tracking-tighter" data-lang="settingsTitle">App Customization</h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <div class="lg:col-span-2 space-y-8">
-                    <div class="glass p-10 rounded-[3rem] space-y-10">
-                        <div>
-                            <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="setAccent">Visual Theme</h4>
-                            <div class="flex flex-wrap gap-6">
-                                <button onclick="updateAccent('#7289da')" class="w-14 h-14 rounded-2xl bg-[#7289da] border-4 border-white/10 btn-interact shadow-lg"></button>
-                                <button onclick="updateAccent('#ff4757')" class="w-14 h-14 rounded-2xl bg-[#ff4757] border-4 border-white/10 btn-interact shadow-lg"></button>
-                                <button onclick="updateAccent('#2ed573')" class="w-14 h-14 rounded-2xl bg-[#2ed573] border-4 border-white/10 btn-interact shadow-lg"></button>
-                                <button onclick="updateAccent('#ffa502')" class="w-14 h-14 rounded-2xl bg-[#ffa502] border-4 border-white/10 btn-interact shadow-lg"></button>
-                                <button onclick="updateAccent('#a29bfe')" class="w-14 h-14 rounded-2xl bg-[#a29bfe] border-4 border-white/10 btn-interact shadow-lg"></button>
+            <div id="settingsMain" class="settings-pane active">
+                <h2 class="text-5xl font-black mb-12 tracking-tighter" data-lang="settingsTitle">App Customization</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div onclick="switchSettings('visual')" class="glass p-8 rounded-[2rem] glow-card cursor-pointer flex items-center justify-between btn-interact">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400"><i class="fas fa-palette"></i></div>
+                            <div>
+                                <h4 class="font-black text-lg">Visuals</h4>
+                                <p class="text-xs text-gray-500">Colors & Glass</p>
                             </div>
                         </div>
+                        <i class="fas fa-chevron-right text-gray-600"></i>
+                    </div>
 
-                        <div>
-                            <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="setTypo">Interface Typography</h4>
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                                <button onclick="updateFont('Inter')" class="bg-white/5 py-4 rounded-2xl text-sm font-black hover:accent-bg btn-interact">INTER</button>
-                                <button onclick="updateFont('Outfit')" class="bg-white/5 py-4 rounded-2xl text-sm font-black hover:accent-bg btn-interact">OUTFIT</button>
-                                <button onclick="updateFont('Lexend')" class="bg-white/5 py-4 rounded-2xl text-sm font-black hover:accent-bg btn-interact">LEXEND</button>
-                                <button onclick="updateFont('JetBrains Mono')" class="bg-white/5 py-4 rounded-2xl text-sm font-black hover:accent-bg btn-interact">MONO</button>
+                    <div onclick="switchSettings('language')" class="glass p-8 rounded-[2rem] glow-card cursor-pointer flex items-center justify-between btn-interact">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400"><i class="fas fa-language"></i></div>
+                            <div>
+                                <h4 class="font-black text-lg">Language</h4>
+                                <p class="text-xs text-gray-500">Locale & Region</p>
                             </div>
                         </div>
+                        <i class="fas fa-chevron-right text-gray-600"></i>
+                    </div>
 
-                        <div>
-                            <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6" data-lang="setLang">Language / Idioma</h4>
-                            <button onclick="openPopup()" class="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-6 flex justify-between items-center group btn-interact">
-                                <span id="currentLangDisplay" class="font-black text-lg">English (US)</span>
-                                <i class="fas fa-chevron-right text-gray-500 group-hover:accent-text transition-colors"></i>
-                            </button>
+                    <div onclick="switchSettings('system')" class="glass p-8 rounded-[2rem] glow-card cursor-pointer flex items-center justify-between btn-interact">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400"><i class="fas fa-microchip"></i></div>
+                            <div>
+                                <h4 class="font-black text-lg">System</h4>
+                                <p class="text-xs text-gray-500">Performance & FX</p>
+                            </div>
                         </div>
+                        <i class="fas fa-chevron-right text-gray-600"></i>
                     </div>
                 </div>
+            </div>
 
-                <div class="glass p-10 rounded-[3rem] space-y-8">
-                    <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-2" data-lang="ctrlPanel">Control Panel</h4>
-                    
-                    <div class="setting-card">
+            <div id="settingsVisual" class="settings-pane">
+                <div class="flex items-center gap-4 mb-10">
+                    <button onclick="switchSettings('main')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"><i class="fas fa-arrow-left"></i></button>
+                    <h2 class="text-4xl font-black tracking-tighter">Visual Theme</h2>
+                </div>
+
+                <div class="glass p-10 rounded-[3rem] space-y-10">
+                    <div>
+                        <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6">Accent Color</h4>
+                        <div class="flex flex-wrap gap-6">
+                            <button onclick="updateAccent('#7289da')" class="w-14 h-14 rounded-2xl bg-[#7289da] border-4 border-white/10 btn-interact shadow-lg"></button>
+                            <button onclick="updateAccent('#ff4757')" class="w-14 h-14 rounded-2xl bg-[#ff4757] border-4 border-white/10 btn-interact shadow-lg"></button>
+                            <button onclick="updateAccent('#2ed573')" class="w-14 h-14 rounded-2xl bg-[#2ed573] border-4 border-white/10 btn-interact shadow-lg"></button>
+                            <button onclick="updateAccent('#ffa502')" class="w-14 h-14 rounded-2xl bg-[#ffa502] border-4 border-white/10 btn-interact shadow-lg"></button>
+                            <button onclick="updateAccent('#a29bfe')" class="w-14 h-14 rounded-2xl bg-[#a29bfe] border-4 border-white/10 btn-interact shadow-lg"></button>
+                        </div>
+                    </div>
+
+                    <div class="setting-card max-w-md">
                         <div class="flex justify-between items-center mb-2">
-                            <p class="font-black text-sm" data-lang="glassStr">Glass Strength</p>
+                            <p class="font-black text-sm">Glass Opacity</p>
                             <span id="opacityLabel" class="text-xs accent-text font-black">60%</span>
                         </div>
                         <input type="range" min="0.1" max="0.9" step="0.1" value="0.6" oninput="updateTransparency(this.value)" class="thick-slider">
                     </div>
+                </div>
+            </div>
 
-                    <div class="setting-card flex items-center justify-between">
-                        <div>
-                            <p class="font-black text-sm" data-lang="motionOpt">Motion (AOS)</p>
-                            <p class="text-[10px] text-gray-500 font-bold" data-lang="motionOptSub">UI animations</p>
+            <div id="settingsLanguage" class="settings-pane">
+                <div class="flex items-center gap-4 mb-10">
+                    <button onclick="switchSettings('main')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"><i class="fas fa-arrow-left"></i></button>
+                    <h2 class="text-4xl font-black tracking-tighter">Localization</h2>
+                </div>
+
+                <div class="glass p-10 rounded-[3rem] max-w-xl">
+                    <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6">Display Language</h4>
+                    <div class="custom-select-container">
+                        <div id="customSelectTrigger" class="custom-select-trigger" onclick="toggleDropdown()">
+                            <span id="selectedLang">English (US)</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
                         </div>
-                        <label class="switch btn-interact">
-                            <input type="checkbox" id="motionToggle" checked onchange="toggleMotion(this.checked)">
-                            <span class="slider-round"></span>
-                        </label>
+                        <div id="customOptions" class="custom-options">
+                            <div class="custom-option" onclick="selectOption('en', 'English (US)')">English (US)</div>
+                            <div class="custom-option" onclick="selectOption('es', 'Español (ES)')">Español (ES)</div>
+                            <div class="custom-option" onclick="selectOption('hi', 'हिन्दी (IN)')">हिन्दी (IN)</div>
+                            <div class="custom-option" onclick="selectOption('de', 'Deutsch (DE)')">Deutsch (DE)</div>
+                            <div class="custom-option" onclick="selectOption('fr', 'Français (FR)')">Français (FR)</div>
+                            <div class="custom-option" onclick="selectOption('ar', 'العربية (SA)')">العربية (SA)</div>
+                            <div class="custom-option" onclick="selectOption('zh', '中文 (CN)')">中文 (CN)</div>
+                        </div>
                     </div>
+                </div>
+            </div>
 
-                    <div class="setting-card flex items-center justify-between">
+            <div id="settingsSystem" class="settings-pane">
+                <div class="flex items-center gap-4 mb-10">
+                    <button onclick="switchSettings('main')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"><i class="fas fa-arrow-left"></i></button>
+                    <h2 class="text-4xl font-black tracking-tighter">System & UX</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass p-8 rounded-[2rem] flex items-center justify-between">
                         <div>
-                            <p class="font-black text-sm" data-lang="cursorOpt">Cursor FX</p>
-                            <p class="text-[10px] text-gray-500 font-bold" data-lang="cursorOptSub">Fluid interactions</p>
+                            <p class="font-black text-sm">Custom Cursor</p>
+                            <p class="text-xs text-gray-500">Hardware pointer override</p>
                         </div>
                         <label class="switch btn-interact">
                             <input type="checkbox" id="cursorToggle" checked onchange="toggleCursor(this.checked)">
@@ -391,10 +497,15 @@
                         </label>
                     </div>
 
-                    <div class="pt-6">
-                        <button onclick="resetSettings()" class="w-full py-5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all btn-interact shadow-lg" data-lang="factoryReset">
-                            Factory Reset
-                        </button>
+                    <div class="glass p-8 rounded-[2rem] flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-sm">Reduced Motion</p>
+                            <p class="text-xs text-gray-500">Disable heavy animations</p>
+                        </div>
+                        <label class="switch btn-interact">
+                            <input type="checkbox" id="motionToggle" onchange="toggleMotion(this.checked)">
+                            <span class="slider-round"></span>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -403,21 +514,18 @@
     </main>
 
     <div class="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] z-50">
-        <nav class="glass p-3 rounded-[2rem] flex justify-between items-center shadow-2xl border border-white/10">
-            <button onclick="showPage('home', this)" class="mobile-tab active w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-home text-xl"></i>
+        <nav class="glass p-3 rounded-[2rem] flex justify-around items-center shadow-2xl border border-white/10">
+            <button onclick="showPage('home', this)" class="mobile-tab active w-12 h-12 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-home text-lg"></i>
             </button>
-            <button onclick="showPage('projects', this)" class="mobile-tab w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-tasks text-xl"></i>
+            <button onclick="showPage('projects', this)" class="mobile-tab w-12 h-12 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-tasks text-lg"></i>
             </button>
-            <button onclick="showPage('websites', this)" class="mobile-tab w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-globe text-xl"></i>
+            <button onclick="showPage('websites', this)" class="mobile-tab w-12 h-12 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-globe text-lg"></i>
             </button>
-            <button onclick="showPage('packs', this)" class="mobile-tab w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-cubes text-xl"></i>
-            </button>
-            <button onclick="showPage('settings', this)" class="mobile-tab w-14 h-14 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-cog text-xl"></i>
+            <button onclick="showPage('settings', this)" class="mobile-tab w-12 h-12 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
+                <i class="fas fa-cog text-lg"></i>
             </button>
         </nav>
     </div>
@@ -425,148 +533,24 @@
     <script>
         const translations = {
             en: {
-                label: "English (US)",
-                navHome: "Home", navProjects: "Projects", navWeb: "Websites", navPacks: "Packs", navSettings: "Settings",
+                navHome: "Home", navProjects: "Projects", navWeb: "Websites", navSettings: "Settings",
                 heroSub: "Owner of Glacier Productions & Nyxora Studios.", glacierDesc: "Managing Glacier Client and the Projects HUB ecosystem.",
                 nyxoraDesc: "Developing advanced web tools for MCBE and Minecraft Java.", projectsTitle: "My Projects",
                 webTitle: "Web Directory", webSub: "Live platforms and utilities developed by me.", packsTitle: "Packs Hub",
-                packsSub: "Official source for all resource and behavior packs.", settingsTitle: "App Customization", setAccent: "Visual Theme",
-                setTypo: "Interface Typography", setLang: "Language / Idioma", ctrlPanel: "Control Panel", glassStr: "Glass Strength",
-                motionOpt: "Motion (AOS)", motionOptSub: "UI animations", cursorOpt: "Cursor FX", cursorOptSub: "Fluid interactions",
-                factoryReset: "Factory Reset", glacierShort: "Performance-driven client for MCBE.", lightShort: "Visual and lighting enhancement repository.",
-                visitDiscord: "Visit Discord", download: "Download", discordComm: "Discord Community"
+                packsSub: "Official source for all resource and behavior packs.", settingsTitle: "App Customization",
+                glacierShort: "Performance-driven client for MCBE.", visitDiscord: "Visit Discord", 
+                packsShort: "All my MCBE Texture Packs in one place.", discordComm: "Discord Community",
+                langsMastered: "Core Proficiencies", langsLearning: "Acquiring Expertise"
             },
             es: {
-                label: "Español (ES)",
-                navHome: "Inicio", navProjects: "Proyectos", navWeb: "Sitios Web", navPacks: "Packs", navSettings: "Ajustes",
+                navHome: "Inicio", navProjects: "Proyectos", navWeb: "Sitios Web", navSettings: "Ajustes",
                 heroSub: "Dueño de Glacier Productions y Nyxora Studios.", glacierDesc: "Gestionando Glacier Client y el ecosistema Projects HUB.",
                 nyxoraDesc: "Desarrollando herramientas web para MCBE y Minecraft Java.", projectsTitle: "Mis Proyectos",
                 webTitle: "Directorio Web", webSub: "Plataformas en vivo y utilidades desarrolladas por mí.", packsTitle: "Centro de Packs",
-                packsSub: "Fuente oficial de todos los paquetes de recursos y comportamiento.", settingsTitle: "Personalización", setAccent: "Tema Visual",
-                setTypo: "Tipografía de Interfaz", setLang: "Idioma / Language", ctrlPanel: "Panel de Control", glassStr: "Fuerza del Cristal",
-                motionOpt: "Movimiento (AOS)", motionOptSub: "Animaciones de UI", cursorOpt: "Efecto de Cursor", cursorOptSub: "Interacciones fluidas",
-                factoryReset: "Restablecer", glacierShort: "Cliente enfocado en rendimiento para MCBE.", lightShort: "Repositorio de mejoras visuales.",
-                visitDiscord: "Ir a Discord", download: "Descargar", discordComm: "Comunidad de Discord"
-            },
-            hi: {
-                label: "हिन्दी (IN)",
-                navHome: "मुख्य", navProjects: "प्रोजेक्ट्स", navWeb: "वेबसाइट्स", navPacks: "पैक्स", navSettings: "सेटिंग्स",
-                heroSub: "ग्लेशियर प्रोडक्शंस और निक्ज़ोरा स्टूडियो के मालिक।", glacierDesc: "ग्लेशियर क्लाइंट और प्रोजेक्ट्स हब इकोसिस्टम का प्रबंधन।",
-                nyxoraDesc: "MCBE और माइनक्राफ्ट जावा के लिए उन्नत वेब टूल विकसित करना।", projectsTitle: "मेरे प्रोजेक्ट्स",
-                webTitle: "वेब निर्देशिका", webSub: "मेरे द्वारा विकसित लाइव प्लेटफॉर्म और उपयोगिताएं।", packsTitle: "पैक्स हब",
-                packsSub: "सभी संसाधन और व्यवहार पैक्स के लिए आधिकारिक स्रोत।", settingsTitle: "ऐप अनुकूलन", setAccent: "विज़ुअल थीम",
-                setTypo: "इंटरफ़ेस टाइपोग्राफी", setLang: "भाषा", ctrlPanel: "कंट्रोल पैनल", glassStr: "ग्लास स्ट्रेंथ",
-                motionOpt: "मोशन (AOS)", motionOptSub: "UI एनिमेशन", cursorOpt: "कर्सर प्रभाव", cursorOptSub: "तरल बातचीत",
-                factoryReset: "फैक्टरी रीसेट", glacierShort: "MCBE के लिए प्रदर्शन-संचालित क्लाइंट।", lightShort: "दृश्य और प्रकाश वृद्धि भंडार।",
-                visitDiscord: "डिस्कॉर्ड देखें", download: "डाउनलोड", discordComm: "डिस्कॉर्ड समुदाय"
-            },
-            de: {
-                label: "Deutsch (DE)",
-                navHome: "Start", navProjects: "Projekte", navWeb: "Webseiten", navPacks: "Packs", navSettings: "Einstellungen",
-                heroSub: "Inhaber von Glacier Productions & Nyxora Studios.", glacierDesc: "Verwaltung von Glacier Client und dem Projects HUB Ökosystem.",
-                nyxoraDesc: "Entwicklung fortschrittlicher Web-Tools für MCBE und Minecraft Java.", projectsTitle: "Meine Projekte",
-                webTitle: "Web-Verzeichnis", webSub: "Live-Plattformen und Tools, die von mir entwickelt wurden.", packsTitle: "Packs Hub",
-                packsSub: "Offizielle Quelle für alle Ressourcen- und Verhaltenspakete.", settingsTitle: "App-Anpassung", setAccent: "Visuelles Thema",
-                setTypo: "Schnittstellen-Typografie", setLang: "Sprache", ctrlPanel: "Kontrollzentrum", glassStr: "Glasstärke",
-                motionOpt: "Animationen (AOS)", motionOptSub: "UI-Animationen", cursorOpt: "Cursor-Effekt", cursorOptSub: "Flüssige Interaktionen",
-                factoryReset: "Werkseinstellungen", glacierShort: "Leistungsstarker Client für MCBE.", lightShort: "Repository für visuelle Verbesserungen.",
-                visitDiscord: "Discord besuchen", download: "Herunterladen", discordComm: "Discord-Community"
-            },
-            fr: {
-                label: "Français (FR)",
-                navHome: "Accueil", navProjects: "Projets", navWeb: "Sites Web", navPacks: "Packs", navSettings: "Paramètres",
-                heroSub: "Propriétaire de Glacier Productions & Nyxora Studios.", glacierDesc: "Gestion du Glacier Client et de l'écosystème Projects HUB.",
-                nyxoraDesc: "Développement d'outils web avancés pour MCBE et Minecraft Java.", projectsTitle: "Mes Projets",
-                webTitle: "Répertoire Web", webSub: "Plateformes et utilitaires en direct développés par moi.", packsTitle: "Hub de Packs",
-                packsSub: "Source officielle pour tous les packs de ressources et de comportement.", settingsTitle: "Personnalisation", setAccent: "Thème Visuel",
-                setTypo: "Typographie d'interface", setLang: "Langue", ctrlPanel: "Panneau de contrôle", glassStr: "Force du verre",
-                motionOpt: "Mouvement (AOS)", motionOptSub: "Animations UI", cursorOpt: "Effet de curseur", cursorOptSub: "Interactions fluides",
-                factoryReset: "Réinitialisation", glacierShort: "Client performant pour MCBE.", lightShort: "Dépôt d'améliorations visuelles.",
-                visitDiscord: "Voir Discord", download: "Télécharger", discordComm: "Communauté Discord"
-            },
-            it: {
-                label: "Italiano (IT)",
-                navHome: "Home", navProjects: "Progetti", navWeb: "Siti Web", navPacks: "Pacchetti", navSettings: "Impostazioni",
-                heroSub: "Proprietario di Glacier Productions & Nyxora Studios.", glacierDesc: "Gestione di Glacier Client e dell'ecosistema Projects HUB.",
-                nyxoraDesc: "Sviluppo di strumenti web avanzati per MCBE e Minecraft Java.", projectsTitle: "I Miei Progetti",
-                webTitle: "Directory Web", webSub: "Piattaforme e utility live sviluppate da me.", packsTitle: "Hub Pacchetti",
-                packsSub: "Fonte ufficiale per tutti i pacchetti di risorse e comportamento.", settingsTitle: "Personalizzazione", setAccent: "Tema Visualivo",
-                setTypo: "Tipografia Interfaccia", setLang: "Lingua", ctrlPanel: "Pannello di Controllo", glassStr: "Forza del Vetro",
-                motionOpt: "Movimento (AOS)", motionOptSub: "Animazioni UI", cursorOpt: "Effetto Cursore", cursorOptSub: "Interazioni fluide",
-                factoryReset: "Ripristino", glacierShort: "Client orientato alle prestazioni per MCBE.", lightShort: "Repository di miglioramenti visivi.",
-                visitDiscord: "Visita Discord", download: "Scarica", discordComm: "Community Discord"
-            },
-            nl: {
-                label: "Nederlands (NL)",
-                navHome: "Home", navProjects: "Projecten", navWeb: "Websites", navPacks: "Packs", navSettings: "Instellingen",
-                heroSub: "Eigenaar van Glacier Productions & Nyxora Studios.", glacierDesc: "Beheer van Glacier Client en het Projects HUB ecosysteem.",
-                nyxoraDesc: "Ontwikkeling van geavanceerde webtools voor MCBE and Minecraft Java.", projectsTitle: "Mijn Projecten",
-                webTitle: "Weboverzicht", webSub: "Live platforms en hulpprogramma's door mij ontwikkeld.", packsTitle: "Packs Hub",
-                packsSub: "Officiële bron voor alle resource- en gedragspakketten.", settingsTitle: "App-aanpassing", setAccent: "Visueel Thema",
-                setTypo: "Interface Typografie", setLang: "Taal", ctrlPanel: "Controlepaneel", glassStr: "Glassterkte",
-                motionOpt: "Beweging (AOS)", motionOptSub: "UI-animaties", cursorOpt: "Cursoreffect", cursorOptSub: "Vloeiende interacties",
-                factoryReset: "Fabrieksinstellingen", glacierShort: "Prestatiegerichte client voor MCBE.", lightShort: "Opslagplaats voor visuele verbeteringen.",
-                visitDiscord: "Bezoek Discord", download: "Downloaden", discordComm: "Discord Community"
-            },
-            da: {
-                label: "Dansk (DK)",
-                navHome: "Hjem", navProjects: "Projekter", navWeb: "Hjemmesider", navPacks: "Pakker", navSettings: "Indstillinger",
-                heroSub: "Ejer af Glacier Productions & Nyxora Studios.", glacierDesc: "Håndtering af Glacier Client og Projects HUB økosystemet.",
-                nyxoraDesc: "Udvikling af avancerede webværktøjer til MCBE og Minecraft Java.", projectsTitle: "Mine Projekter",
-                webTitle: "Web-oversigt", webSub: "Live platforme og værktøjer udviklet af mig.", packsTitle: "Pakke Hub",
-                packsSub: "Officiel kilde til alle ressource- og adfærdspakker.", settingsTitle: "App Tilpasning", setAccent: "Visuelt Tema",
-                setTypo: "Grænseflade Typografi", setLang: "Sprog", ctrlPanel: "Kontrolpanel", glassStr: "Glasstyrke",
-                motionOpt: "Bevægelse (AOS)", motionOptSub: "UI-animationer", cursorOpt: "Cursor Effet", cursorOptSub: "Flydende interaktioner",
-                factoryReset: "Nulstil", glacierShort: "Ydelsesorienteret klient til MCBE.", lightShort: "Arkiv for visuelle forbedringer.",
-                visitDiscord: "Besøg Discord", download: "Download", discordComm: "Discord Fællesskab"
-            },
-            ar: {
-                label: "العربية (SA)",
-                navHome: "الرئيسية", navProjects: "المشاريع", navWeb: "المواقع", navPacks: "الحزم", navSettings: "الإعدادات",
-                heroSub: "مالك Glacier Productions و Nyxora Studios.", glacierDesc: "إدارة Glacier Client ونظام Projects HUB.",
-                nyxoraDesc: "تطوير أدوات ويب متقدمة لـ MCBE و Minecraft Java.", projectsTitle: "مشاريعي",
-                webTitle: "دليل الويب", webSub: "المنصات والأدوات الحية التي قمت بتطويرها.", packsTitle: "مركز الحزم",
-                packsSub: "المصدر الرسمي لجميع حزم الموارد والسلوك.", settingsTitle: "تخصيص التطبيق", setAccent: "المظهر المرئي",
-                setTypo: "خط الواجهة", setLang: "اللغة", ctrlPanel: "لوحة التحكم", glassStr: "قوة الزجاج",
-                motionOpt: "الحركة (AOS)", motionOptSub: "تحريك الواجهة", cursorOpt: "تأثير المؤشر", cursorOptSub: "تفاعلات سلسة",
-                factoryReset: "إعادة ضبط المصنع", glacierShort: "عميل يركز على الأداء لـ MCBE.", lightShort: "مستودع التحسينات البصرية والإضاءة.",
-                visitDiscord: "زيارة ديسكورد", download: "تحميل", discordComm: "مجتمع ديسكورد"
-            },
-            pt: {
-                label: "Português (PT)",
-                navHome: "Início", navProjects: "Projetos", navWeb: "Websites", navPacks: "Packs", navSettings: "Definições",
-                heroSub: "Proprietário de Glacier Productions & Nyxora Studios.", glacierDesc: "Gestão do Glacier Client e do ecossistema Projects HUB.",
-                nyxoraDesc: "Desenvolvimento de ferramentas web avançadas para MCBE e Minecraft Java.", projectsTitle: "Os Meus Projetos",
-                webTitle: "Diretório Web", webSub: "Plataformas e utilitários live desenvolvidos por mim.", packsTitle: "Centro de Packs",
-                packsSub: "Fonte oficial para todos os packs de recursos e comportamento.", settingsTitle: "Personalização", setAccent: "Tema Visual",
-                setTypo: "Tipografía de Interface", setLang: "Idioma", ctrlPanel: "Painel de Controlo", glassStr: "Força do Vidro",
-                motionOpt: "Movimento (AOS)", motionOptSub: "Animações UI", cursorOpt: "Efeito de Cursor", cursorOptSub: "Interações fluidas",
-                factoryReset: "Repor Fábrica", glacierShort: "Cliente focado em desempenho para MCBE.", lightShort: "Repositório de melhorias visuais.",
-                visitDiscord: "Visitar Discord", download: "Descarregar", discordComm: "Comunidade Discord"
-            },
-            zh: {
-                label: "中文 (CN)",
-                navHome: "首页", navProjects: "项目", navWeb: "网站", navPacks: "资源包", navSettings: "设置",
-                heroSub: "Glacier Productions 和 Nyxora Studios 的所有者。", glacierDesc: "管理 Glacier Client 和 Projects HUB 生态系统。",
-                nyxoraDesc: "为 MCBE 和 Minecraft Java 开发先进的 Web 工具。", projectsTitle: "我的项目",
-                webTitle: "网络目录", webSub: "我开发的在线平台和实用工具。", packsTitle: "资源中心",
-                packsSub: "所有资源包和行为包的官方来源。", settingsTitle: "应用自定义", setAccent: "视觉主题",
-                setTypo: "界面字体", setLang: "语言", ctrlPanel: "控制面板", glassStr: "玻璃强度",
-                motionOpt: "动态 (AOS)", motionOptSub: "UI 动画", cursorOpt: "光标效果", cursorOptSub: "流体交互",
-                factoryReset: "恢复出厂设置", glacierShort: "为 MCBE 设计的高性能客户端。", lightShort: "视觉和灯光增强库。",
-                visitDiscord: "访问 Discord", download: "下载", discordComm: "Discord 社区"
-            },
-            ru: {
-                label: "Русский (RU)",
-                navHome: "Главная", navProjects: "Проекты", navWeb: "Веб-сайты", navPacks: "Паки", navSettings: "Настройки",
-                heroSub: "Владелец Glacier Productions и Nyxora Studios.", glacierDesc: "Управление Glacier Client и экосистемой Projects HUB.",
-                nyxoraDesc: "Разработка продвинутых веб-инструментов для MCBE и Minecraft Java.", projectsTitle: "Мои проекты",
-                webTitle: "Веб-каталог", webSub: "Живые платформы и утилиты, разработанные мной.", packsTitle: "Центр паков",
-                packsSub: "Официальный источник для всех ресурс-паков и паков поведения.", settingsTitle: "Кастомизация", setAccent: "Визуальная тема",
-                setTypo: "Типографика интерфейса", setLang: "Язык", ctrlPanel: "Панель управления", glassStr: "Прозрачность",
-                motionOpt: "Движение (AOS)", motionOptSub: "UI анимации", cursorOpt: "Эффект курсора", cursorOptSub: "Плавные взаимодействия",
-                factoryReset: "Сброс настроек", glacierShort: "Производительный клиент для MCBE.", lightShort: "Репозиторий визуальных улучшений.",
-                visitDiscord: "Перейти в Discord", download: "Скачать", discordComm: "Сообщество Discord"
+                packsSub: "Fuente oficial de todos los paquetes de recursos y comportamiento.", settingsTitle: "Personalización",
+                glacierShort: "Cliente enfocado en rendimiento para MCBE.", visitDiscord: "Ir a Discord", 
+                packsShort: "Mis Texture Packs de MCBE.", discordComm: "Comunidad de Discord",
+                langsMastered: "Competencias Principales", langsLearning: "Adquiriendo Conocimientos"
             }
         };
 
@@ -593,10 +577,7 @@
         let cursorX = 0, cursorY = 0;
         let targetX = 0, targetY = 0;
 
-        document.addEventListener('mousemove', e => {
-            targetX = e.clientX;
-            targetY = e.clientY;
-        });
+        document.addEventListener('mousemove', e => { targetX = e.clientX; targetY = e.clientY; });
 
         function animateCursor() {
             if (settings.cursor) {
@@ -609,8 +590,21 @@
         }
         animateCursor();
 
-        document.addEventListener('mousedown', () => { if(settings.cursor) cursor.style.transform = 'scale(0.7)'; });
-        document.addEventListener('mouseup', () => { if(settings.cursor) cursor.style.transform = 'scale(1)'; });
+        function toggleDropdown() {
+            document.getElementById('customOptions').classList.toggle('show');
+        }
+
+        function selectOption(lang, label) {
+            document.getElementById('selectedLang').innerText = label;
+            document.getElementById('customOptions').classList.remove('show');
+            updateLang(lang);
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.custom-select-container')) {
+                document.getElementById('customOptions').classList.remove('show');
+            }
+        }
 
         function applySettings() {
             const r = document.documentElement;
@@ -618,68 +612,34 @@
             r.style.setProperty('--glass-opacity', settings.opacity);
             r.style.setProperty('--card-radius', settings.radius);
             
-            let currentFont = settings.font;
-            if(settings.lang === 'ar') currentFont = 'Noto Sans Arabic';
-            if(settings.lang === 'zh') currentFont = 'Noto Sans SC';
-            r.style.setProperty('--font-main', `'${currentFont}', sans-serif`);
-
             document.body.dir = settings.lang === 'ar' ? 'rtl' : 'ltr';
-
-            document.getElementById('motionToggle').checked = settings.motion;
             document.getElementById('cursorToggle').checked = settings.cursor;
             document.getElementById('opacityLabel').innerText = `${Math.round(settings.opacity * 100)}%`;
-            document.getElementById('currentLangDisplay').innerText = translations[settings.lang].label;
             
             cursor.style.display = (settings.cursor && window.matchMedia('(pointer: fine)').matches) ? 'block' : 'none';
 
-            Object.keys(translations[settings.lang]).forEach(key => {
+            const langDict = translations[settings.lang] || translations['en'];
+            Object.keys(langDict).forEach(key => {
                 const els = document.querySelectorAll(`[data-lang="${key}"]`);
-                els.forEach(el => el.innerText = translations[settings.lang][key]);
+                els.forEach(el => el.innerText = langDict[key]);
             });
 
             localStorage.setItem('pepe_hybrid_v3', JSON.stringify(settings));
             updateActiveTabColor();
-            renderPopupOptions();
-        }
-
-        function openPopup() {
-            document.getElementById('languagePopup').classList.add('open');
-            renderPopupOptions();
-        }
-
-        function closePopup(e) {
-            if (e && e.target !== e.currentTarget) return;
-            document.getElementById('languagePopup').classList.remove('open');
-        }
-
-        function renderPopupOptions() {
-            const grid = document.getElementById('langOptionsGrid');
-            grid.innerHTML = Object.keys(translations).map(key => {
-                const isActive = settings.lang === key;
-                return `
-                    <button onclick="updateLang('${key}')" class="w-full text-left p-4 rounded-2xl transition-all flex items-center justify-between group ${isActive ? 'accent-bg text-white' : 'bg-white/5 hover:bg-white/10 text-gray-300'}">
-                        <span class="font-bold">${translations[key].label}</span>
-                        ${isActive ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-circle text-white/10 group-hover:text-white/20"></i>'}
-                    </button>
-                `;
-            }).join('');
         }
 
         function updateAccent(c) { settings.accent = c; applySettings(); }
-        function updateFont(f) { settings.font = f; applySettings(); }
-        function updateLang(l) { 
-            settings.lang = l; 
-            applySettings(); 
-            setTimeout(() => closePopup(null), 150);
-        }
+        function updateLang(l) { settings.lang = l; applySettings(); }
         function updateTransparency(v) { settings.opacity = v; applySettings(); }
-        function toggleMotion(v) { settings.motion = v; applySettings(); }
         function toggleCursor(v) { settings.cursor = v; applySettings(); }
+        function toggleMotion(v) { settings.motion = v; applySettings(); }
 
-        function resetSettings() {
-            settings = { accent: '#7289da', opacity: 0.6, radius: '2rem', motion: true, cursor: true, font: 'Inter', lang: 'en' };
-            applySettings();
-            renderWebsites();
+        function switchSettings(paneId) {
+            document.querySelectorAll('.settings-pane').forEach(p => p.classList.remove('active'));
+            const target = paneId === 'main' ? 'settingsMain' : 
+                         paneId === 'visual' ? 'settingsVisual' : 
+                         paneId === 'language' ? 'settingsLanguage' : 'settingsSystem';
+            document.getElementById(target).classList.add('active');
         }
 
         function renderWebsites() {
@@ -718,10 +678,14 @@
                 if(t.classList.contains('mobile-tab')) {
                     t.style.color = settings.accent;
                     t.classList.remove('text-gray-500');
+                } else {
+                    t.style.backgroundColor = settings.accent;
+                    t.style.color = 'white';
                 }
             });
 
             if (id === 'websites') renderWebsites();
+            if (id === 'settings') switchSettings('main');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
