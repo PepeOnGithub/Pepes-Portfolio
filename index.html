@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pepe's Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;700;900&family=Lexend:wght@400;700;900&family=Noto+Sans+Arabic:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;700;900&display=swap');
 
         :root {
             --blurple: #7289da;
@@ -26,6 +26,19 @@
             overflow-x: hidden;
             transition: background-color 0.3s ease;
             cursor: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Weather Canvas */
+        #weatherCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            display: none;
         }
 
         .custom-cursor {
@@ -47,7 +60,7 @@
 
         .header-rounded {
             margin: 1rem;
-            border-radius: 2rem;
+            border-radius: var(--card-radius);
             width: calc(100% - 2rem);
         }
 
@@ -57,11 +70,12 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .glow-card {
+        /* Glow Effects */
+        body.glows-enabled .glow-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .glow-card:hover {
+        body.glows-enabled .glow-card:hover {
             box-shadow: 0 0 30px var(--blurple);
             border-color: var(--blurple);
             transform: translateY(-8px) scale(1.02);
@@ -92,6 +106,36 @@
             box-shadow: 0 10px 25px rgba(114, 137, 218, 0.4);
         }
 
+        /* Mobile Nav Styling */
+        .mobile-nav-container {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .mobile-tab {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 3.5rem;
+            border-radius: 0;
+            position: relative;
+        }
+
+        /* Vertical separators */
+        .mobile-tab:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 20%;
+            height: 60%;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .accent-bg { background-color: var(--blurple); }
         .accent-text { color: var(--blurple); }
         .accent-border { border-color: var(--blurple); }
@@ -101,6 +145,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 1.5rem;
             border-radius: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .thick-slider {
@@ -111,26 +156,26 @@
             border-radius: 20px;
             outline: none;
             cursor: pointer;
-            margin: 15px 0;
+            margin: 10px 0;
         }
 
         .thick-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             background: var(--blurple);
             border-radius: 50%;
             cursor: pointer;
-            border: 5px solid #1a1d21;
-            box-shadow: 0 0 15px var(--blurple);
+            border: 4px solid #1a1d21;
+            box-shadow: 0 0 10px var(--blurple);
             transition: transform 0.2s ease;
         }
 
         .switch {
             position: relative;
             display: inline-block;
-            width: 52px;
-            height: 28px;
+            width: 48px;
+            height: 26px;
         }
 
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -148,8 +193,8 @@
         .slider-round:before {
             position: absolute;
             content: "";
-            height: 20px;
-            width: 20px;
+            height: 18px;
+            width: 18px;
             left: 4px;
             bottom: 3px;
             background-color: white;
@@ -159,6 +204,10 @@
 
         input:checked + .slider-round {
             background-color: var(--blurple);
+        }
+        
+        input:checked + .slider-round:before {
+            transform: translateX(22px);
         }
 
         .custom-select-container {
@@ -203,9 +252,7 @@
             transition: background 0.2s;
         }
 
-        .custom-option:hover {
-            background: var(--blurple);
-        }
+        .custom-option:hover { background: var(--blurple); }
 
         .tech-badge {
             background: rgba(255,255,255,0.03);
@@ -220,6 +267,19 @@
             transition: all 0.3s ease;
         }
 
+        .input-dark {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            outline: none;
+            font-family: monospace;
+            width: 100%;
+        }
+        
+        .input-dark:focus { border-color: var(--blurple); }
+
         .mcpedl-btn {
             background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -232,108 +292,11 @@
             from { opacity: 0; transform: translateX(10px); }
             to { opacity: 1; transform: translateX(0); }
         }
-
-        /* Mobile Navigation Fix */
-        .mobile-nav-container {
-            width: 96% !important;
-            max-width: 400px;
-            padding: 0.5rem !important;
-        }
-
-        .mobile-tab {
-            width: 3.5rem !important;
-            height: 3.5rem !important;
-            position: relative;
-            flex: 1;
-        }
-
-        .mobile-tab:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 25%;
-            height: 50%;
-            width: 1px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* New Settings */
-        .color-input-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .color-textbox {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.75rem 1rem;
-            border-radius: 1rem;
-            color: white;
-            font-family: monospace;
-            outline: none;
-        }
-
-        .color-textbox:focus {
-            border-color: var(--blurple);
-            box-shadow: 0 0 0 2px rgba(114, 137, 218, 0.2);
-        }
-
-        .percentage-input {
-            width: 70px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.75rem;
-            border-radius: 1rem;
-            color: white;
-            text-align: center;
-            outline: none;
-        }
-
-        .percentage-input:focus {
-            border-color: var(--blurple);
-        }
-
-        .percentage-label {
-            font-size: 0.85rem;
-            color: #888;
-            margin-left: 8px;
-        }
-
-        /* Visual Effects */
-        .snowflake, .raindrop {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        .snowflake {
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-        }
-
-        .raindrop {
-            background: linear-gradient(transparent, var(--blurple));
-            width: 2px;
-            border-radius: 0 0 10px 10px;
-        }
-
-        .glow-particle {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: var(--blurple);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999;
-            box-shadow: 0 0 10px var(--blurple);
-        }
     </style>
 </head>
-<body class="min-h-screen pb-40 md:pb-10">
+<body class="min-h-screen pb-40 md:pb-10 glows-enabled">
 
+    <canvas id="weatherCanvas"></canvas>
     <div id="cursor" class="custom-cursor"></div>
 
     <header id="mainHeader" class="sticky top-4 z-50 header-rounded glass px-8 py-5 flex justify-between items-center shadow-2xl">
@@ -349,7 +312,7 @@
             <button onclick="showPage('settings', this)" class="pill-tab px-6 py-2.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition-all btn-interact" data-lang="navSettings">Settings</button>
         </nav>
         
-        <!-- Version indicator removed -->
+        <!-- Versions Removed -->
     </header>
 
     <main class="max-w-6xl mx-auto px-6 mt-12">
@@ -489,7 +452,7 @@
                             <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400"><i class="fas fa-palette"></i></div>
                             <div>
                                 <h4 class="font-black text-lg">Visuals</h4>
-                                <p class="text-xs text-gray-500">Colors & Glass</p>
+                                <p class="text-xs text-gray-500">Colors, Radius & Glass</p>
                             </div>
                         </div>
                         <i class="fas fa-chevron-right text-gray-600"></i>
@@ -506,12 +469,12 @@
                         <i class="fas fa-chevron-right text-gray-600"></i>
                     </div>
 
-                    <div onclick="switchSettings('effects')" class="glass p-8 rounded-[2rem] glow-card cursor-pointer flex items-center justify-between btn-interact">
+                    <div onclick="switchSettings('system')" class="glass p-8 rounded-[2rem] glow-card cursor-pointer flex items-center justify-between btn-interact">
                         <div class="flex items-center gap-5">
-                            <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400"><i class="fas fa-snowflake"></i></div>
+                            <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400"><i class="fas fa-microchip"></i></div>
                             <div>
-                                <h4 class="font-black text-lg">Effects</h4>
-                                <p class="text-xs text-gray-500">Snow, Rain & Glows</p>
+                                <h4 class="font-black text-lg">System & Effects</h4>
+                                <p class="text-xs text-gray-500">Weather, Glows & Motion</p>
                             </div>
                         </div>
                         <i class="fas fa-chevron-right text-gray-600"></i>
@@ -525,115 +488,46 @@
                     <h2 class="text-4xl font-black tracking-tighter">Visual Theme</h2>
                 </div>
 
-                <div class="glass p-10 rounded-[3rem] space-y-10">
+                <div class="glass p-10 rounded-[3rem] space-y-8">
+                    
+                    <!-- Color Picker -->
                     <div>
                         <h4 class="text-xs font-black uppercase tracking-[0.2em] text-gray-500 mb-6">Accent Color</h4>
-                        <div class="flex flex-wrap gap-6 mb-6">
-                            <button onclick="updateAccent('#7289da')" class="w-14 h-14 rounded-2xl bg-[#7289da] border-4 border-white/10 btn-interact shadow-lg"></button>
-                            <button onclick="updateAccent('#ff4757')" class="w-14 h-14 rounded-2xl bg-[#ff4757] border-4 border-white/10 btn-interact shadow-lg"></button>
-                            <button onclick="updateAccent('#2ed573')" class="w-14 h-14 rounded-2xl bg-[#2ed573] border-4 border-white/10 btn-interact shadow-lg"></button>
-                            <button onclick="updateAccent('#ffa502')" class="w-14 h-14 rounded-2xl bg-[#ffa502] border-4 border-white/10 btn-interact shadow-lg"></button>
-                            <button onclick="updateAccent('#a29bfe')" class="w-14 h-14 rounded-2xl bg-[#a29bfe] border-4 border-white/10 btn-interact shadow-lg"></button>
+                        <div class="flex flex-wrap gap-4 mb-4">
+                            <button onclick="updateAccent('#7289da')" class="w-12 h-12 rounded-xl bg-[#7289da] border-2 border-white/10 btn-interact"></button>
+                            <button onclick="updateAccent('#ff4757')" class="w-12 h-12 rounded-xl bg-[#ff4757] border-2 border-white/10 btn-interact"></button>
+                            <button onclick="updateAccent('#2ed573')" class="w-12 h-12 rounded-xl bg-[#2ed573] border-2 border-white/10 btn-interact"></button>
+                            <button onclick="updateAccent('#ffa502')" class="w-12 h-12 rounded-xl bg-[#ffa502] border-2 border-white/10 btn-interact"></button>
+                            <button onclick="updateAccent('#a29bfe')" class="w-12 h-12 rounded-xl bg-[#a29bfe] border-2 border-white/10 btn-interact"></button>
                         </div>
-                        <div class="color-input-group">
-                            <input type="text" id="customColorInput" placeholder="#RRGGBB" class="color-textbox">
-                            <button onclick="applyCustomColor()" class="px-4 py-3 accent-bg rounded-xl font-bold btn-interact">Apply</button>
+                        <div class="flex items-center gap-3 max-w-xs">
+                            <input type="text" id="customColorInput" placeholder="#HEXCODE" class="input-dark flex-1" onchange="updateAccent(this.value)">
+                            <div id="colorPreview" class="w-10 h-10 rounded-lg border border-white/20 accent-bg"></div>
                         </div>
                     </div>
 
-                    <div class="setting-card">
+                    <!-- Glass Slider & Input -->
+                    <div class="setting-card max-w-md">
                         <div class="flex justify-between items-center mb-2">
-                            <p class="font-black text-sm">Glass Opacity</p>
-                            <div class="flex items-center">
-                                <input type="text" id="opacityInput" value="60" class="percentage-input" onchange="updateOpacityFromInput(this.value)" maxlength="3">
-                                <span class="percentage-label">%</span>
-                            </div>
+                            <p class="font-black text-sm">Glass Strength (%)</p>
                         </div>
-                        <input type="range" min="10" max="90" step="5" value="60" oninput="updateTransparency(this.value)" class="thick-slider" id="opacitySlider">
+                        <div class="flex items-center gap-4">
+                            <input type="range" id="opacitySlider" min="10" max="95" step="1" value="60" oninput="updateTransparency(this.value/100)" class="thick-slider flex-1">
+                            <input type="number" id="opacityInput" min="10" max="95" value="60" class="input-dark w-20 text-center" onchange="updateTransparency(this.value/100)">
+                        </div>
                     </div>
 
-                    <div class="setting-card">
+                    <!-- Roundness Slider & Input -->
+                    <div class="setting-card max-w-md">
                         <div class="flex justify-between items-center mb-2">
-                            <p class="font-black text-sm">Roundness</p>
-                            <div class="flex items-center">
-                                <input type="text" id="roundnessInput" value="2" class="percentage-input" onchange="updateRoundnessFromInput(this.value)" maxlength="2">
-                                <span class="percentage-label">rem</span>
-                            </div>
+                            <p class="font-black text-sm">Card Roundness (rem)</p>
                         </div>
-                        <input type="range" min="0.5" max="4" step="0.5" value="2" oninput="updateRoundness(this.value)" class="thick-slider" id="roundnessSlider">
-                    </div>
-                </div>
-            </div>
-
-            <div id="settingsEffects" class="settings-pane">
-                <div class="flex items-center gap-4 mb-10">
-                    <button onclick="switchSettings('main')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"><i class="fas fa-arrow-left"></i></button>
-                    <h2 class="text-4xl font-black tracking-tighter">Visual Effects</h2>
-                </div>
-
-                <div class="glass p-10 rounded-[3rem] space-y-8">
-                    <div class="setting-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="font-black text-sm">Snow Effect</p>
-                                <p class="text-xs text-gray-500">Falling snow particles</p>
-                            </div>
-                            <label class="switch btn-interact">
-                                <input type="checkbox" id="snowToggle" onchange="toggleSnow(this.checked)">
-                                <span class="slider-round"></span>
-                            </label>
+                        <div class="flex items-center gap-4">
+                            <input type="range" id="radiusSlider" min="0" max="4" step="0.1" value="2" oninput="updateRadius(this.value)" class="thick-slider flex-1">
+                            <input type="number" id="radiusInput" min="0" max="4" step="0.1" value="2" class="input-dark w-20 text-center" onchange="updateRadius(this.value)">
                         </div>
-                        <div class="flex items-center justify-between mt-4">
-                            <p class="text-xs text-gray-500">Intensity</p>
-                            <div class="flex items-center">
-                                <input type="text" id="snowIntensityInput" value="50" class="percentage-input w-16" onchange="updateSnowIntensity(this.value)" maxlength="3">
-                                <span class="percentage-label">%</span>
-                            </div>
-                        </div>
-                        <input type="range" min="10" max="100" step="10" value="50" oninput="updateSnowIntensity(this.value)" class="thick-slider mt-2">
                     </div>
 
-                    <div class="setting-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="font-black text-sm">Rain Effect</p>
-                                <p class="text-xs text-gray-500">Falling rain droplets</p>
-                            </div>
-                            <label class="switch btn-interact">
-                                <input type="checkbox" id="rainToggle" onchange="toggleRain(this.checked)">
-                                <span class="slider-round"></span>
-                            </label>
-                        </div>
-                        <div class="flex items-center justify-between mt-4">
-                            <p class="text-xs text-gray-500">Intensity</p>
-                            <div class="flex items-center">
-                                <input type="text" id="rainIntensityInput" value="50" class="percentage-input w-16" onchange="updateRainIntensity(this.value)" maxlength="3">
-                                <span class="percentage-label">%</span>
-                            </div>
-                        </div>
-                        <input type="range" min="10" max="100" step="10" value="50" oninput="updateRainIntensity(this.value)" class="thick-slider mt-2">
-                    </div>
-
-                    <div class="setting-card">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="font-black text-sm">Glow Particles</p>
-                                <p class="text-xs text-gray-500">Floating accent particles</p>
-                            </div>
-                            <label class="switch btn-interact">
-                                <input type="checkbox" id="glowToggle" onchange="toggleGlow(this.checked)">
-                                <span class="slider-round"></span>
-                            </label>
-                        </div>
-                        <div class="flex items-center justify-between mt-4">
-                            <p class="text-xs text-gray-500">Intensity</p>
-                            <div class="flex items-center">
-                                <input type="text" id="glowIntensityInput" value="50" class="percentage-input w-16" onchange="updateGlowIntensity(this.value)" maxlength="3">
-                                <span class="percentage-label">%</span>
-                            </div>
-                        </div>
-                        <input type="range" min="10" max="100" step="10" value="50" oninput="updateGlowIntensity(this.value)" class="thick-slider mt-2">
-                    </div>
                 </div>
             </div>
 
@@ -662,24 +556,96 @@
                     </div>
                 </div>
             </div>
+
+            <div id="settingsSystem" class="settings-pane">
+                <div class="flex items-center gap-4 mb-10">
+                    <button onclick="switchSettings('main')" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all"><i class="fas fa-arrow-left"></i></button>
+                    <h2 class="text-4xl font-black tracking-tighter">System & Effects</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Glows -->
+                    <div class="glass p-8 rounded-[2rem] flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-sm">Glow Effects</p>
+                            <p class="text-xs text-gray-500">Card hover & ambient lighting</p>
+                        </div>
+                        <label class="switch btn-interact">
+                            <input type="checkbox" id="glowToggle" checked onchange="toggleGlow(this.checked)">
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+
+                    <!-- Snow -->
+                    <div class="glass p-8 rounded-[2rem] flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-sm">Snowfall</p>
+                            <p class="text-xs text-gray-500">Particle canvas overlay</p>
+                        </div>
+                        <label class="switch btn-interact">
+                            <input type="checkbox" id="snowToggle" onchange="toggleWeather('snow', this.checked)">
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+
+                    <!-- Rain -->
+                    <div class="glass p-8 rounded-[2rem] flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-sm">Rainfall</p>
+                            <p class="text-xs text-gray-500">Heavy rain canvas overlay</p>
+                        </div>
+                        <label class="switch btn-interact">
+                            <input type="checkbox" id="rainToggle" onchange="toggleWeather('rain', this.checked)">
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+
+                    <!-- Cursor -->
+                    <div class="glass p-8 rounded-[2rem] flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-sm">Custom Cursor</p>
+                            <p class="text-xs text-gray-500">Hardware pointer override</p>
+                        </div>
+                        <label class="switch btn-interact">
+                            <input type="checkbox" id="cursorToggle" checked onchange="toggleCursor(this.checked)">
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+                    
+                    <!-- Motion -->
+                    <div class="glass p-8 rounded-[2rem] flex items-center justify-between">
+                        <div>
+                            <p class="font-black text-sm">Reduced Motion</p>
+                            <p class="text-xs text-gray-500">Disable heavy animations</p>
+                        </div>
+                        <label class="switch btn-interact">
+                            <input type="checkbox" id="motionToggle" onchange="toggleMotion(this.checked)">
+                            <span class="slider-round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </section>
 
     </main>
 
-    <div class="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 mobile-nav-container">
-        <nav class="glass p-3 rounded-[2rem] flex justify-between items-center shadow-2xl border border-white/10">
-            <button onclick="showPage('home', this)" class="mobile-tab active w-12 h-12 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-home text-lg"></i>
-            </button>
-            <button onclick="showPage('projects', this)" class="mobile-tab w-12 h-12 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-tasks text-lg"></i>
-            </button>
-            <button onclick="showPage('websites', this)" class="mobile-tab w-12 h-12 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-globe text-lg"></i>
-            </button>
-            <button onclick="showPage('settings', this)" class="mobile-tab w-12 h-12 rounded-2xl flex items-center justify-center text-gray-500 btn-interact">
-                <i class="fas fa-cog text-lg"></i>
-            </button>
+    <!-- Optimized Mobile Nav -->
+    <div class="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-sm z-50">
+        <nav class="glass rounded-[2rem] border border-white/10 shadow-2xl overflow-hidden">
+            <div class="mobile-nav-container">
+                <div onclick="showPage('home', this)" class="mobile-tab active text-gray-500 btn-interact cursor-pointer">
+                    <i class="fas fa-home text-lg"></i>
+                </div>
+                <div onclick="showPage('projects', this)" class="mobile-tab text-gray-500 btn-interact cursor-pointer">
+                    <i class="fas fa-tasks text-lg"></i>
+                </div>
+                <div onclick="showPage('websites', this)" class="mobile-tab text-gray-500 btn-interact cursor-pointer">
+                    <i class="fas fa-globe text-lg"></i>
+                </div>
+                <div onclick="showPage('settings', this)" class="mobile-tab text-gray-500 btn-interact cursor-pointer">
+                    <i class="fas fa-cog text-lg"></i>
+                </div>
+            </div>
         </nav>
     </div>
 
@@ -716,140 +682,88 @@
             { name: "MCBE Translator", url: "https://pepeongithub.github.io/Pepes-MCBE-Translator/" }
         ];
 
-        let settings = JSON.parse(localStorage.getItem('pepe_hybrid_v3')) || {
+        let settings = JSON.parse(localStorage.getItem('pepe_hybrid_v4')) || {
             accent: '#7289da',
             opacity: 0.6,
-            radius: '2rem',
+            radius: 2,
             motion: true,
             cursor: true,
-            font: 'Inter',
             lang: 'en',
             snow: false,
             rain: false,
-            glow: false,
-            snowIntensity: 50,
-            rainIntensity: 50,
-            glowIntensity: 50
+            glow: true
         };
 
-        // Visual Effects
-        let snowInterval, rainInterval, glowInterval;
-        let snowflakes = [];
-        let raindrops = [];
-        let glowParticles = [];
-
-        function createSnowflake() {
-            if (!settings.snow) return;
-            
-            const snowflake = document.createElement('div');
-            snowflake.className = 'snowflake';
-            snowflake.style.width = `${Math.random() * 8 + 4}px`;
-            snowflake.style.height = snowflake.style.width;
-            snowflake.style.left = `${Math.random() * 100}vw`;
-            snowflake.style.top = '-10px';
-            snowflake.style.opacity = Math.random() * 0.7 + 0.3;
-            document.body.appendChild(snowflake);
-            snowflakes.push(snowflake);
-            
-            let x = parseFloat(snowflake.style.left);
-            let y = -10;
-            const speed = Math.random() * 2 + 1;
-            const sway = Math.random() * 2 - 1;
-            
-            const animate = () => {
-                if (!settings.snow) return;
-                y += speed;
-                x += sway * 0.5;
-                
-                if (y > window.innerHeight) {
-                    snowflake.remove();
-                    snowflakes = snowflakes.filter(s => s !== snowflake);
-                    return;
-                }
-                
-                snowflake.style.left = `${x}px`;
-                snowflake.style.top = `${y}px`;
-                requestAnimationFrame(animate);
-            };
-            
-            animate();
-        }
-
-        function createRaindrop() {
-            if (!settings.rain) return;
-            
-            const raindrop = document.createElement('div');
-            raindrop.className = 'raindrop';
-            raindrop.style.width = '2px';
-            raindrop.style.height = `${Math.random() * 40 + 20}px`;
-            raindrop.style.left = `${Math.random() * 100}vw`;
-            raindrop.style.top = '-30px';
-            raindrop.style.background = `linear-gradient(transparent, ${settings.accent})`;
-            document.body.appendChild(raindrop);
-            raindrops.push(raindrop);
-            
-            let y = -30;
-            const speed = Math.random() * 10 + 15;
-            
-            const animate = () => {
-                if (!settings.rain) return;
-                y += speed;
-                
-                if (y > window.innerHeight) {
-                    raindrop.remove();
-                    raindrops = raindrops.filter(r => r !== raindrop);
-                    return;
-                }
-                
-                raindrop.style.top = `${y}px`;
-                requestAnimationFrame(animate);
-            };
-            
-            animate();
-        }
-
-        function createGlowParticle() {
-            if (!settings.glow) return;
-            
-            const particle = document.createElement('div');
-            particle.className = 'glow-particle';
-            particle.style.backgroundColor = settings.accent;
-            particle.style.boxShadow = `0 0 10px ${settings.accent}`;
-            particle.style.left = `${Math.random() * 100}vw`;
-            particle.style.top = `${Math.random() * 100}vh`;
-            document.body.appendChild(particle);
-            glowParticles.push(particle);
-            
-            let x = parseFloat(particle.style.left);
-            let y = parseFloat(particle.style.top);
-            const speedX = (Math.random() - 0.5) * 2;
-            const speedY = (Math.random() - 0.5) * 2;
-            
-            const animate = () => {
-                if (!settings.glow) return;
-                
-                x += speedX;
-                y += speedY;
-                
-                if (x < -10 || x > window.innerWidth + 10 || 
-                    y < -10 || y > window.innerHeight + 10) {
-                    particle.remove();
-                    glowParticles = glowParticles.filter(p => p !== particle);
-                    return;
-                }
-                
-                particle.style.left = `${x}px`;
-                particle.style.top = `${y}px`;
-                requestAnimationFrame(animate);
-            };
-            
-            animate();
-        }
-
         const cursor = document.getElementById('cursor');
-        let cursorX = 0, cursorY = 0;
-        let targetX = 0, targetY = 0;
+        let cursorX = 0, cursorY = 0, targetX = 0, targetY = 0;
 
+        // Weather System
+        const canvas = document.getElementById('weatherCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let weatherId = null;
+        let weatherType = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function initWeather(type) {
+            weatherType = type;
+            resizeCanvas();
+            particles = [];
+            const count = type === 'snow' ? 100 : 200;
+            for(let i=0; i<count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    speed: Math.random() * (type === 'snow' ? 2 : 15) + 1,
+                    size: Math.random() * 2 + 1
+                });
+            }
+            canvas.style.display = 'block';
+            if(!weatherId) animateWeather();
+        }
+
+        function animateWeather() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 1;
+
+            particles.forEach(p => {
+                if(weatherType === 'snow') {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    p.y += p.speed;
+                    p.x += Math.sin(p.y * 0.01) * 0.5;
+                } else {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x, p.y + p.speed * 2);
+                    ctx.stroke();
+                    p.y += p.speed;
+                }
+
+                if(p.y > canvas.height) {
+                    p.y = -10;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+
+            weatherId = requestAnimationFrame(animateWeather);
+        }
+
+        function stopWeather() {
+            cancelAnimationFrame(weatherId);
+            weatherId = null;
+            canvas.style.display = 'none';
+        }
+
+        // Settings Logic
         document.addEventListener('mousemove', e => { targetX = e.clientX; targetY = e.clientY; });
 
         function animateCursor() {
@@ -883,170 +797,84 @@
             const r = document.documentElement;
             r.style.setProperty('--blurple', settings.accent);
             r.style.setProperty('--glass-opacity', settings.opacity);
-            r.style.setProperty('--card-radius', settings.radius);
+            r.style.setProperty('--card-radius', `${settings.radius}rem`);
             
             document.body.dir = settings.lang === 'ar' ? 'rtl' : 'ltr';
-            document.getElementById('cursorToggle')?.checked = settings.cursor;
-            document.getElementById('opacityLabel').innerText = `${Math.round(settings.opacity * 100)}%`;
             
-            // Update sliders and inputs
-            document.getElementById('opacitySlider').value = settings.opacity * 100;
-            document.getElementById('opacityInput').value = Math.round(settings.opacity * 100);
-            document.getElementById('roundnessSlider').value = parseFloat(settings.radius);
-            document.getElementById('roundnessInput').value = settings.radius.replace('rem', '');
-            
-            // Update effect controls
+            // UI Sync
+            document.getElementById('cursorToggle').checked = settings.cursor;
+            document.getElementById('glowToggle').checked = settings.glow;
             document.getElementById('snowToggle').checked = settings.snow;
             document.getElementById('rainToggle').checked = settings.rain;
-            document.getElementById('glowToggle').checked = settings.glow;
-            document.getElementById('snowIntensityInput').value = settings.snowIntensity;
-            document.getElementById('rainIntensityInput').value = settings.rainIntensity;
-            document.getElementById('glowIntensityInput').value = settings.glowIntensity;
-            document.querySelectorAll('#settingsEffects input[type="range"]').forEach(slider => {
-                if(slider.id.includes('Snow')) slider.value = settings.snowIntensity;
-                if(slider.id.includes('Rain')) slider.value = settings.rainIntensity;
-                if(slider.id.includes('Glow')) slider.value = settings.glowIntensity;
-            });
             
-            cursor.style.display = (settings.cursor && window.matchMedia('(pointer: fine)').matches) ? 'block' : 'none';
+            document.getElementById('opacitySlider').value = settings.opacity * 100;
+            document.getElementById('opacityInput').value = Math.round(settings.opacity * 100);
+            
+            document.getElementById('radiusSlider').value = settings.radius;
+            document.getElementById('radiusInput').value = settings.radius;
+            
+            document.getElementById('customColorInput').value = settings.accent;
+            document.getElementById('colorPreview').style.backgroundColor = settings.accent;
 
+            cursor.style.display = (settings.cursor && window.matchMedia('(pointer: fine)').matches) ? 'block' : 'none';
+            
+            // Glows
+            if(settings.glow) document.body.classList.add('glows-enabled');
+            else document.body.classList.remove('glows-enabled');
+
+            // Weather
+            if(settings.snow) initWeather('snow');
+            else if(settings.rain) initWeather('rain');
+            else stopWeather();
+
+            // Language
             const langDict = translations[settings.lang] || translations['en'];
             Object.keys(langDict).forEach(key => {
                 const els = document.querySelectorAll(`[data-lang="${key}"]`);
                 els.forEach(el => el.innerText = langDict[key]);
             });
 
-            localStorage.setItem('pepe_hybrid_v3', JSON.stringify(settings));
+            localStorage.setItem('pepe_hybrid_v4', JSON.stringify(settings));
             updateActiveTabColor();
-            
-            // Update visual effects
-            updateSnowEffect();
-            updateRainEffect();
-            updateGlowEffect();
-        }
-
-        function applyCustomColor() {
-            const input = document.getElementById('customColorInput');
-            const color = input.value;
-            if (/^#[0-9A-F]{6}$/i.test(color)) {
-                updateAccent(color);
-                input.value = '';
-            } else {
-                alert('Please enter a valid hex color (e.g., #7289da)');
-            }
         }
 
         function updateAccent(c) { 
             settings.accent = c; 
             applySettings(); 
         }
-
-        function updateLang(l) { 
-            settings.lang = l; 
-            applySettings(); 
-        }
-
+        
+        function updateLang(l) { settings.lang = l; applySettings(); }
+        
         function updateTransparency(v) { 
-            settings.opacity = v / 100; 
-            document.getElementById('opacityInput').value = v;
+            settings.opacity = parseFloat(v); 
             applySettings(); 
         }
 
-        function updateOpacityFromInput(v) {
-            let value = Math.max(10, Math.min(90, parseInt(v) || 60));
-            settings.opacity = value / 100;
+        function updateRadius(v) {
+            settings.radius = parseFloat(v);
             applySettings();
         }
 
-        function updateRoundness(v) { 
-            settings.radius = v + 'rem'; 
-            document.getElementById('roundnessInput').value = v;
-            applySettings(); 
-        }
-
-        function updateRoundnessFromInput(v) {
-            let value = Math.max(0.5, Math.min(4, parseFloat(v) || 2));
-            settings.radius = value + 'rem';
-            applySettings();
-        }
-
-        function toggleCursor(v) { 
-            settings.cursor = v; 
-            applySettings(); 
-        }
-
-        function toggleSnow(v) { 
-            settings.snow = v; 
-            applySettings(); 
-        }
-
-        function toggleRain(v) { 
-            settings.rain = v; 
-            applySettings(); 
-        }
-
-        function toggleGlow(v) { 
-            settings.glow = v; 
-            applySettings(); 
-        }
-
-        function updateSnowIntensity(v) {
-            settings.snowIntensity = parseInt(v);
-            document.getElementById('snowIntensityInput').value = v;
-            applySettings();
-        }
-
-        function updateRainIntensity(v) {
-            settings.rainIntensity = parseInt(v);
-            document.getElementById('rainIntensityInput').value = v;
-            applySettings();
-        }
-
-        function updateGlowIntensity(v) {
-            settings.glowIntensity = parseInt(v);
-            document.getElementById('glowIntensityInput').value = v;
-            applySettings();
-        }
-
-        function updateSnowEffect() {
-            clearInterval(snowInterval);
-            snowflakes.forEach(s => s.remove());
-            snowflakes = [];
-            
-            if (settings.snow) {
-                const interval = Math.max(1000, 2000 - (settings.snowIntensity * 18));
-                snowInterval = setInterval(createSnowflake, interval);
+        function toggleCursor(v) { settings.cursor = v; applySettings(); }
+        function toggleMotion(v) { settings.motion = v; applySettings(); }
+        function toggleGlow(v) { settings.glow = v; applySettings(); }
+        
+        function toggleWeather(type, active) {
+            if(type === 'snow') {
+                settings.snow = active;
+                if(active) { settings.rain = false; document.getElementById('rainToggle').checked = false; }
+            } else {
+                settings.rain = active;
+                if(active) { settings.snow = false; document.getElementById('snowToggle').checked = false; }
             }
-        }
-
-        function updateRainEffect() {
-            clearInterval(rainInterval);
-            raindrops.forEach(r => r.remove());
-            raindrops = [];
-            
-            if (settings.rain) {
-                const interval = Math.max(50, 500 - (settings.rainIntensity * 4.5));
-                rainInterval = setInterval(createRaindrop, interval);
-            }
-        }
-
-        function updateGlowEffect() {
-            clearInterval(glowInterval);
-            glowParticles.forEach(p => p.remove());
-            glowParticles = [];
-            
-            if (settings.glow) {
-                const interval = Math.max(100, 1000 - (settings.glowIntensity * 9));
-                glowInterval = setInterval(createGlowParticle, interval);
-            }
+            applySettings();
         }
 
         function switchSettings(paneId) {
             document.querySelectorAll('.settings-pane').forEach(p => p.classList.remove('active'));
             const target = paneId === 'main' ? 'settingsMain' : 
                          paneId === 'visual' ? 'settingsVisual' : 
-                         paneId === 'language' ? 'settingsLanguage' : 
-                         paneId === 'effects' ? 'settingsEffects' : 'settingsSystem';
+                         paneId === 'language' ? 'settingsLanguage' : 'settingsSystem';
             document.getElementById(target).classList.add('active');
         }
 
@@ -1067,33 +895,48 @@
 
         function updateActiveTabColor() {
             document.querySelectorAll('.mobile-tab.active').forEach(t => t.style.color = settings.accent);
-            document.querySelectorAll('.pill-tab.active').forEach(t => {
-                t.style.backgroundColor = settings.accent;
-                t.style.color = 'white';
-            });
+            document.querySelectorAll('.pill-tab.active').forEach(t => t.style.backgroundColor = settings.accent);
         }
 
         function showPage(id, btn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             
-            document.querySelectorAll('.pill-tab, .mobile-tab').forEach(t => {
+            // Desktop pills
+            document.querySelectorAll('.pill-tab').forEach(t => {
                 t.classList.remove('active');
-                t.style.color = '';
                 t.style.backgroundColor = '';
-                t.classList.add(t.classList.contains('mobile-tab') ? 'text-gray-500' : 'text-gray-400');
+                t.style.color = '';
+                t.classList.add('text-gray-400');
             });
 
-            document.querySelectorAll(`button[onclick*="'${id}'"]`).forEach(t => {
-                t.classList.add('active');
-                if(t.classList.contains('mobile-tab')) {
-                    t.style.color = settings.accent;
-                    t.classList.remove('text-gray-500');
-                } else {
-                    t.style.backgroundColor = settings.accent;
-                    t.style.color = 'white';
-                }
+            // Mobile icons
+            document.querySelectorAll('.mobile-tab').forEach(t => {
+                t.classList.remove('active');
+                t.style.color = 'rgb(107, 114, 128)'; // gray-500
             });
+
+            // Set active states
+            // For buttons that called this (desktop)
+            if(btn.classList.contains('pill-tab')) {
+                btn.classList.add('active');
+                btn.classList.remove('text-gray-400');
+                btn.style.backgroundColor = settings.accent;
+                btn.style.color = 'white';
+            }
+
+            // Sync Mobile & Desktop active states by ID mapping
+            const pageIndex = ['home', 'projects', 'websites', 'settings'].indexOf(id);
+            if(pageIndex !== -1) {
+                const mobileTab = document.querySelectorAll('.mobile-tab')[pageIndex];
+                mobileTab.classList.add('active');
+                mobileTab.style.color = settings.accent;
+                
+                const desktopTab = document.querySelectorAll('.pill-tab')[pageIndex];
+                desktopTab.classList.add('active');
+                desktopTab.style.backgroundColor = settings.accent;
+                desktopTab.style.color = 'white';
+            }
 
             if (id === 'websites') renderWebsites();
             if (id === 'settings') switchSettings('main');
@@ -1115,3 +958,4 @@
     </script>
 </body>
 </html>
+
