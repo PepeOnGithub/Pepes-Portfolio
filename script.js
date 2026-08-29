@@ -14,7 +14,7 @@ class Router {
     });
   }
 
-  show(pageId) {
+  show(pageId, { push = true } = {}) {
     if (!this.pages.includes(pageId)) return;
 
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -26,6 +26,15 @@ class Router {
 
     document.getElementById('main-content').focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (window.packLibrary) {
+      window.packLibrary.showBrowse({ push: false });
+    }
+
+    if (push) {
+      history.pushState({ page: pageId }, '', `#${pageId}`);
+    }
+    document.title = 'Pepe';
   }
 }
 
@@ -96,7 +105,7 @@ class PackLibrary {
       category: '',
       sort: 'relevance'
     };
-    this.init();
+    this.ready = this.init();
   }
 
   async init() {
@@ -134,7 +143,13 @@ class PackLibrary {
       this.setCompactView(e.target.checked);
     });
 
-    document.getElementById('back-to-browse').addEventListener('click', () => this.showBrowse());
+    document.getElementById('back-to-browse').addEventListener('click', () => {
+      if (history.state && history.state.page === 'pack') {
+        history.back();
+      } else {
+        this.showBrowse();
+      }
+    });
   }
 
   async loadPacks() {
@@ -393,7 +408,7 @@ class PackLibrary {
     `;
   }
 
-  showDetail(pack) {
+  showDetail(pack, { push = true } = {}) {
     const hasImage = pack.thumbnail && pack.thumbnail.startsWith('http');
     const letter = pack.name.charAt(0).toUpperCase();
 
@@ -430,11 +445,21 @@ class PackLibrary {
     document.getElementById('browse-view').classList.add('hidden');
     document.getElementById('detail-view').classList.remove('hidden');
     window.scrollTo(0, 0);
+
+    if (push) {
+      history.pushState({ page: 'pack', id: pack.id }, '', `#pack-${pack.id}`);
+    }
+    document.title = `${pack.name} · Pepe`;
   }
 
-  showBrowse() {
+  showBrowse({ push = true } = {}) {
     document.getElementById('detail-view').classList.add('hidden');
     document.getElementById('browse-view').classList.remove('hidden');
+
+    if (push) {
+      history.pushState({ page: 'library' }, '', '#library');
+    }
+    document.title = 'Pepe';
   }
 
   formatDate(dateStr) {
@@ -511,7 +536,58 @@ class PackLibrary {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   window.router = new Router();
   window.packLibrary = new PackLibrary();
+  await window.packLibrary.ready;
+  resolveInitialRoute();
+});
+
+function resolveInitialRoute() {
+  const hash = location.hash.slice(1);
+
+  if (hash.startsWith('pack-')) {
+    const id = parseInt(hash.slice(5), 10);
+    const pack = window.packLibrary.packs.find(p => p.id === id);
+    window.router.show('library', { push: false });
+    if (pack) {
+      history.replaceState({ page: 'library' }, '', '#library');
+      window.packLibrary.showDetail(pack, { push: true });
+    } else {
+      history.replaceState({ page: 'library' }, '', '#library');
+    }
+    return;
+  }
+
+  if (hash && window.router.pages.includes(hash)) {
+    window.router.show(hash, { push: false });
+    history.replaceState({ page: hash }, '', `#${hash}`);
+    return;
+  }
+
+  history.replaceState({ page: 'home' }, '', location.pathname + location.search);
+}
+
+window.addEventListener('popstate', (e) => {
+  const state = e.state;
+
+  if (!state) {
+    window.router.show('home', { push: false });
+    return;
+  }
+
+  if (state.page === 'pack') {
+    window.router.show('library', { push: false });
+    const pack = window.packLibrary.packs.find(p => p.id === state.id);
+    if (pack) window.packLibrary.showDetail(pack, { push: false });
+    return;
+  }
+
+  window.router.show(state.page, { push: false });
+});
+
+window.addEventListener('hashchange', () => {
+  if (window.packLibrary && window.packLibrary.packs.length) {
+    resolveInitialRoute();
+  }
 });

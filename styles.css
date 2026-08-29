@@ -349,8 +349,21 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: var(--spacing-md);
 }
 
+.highlight-icon-img { background: var(--color-bg-tertiary); padding: 8px; overflow: hidden; }
+.highlight-icon-img img { width: 100%; height: 100%; object-fit: contain; }
+
 .highlight-card h3 { font-size: var(--font-size-lg); font-weight: 700; margin-bottom: var(--spacing-sm); }
 .highlight-card p { color: var(--color-text-secondary); font-size: var(--font-size-sm); }
+
+.project-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: 6px;
+  margin-bottom: var(--spacing-md);
+}
 
 .join-tag {
   display: flex;
@@ -808,9 +821,11 @@ a { color: inherit; text-decoration: none; }
 .empty-state i { font-size: 4rem; color: var(--color-accent); margin-bottom: var(--spacing-lg); opacity: 0.5; }
 .empty-state h2 { font-size: var(--font-size-2xl); margin-bottom: var(--spacing-md); color: var(--color-text-primary); }
 
+/* ===== Utility ===== */
+.hidden { display: none !important; }
+
 /* ===== Detail View ===== */
 .detail-view { padding: var(--spacing-xl); max-width: 1600px; margin: 0 auto; }
-.detail-view.hidden { display: none; }
 
 .back-link {
   display: inline-flex;
