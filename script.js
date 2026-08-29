@@ -489,9 +489,9 @@ class PackLibrary {
     const background = hasBanner
       ? `<img src="${pack.bannerUrl}" alt="${this.escapeHtml(pack.name)}">`
       : hasImage
-        ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
+        ? `<img class="pack-thumbnail-bg" src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
         : `<span class="pack-letter">${letter}</span>`;
-    const iconBadge = hasBanner && hasImage
+    const iconBadge = hasImage
       ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt=""></span>`
       : '';
 
