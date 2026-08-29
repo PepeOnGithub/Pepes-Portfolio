@@ -1,0 +1,82 @@
+{
+  "packs": [
+    {
+      "id": 1,
+      "name": "Modern UI Kit",
+      "category": "designs",
+      "description": "A modern and clean UI component library perfect for web applications.",
+      "thumbnail": "🎨",
+      "tags": ["ui", "web", "components"],
+      "version": "1.0.0",
+      "downloads": 234,
+      "size": "12.5 MB",
+      "downloadUrl": "packs/designs/modern-ui-kit.zip",
+      "previewUrl": "packs/designs/modern-ui-kit/"
+    },
+    {
+      "id": 2,
+      "name": "Dark Theme Template",
+      "category": "templates",
+      "description": "Professional dark theme template with ready-to-use components.",
+      "thumbnail": "🌙",
+      "tags": ["dark", "theme", "template"],
+      "version": "2.1.0",
+      "downloads": 567,
+      "size": "8.3 MB",
+      "downloadUrl": "packs/templates/dark-theme.zip",
+      "previewUrl": "packs/templates/dark-theme/"
+    },
+    {
+      "id": 3,
+      "name": "Icon Pack Pro",
+      "category": "resources",
+      "description": "Comprehensive icon collection with 500+ high-quality icons.",
+      "thumbnail": "✨",
+      "tags": ["icons", "graphics", "resources"],
+      "version": "3.2.1",
+      "downloads": 892,
+      "size": "15.7 MB",
+      "downloadUrl": "packs/resources/icon-pack-pro.zip",
+      "previewUrl": "packs/resources/icon-pack-pro/"
+    },
+    {
+      "id": 4,
+      "name": "Typography System",
+      "category": "designs",
+      "description": "Complete typography system with font pairings and sizing scales.",
+      "thumbnail": "📝",
+      "tags": ["typography", "fonts", "design"],
+      "version": "1.5.0",
+      "downloads": 123,
+      "size": "4.2 MB",
+      "downloadUrl": "packs/designs/typography-system.zip",
+      "previewUrl": "packs/designs/typography-system/"
+    },
+    {
+      "id": 5,
+      "name": "Color Palettes",
+      "category": "resources",
+      "description": "Curated collection of color palettes for various design needs.",
+      "thumbnail": "🎭",
+      "tags": ["colors", "palettes", "design"],
+      "version": "2.0.0",
+      "downloads": 445,
+      "size": "1.8 MB",
+      "downloadUrl": "packs/resources/color-palettes.zip",
+      "previewUrl": "packs/resources/color-palettes/"
+    },
+    {
+      "id": 6,
+      "name": "Landing Page Template",
+      "category": "templates",
+      "description": "Responsive landing page template with conversion-optimized design.",
+      "thumbnail": "🚀",
+      "tags": ["landing", "web", "template"],
+      "version": "1.2.3",
+      "downloads": 678,
+      "size": "9.1 MB",
+      "downloadUrl": "packs/templates/landing-page.zip",
+      "previewUrl": "packs/templates/landing-page/"
+    }
+  ]
+}
