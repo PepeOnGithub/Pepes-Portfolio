@@ -75,6 +75,35 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ===== Custom Scrollbar ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-light);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-bg-secondary);
+}
+
 body {
   font-family: var(--font-family);
   background-color: var(--color-bg-primary);
