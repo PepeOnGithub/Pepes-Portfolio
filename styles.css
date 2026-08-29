@@ -1,3 +1,14 @@
+/* ===== Fonts ===== */
+/* "Gyroscope Mojang F" by Vyacheslav Kirnos, CC BY-SA 3.0 — a Minecraft
+   splash-text style font, used for pack name banner overlays. */
+@font-face {
+  font-family: 'MinecraftSplash';
+  src: url('assets/fonts/gyroscope-mojang-f.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ===== Design Tokens ===== */
 :root {
   --color-accent: #489c49;
@@ -879,9 +890,34 @@ body.reduce-motion *::after {
 
 .pack-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
 
-.pack-thumbnail-bg {
-  filter: blur(6px) brightness(0.55) saturate(1.1);
-  transform: scale(1.15);
+.pack-thumbnail-bg { filter: blur(6px) brightness(0.6) saturate(1.1); transform: scale(1.15); }
+
+.pack-thumbnail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+}
+
+.pack-splash-name {
+  position: absolute;
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%) rotate(-3deg);
+  z-index: 1;
+  font-family: 'MinecraftSplash', 'Segoe UI', Impact, 'Arial Black', sans-serif;
+  font-weight: normal;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: #ffff55;
+  text-shadow: 2px 2px 0 rgba(63, 63, 0, 0.9), 0 0 12px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .pack-icon-badge {
@@ -895,9 +931,18 @@ body.reduce-motion *::after {
   background: var(--color-bg-tertiary);
   border: 2px solid rgba(255, 255, 255, 0.15);
   box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
 
-.pack-icon-badge img { width: 100%; height: 100%; object-fit: cover; }
+.pack-icon-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
 
 .pack-letter {
   font-weight: 700;
@@ -1032,6 +1077,32 @@ body.reduce-motion *::after {
 
 .detail-banner img { width: 100%; height: 100%; object-fit: cover; }
 
+.detail-banner-bg { filter: blur(6px) brightness(0.6) saturate(1.1); transform: scale(1.1); }
+
+.detail-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+}
+
+.detail-splash-name {
+  position: absolute;
+  left: var(--spacing-xl);
+  right: var(--spacing-xl);
+  top: 50%;
+  transform: translateY(-50%) rotate(-3deg);
+  z-index: 1;
+  font-family: 'MinecraftSplash', 'Segoe UI', Impact, 'Arial Black', sans-serif;
+  font-weight: normal;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.15;
+  color: #ffff55;
+  text-shadow: 3px 3px 0 rgba(63, 63, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
 .detail-thumb {
   width: 96px;
   height: 96px;
@@ -1049,7 +1120,7 @@ body.reduce-motion *::after {
   box-shadow: var(--shadow-md);
 }
 
-.detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.detail-thumb img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
 
 .detail-heading {
   display: flex;

@@ -71,7 +71,7 @@ def count_downloads(pack_path):
 
 # Files that are never treated as the "link file" for a website pack
 KNOWN_FILES = {
-    'pack.json', 'icon.png', 'bg.png', '.metadata.json',
+    'pack.json', 'icon.png', 'bg.png', 'pack_banner.png', '.metadata.json',
     'readme.md', 'license', 'license.txt'
 }
 
@@ -176,16 +176,18 @@ def generate_packs_json(packs_dir, output_file):
             # Get metadata
             metadata = get_pack_metadata(pack_path)
 
-            # icon.png / bg.png override the thumbnail/banner if present
+            # icon.png / pack_banner.png (or bg.png) override the thumbnail/banner if present
             thumbnail = metadata.get('thumbnail', '📦')
             icon_path = pack_path / 'icon.png'
             if icon_path.exists():
                 thumbnail = f'packs/{category}/{pack_path.name}/icon.png'
 
             banner_url = None
-            bg_path = pack_path / 'bg.png'
-            if bg_path.exists():
-                banner_url = f'packs/{category}/{pack_path.name}/bg.png'
+            for banner_name in ('pack_banner.png', 'bg.png'):
+                banner_path = pack_path / banner_name
+                if banner_path.exists():
+                    banner_url = f'packs/{category}/{pack_path.name}/{banner_name}'
+                    break
 
             # Prefer real pack file(s) (.mcpack/.mcaddon/etc) if present, so
             # downloads point at actual importable files and sizes are accurate.

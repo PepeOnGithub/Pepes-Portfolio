@@ -1,0 +1,16 @@
+﻿The FontStruction “Gyroscope Mojang F”
+(https://fontstruct.com/fontstructions/show/1946153) by Vyacheslav Kirnos is
+licensed under a Creative Commons Attribution Share Alike license
+(http://creativecommons.org/licenses/by-sa/3.0/).
+“Gyroscope Mojang F” was originally cloned (copied) from the FontStruction
+“Gyroscope Mojang” (https://fontstruct.com/fontstructions/show/1926592) by
+Dmitriy Sychiov, which is licensed under a Creative Commons Attribution Share
+Alike license (http://creativecommons.org/licenses/by-sa/3.0/).
+“Gyroscope Mojang” was in turn cloned (copied) from the FontStruction
+“Gyroscope C” (https://fontstruct.com/fontstructions/show/1675680) by
+Dmitriy Sychiov, which is licensed under a Creative Commons Attribution Share
+Alike license (http://creativecommons.org/licenses/by-sa/3.0/).
+“Gyroscope C” was in turn cloned (copied) from the FontStruction
+“gyroscope” (https://fontstruct.com/fontstructions/show/367113) by Christian
+Munk, which is licensed under a Creative Commons Attribution Share Alike license
+(http://creativecommons.org/licenses/by-sa/3.0/).

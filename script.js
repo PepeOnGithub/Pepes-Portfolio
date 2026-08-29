@@ -1,5 +1,9 @@
 const CATEGORY_ORDER = ['packs', 'clients', 'addons', 'website', 'other'];
 
+// Default banner shown behind the pack name (Minecraft splash-text style)
+// whenever a pack doesn't have its own bg.png banner.
+const DEFAULT_BANNER_URL = 'assets/default-banner.png';
+
 // Free, no-auth counter API — lets download counts persist and increment
 // globally without running any server or Cloudflare Worker of our own.
 // https://jasoncameron.dev/abacus/
@@ -482,15 +486,10 @@ class PackLibrary {
   }
 
   createPackCard(pack) {
-    const letter = pack.name.charAt(0).toUpperCase();
     const hasImage = this.isImagePath(pack.thumbnail);
     const hasBanner = this.isImagePath(pack.bannerUrl);
+    const bannerSrc = hasBanner ? pack.bannerUrl : DEFAULT_BANNER_URL;
 
-    const background = hasBanner
-      ? `<img src="${pack.bannerUrl}" alt="${this.escapeHtml(pack.name)}">`
-      : hasImage
-        ? `<img class="pack-thumbnail-bg" src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
-        : `<span class="pack-letter">${letter}</span>`;
     const iconBadge = hasImage
       ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt=""></span>`
       : '';
@@ -499,7 +498,8 @@ class PackLibrary {
       <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}" data-pack-id="${pack.id}">
         ${pack.pinned ? '<span class="pinned-badge"><i class="fas fa-thumbtack"></i> Required</span>' : ''}
         <div class="pack-thumbnail">
-          ${background}
+          <img class="pack-thumbnail-bg" src="${bannerSrc}" alt="" onerror="this.style.display='none'">
+          <span class="pack-splash-name">${this.escapeHtml(pack.name)}</span>
           ${iconBadge}
         </div>
         <div class="pack-content">
@@ -521,12 +521,12 @@ class PackLibrary {
     const hasImage = this.isImagePath(pack.thumbnail);
     const hasBanner = this.isImagePath(pack.bannerUrl);
     const letter = pack.name.charAt(0).toUpperCase();
+    const bannerSrc = hasBanner ? pack.bannerUrl : DEFAULT_BANNER_URL;
 
-    document.getElementById('detail-banner').innerHTML = hasBanner
-      ? `<img src="${pack.bannerUrl}" alt="${this.escapeHtml(pack.name)}">`
-      : hasImage
-        ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
-        : `<span class="pack-letter">${letter}</span>`;
+    document.getElementById('detail-banner').innerHTML = `
+      <img class="detail-banner-bg" src="${bannerSrc}" alt="" onerror="this.style.display='none'">
+      <span class="detail-splash-name">${this.escapeHtml(pack.name)}</span>
+    `;
     document.getElementById('detail-thumb').innerHTML = hasImage
       ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
       : `<span class="pack-letter">${letter}</span>`;

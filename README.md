@@ -115,6 +115,20 @@ git push origin main
 
 Your site updates automatically with the new pack!
 
+## 🎨 Banners
+
+Every card and detail page shows the pack name as Minecraft-style splash
+text over a banner image:
+
+- Drop a **`pack_banner.png`** into a pack's folder to use it as that pack's
+  own banner (falls back to `bg.png` if that's what's there).
+- Otherwise, the sitewide default banner at **`assets/default-banner.png`**
+  is used — add that file once and every pack without its own banner picks
+  it up automatically.
+
+The splash text uses "Gyroscope Mojang F" by Vyacheslav Kirnos
+(CC BY-SA 3.0) — see `assets/fonts/license.txt`.
+
 ## 🗂️ Multiple Versions Per Pack
 
 Drop more than one pack file (`.mcpack`/`.mcaddon`/`.zip`/etc) into the same
