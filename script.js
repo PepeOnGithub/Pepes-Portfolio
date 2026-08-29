@@ -1,5 +1,10 @@
 const CATEGORY_ORDER = ['packs', 'clients', 'addons', 'website', 'other'];
 
+// Free, no-auth counter API — lets download counts persist and increment
+// globally without running any server or Cloudflare Worker of our own.
+// https://jasoncameron.dev/abacus/
+const COUNTER_NAMESPACE = 'pepes-portfolio-pack-downloads';
+
 // Page Router
 class Router {
   constructor() {
@@ -154,6 +159,22 @@ class PackLibrary {
         this.showBrowse();
       }
     });
+
+    ['detail-download', 'detail-download-inline'].forEach(id => {
+      document.getElementById(id).addEventListener('click', (e) => {
+        // A placeholder "#" href would otherwise navigate the fragment and
+        // confuse the pack/page router — only real download URLs proceed.
+        const href = e.currentTarget.getAttribute('href');
+        if (!href || href === '#') e.preventDefault();
+
+        if (!this.currentPack) return;
+        const pack = this.currentPack;
+        this.incrementDownloads(pack).then(count => {
+          pack.downloads = count;
+          if (this.currentPack === pack) this.updateDownloadsDisplay(pack, count);
+        });
+      });
+    });
   }
 
   async loadPacks() {
@@ -189,7 +210,7 @@ class PackLibrary {
         version: '1.0.0',
         downloads: 234,
         size: '12.5 MB',
-        author: 'You',
+        author: 'Pepe',
         createdAt: '2026-08-15',
         updatedAt: '2026-08-15',
         fileName: 'nyxora-texture-pack.zip',
@@ -207,7 +228,7 @@ class PackLibrary {
         version: '2.1.0',
         downloads: 567,
         size: '8.3 MB',
-        author: 'You',
+        author: 'Pepe',
         createdAt: '2026-08-10',
         updatedAt: '2026-08-12',
         fileName: 'glacier-client.zip',
@@ -225,7 +246,7 @@ class PackLibrary {
         version: '3.2.1',
         downloads: 892,
         size: '15.7 MB',
-        author: 'You',
+        author: 'Pepe',
         createdAt: '2026-07-20',
         updatedAt: '2026-08-01',
         fileName: 'elecro-blobs-wizardry.zip',
@@ -243,7 +264,7 @@ class PackLibrary {
         version: '1.5.0',
         downloads: 123,
         size: '4.2 MB',
-        author: 'You',
+        author: 'Pepe',
         createdAt: '2026-06-05',
         updatedAt: '2026-06-05',
         fileName: 'flarial-config-pack.zip',
@@ -261,7 +282,7 @@ class PackLibrary {
         version: '2.0.0',
         downloads: 445,
         size: '1.8 MB',
-        author: 'You',
+        author: 'Pepe',
         createdAt: '2026-05-18',
         updatedAt: '2026-05-18',
         fileName: 'aurora-resource-pack.zip',
@@ -279,7 +300,7 @@ class PackLibrary {
         version: '1.2.3',
         downloads: 678,
         size: '9.1 MB',
-        author: 'You',
+        author: 'Pepe',
         createdAt: '2026-04-22',
         updatedAt: '2026-04-30',
         fileName: 'cape-collection.zip',
@@ -297,7 +318,7 @@ class PackLibrary {
         version: '1.0.0',
         downloads: 156,
         size: '2.4 MB',
-        author: 'You',
+        author: 'Pepe',
         createdAt: '2026-03-10',
         updatedAt: '2026-03-15',
         fileName: 'glacierclient.xyz',
@@ -489,7 +510,6 @@ class PackLibrary {
     document.getElementById('versions-sub').textContent = `Download releases of ${pack.name}.`;
     document.getElementById('detail-version').textContent = pack.version;
     document.getElementById('detail-date').textContent = this.formatDate(pack.createdAt);
-    document.getElementById('detail-file').textContent = `${pack.fileName || 'download.zip'} · ${pack.size} · ${pack.downloads} downloads`;
     document.getElementById('detail-tags').innerHTML = `
       ${pack.gameVersion ? `<span>${this.escapeHtml(pack.gameVersion)}</span>` : ''}
       <span>${this.capitalizeFirst(pack.category)}</span>
@@ -501,9 +521,14 @@ class PackLibrary {
 
     document.getElementById('detail-avatar').textContent = (pack.author || 'U').charAt(0).toUpperCase();
     document.getElementById('detail-author-name').textContent = pack.author || 'Unknown';
-    document.getElementById('detail-downloads').textContent = pack.downloads;
     document.getElementById('detail-made').textContent = this.formatDate(pack.createdAt);
     document.getElementById('detail-updated').textContent = this.formatDate(pack.updatedAt || pack.createdAt);
+
+    this.currentPack = pack;
+    this.updateDownloadsDisplay(pack, pack.downloads);
+    this.fetchLiveDownloads(pack).then(count => {
+      if (this.currentPack === pack) this.updateDownloadsDisplay(pack, count);
+    });
 
     document.getElementById('browse-view').classList.add('hidden');
     document.getElementById('detail-view').classList.remove('hidden');
@@ -530,6 +555,46 @@ class PackLibrary {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr;
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  counterKey(pack) {
+    const base = (pack.fileName || pack.name || `pack-${pack.id}`)
+      .toLowerCase()
+      .replace(/\.[a-z0-9]+$/i, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    return `${base}-${pack.id}`;
+  }
+
+  updateDownloadsDisplay(pack, count) {
+    const downloadsEl = document.getElementById('detail-downloads');
+    const fileEl = document.getElementById('detail-file');
+    if (downloadsEl) downloadsEl.textContent = count;
+    if (fileEl) fileEl.textContent = `${pack.fileName || 'download.zip'} · ${pack.size} · ${count} downloads`;
+  }
+
+  async fetchLiveDownloads(pack) {
+    try {
+      const key = this.counterKey(pack);
+      const res = await fetch(`https://abacus.jasoncameron.dev/get/${COUNTER_NAMESPACE}/${key}`);
+      if (!res.ok) return pack.downloads;
+      const data = await res.json();
+      return typeof data.value === 'number' ? data.value : pack.downloads;
+    } catch (error) {
+      return pack.downloads;
+    }
+  }
+
+  async incrementDownloads(pack) {
+    try {
+      const key = this.counterKey(pack);
+      const res = await fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NAMESPACE}/${key}`);
+      if (!res.ok) return pack.downloads + 1;
+      const data = await res.json();
+      return typeof data.value === 'number' ? data.value : pack.downloads + 1;
+    } catch (error) {
+      return pack.downloads + 1;
+    }
   }
 
   capitalizeFirst(str) {
@@ -664,7 +729,10 @@ window.addEventListener('popstate', (e) => {
   const state = e.state;
 
   if (!state) {
-    window.router.show('home', { push: false });
+    // No usable state (e.g. a browser-native fragment navigation) —
+    // fall back to inferring the page from the current URL hash instead
+    // of forcing a jump to Home.
+    resolveInitialRoute();
     return;
   }
 

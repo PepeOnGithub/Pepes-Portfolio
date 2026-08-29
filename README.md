@@ -243,13 +243,19 @@ python generator.py --validate
    - Use `1.0.0` for initial release
 
 5. **Downloads Tracking**
-   - Create `.metadata.json` in pack folder to track:
+   - `.metadata.json` in a pack folder sets the *starting* count picked up by the generator:
    ```json
   {
     "downloads": 150,
     "last_updated": "2026-08-29"
   }
   ```
+   - From there, downloads count up live in the browser — no server or
+     Cloudflare Worker needed. Every click on a pack's Download button
+     calls a free public counter ([abacus](https://jasoncameron.dev/abacus/)),
+     which persists and increments the count globally. The pack detail
+     page fetches the current live count on load and falls back to the
+     static seed number above until the first real click happens.
 
 ## 🌐 Deployment
 

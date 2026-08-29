@@ -35,7 +35,7 @@ def get_pack_metadata(pack_path):
         'description': f'Pack: {pack_name}',
         'tags': [],
         'thumbnail': '📦',
-        'author': 'You'
+        'author': 'Pepe'
     }
 
 def get_directory_size(path):
@@ -139,7 +139,7 @@ def generate_packs_json(packs_dir, output_file):
                 'version': metadata.get('version', '1.0.0'),
                 'downloads': count_downloads(pack_path),
                 'size': get_directory_size(pack_path),
-                'author': metadata.get('author', 'You'),
+                'author': metadata.get('author', 'Pepe'),
                 'downloadUrl': f'packs/{category}/{pack_path.name}.zip',
                 'previewUrl': f'packs/{category}/{pack_path.name}/'
             }
