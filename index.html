@@ -40,27 +40,31 @@
 
   <!-- ============ HOME PAGE ============ -->
   <section class="page active" id="page-home">
-    <div class="hero">
-      <div class="hero-top">
-        <div class="hero-avatar-wrap">
-          <img src="assets/pepe-profile.png" alt="Pepe" class="hero-avatar">
-        </div>
-        <h1 class="hero-name">PEPE</h1>
-        <p class="hero-tagline">MCBE Texture Pack Creator &middot; Glacier Client Owner &middot; Website &amp; Discord Bot Maker</p>
-        <p class="hero-sub">Owner of <strong>Glacier Productions</strong> &amp; <strong>Pepe's Projects HUB</strong>.</p>
-
-        <div class="social-row">
-          <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" class="social-circle" aria-label="Discord"><i class="fab fa-discord"></i></a>
-          <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" class="social-circle" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" class="social-circle" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" class="social-circle" aria-label="PayPal"><i class="fab fa-paypal"></i></a>
+    <div class="home-hero">
+      <div class="home-hero-media">
+        <img src="assets/pepe-profile.png" alt="Pepe" class="home-avatar">
+      </div>
+      <div class="home-hero-content">
+        <p class="home-eyebrow">Hi, I'm</p>
+        <h1 class="home-name">Pepe</h1>
+        <p class="home-lede">
+          MCBE texture pack creator and Glacier Client owner, building websites, Discord bots,
+          and tooling under <strong>Glacier Productions</strong> &amp; <strong>Pepe's Projects HUB</strong>.
+        </p>
+        <div class="home-cta-row">
+          <button type="button" class="cta-btn cta-primary" data-page="projects">
+            View Projects <i class="fas fa-arrow-right"></i>
+          </button>
+          <button type="button" class="cta-btn cta-secondary" data-page="library">
+            Browse Library <i class="fas fa-box-open"></i>
+          </button>
         </div>
       </div>
+    </div>
 
-      <div class="lang-block">
-        <div class="lang-divider">
-          <span></span><p>Known Languages</p><span></span>
-        </div>
+    <div class="home-skills">
+      <div class="skills-col">
+        <h3 class="skills-title">Known</h3>
         <div class="tech-row">
           <div class="tech-badge"><i class="fab fa-html5"></i> HTML</div>
           <div class="tech-badge"><i class="fab fa-css3-alt"></i> CSS3</div>
@@ -70,54 +74,11 @@
           <div class="tech-badge"><i class="fab fa-java"></i> Java</div>
         </div>
       </div>
-
-      <div class="lang-block">
-        <div class="lang-divider muted">
-          <span></span><p>Languages Learning</p><span></span>
-        </div>
+      <div class="skills-col">
+        <h3 class="skills-title muted">Learning</h3>
         <div class="tech-row">
           <div class="tech-badge muted"><i class="fas fa-gear"></i> Rust</div>
           <div class="tech-badge muted"><i class="fas fa-plus"></i> C++</div>
-        </div>
-      </div>
-
-      <div class="lang-divider">
-        <span></span><p>Explore</p><span></span>
-      </div>
-
-      <div class="highlight-grid">
-        <div class="highlight-card nav-card" data-page="projects">
-          <div class="highlight-icon"><i class="fas fa-diagram-project"></i></div>
-          <h3>Projects</h3>
-          <p>Tools and clients I've built and maintained.</p>
-          <span class="card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </div>
-        <div class="highlight-card nav-card" data-page="hub">
-          <div class="highlight-icon"><i class="fas fa-sitemap"></i></div>
-          <h3>Projects HUB</h3>
-          <p>The umbrella for every brand, client, and studio I'm part of.</p>
-          <span class="card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </div>
-        <div class="highlight-card">
-          <div class="highlight-icon highlight-icon-img"><img src="assets/glacier-icon.png" alt=""></div>
-          <h3>Glacier Productions</h3>
-          <p>Managing Glacier Client and the Projects HUB ecosystem.</p>
-        </div>
-        <div class="highlight-card">
-          <div class="highlight-icon"><i class="fas fa-building"></i></div>
-          <h3>Nyxora Studios</h3>
-          <p>Studio behind original MCBE experiences and tools.</p>
-        </div>
-        <a href="https://discord.gg/Va4fG6J2Rw" target="_blank" rel="noopener" class="highlight-card link-card">
-          <div class="highlight-icon"><i class="fas fa-shield-alt"></i></div>
-          <h3>Azelux Client</h3>
-          <p>Ex Developer of Azelux Client MCBE.</p>
-          <span class="join-tag"><i class="fab fa-discord"></i> Join Server</span>
-        </a>
-        <div class="highlight-card">
-          <div class="highlight-icon highlight-icon-img"><img src="assets/flarial.svg" alt=""></div>
-          <h3>Flarial Proxy</h3>
-          <p>Developer on the Flarial Proxy team.</p>
         </div>
       </div>
     </div>
@@ -126,15 +87,42 @@
   <!-- ============ PROJECTS PAGE ============ -->
   <section class="page" id="page-projects">
     <div class="page-inner">
-      <h2 class="page-title">My Projects</h2>
-      <p class="page-subtitle">Platforms and tools I've built and maintained.</p>
+      <h2 class="page-title">Projects</h2>
+      <p class="page-subtitle">Every brand, client, studio, and tool I'm part of, in one place.</p>
 
+      <h3 class="section-subtitle">Brands &amp; Clients</h3>
       <div class="project-grid">
         <div class="project-card featured">
+          <img src="assets/glacier-icon.png" alt="" class="project-icon">
+          <h4>Glacier Productions</h4>
+          <p>Owner &middot; managing Glacier Client and this HUB ecosystem.</p>
+        </div>
+        <div class="project-card featured">
+          <div class="project-icon-fallback"><i class="fas fa-building"></i></div>
+          <h4>Nyxora Studios</h4>
+          <p>Studio behind original MCBE experiences and tools.</p>
+        </div>
+        <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="project-card">
+          <img src="assets/glacier-icon.png" alt="" class="project-icon">
           <h4>Glacier Client</h4>
           <p>Performance-driven client for MCBE.</p>
-          <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></a>
+          <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
+        </a>
+        <a href="https://discord.gg/Va4fG6J2Rw" target="_blank" rel="noopener" class="project-card">
+          <div class="project-icon-fallback"><i class="fas fa-shield-alt"></i></div>
+          <h4>Azelux Client</h4>
+          <p>Ex Developer of Azelux Client MCBE.</p>
+          <span class="project-link">Join Server <i class="fab fa-discord"></i></span>
+        </a>
+        <div class="project-card">
+          <img src="assets/flarial.svg" alt="" class="project-icon">
+          <h4>Flarial Proxy</h4>
+          <p>Developer on the Flarial Proxy team.</p>
         </div>
+      </div>
+
+      <h3 class="section-subtitle">Tools &amp; Utilities</h3>
+      <div class="project-grid">
         <div class="project-card" data-page="library">
           <h4>Packs Hub</h4>
           <p>All my MCBE Texture Packs in one place.</p>
@@ -165,42 +153,6 @@
           <p>Translate MCBE language files with ease.</p>
           <span class="project-link">Open Tool <i class="fas fa-external-link-alt"></i></span>
         </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ PROJECTS HUB PAGE ============ -->
-  <section class="page" id="page-hub">
-    <div class="page-inner">
-      <h2 class="page-title">Pepe's Projects HUB</h2>
-      <p class="page-subtitle">The umbrella for every brand, client, and studio I'm part of.</p>
-
-      <div class="project-grid">
-        <div class="project-card featured">
-          <img src="assets/glacier-icon.png" alt="" class="project-icon">
-          <h4>Glacier Productions</h4>
-          <p>Owner &middot; managing Glacier Client and this HUB ecosystem.</p>
-        </div>
-        <div class="project-card featured">
-          <h4>Nyxora Studios</h4>
-          <p>Studio behind original MCBE experiences and tools.</p>
-        </div>
-        <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="project-card">
-          <img src="assets/glacier-icon.png" alt="" class="project-icon">
-          <h4>Glacier Client</h4>
-          <p>Performance-driven client for MCBE.</p>
-          <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="https://discord.gg/Va4fG6J2Rw" target="_blank" rel="noopener" class="project-card">
-          <h4>Azelux Client</h4>
-          <p>Ex Developer of Azelux Client MCBE.</p>
-          <span class="project-link">Join Server <i class="fab fa-discord"></i></span>
-        </a>
-        <div class="project-card">
-          <img src="assets/flarial.svg" alt="" class="project-icon">
-          <h4>Flarial Proxy</h4>
-          <p>Developer on the Flarial Proxy team.</p>
-        </div>
       </div>
     </div>
   </section>
@@ -250,7 +202,7 @@
           type="text"
           id="search-input"
           class="search-input"
-          placeholder="Search packs, templates, resources..."
+          placeholder="Search packs, clients, addons..."
           aria-label="Search packs"
         >
       </div>
@@ -268,20 +220,24 @@
           <h4 class="sidebar-subtitle">Categories</h4>
           <div class="category-list">
             <button class="category-row active" data-category="">
-              <span>All projects</span>
+              <span>All</span>
               <span class="count" id="count-all">0</span>
             </button>
-            <button class="category-row" data-category="templates">
-              <span>Templates</span>
-              <span class="count" id="count-templates">0</span>
+            <button class="category-row" data-category="packs">
+              <span>Packs</span>
+              <span class="count" id="count-packs">0</span>
             </button>
-            <button class="category-row" data-category="designs">
-              <span>Designs</span>
-              <span class="count" id="count-designs">0</span>
+            <button class="category-row" data-category="clients">
+              <span>Clients</span>
+              <span class="count" id="count-clients">0</span>
             </button>
-            <button class="category-row" data-category="resources">
-              <span>Resources</span>
-              <span class="count" id="count-resources">0</span>
+            <button class="category-row" data-category="addons">
+              <span>Addons</span>
+              <span class="count" id="count-addons">0</span>
+            </button>
+            <button class="category-row" data-category="other">
+              <span>Other</span>
+              <span class="count" id="count-other">0</span>
             </button>
           </div>
         </div>
@@ -418,6 +374,30 @@
       </div>
     </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark"><img src="assets/pepe-profile.png" alt="" class="brand-avatar"></span>
+        <span class="brand-name">Pepe</span>
+      </div>
+
+      <nav class="footer-links">
+        <a href="#" data-page="home">Home</a>
+        <a href="#" data-page="socials">Socials</a>
+        <a href="#" data-page="library">Library</a>
+      </nav>
+
+      <div class="footer-socials">
+        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord"></i></a>
+        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" aria-label="PayPal"><i class="fab fa-paypal"></i></a>
+      </div>
+    </div>
+    <p class="footer-copy">&copy; 2026 Pepe. All rights reserved.</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>

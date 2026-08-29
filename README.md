@@ -1,11 +1,11 @@
 # Pepe's Portfolio
 
-A personal site with four sections: Home (about), Projects, Socials, and a Library — a personal design pack management system with automatic pack indexing.
+A personal site with three tabs: Home (about), Socials, and a Library — a personal MCBE pack management system with automatic pack indexing. Projects live on Home as cards, not their own tab.
 
 ## 🧭 Site Structure
 
-- **Home** — about, known/learning languages, socials, highlight cards
-- **Projects** — links to tools and clients I've built
+- **Home** — hero, bio, known/learning languages, and cards into Projects and the Library
+- **Projects** *(reached via a card on Home)* — every brand, client, and tool in one place
 - **Socials** — Discord, YouTube, GitHub, PayPal, MCPEDL, CurseForge
 - **Library** — the pack browser documented below
 
@@ -37,12 +37,13 @@ Features:
 ├── packs.json          # Generated pack index (DO NOT EDIT)
 ├── README.md           # This file
 └── packs/              # Your pack storage
-    ├── designs/
-    │   ├── my-design-pack/
+    ├── packs/
+    │   ├── my-texture-pack/
     │   │   └── pack.json          # Pack metadata
-    │   └── another-design/
-    ├── templates/
-    └── resources/
+    │   └── another-pack/
+    ├── clients/
+    ├── addons/
+    └── other/
 ```
 
 ## 🚀 Workflow: Adding Packs
@@ -50,21 +51,21 @@ Features:
 ### Step 1: Create Pack Folder
 Create a folder in `packs/[category]/`:
 ```
-packs/designs/modern-ui-kit/
+packs/packs/nyxora-texture-pack/
 ```
 
 ### Step 2: Add pack.json Metadata
-Create `packs/designs/modern-ui-kit/pack.json`:
+Create `packs/packs/nyxora-texture-pack/pack.json`:
 
 ```json
 {
-  "name": "Modern UI Kit",
-  "description": "A modern and clean UI component library",
+  "name": "Nyxora Texture Pack",
+  "description": "A vibrant texture pack overhauling terrain, mobs, and UI",
   "author": "Your Name",
   "version": "1.0.0",
-  "thumbnail": "🎨",
-  "tags": ["ui", "web", "components"],
-  "category": "designs",
+  "thumbnail": "📦",
+  "tags": ["texture", "pack", "mcbe"],
+  "category": "packs",
   "license": "MIT"
 }
 ```
@@ -76,17 +77,16 @@ Create `packs/designs/modern-ui-kit/pack.json`:
 - `version` — Version number (e.g., "1.0.0")
 - `thumbnail` — Emoji or image URL (use emoji for simplicity)
 - `tags` — Search keywords
-- `category` — One of: `designs`, `templates`, `resources`
+- `category` — One of: `packs`, `clients`, `addons`, `other`
 - `license` — License type (optional)
 
 ### Step 3: Add Pack Files
-Put your design files, components, etc. inside the pack folder:
+Put your pack files, configs, etc. inside the pack folder:
 ```
-packs/designs/modern-ui-kit/
+packs/packs/nyxora-texture-pack/
 ├── pack.json
 ├── README.md
-├── components/
-├── assets/
+├── textures/
 └── license.txt
 ```
 
@@ -121,8 +121,9 @@ Your site updates automatically with the new pack!
 - Real-time filtering as you type
 
 ### Categories
-- Filter by: Designs, Templates, Resources
+- Filter by: Packs, Clients, Addons, Other
 - Shows pack count per category
+- The "All" view groups results by category with a divider line and label
 - One-click filtering
 
 ### Sorting
@@ -158,15 +159,17 @@ Your site updates automatically with the new pack!
 ```
 
 **Available Emoji for Common Types:**
-- Designs: `🎨` `🖌️` `✏️` `📐`
-- Templates: `🚀` `📄` `📋` `🎯`
-- Resources: `✨` `📚` `🎭` `📦`
+- Packs: `📦` `🎨` `🖌️`
+- Clients: `🛡️` `⚙️` `🧊`
+- Addons: `✨` `🧩` `🔮`
+- Other: `📄` `🎭` `🚀`
 
 ### Category Descriptions
 
-- **designs** — UI kits, component libraries, design systems
-- **templates** — Ready-to-use templates and starting points
-- **resources** — Icons, fonts, colors, images, utilities
+- **packs** — Texture/resource packs
+- **clients** — MCBE client builds and configs
+- **addons** — Behavior pack addons and mods
+- **other** — Everything else (capes, misc tools, resources)
 
 ## 🔄 Generator Script
 
@@ -275,30 +278,26 @@ Edit `script.js` `createPackCard()` method to display additional metadata.
 
 ```
 packs/
-├── designs/
-│   └── modern-ui-kit/
+├── packs/
+│   └── nyxora-texture-pack/
 │       ├── pack.json
 │       ├── README.md
 │       ├── LICENSE
-│       ├── components/
-│       │   ├── buttons.css
-│       │   ├── cards.css
-│       │   └── typography.css
-│       └── assets/
-│           ├── icons/
-│           └── images/
+│       └── textures/
+│           ├── blocks/
+│           └── ui/
 ```
 
 **pack.json:**
 ```json
 {
-  "name": "Modern UI Kit",
-  "description": "Production-ready UI components with 50+ elements",
+  "name": "Nyxora Texture Pack",
+  "description": "A vibrant texture pack overhauling terrain, mobs, and UI",
   "author": "Your Name",
   "version": "2.1.0",
-  "thumbnail": "🎨",
-  "tags": ["ui", "components", "css", "web"],
-  "category": "designs"
+  "thumbnail": "📦",
+  "tags": ["texture", "pack", "mcbe"],
+  "category": "packs"
 }
 ```
 

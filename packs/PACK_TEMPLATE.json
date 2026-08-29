@@ -3,12 +3,11 @@
   "description": "Brief description of what this pack contains",
   "author": "Your Name",
   "version": "1.0.0",
-  "thumbnail": "🎨",
+  "thumbnail": "📦",
   "tags": [
-    "design",
-    "template",
-    "web"
+    "mcbe",
+    "pack"
   ],
-  "category": "designs",
+  "category": "packs",
   "license": "MIT"
 }

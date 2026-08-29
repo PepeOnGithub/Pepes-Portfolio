@@ -1,7 +1,9 @@
+const CATEGORY_ORDER = ['packs', 'clients', 'addons', 'other'];
+
 // Page Router
 class Router {
   constructor() {
-    this.pages = ['home', 'projects', 'hub', 'socials', 'library'];
+    this.pages = ['home', 'projects', 'socials', 'library'];
     this.setupNav();
   }
 
@@ -177,109 +179,109 @@ class PackLibrary {
     return [
       {
         id: 1,
-        name: 'Modern UI Kit',
-        category: 'designs',
-        description: 'A modern and clean UI component library perfect for web applications.',
+        name: 'Nyxora Texture Pack',
+        category: 'packs',
+        description: 'A vibrant texture pack overhauling terrain, mobs, and UI for MCBE.',
         thumbnail: '',
-        tags: ['ui', 'web', 'components'],
+        tags: ['texture', 'pack', 'mcbe'],
         version: '1.0.0',
         downloads: 234,
         size: '12.5 MB',
         author: 'You',
         createdAt: '2026-08-15',
         updatedAt: '2026-08-15',
-        fileName: 'modern-ui-kit.zip',
-        gameVersion: '1.0',
+        fileName: 'nyxora-texture-pack.zip',
+        gameVersion: '1.21',
         downloadUrl: '#',
         previewUrl: '#'
       },
       {
         id: 2,
-        name: 'Dark Theme Template',
-        category: 'templates',
-        description: 'Professional dark theme template with ready-to-use components.',
+        name: 'Glacier Client',
+        category: 'clients',
+        description: 'Performance-driven MCBE client build with custom UI and modules.',
         thumbnail: '',
-        tags: ['dark', 'theme', 'template'],
+        tags: ['client', 'mcbe', 'performance'],
         version: '2.1.0',
         downloads: 567,
         size: '8.3 MB',
         author: 'You',
         createdAt: '2026-08-10',
         updatedAt: '2026-08-12',
-        fileName: 'dark-theme.zip',
-        gameVersion: '2.1',
+        fileName: 'glacier-client.zip',
+        gameVersion: '1.21',
         downloadUrl: '#',
         previewUrl: '#'
       },
       {
         id: 3,
-        name: 'Icon Pack Pro',
-        category: 'resources',
-        description: 'Comprehensive icon collection with 500+ high-quality icons.',
+        name: "Elecro Blob's Wizardry",
+        category: 'addons',
+        description: 'Adds spellcasting, wands, and wizard mobs to Minecraft Bedrock.',
         thumbnail: '',
-        tags: ['icons', 'graphics', 'resources'],
+        tags: ['addon', 'magic', 'mobs'],
         version: '3.2.1',
         downloads: 892,
         size: '15.7 MB',
         author: 'You',
         createdAt: '2026-07-20',
         updatedAt: '2026-08-01',
-        fileName: 'icon-pack-pro.zip',
-        gameVersion: '3.2',
+        fileName: 'elecro-blobs-wizardry.zip',
+        gameVersion: '1.20',
         downloadUrl: '#',
         previewUrl: '#'
       },
       {
         id: 4,
-        name: 'Typography System',
-        category: 'designs',
-        description: 'Complete typography system with font pairings and sizing scales.',
+        name: 'Flarial Config Pack',
+        category: 'clients',
+        description: 'Preset Flarial proxy configuration with tuned modules and HUD.',
         thumbnail: '',
-        tags: ['typography', 'fonts', 'design'],
+        tags: ['flarial', 'config', 'client'],
         version: '1.5.0',
         downloads: 123,
         size: '4.2 MB',
         author: 'You',
         createdAt: '2026-06-05',
         updatedAt: '2026-06-05',
-        fileName: 'typography-system.zip',
-        gameVersion: '1.5',
+        fileName: 'flarial-config-pack.zip',
+        gameVersion: '1.21',
         downloadUrl: '#',
         previewUrl: '#'
       },
       {
         id: 5,
-        name: 'Color Palettes',
-        category: 'resources',
-        description: 'Curated collection of color palettes for various design needs.',
+        name: 'Aurora Resource Pack',
+        category: 'packs',
+        description: 'Soft-toned resource pack with custom skies, particles, and menus.',
         thumbnail: '',
-        tags: ['colors', 'palettes', 'design'],
+        tags: ['resource', 'pack', 'visual'],
         version: '2.0.0',
         downloads: 445,
         size: '1.8 MB',
         author: 'You',
         createdAt: '2026-05-18',
         updatedAt: '2026-05-18',
-        fileName: 'color-palettes.zip',
-        gameVersion: '2.0',
+        fileName: 'aurora-resource-pack.zip',
+        gameVersion: '1.20',
         downloadUrl: '#',
         previewUrl: '#'
       },
       {
         id: 6,
-        name: 'Landing Page Template',
-        category: 'templates',
-        description: 'Responsive landing page template with conversion-optimized design.',
+        name: 'Cape Collection',
+        category: 'other',
+        description: 'A bundle of custom capes made with the Cape Generator tool.',
         thumbnail: '',
-        tags: ['landing', 'web', 'template'],
+        tags: ['cape', 'cosmetic', 'misc'],
         version: '1.2.3',
         downloads: 678,
         size: '9.1 MB',
         author: 'You',
         createdAt: '2026-04-22',
         updatedAt: '2026-04-30',
-        fileName: 'landing-page.zip',
-        gameVersion: '1.2',
+        fileName: 'cape-collection.zip',
+        gameVersion: '1.21',
         downloadUrl: '#',
         previewUrl: '#'
       }
@@ -288,8 +290,7 @@ class PackLibrary {
 
   updateCategoryCounts() {
     document.getElementById('count-all').textContent = this.packs.length;
-    const categories = ['templates', 'designs', 'resources'];
-    categories.forEach(cat => {
+    CATEGORY_ORDER.forEach(cat => {
       const count = this.packs.filter(p => p.category === cat).length;
       const elem = document.getElementById(`count-${cat}`);
       if (elem) elem.textContent = count;
@@ -373,7 +374,17 @@ class PackLibrary {
     const count = this.filteredPacks.length;
     resultsText.textContent = `${count} project${count !== 1 ? 's' : ''}`;
 
-    grid.innerHTML = this.filteredPacks.map(pack => this.createPackCard(pack)).join('');
+    if (this.currentFilter.category === '') {
+      grid.innerHTML = CATEGORY_ORDER
+        .map(cat => {
+          const packsInCat = this.filteredPacks.filter(p => p.category === cat);
+          if (packsInCat.length === 0) return '';
+          return this.createCategoryDivider(cat) + packsInCat.map(pack => this.createPackCard(pack)).join('');
+        })
+        .join('');
+    } else {
+      grid.innerHTML = this.filteredPacks.map(pack => this.createPackCard(pack)).join('');
+    }
 
     grid.querySelectorAll('.pack-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -382,6 +393,14 @@ class PackLibrary {
         if (pack) this.showDetail(pack);
       });
     });
+  }
+
+  createCategoryDivider(category) {
+    return `
+      <div class="category-section-divider">
+        <span></span><p>${this.capitalizeFirst(category)}</p><span></span>
+      </div>
+    `;
   }
 
   createPackCard(pack) {
