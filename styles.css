@@ -328,12 +328,33 @@ a { color: inherit; text-decoration: none; }
   padding: var(--spacing-xl);
   transition: all var(--transition-base);
   display: block;
+  position: relative;
 }
 
-.link-card:hover {
+.link-card:hover,
+.nav-card:hover {
   border-color: var(--color-accent);
   transform: translateY(-3px);
   box-shadow: var(--shadow-lg);
+}
+
+.nav-card { cursor: pointer; }
+
+.card-arrow {
+  position: absolute;
+  top: var(--spacing-xl);
+  right: var(--spacing-xl);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all var(--transition-fast);
+}
+
+.nav-card:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: var(--color-accent);
 }
 
 .highlight-icon {
