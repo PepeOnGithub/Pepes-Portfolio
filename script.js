@@ -390,7 +390,11 @@ class PackLibrary {
     }
 
     if (this.currentFilter.category) {
-      filtered = filtered.filter(pack => pack.category === this.currentFilter.category);
+      // Pinned packs (e.g. required dependencies) show in every category,
+      // not just their own, since they're relevant no matter what you're browsing.
+      filtered = filtered.filter(pack =>
+        pack.category === this.currentFilter.category || pack.pinned
+      );
     }
 
     switch (this.currentFilter.sort) {
