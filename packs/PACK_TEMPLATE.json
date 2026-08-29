@@ -1,0 +1,14 @@
+{
+  "name": "Your Pack Name",
+  "description": "Brief description of what this pack contains",
+  "author": "Your Name",
+  "version": "1.0.0",
+  "thumbnail": "🎨",
+  "tags": [
+    "design",
+    "template",
+    "web"
+  ],
+  "category": "designs",
+  "license": "MIT"
+}

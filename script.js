@@ -1,3 +1,91 @@
+// Page Router
+class Router {
+  constructor() {
+    this.pages = ['home', 'projects', 'socials', 'library'];
+    this.setupNav();
+  }
+
+  setupNav() {
+    document.querySelectorAll('[data-page]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.show(el.dataset.page);
+      });
+    });
+  }
+
+  show(pageId) {
+    if (!this.pages.includes(pageId)) return;
+
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page-${pageId}`).classList.add('active');
+
+    document.querySelectorAll('.topnav-link').forEach(link => {
+      link.classList.toggle('active', link.dataset.page === pageId);
+    });
+
+    document.getElementById('main-content').focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+// Custom Dropdown
+class CustomDropdown {
+  constructor(id, onSelect) {
+    this.wrap = document.getElementById(id);
+    if (!this.wrap) return;
+    this.trigger = this.wrap.querySelector('.custom-dropdown-trigger');
+    this.menu = this.wrap.querySelector('.custom-dropdown-menu');
+    this.label = this.trigger.querySelector('span');
+    this.onSelect = onSelect;
+
+    this.trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggle();
+    });
+
+    this.menu.querySelectorAll('li').forEach(item => {
+      item.addEventListener('click', () => {
+        this.select(item.dataset.value, item.textContent);
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!this.wrap.contains(e.target)) this.close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this.close();
+    });
+  }
+
+  toggle() {
+    const isOpen = this.menu.classList.contains('open');
+    if (isOpen) this.close(); else this.open();
+  }
+
+  open() {
+    this.menu.classList.add('open');
+    this.trigger.classList.add('open');
+    this.trigger.setAttribute('aria-expanded', 'true');
+  }
+
+  close() {
+    this.menu.classList.remove('open');
+    this.trigger.classList.remove('open');
+    this.trigger.setAttribute('aria-expanded', 'false');
+  }
+
+  select(value, text) {
+    this.label.textContent = text;
+    this.menu.querySelectorAll('li').forEach(li => {
+      li.classList.toggle('selected', li.dataset.value === value);
+    });
+    this.close();
+    if (this.onSelect) this.onSelect(value);
+  }
+}
+
 // Pack Library Application
 class PackLibrary {
   constructor() {
@@ -6,7 +94,7 @@ class PackLibrary {
     this.currentFilter = {
       search: '',
       category: '',
-      sort: 'name'
+      sort: 'relevance'
     };
     this.init();
   }
@@ -14,32 +102,30 @@ class PackLibrary {
   async init() {
     this.setupEventListeners();
     this.loadTheme();
+    this.sortDropdown = new CustomDropdown('sort-dropdown', (value) => {
+      this.currentFilter.sort = value;
+      this.applyFilters();
+    });
     await this.loadPacks();
-    this.render();
+    this.updateCategoryCounts();
+    this.applyFilters();
   }
 
   setupEventListeners() {
-    // Search
-    const searchInput = document.getElementById('search-input');
-    const searchClear = document.getElementById('search-clear');
-    searchInput.addEventListener('input', (e) => this.handleSearch(e));
-    searchClear.addEventListener('click', () => this.clearSearch());
+    document.getElementById('search-input').addEventListener('input', (e) => this.handleSearch(e));
 
-    // Filters
-    document.getElementById('category-filter').addEventListener('change', (e) => this.handleCategoryFilter(e));
-    document.getElementById('sort-filter').addEventListener('change', (e) => this.handleSort(e));
+    document.querySelectorAll('.category-row').forEach(btn => {
+      btn.addEventListener('click', (e) => this.handleCategoryClick(e));
+    });
 
-    // Theme
     document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
 
-    // Settings
     document.getElementById('settings-toggle').addEventListener('click', () => this.openSettings());
     document.querySelector('.modal-close').addEventListener('click', () => this.closeSettings());
     document.getElementById('settings-modal').addEventListener('click', (e) => {
       if (e.target.id === 'settings-modal') this.closeSettings();
     });
 
-    // Settings toggles
     document.getElementById('dark-mode-toggle').addEventListener('change', (e) => {
       this.setDarkMode(e.target.checked);
     });
@@ -47,13 +133,22 @@ class PackLibrary {
     document.getElementById('compact-view-toggle').addEventListener('change', (e) => {
       this.setCompactView(e.target.checked);
     });
+
+    document.getElementById('back-to-browse').addEventListener('click', () => this.showBrowse());
   }
 
   async loadPacks() {
     try {
-      // Simulate loading packs from the packs folder
-      // In a real scenario, this would fetch an index file or scan the directory
-      this.packs = await this.scanPacksDirectory();
+      const response = await fetch('packs.json', { cache: 'no-store' });
+      if (response.ok) {
+        const data = await response.json();
+        this.packs = data.packs || [];
+      } else {
+        this.packs = this.getDefaultPacks();
+      }
+      if (this.packs.length === 0) {
+        this.packs = this.getDefaultPacks();
+      }
       this.filteredPacks = [...this.packs];
       return this.packs;
     } catch (error) {
@@ -63,25 +158,23 @@ class PackLibrary {
     }
   }
 
-  async scanPacksDirectory() {
-    // This would ideally be generated by a build script
-    // For now, return empty and let getDefaultPacks handle it
-    return [];
-  }
-
   getDefaultPacks() {
-    // Sample packs structure - replace with real data
     return [
       {
         id: 1,
         name: 'Modern UI Kit',
         category: 'designs',
         description: 'A modern and clean UI component library perfect for web applications.',
-        thumbnail: '🎨',
+        thumbnail: '',
         tags: ['ui', 'web', 'components'],
         version: '1.0.0',
         downloads: 234,
         size: '12.5 MB',
+        author: 'You',
+        createdAt: '2026-08-15',
+        updatedAt: '2026-08-15',
+        fileName: 'modern-ui-kit.zip',
+        gameVersion: '1.0',
         downloadUrl: '#',
         previewUrl: '#'
       },
@@ -90,11 +183,16 @@ class PackLibrary {
         name: 'Dark Theme Template',
         category: 'templates',
         description: 'Professional dark theme template with ready-to-use components.',
-        thumbnail: '🌙',
+        thumbnail: '',
         tags: ['dark', 'theme', 'template'],
         version: '2.1.0',
         downloads: 567,
         size: '8.3 MB',
+        author: 'You',
+        createdAt: '2026-08-10',
+        updatedAt: '2026-08-12',
+        fileName: 'dark-theme.zip',
+        gameVersion: '2.1',
         downloadUrl: '#',
         previewUrl: '#'
       },
@@ -103,11 +201,16 @@ class PackLibrary {
         name: 'Icon Pack Pro',
         category: 'resources',
         description: 'Comprehensive icon collection with 500+ high-quality icons.',
-        thumbnail: '✨',
+        thumbnail: '',
         tags: ['icons', 'graphics', 'resources'],
         version: '3.2.1',
         downloads: 892,
         size: '15.7 MB',
+        author: 'You',
+        createdAt: '2026-07-20',
+        updatedAt: '2026-08-01',
+        fileName: 'icon-pack-pro.zip',
+        gameVersion: '3.2',
         downloadUrl: '#',
         previewUrl: '#'
       },
@@ -116,11 +219,16 @@ class PackLibrary {
         name: 'Typography System',
         category: 'designs',
         description: 'Complete typography system with font pairings and sizing scales.',
-        thumbnail: '📝',
+        thumbnail: '',
         tags: ['typography', 'fonts', 'design'],
         version: '1.5.0',
         downloads: 123,
         size: '4.2 MB',
+        author: 'You',
+        createdAt: '2026-06-05',
+        updatedAt: '2026-06-05',
+        fileName: 'typography-system.zip',
+        gameVersion: '1.5',
         downloadUrl: '#',
         previewUrl: '#'
       },
@@ -129,11 +237,16 @@ class PackLibrary {
         name: 'Color Palettes',
         category: 'resources',
         description: 'Curated collection of color palettes for various design needs.',
-        thumbnail: '🎭',
+        thumbnail: '',
         tags: ['colors', 'palettes', 'design'],
         version: '2.0.0',
         downloads: 445,
         size: '1.8 MB',
+        author: 'You',
+        createdAt: '2026-05-18',
+        updatedAt: '2026-05-18',
+        fileName: 'color-palettes.zip',
+        gameVersion: '2.0',
         downloadUrl: '#',
         previewUrl: '#'
       },
@@ -142,41 +255,45 @@ class PackLibrary {
         name: 'Landing Page Template',
         category: 'templates',
         description: 'Responsive landing page template with conversion-optimized design.',
-        thumbnail: '🚀',
+        thumbnail: '',
         tags: ['landing', 'web', 'template'],
         version: '1.2.3',
         downloads: 678,
         size: '9.1 MB',
+        author: 'You',
+        createdAt: '2026-04-22',
+        updatedAt: '2026-04-30',
+        fileName: 'landing-page.zip',
+        gameVersion: '1.2',
         downloadUrl: '#',
         previewUrl: '#'
       }
     ];
   }
 
+  updateCategoryCounts() {
+    document.getElementById('count-all').textContent = this.packs.length;
+    const categories = ['templates', 'designs', 'resources'];
+    categories.forEach(cat => {
+      const count = this.packs.filter(p => p.category === cat).length;
+      const elem = document.getElementById(`count-${cat}`);
+      if (elem) elem.textContent = count;
+    });
+  }
+
   handleSearch(e) {
     this.currentFilter.search = e.target.value.toLowerCase();
-    this.updateSearchClearButton();
     this.applyFilters();
   }
 
-  clearSearch() {
-    document.getElementById('search-input').value = '';
-    this.currentFilter.search = '';
-    this.updateSearchClearButton();
-    this.applyFilters();
-  }
+  handleCategoryClick(e) {
+    const row = e.currentTarget;
+    const category = row.dataset.category;
+    this.currentFilter.category = category;
 
-  updateSearchClearButton() {
-    const clearBtn = document.getElementById('search-clear');
-    if (this.currentFilter.search) {
-      clearBtn.style.display = 'flex';
-    } else {
-      clearBtn.style.display = 'none';
-    }
-  }
+    document.querySelectorAll('.category-row').forEach(btn => btn.classList.remove('active'));
+    row.classList.add('active');
 
-  handleCategoryFilter(e) {
-    this.currentFilter.category = e.target.value;
     this.applyFilters();
   }
 
@@ -188,34 +305,34 @@ class PackLibrary {
   applyFilters() {
     let filtered = [...this.packs];
 
-    // Search filter
     if (this.currentFilter.search) {
-      filtered = filtered.filter(pack => {
-        const search = this.currentFilter.search;
-        return (
-          pack.name.toLowerCase().includes(search) ||
-          pack.description.toLowerCase().includes(search) ||
-          pack.tags.some(tag => tag.toLowerCase().includes(search))
-        );
-      });
+      const search = this.currentFilter.search;
+      filtered = filtered.filter(pack =>
+        pack.name.toLowerCase().includes(search) ||
+        pack.description.toLowerCase().includes(search) ||
+        (pack.tags || []).some(tag => tag.toLowerCase().includes(search))
+      );
     }
 
-    // Category filter
     if (this.currentFilter.category) {
       filtered = filtered.filter(pack => pack.category === this.currentFilter.category);
     }
 
-    // Sort
     switch (this.currentFilter.sort) {
       case 'recent':
-        filtered.sort((a, b) => b.id - a.id);
+        filtered.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
         break;
       case 'popular':
         filtered.sort((a, b) => b.downloads - a.downloads);
         break;
       case 'name':
-      default:
         filtered.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      default:
+        // relevance: keep as-is when no search, else sort by name
+        if (this.currentFilter.search) {
+          filtered.sort((a, b) => a.name.localeCompare(b.name));
+        }
     }
 
     this.filteredPacks = filtered;
@@ -226,62 +343,110 @@ class PackLibrary {
     const grid = document.getElementById('packs-grid');
     const emptyState = document.getElementById('empty-state');
     const resultsText = document.getElementById('results-text');
+    const endMarker = document.getElementById('end-marker');
 
     if (this.filteredPacks.length === 0) {
       grid.innerHTML = '';
       emptyState.style.display = 'block';
-      resultsText.textContent = this.packs.length === 0
-        ? 'No packs available. Add some to the packs folder.'
-        : 'No packs match your search criteria.';
+      endMarker.style.display = 'none';
+      resultsText.textContent = '0 projects';
       return;
     }
 
     emptyState.style.display = 'none';
+    endMarker.style.display = 'block';
     const count = this.filteredPacks.length;
-    resultsText.textContent = `Showing ${count} pack${count !== 1 ? 's' : ''}`;
+    resultsText.textContent = `${count} project${count !== 1 ? 's' : ''}`;
 
     grid.innerHTML = this.filteredPacks.map(pack => this.createPackCard(pack)).join('');
+
+    grid.querySelectorAll('.pack-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = parseInt(card.dataset.packId, 10);
+        const pack = this.packs.find(p => p.id === id);
+        if (pack) this.showDetail(pack);
+      });
+    });
   }
 
   createPackCard(pack) {
+    const letter = pack.name.charAt(0).toUpperCase();
+    const hasImage = pack.thumbnail && pack.thumbnail.startsWith('http');
+
     return `
       <div class="pack-card" data-pack-id="${pack.id}">
-        <div class="pack-thumbnail">${pack.thumbnail}</div>
+        <div class="pack-thumbnail">
+          ${hasImage ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">` : `<span class="pack-letter">${letter}</span>`}
+        </div>
         <div class="pack-content">
-          <span class="pack-category">${pack.category}</span>
-          <h3 class="pack-name">${this.escapeHtml(pack.name)}</h3>
+          <div class="pack-title-row">
+            <span class="pack-name">${this.escapeHtml(pack.name)}</span>
+            <span class="pack-badge">${this.capitalizeFirst(pack.category)}</span>
+          </div>
           <p class="pack-description">${this.escapeHtml(pack.description)}</p>
-
-          <div class="pack-meta">
-            <div class="pack-meta-item">
-              <i class="fas fa-download"></i>
-              <span>${pack.downloads}</span>
-            </div>
-            <div class="pack-meta-item">
-              <i class="fas fa-database"></i>
-              <span>${pack.size}</span>
-            </div>
-            <div class="pack-meta-item">
-              <i class="fas fa-tag"></i>
-              <span>v${pack.version}</span>
-            </div>
-          </div>
-
-          <div class="pack-tags">
-            ${pack.tags.map(tag => `<span class="pack-tag">${this.escapeHtml(tag)}</span>`).join('')}
-          </div>
-
-          <div class="pack-actions">
-            <a href="${pack.previewUrl}" class="pack-action-btn" target="_blank" rel="noopener">
-              <i class="fas fa-eye"></i> Preview
-            </a>
-            <a href="${pack.downloadUrl}" class="pack-action-btn" target="_blank" rel="noopener">
-              <i class="fas fa-download"></i> Download
-            </a>
+          <div class="pack-footer">
+            <span>by ${this.escapeHtml(pack.author || 'Unknown')}</span>
+            <span class="downloads">${pack.downloads}</span>
           </div>
         </div>
       </div>
     `;
+  }
+
+  showDetail(pack) {
+    const hasImage = pack.thumbnail && pack.thumbnail.startsWith('http');
+    const letter = pack.name.charAt(0).toUpperCase();
+
+    document.getElementById('detail-banner').innerHTML = hasImage
+      ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
+      : `<span class="pack-letter">${letter}</span>`;
+    document.getElementById('detail-thumb').innerHTML = hasImage
+      ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
+      : `<span class="pack-letter">${letter}</span>`;
+
+    document.getElementById('detail-name').textContent = pack.name;
+    document.getElementById('detail-badge').textContent = this.capitalizeFirst(pack.category);
+    document.getElementById('detail-author').textContent = `by ${pack.author || 'Unknown'}`;
+    document.getElementById('detail-description').textContent = pack.description;
+
+    document.getElementById('versions-sub').textContent = `Download releases of ${pack.name}.`;
+    document.getElementById('detail-version').textContent = pack.version;
+    document.getElementById('detail-date').textContent = this.formatDate(pack.createdAt);
+    document.getElementById('detail-file').textContent = `${pack.fileName || 'download.zip'} · ${pack.size} · ${pack.downloads} downloads`;
+    document.getElementById('detail-tags').innerHTML = `
+      ${pack.gameVersion ? `<span>${this.escapeHtml(pack.gameVersion)}</span>` : ''}
+      <span>${this.capitalizeFirst(pack.category)}</span>
+    `;
+
+    document.getElementById('detail-download').href = pack.downloadUrl;
+    document.getElementById('detail-download-inline').href = pack.downloadUrl;
+
+    document.getElementById('detail-avatar').textContent = (pack.author || 'U').charAt(0).toUpperCase();
+    document.getElementById('detail-author-name').textContent = pack.author || 'Unknown';
+    document.getElementById('detail-downloads').textContent = pack.downloads;
+    document.getElementById('detail-made').textContent = this.formatDate(pack.createdAt);
+    document.getElementById('detail-updated').textContent = this.formatDate(pack.updatedAt || pack.createdAt);
+
+    document.getElementById('browse-view').classList.add('hidden');
+    document.getElementById('detail-view').classList.remove('hidden');
+    window.scrollTo(0, 0);
+  }
+
+  showBrowse() {
+    document.getElementById('detail-view').classList.add('hidden');
+    document.getElementById('browse-view').classList.remove('hidden');
+  }
+
+  formatDate(dateStr) {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  capitalizeFirst(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   escapeHtml(text) {
@@ -291,23 +456,22 @@ class PackLibrary {
   }
 
   toggleTheme() {
-    const isDark = document.body.classList.contains('light-mode');
-    if (isDark) {
-      this.setDarkMode(true);
-    } else {
-      this.setDarkMode(false);
-    }
+    const isLight = document.body.classList.contains('light-mode');
+    this.setDarkMode(isLight);
   }
 
   setDarkMode(isDark) {
     const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const themeIcon = document.querySelector('#theme-toggle i');
     if (isDark) {
       document.body.classList.remove('light-mode');
       darkModeToggle.checked = false;
+      if (themeIcon) themeIcon.className = 'fas fa-sun';
       localStorage.setItem('darkMode', 'true');
     } else {
       document.body.classList.add('light-mode');
       darkModeToggle.checked = true;
+      if (themeIcon) themeIcon.className = 'fas fa-moon';
       localStorage.setItem('darkMode', 'false');
     }
   }
@@ -347,14 +511,7 @@ class PackLibrary {
   }
 }
 
-// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
+  window.router = new Router();
   window.packLibrary = new PackLibrary();
-});
-
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-  if (e.key === '?') {
-    console.log('Help not implemented yet');
-  }
 });
