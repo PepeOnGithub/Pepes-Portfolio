@@ -406,6 +406,10 @@ class PackLibrary {
         }
     }
 
+    // Pinned packs (e.g. required dependencies) always float to the top
+    // of their group, regardless of sort order.
+    filtered.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+
     this.filteredPacks = filtered;
     this.render();
   }
@@ -492,7 +496,8 @@ class PackLibrary {
       : '';
 
     return `
-      <div class="pack-card" data-pack-id="${pack.id}">
+      <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}" data-pack-id="${pack.id}">
+        ${pack.pinned ? '<span class="pinned-badge"><i class="fas fa-thumbtack"></i> Required</span>' : ''}
         <div class="pack-thumbnail">
           ${background}
           ${iconBadge}
@@ -530,6 +535,8 @@ class PackLibrary {
     document.getElementById('detail-badge').textContent = this.capitalizeFirst(pack.category);
     document.getElementById('detail-author').textContent = `by ${pack.author || 'Unknown'}`;
     document.getElementById('detail-description').textContent = pack.description;
+
+    this.renderNotice(pack);
 
     document.getElementById('versions-sub').textContent = `Download releases of ${pack.name}.`;
     this.renderVersionsList(pack);
@@ -591,6 +598,37 @@ class PackLibrary {
     document.querySelectorAll('.version-downloads').forEach(el => {
       el.textContent = `${count} downloads`;
     });
+  }
+
+  renderNotice(pack) {
+    const box = document.getElementById('detail-notice');
+    const notice = pack.notice;
+
+    if (!notice) {
+      box.classList.add('hidden');
+      box.innerHTML = '';
+      return;
+    }
+
+    const features = (notice.features || []).map(f => `
+      <li>
+        <strong>${this.escapeHtml(f.title)}</strong>: ${this.escapeHtml(f.text)}
+      </li>
+    `).join('');
+
+    box.innerHTML = `
+      <div class="notice-header">
+        <i class="fas fa-triangle-exclamation"></i>
+        <h3>${this.escapeHtml(notice.title || 'Important')}</h3>
+      </div>
+      ${notice.intro ? `<p>${this.escapeHtml(notice.intro)}</p>` : ''}
+      ${notice.instruction ? `<p class="notice-instruction">${this.escapeHtml(notice.instruction)}</p>` : ''}
+      ${notice.featuresTitle ? `<h4>${this.escapeHtml(notice.featuresTitle)}</h4>` : ''}
+      ${notice.featuresIntro ? `<p>${this.escapeHtml(notice.featuresIntro)}</p>` : ''}
+      ${features ? `<ul class="notice-features">${features}</ul>` : ''}
+      ${notice.critical ? `<div class="notice-critical"><i class="fas fa-circle-exclamation"></i> ${this.escapeHtml(notice.critical)}</div>` : ''}
+    `;
+    box.classList.remove('hidden');
   }
 
   renderVersionsList(pack) {

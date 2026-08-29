@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-29T20:46:08.116507",
+  "generated": "2026-08-29T20:48:50.899579",
   "total_packs": 28,
   "categories": {
     "addons": [
@@ -112,9 +112,11 @@
       "id": 5,
       "name": "Pepe's Assets Pack",
       "category": "other",
-      "description": "Important: Put this Pack above every Pack made by me (Pepe) or nothing will work. Note: Makes all of Pepe's Packs Compatible You can configure every pack inside the ui/_global_variables.json file.",
+      "description": "Provides the shared assets and compatibility layer required by every other Pepe's Pack. Place it above all other Pepe's Packs in your load order.",
       "thumbnail": "packs/other/pepes-assets-pack/icon.png",
       "tags": [
+        "required",
+        "dependency",
         "other"
       ],
       "version": "1.7.0",
@@ -188,7 +190,30 @@
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack.mcpack",
           "date": "2026-08-29"
         }
-      ]
+      ],
+      "pinned": true,
+      "notice": {
+        "title": "A Must-Have for All Packs!",
+        "intro": "To ensure all your Pepe's Packs load and work perfectly, you must enable and place the Pepe's Pack Assets pack above all other packs in your load order.",
+        "instruction": "Download and Import it like a regular pack and make sure it's on top of the list.",
+        "featuresTitle": "What Does the Assets Pack Do?",
+        "featuresIntro": "This essential pack provides the core foundation for all other Pepe's Packs:",
+        "features": [
+          {
+            "title": "Seamless Compatibility",
+            "text": "It makes every pack compatible with each other, ensuring they work together without issues."
+          },
+          {
+            "title": "Shared Resources",
+            "text": "It contains crucial assets that multiple packs need, preventing duplication and keeping things tidy."
+          },
+          {
+            "title": "Full Customization",
+            "text": "It allows you to easily configure settings across all your packs from one central place."
+          }
+        ],
+        "critical": "Your game will crash if the Pepe's Pack Assets isn't enabled! Don't forget to activate it!"
+      }
     },
     {
       "id": 6,

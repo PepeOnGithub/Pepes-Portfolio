@@ -242,6 +242,12 @@ def generate_packs_json(packs_dir, output_file):
             if banner_url:
                 pack_entry['bannerUrl'] = banner_url
 
+            if metadata.get('pinned'):
+                pack_entry['pinned'] = True
+
+            if metadata.get('notice'):
+                pack_entry['notice'] = metadata['notice']
+
             # Website packs: a file named like a domain (e.g. "glacierclient.xyz",
             # empty content) supplies the external link
             if category == 'website':
