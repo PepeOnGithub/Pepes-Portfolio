@@ -902,9 +902,9 @@ body.reduce-motion *::after {
 
 .pack-splash-name {
   position: absolute;
-  left: var(--spacing-md);
-  right: var(--spacing-md);
-  top: var(--spacing-md);
+  left: var(--spacing-lg);
+  right: var(--spacing-lg);
+  top: var(--spacing-xl);
   z-index: 1;
   font-family: 'MinecraftSplash', 'Segoe UI', Impact, 'Arial Black', sans-serif;
   font-weight: normal;
@@ -1090,7 +1090,8 @@ body.reduce-motion *::after {
   position: absolute;
   left: var(--spacing-xl);
   right: var(--spacing-xl);
-  top: var(--spacing-xl);
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 1;
   font-family: 'MinecraftSplash', 'Segoe UI', Impact, 'Arial Black', sans-serif;
   font-weight: normal;
