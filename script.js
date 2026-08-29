@@ -1,9 +1,9 @@
-const CATEGORY_ORDER = ['packs', 'clients', 'addons', 'other'];
+const CATEGORY_ORDER = ['packs', 'clients', 'addons', 'website', 'other'];
 
 // Page Router
 class Router {
   constructor() {
-    this.pages = ['home', 'projects', 'socials', 'library'];
+    this.pages = ['home', 'projects', 'socials', 'library', 'settings'];
     this.setupNav();
   }
 
@@ -131,18 +131,20 @@ class PackLibrary {
 
     document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
 
-    document.getElementById('settings-toggle').addEventListener('click', () => this.openSettings());
-    document.querySelector('.modal-close').addEventListener('click', () => this.closeSettings());
-    document.getElementById('settings-modal').addEventListener('click', (e) => {
-      if (e.target.id === 'settings-modal') this.closeSettings();
-    });
-
     document.getElementById('dark-mode-toggle').addEventListener('change', (e) => {
       this.setDarkMode(e.target.checked);
     });
 
     document.getElementById('compact-view-toggle').addEventListener('change', (e) => {
       this.setCompactView(e.target.checked);
+    });
+
+    document.getElementById('reduce-motion-toggle').addEventListener('change', (e) => {
+      this.setReduceMotion(e.target.checked);
+    });
+
+    document.getElementById('new-tab-toggle').addEventListener('change', (e) => {
+      this.setNewTabLinks(e.target.checked);
     });
 
     document.getElementById('back-to-browse').addEventListener('click', () => {
@@ -282,6 +284,24 @@ class PackLibrary {
         updatedAt: '2026-04-30',
         fileName: 'cape-collection.zip',
         gameVersion: '1.21',
+        downloadUrl: '#',
+        previewUrl: '#'
+      },
+      {
+        id: 7,
+        name: 'Glacier Client Web',
+        category: 'website',
+        description: 'Source for the Glacier Client landing site and download page.',
+        thumbnail: '',
+        tags: ['website', 'source', 'glacier'],
+        version: '1.0.0',
+        downloads: 156,
+        size: '2.4 MB',
+        author: 'You',
+        createdAt: '2026-03-10',
+        updatedAt: '2026-03-15',
+        fileName: 'glacier-client-web.zip',
+        gameVersion: 'N/A',
         downloadUrl: '#',
         previewUrl: '#'
       }
@@ -454,6 +474,7 @@ class PackLibrary {
 
     document.getElementById('detail-download').href = pack.downloadUrl;
     document.getElementById('detail-download-inline').href = pack.downloadUrl;
+    this.applyLinkTargets();
 
     document.getElementById('detail-avatar').textContent = (pack.author || 'U').charAt(0).toUpperCase();
     document.getElementById('detail-author-name').textContent = pack.author || 'Unknown';
@@ -509,12 +530,12 @@ class PackLibrary {
     const themeIcon = document.querySelector('#theme-toggle i');
     if (isDark) {
       document.body.classList.remove('light-mode');
-      darkModeToggle.checked = false;
+      darkModeToggle.checked = true;
       if (themeIcon) themeIcon.className = 'fas fa-sun';
       localStorage.setItem('darkMode', 'true');
     } else {
       document.body.classList.add('light-mode');
-      darkModeToggle.checked = true;
+      darkModeToggle.checked = false;
       if (themeIcon) themeIcon.className = 'fas fa-moon';
       localStorage.setItem('darkMode', 'false');
     }
@@ -530,9 +551,43 @@ class PackLibrary {
     }
   }
 
+  setReduceMotion(isReduced) {
+    const toggle = document.getElementById('reduce-motion-toggle');
+    if (isReduced) {
+      document.body.classList.add('reduce-motion');
+      localStorage.setItem('reduceMotion', 'true');
+    } else {
+      document.body.classList.remove('reduce-motion');
+      localStorage.setItem('reduceMotion', 'false');
+    }
+    if (toggle) toggle.checked = isReduced;
+  }
+
+  setNewTabLinks(isNewTab) {
+    const toggle = document.getElementById('new-tab-toggle');
+    localStorage.setItem('newTabLinks', isNewTab ? 'true' : 'false');
+    if (toggle) toggle.checked = isNewTab;
+    this.applyLinkTargets();
+  }
+
+  applyLinkTargets() {
+    const newTab = localStorage.getItem('newTabLinks') !== 'false';
+    document.querySelectorAll('a[href^="http"]').forEach(link => {
+      if (newTab) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener');
+      } else {
+        link.removeAttribute('target');
+        link.removeAttribute('rel');
+      }
+    });
+  }
+
   loadTheme() {
     const darkMode = localStorage.getItem('darkMode');
     const compactView = localStorage.getItem('compactView');
+    const reduceMotion = localStorage.getItem('reduceMotion');
+    const newTabLinks = localStorage.getItem('newTabLinks');
 
     if (darkMode === 'false') {
       this.setDarkMode(false);
@@ -541,17 +596,12 @@ class PackLibrary {
     if (compactView === 'true') {
       this.setCompactView(true);
     }
-  }
 
-  openSettings() {
-    const modal = document.getElementById('settings-modal');
-    modal.classList.remove('hidden');
-    document.getElementById('dark-mode-toggle').checked = document.body.classList.contains('light-mode');
-    document.getElementById('compact-view-toggle').checked = document.body.classList.contains('compact-view');
-  }
+    if (reduceMotion === 'true') {
+      this.setReduceMotion(true);
+    }
 
-  closeSettings() {
-    document.getElementById('settings-modal').classList.add('hidden');
+    this.setNewTabLinks(newTabLinks !== 'false');
   }
 }
 

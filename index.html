@@ -30,7 +30,7 @@
       <button class="icon-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
         <i class="fas fa-sun"></i>
       </button>
-      <button class="icon-btn" id="settings-toggle" title="Settings" aria-label="Settings">
+      <button class="icon-btn" id="settings-toggle" title="Settings" aria-label="Settings" data-page="settings">
         <i class="fas fa-cog"></i>
       </button>
     </div>
@@ -63,23 +63,50 @@
     </div>
 
     <div class="home-skills">
-      <div class="skills-col">
-        <h3 class="skills-title">Known</h3>
-        <div class="tech-row">
-          <div class="tech-badge"><i class="fab fa-html5"></i> HTML</div>
-          <div class="tech-badge"><i class="fab fa-css3-alt"></i> CSS3</div>
-          <div class="tech-badge"><i class="fab fa-js"></i> JavaScript</div>
-          <div class="tech-badge accent"><i class="fab fa-python"></i> Python</div>
-          <div class="tech-badge"><i class="fas fa-hashtag"></i> C#</div>
-          <div class="tech-badge"><i class="fab fa-java"></i> Java</div>
-        </div>
-      </div>
-      <div class="skills-col">
-        <h3 class="skills-title muted">Learning</h3>
-        <div class="tech-row">
-          <div class="tech-badge muted"><i class="fas fa-gear"></i> Rust</div>
-          <div class="tech-badge muted"><i class="fas fa-plus"></i> C++</div>
-        </div>
+      <h3 class="skills-title">Languages</h3>
+      <div class="lang-table-wrap">
+        <table class="lang-table">
+          <thead>
+            <tr>
+              <th>Language</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><i class="fab fa-html5"></i> HTML</td>
+              <td><span class="status-pill known">Known</span></td>
+            </tr>
+            <tr>
+              <td><i class="fab fa-css3-alt"></i> CSS3</td>
+              <td><span class="status-pill known">Known</span></td>
+            </tr>
+            <tr>
+              <td><i class="fab fa-js"></i> JavaScript</td>
+              <td><span class="status-pill known">Known</span></td>
+            </tr>
+            <tr>
+              <td><i class="fab fa-python"></i> Python</td>
+              <td><span class="status-pill known accent">Known</span></td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-hashtag"></i> C#</td>
+              <td><span class="status-pill known">Known</span></td>
+            </tr>
+            <tr>
+              <td><i class="fab fa-java"></i> Java</td>
+              <td><span class="status-pill known">Known</span></td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-gear"></i> Rust</td>
+              <td><span class="status-pill learning">Learning</span></td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-plus"></i> C++</td>
+              <td><span class="status-pill learning">Learning</span></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -164,28 +191,40 @@
       <p class="page-subtitle">Find and follow me across platforms.</p>
 
       <div class="social-grid">
-        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" class="social-card">
-          <i class="fab fa-discord"></i>
+        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" class="social-card social-card--discord">
+          <span class="social-icon"><i class="fab fa-discord"></i></span>
           <div><h4>Discord</h4><p>Join the community</p></div>
         </a>
-        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" class="social-card">
-          <i class="fab fa-youtube"></i>
+        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" class="social-card social-card--youtube">
+          <span class="social-icon"><i class="fab fa-youtube"></i></span>
           <div><h4>YouTube</h4><p>@PepeOnYoutube</p></div>
         </a>
-        <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" class="social-card">
-          <i class="fab fa-github"></i>
+        <a href="https://x.com/_pepeyt_" target="_blank" rel="noopener" class="social-card social-card--x">
+          <span class="social-icon"><i class="fab fa-x-twitter"></i></span>
+          <div><h4>X</h4><p>@_pepeyt_</p></div>
+        </a>
+        <a href="https://www.instagram.com/pepeonmeta/" target="_blank" rel="noopener" class="social-card social-card--instagram">
+          <span class="social-icon"><i class="fab fa-instagram"></i></span>
+          <div><h4>Instagram</h4><p>@pepeonmeta</p></div>
+        </a>
+        <a href="https://www.tiktok.com/@pepeontt" target="_blank" rel="noopener" class="social-card social-card--tiktok">
+          <span class="social-icon"><i class="fab fa-tiktok"></i></span>
+          <div><h4>TikTok</h4><p>@pepeontt</p></div>
+        </a>
+        <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" class="social-card social-card--github">
+          <span class="social-icon"><i class="fab fa-github"></i></span>
           <div><h4>GitHub</h4><p>@PepeOnGithub</p></div>
         </a>
-        <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" class="social-card">
-          <i class="fab fa-paypal"></i>
+        <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" class="social-card social-card--paypal">
+          <span class="social-icon"><i class="fab fa-paypal"></i></span>
           <div><h4>PayPal</h4><p>Support my work</p></div>
         </a>
-        <a href="https://mcpedl.com/user/pepeonmcpedl/" target="_blank" rel="noopener" class="social-card">
-          <i class="fas fa-download"></i>
+        <a href="https://mcpedl.com/user/pepeonmcpedl/" target="_blank" rel="noopener" class="social-card social-card--mcpedl">
+          <span class="social-icon"><i class="fas fa-download"></i></span>
           <div><h4>MCPEDL</h4><p>Browse my packs</p></div>
         </a>
-        <a href="https://www.curseforge.com/members/pepeoncf/projects" target="_blank" rel="noopener" class="social-card">
-          <i class="fas fa-fire"></i>
+        <a href="https://www.curseforge.com/members/pepeoncf/projects" target="_blank" rel="noopener" class="social-card social-card--curseforge">
+          <span class="social-icon"><i class="fas fa-fire"></i></span>
           <div><h4>CurseForge</h4><p>Projects &amp; downloads</p></div>
         </a>
       </div>
@@ -234,6 +273,10 @@
             <button class="category-row" data-category="addons">
               <span>Addons</span>
               <span class="count" id="count-addons">0</span>
+            </button>
+            <button class="category-row" data-category="website">
+              <span>Website</span>
+              <span class="count" id="count-website">0</span>
             </button>
             <button class="category-row" data-category="other">
               <span>Other</span>
@@ -347,33 +390,61 @@
     </div>
   </section>
 
-  </div><!-- /#main-content -->
+  <!-- ============ SETTINGS PAGE ============ -->
+  <section class="page" id="page-settings">
+    <div class="page-inner page-inner-narrow">
+      <h2 class="page-title">Settings</h2>
+      <p class="page-subtitle">Customize how the site looks and behaves.</p>
 
-  <!-- Settings Modal -->
-  <div id="settings-modal" class="modal hidden">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Settings</h2>
-        <button class="modal-close" aria-label="Close settings">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="setting-group">
-          <label class="setting-label">
-            <input type="checkbox" id="dark-mode-toggle" class="setting-input">
-            <span>Dark Mode</span>
-          </label>
-        </div>
-        <div class="setting-group">
-          <label class="setting-label">
+      <div class="settings-list">
+        <label class="setting-row">
+          <div>
+            <p class="setting-name">Dark Mode</p>
+            <p class="setting-desc">Use the dark palette across the site</p>
+          </div>
+          <span class="custom-checkbox">
+            <input type="checkbox" id="dark-mode-toggle" class="setting-input" checked>
+            <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+          </span>
+        </label>
+
+        <label class="setting-row">
+          <div>
+            <p class="setting-name">Compact View</p>
+            <p class="setting-desc">Reduce spacing for denser layouts</p>
+          </div>
+          <span class="custom-checkbox">
             <input type="checkbox" id="compact-view-toggle" class="setting-input">
-            <span>Compact View</span>
-          </label>
-        </div>
+            <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+          </span>
+        </label>
+
+        <label class="setting-row">
+          <div>
+            <p class="setting-name">Reduce Motion</p>
+            <p class="setting-desc">Turn off animations and transitions</p>
+          </div>
+          <span class="custom-checkbox">
+            <input type="checkbox" id="reduce-motion-toggle" class="setting-input">
+            <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+          </span>
+        </label>
+
+        <label class="setting-row">
+          <div>
+            <p class="setting-name">Open Links in New Tab</p>
+            <p class="setting-desc">External links open in a new browser tab</p>
+          </div>
+          <span class="custom-checkbox">
+            <input type="checkbox" id="new-tab-toggle" class="setting-input" checked>
+            <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+          </span>
+        </label>
       </div>
     </div>
-  </div>
+  </section>
+
+  </div><!-- /#main-content -->
 
   <!-- Footer -->
   <footer class="site-footer">

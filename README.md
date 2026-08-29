@@ -43,6 +43,7 @@ Features:
     │   └── another-pack/
     ├── clients/
     ├── addons/
+    ├── website/
     └── other/
 ```
 
@@ -77,7 +78,7 @@ Create `packs/packs/nyxora-texture-pack/pack.json`:
 - `version` — Version number (e.g., "1.0.0")
 - `thumbnail` — Emoji or image URL (use emoji for simplicity)
 - `tags` — Search keywords
-- `category` — One of: `packs`, `clients`, `addons`, `other`
+- `category` — One of: `packs`, `clients`, `addons`, `website`, `other`
 - `license` — License type (optional)
 
 ### Step 3: Add Pack Files
@@ -121,7 +122,7 @@ Your site updates automatically with the new pack!
 - Real-time filtering as you type
 
 ### Categories
-- Filter by: Packs, Clients, Addons, Other
+- Filter by: Packs, Clients, Addons, Website, Other
 - Shows pack count per category
 - The "All" view groups results by category with a divider line and label
 - One-click filtering
@@ -162,6 +163,7 @@ Your site updates automatically with the new pack!
 - Packs: `📦` `🎨` `🖌️`
 - Clients: `🛡️` `⚙️` `🧊`
 - Addons: `✨` `🧩` `🔮`
+- Website: `🌐` `💻` `🔗`
 - Other: `📄` `🎭` `🚀`
 
 ### Category Descriptions
@@ -169,6 +171,7 @@ Your site updates automatically with the new pack!
 - **packs** — Texture/resource packs
 - **clients** — MCBE client builds and configs
 - **addons** — Behavior pack addons and mods
+- **website** — Site source code and web tools
 - **other** — Everything else (capes, misc tools, resources)
 
 ## 🔄 Generator Script
