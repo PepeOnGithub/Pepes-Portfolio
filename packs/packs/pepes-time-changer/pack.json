@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's Time Changer",
+  "description": "Switch between day and night using subpacks.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "packs"
+  ],
+  "category": "packs",
+  "license": "MIT"
+}

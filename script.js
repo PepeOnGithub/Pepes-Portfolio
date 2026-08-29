@@ -5,6 +5,21 @@ const CATEGORY_ORDER = ['packs', 'clients', 'addons', 'website', 'other'];
 // https://jasoncameron.dev/abacus/
 const COUNTER_NAMESPACE = 'pepes-portfolio-pack-downloads';
 
+// Linkvertise monetization, same setup as ClientLibrary
+const LINKVERTISE_USER_ID = 499358;
+function isMonetizationOn() { return true; }
+
+function getMonetizedUrl(targetUrl) {
+  if (!targetUrl || targetUrl === '#' || !isMonetizationOn() || !LINKVERTISE_USER_ID) return targetUrl;
+  try {
+    const encoded = encodeURIComponent(btoa(targetUrl));
+    const random = Math.random() * 1000;
+    return `https://link-to.net/${LINKVERTISE_USER_ID}/${random}/dynamic/?r=${encoded}`;
+  } catch (e) {
+    return targetUrl;
+  }
+}
+
 // Page Router
 class Router {
   constructor() {
@@ -160,19 +175,17 @@ class PackLibrary {
       }
     });
 
-    ['detail-download', 'detail-download-inline'].forEach(id => {
-      document.getElementById(id).addEventListener('click', (e) => {
-        // A placeholder "#" href would otherwise navigate the fragment and
-        // confuse the pack/page router — only real download URLs proceed.
-        const href = e.currentTarget.getAttribute('href');
-        if (!href || href === '#') e.preventDefault();
+    document.getElementById('detail-download').addEventListener('click', (e) => {
+      // A placeholder "#" href would otherwise navigate the fragment and
+      // confuse the pack/page router — only real download URLs proceed.
+      const href = e.currentTarget.getAttribute('href');
+      if (!href || href === '#') e.preventDefault();
 
-        if (!this.currentPack) return;
-        const pack = this.currentPack;
-        this.incrementDownloads(pack).then(count => {
-          pack.downloads = count;
-          if (this.currentPack === pack) this.updateDownloadsDisplay(pack, count);
-        });
+      if (!this.currentPack) return;
+      const pack = this.currentPack;
+      this.incrementDownloads(pack).then(count => {
+        pack.downloads = count;
+        if (this.currentPack === pack) this.updateDownloadsDisplay(pack, count);
       });
     });
   }
@@ -467,11 +480,22 @@ class PackLibrary {
   createPackCard(pack) {
     const letter = pack.name.charAt(0).toUpperCase();
     const hasImage = this.isImagePath(pack.thumbnail);
+    const hasBanner = this.isImagePath(pack.bannerUrl);
+
+    const background = hasBanner
+      ? `<img src="${pack.bannerUrl}" alt="${this.escapeHtml(pack.name)}">`
+      : hasImage
+        ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
+        : `<span class="pack-letter">${letter}</span>`;
+    const iconBadge = hasBanner && hasImage
+      ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt=""></span>`
+      : '';
 
     return `
       <div class="pack-card" data-pack-id="${pack.id}">
         <div class="pack-thumbnail">
-          ${hasImage ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">` : `<span class="pack-letter">${letter}</span>`}
+          ${background}
+          ${iconBadge}
         </div>
         <div class="pack-content">
           <div class="pack-title-row">
@@ -508,15 +532,10 @@ class PackLibrary {
     document.getElementById('detail-description').textContent = pack.description;
 
     document.getElementById('versions-sub').textContent = `Download releases of ${pack.name}.`;
-    document.getElementById('detail-version').textContent = pack.version;
-    document.getElementById('detail-date').textContent = this.formatDate(pack.createdAt);
-    document.getElementById('detail-tags').innerHTML = `
-      ${pack.gameVersion ? `<span>${this.escapeHtml(pack.gameVersion)}</span>` : ''}
-      <span>${this.capitalizeFirst(pack.category)}</span>
-    `;
+    this.renderVersionsList(pack);
 
-    document.getElementById('detail-download').href = pack.downloadUrl;
-    document.getElementById('detail-download-inline').href = pack.downloadUrl;
+    const latestVersion = (pack.versions && pack.versions[0]) || pack;
+    document.getElementById('detail-download').href = getMonetizedUrl(latestVersion.downloadUrl || pack.downloadUrl);
     this.applyLinkTargets();
 
     document.getElementById('detail-avatar').textContent = (pack.author || 'U').charAt(0).toUpperCase();
@@ -568,9 +587,54 @@ class PackLibrary {
 
   updateDownloadsDisplay(pack, count) {
     const downloadsEl = document.getElementById('detail-downloads');
-    const fileEl = document.getElementById('detail-file');
     if (downloadsEl) downloadsEl.textContent = count;
-    if (fileEl) fileEl.textContent = `${pack.fileName || 'download.zip'} · ${pack.size} · ${count} downloads`;
+    document.querySelectorAll('.version-downloads').forEach(el => {
+      el.textContent = `${count} downloads`;
+    });
+  }
+
+  renderVersionsList(pack) {
+    const list = document.getElementById('versions-list');
+    const versions = (pack.versions && pack.versions.length ? pack.versions : [{
+      version: pack.version,
+      fileName: pack.fileName,
+      size: pack.size,
+      downloadUrl: pack.downloadUrl,
+      date: pack.createdAt
+    }]);
+
+    list.innerHTML = versions.map((v, i) => `
+      <div class="version-row">
+        <div class="version-info">
+          <div class="version-top">
+            <span class="version-number">${this.escapeHtml(v.version || '1.0.0')}</span>
+            <span class="version-date">${this.formatDate(v.date)}</span>
+          </div>
+          <p class="version-file">${this.escapeHtml(v.fileName || 'download.zip')} &middot; ${this.escapeHtml(v.size || '')} &middot; <span class="version-downloads">${pack.downloads} downloads</span></p>
+          <div class="version-tags">
+            ${pack.gameVersion && pack.gameVersion !== 'N/A' ? `<span>${this.escapeHtml(pack.gameVersion)}</span>` : ''}
+            <span>${this.capitalizeFirst(pack.category)}</span>
+            ${i === 0 && versions.length > 1 ? '<span class="latest-tag">Latest</span>' : ''}
+          </div>
+        </div>
+        <a href="${getMonetizedUrl(v.downloadUrl)}" class="btn-download version-download-btn" data-version-index="${i}">
+          <i class="fas fa-download"></i> Download
+        </a>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.version-download-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const href = btn.getAttribute('href');
+        if (!href || href === '#') btn.removeAttribute('href');
+        this.incrementDownloads(pack).then(count => {
+          pack.downloads = count;
+          this.updateDownloadsDisplay(pack, count);
+        });
+      });
+    });
+
+    this.applyLinkTargets();
   }
 
   async fetchLiveDownloads(pack) {

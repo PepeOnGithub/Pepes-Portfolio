@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's Shiny Pots",
+  "description": "Adds shiny pot textures to the Hotbar. Note:Requires Pepe's Assets Pack to work properly.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "packs"
+  ],
+  "category": "packs",
+  "license": "MIT"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's InventoryHUD",
+  "description": "Displays your inventory on the HUD.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "packs"
+  ],
+  "category": "packs",
+  "license": "MIT"
+}

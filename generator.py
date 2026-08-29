@@ -7,7 +7,9 @@ Run this after adding new packs to update the library.
 
 import os
 import json
+import re
 import sys
+import zipfile
 from pathlib import Path
 from datetime import datetime
 
@@ -73,6 +75,63 @@ KNOWN_FILES = {
     'readme.md', 'license', 'license.txt'
 }
 
+ASSET_EXTENSIONS = ('.zip', '.mcpack', '.mcaddon', '.mcworld', '.mctemplate')
+VERSION_IN_FILENAME = re.compile(r'[Vv](\d+(?:\.\d+)*)')
+
+def version_key(filename):
+    """Extract a sortable version tuple from a filename; unversioned files sort as 1.0.0."""
+    m = VERSION_IN_FILENAME.search(filename)
+    if not m:
+        return (1, 0, 0)
+    parts = [int(p) for p in m.group(1).split('.')]
+    while len(parts) < 3:
+        parts.append(0)
+    return tuple(parts[:3])
+
+def read_version_from_archive(path):
+    """Fallback for files with no version in their filename: read it from
+    the pack's own manifest.json inside the archive."""
+    try:
+        with zipfile.ZipFile(path) as zf:
+            names = zf.namelist()
+            manifest_name = 'manifest.json'
+            if manifest_name not in names:
+                # nested .mcaddon structure
+                for n in names:
+                    if n.endswith('manifest.json'):
+                        manifest_name = n
+                        break
+                else:
+                    return None
+            with zf.open(manifest_name) as f:
+                manifest = json.load(f)
+            v = manifest.get('header', {}).get('version')
+            if isinstance(v, str):
+                return v
+            if isinstance(v, list):
+                return '.'.join(str(x) for x in v)
+    except Exception:
+        pass
+    return None
+
+def format_size(num_bytes):
+    if num_bytes >= 1024 * 1024:
+        return f"{num_bytes / (1024 * 1024):.1f} MB"
+    return f"{num_bytes / 1024:.1f} KB"
+
+def find_asset_files(pack_path):
+    """
+    Find every downloadable pack file (.mcpack/.mcaddon/.zip/etc) in a pack
+    folder, sorted newest version first. Supports multiple versions of the
+    same pack living side by side in one folder.
+    """
+    files = [
+        entry for entry in pack_path.iterdir()
+        if entry.is_file() and entry.suffix.lower() in ASSET_EXTENSIONS
+    ]
+    files.sort(key=lambda e: version_key(e.name), reverse=True)
+    return files
+
 def find_link_file(pack_path):
     """
     For website packs: find a file whose name IS the link, e.g. a file
@@ -128,6 +187,36 @@ def generate_packs_json(packs_dir, output_file):
             if bg_path.exists():
                 banner_url = f'packs/{category}/{pack_path.name}/bg.png'
 
+            # Prefer real pack file(s) (.mcpack/.mcaddon/etc) if present, so
+            # downloads point at actual importable files and sizes are accurate.
+            # Multiple versions can live side by side in one pack folder.
+            asset_files = find_asset_files(pack_path)
+
+            versions = []
+            for f in asset_files:
+                stat = f.stat()
+                m = VERSION_IN_FILENAME.search(f.name)
+                v_label = m.group(1) if m else (read_version_from_archive(f) or metadata.get('version', '1.0.0'))
+                versions.append({
+                    'version': v_label,
+                    'fileName': f.name,
+                    'size': format_size(stat.st_size),
+                    'downloadUrl': f'packs/{category}/{pack_path.name}/{f.name}',
+                    'date': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d')
+                })
+
+            if versions:
+                latest = versions[0]
+                download_url = latest['downloadUrl']
+                size_str = latest['size']
+                file_name = latest['fileName']
+                version_str = latest['version']
+            else:
+                download_url = f'packs/{category}/{pack_path.name}.zip'
+                size_str = get_directory_size(pack_path)
+                file_name = metadata.get('fileName')
+                version_str = metadata.get('version', '1.0.0')
+
             # Build pack entry
             pack_entry = {
                 'id': pack_id,
@@ -136,13 +225,19 @@ def generate_packs_json(packs_dir, output_file):
                 'description': metadata.get('description', f'A {category} pack'),
                 'thumbnail': thumbnail,
                 'tags': metadata.get('tags', [category]),
-                'version': metadata.get('version', '1.0.0'),
+                'version': version_str,
                 'downloads': count_downloads(pack_path),
-                'size': get_directory_size(pack_path),
+                'size': size_str,
                 'author': metadata.get('author', 'Pepe'),
-                'downloadUrl': f'packs/{category}/{pack_path.name}.zip',
+                'downloadUrl': download_url,
                 'previewUrl': f'packs/{category}/{pack_path.name}/'
             }
+
+            if file_name:
+                pack_entry['fileName'] = file_name
+
+            if len(versions) > 1:
+                pack_entry['versions'] = versions
 
             if banner_url:
                 pack_entry['bannerUrl'] = banner_url

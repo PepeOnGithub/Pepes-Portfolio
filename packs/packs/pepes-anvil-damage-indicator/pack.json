@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's Anvil Damage Indicator",
+  "description": "Enhances anvil visuals with clear, color-coded damage indicators to track durability at a glance. No more guessing when your anvil is about to break.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "packs"
+  ],
+  "category": "packs",
+  "license": "MIT"
+}

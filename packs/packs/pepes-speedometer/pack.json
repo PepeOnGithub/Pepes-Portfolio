@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's Speedometer",
+  "description": "Displays your movement speed in the HUD Note: Pepe's Assets Pack is required for this pack to work.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "packs"
+  ],
+  "category": "packs",
+  "license": "MIT"
+}

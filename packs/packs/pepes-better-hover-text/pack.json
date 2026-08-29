@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's Better Hover Text",
+  "description": "Enhances inventory tooltips with advanced data. - Item Durability (Current/Max) - Technical IDs (Aux/Item ID) - Suspicious Stew Identifier Note: Pepe's Assets Pack is required for this pack to work.",
+  "author": "Pepe",
+  "version": "0.0.3",
+  "thumbnail": "📦",
+  "tags": [
+    "packs"
+  ],
+  "category": "packs",
+  "license": "MIT"
+}

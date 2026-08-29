@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's Experience Tome",
+  "description": "Experience a new way to save your progress. This add-on introduces Crystallized Lapis and the XP Tome, a mystical item capable of storing up to 64 levels. Discover them hidden within ancient structures with varying amounts of stored knowledge.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "addons"
+  ],
+  "category": "addons",
+  "license": "MIT"
+}

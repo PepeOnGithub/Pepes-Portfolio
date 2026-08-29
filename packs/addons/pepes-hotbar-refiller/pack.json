@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's Hotbar Refiller",
+  "description": "Automatically restores broken tools and fully consumed hotbar block stacks from the main inventory.",
+  "author": "PepeOnMCBE",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "addons"
+  ],
+  "category": "addons",
+  "license": "MIT"
+}

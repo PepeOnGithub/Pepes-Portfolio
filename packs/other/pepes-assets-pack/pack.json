@@ -1,0 +1,12 @@
+{
+  "name": "Pepe's Assets Pack",
+  "description": "Important: Put this Pack above every Pack made by me (Pepe) or nothing will work. Note: Makes all of Pepe's Packs Compatible You can configure every pack inside the ui/_global_variables.json file.",
+  "author": "Pepe",
+  "version": "1.7.0",
+  "thumbnail": "📦",
+  "tags": [
+    "other"
+  ],
+  "category": "other",
+  "license": "MIT"
+}

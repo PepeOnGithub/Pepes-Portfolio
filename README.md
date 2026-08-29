@@ -115,6 +115,25 @@ git push origin main
 
 Your site updates automatically with the new pack!
 
+## 🗂️ Multiple Versions Per Pack
+
+Drop more than one pack file (`.mcpack`/`.mcaddon`/`.zip`/etc) into the same
+pack folder and the generator lists every one on the detail page, newest
+first, each with its own size/date/Download button. The version number is
+read from the filename (`My_Pack_V1.6.0.mcpack`) or, if there isn't one,
+from the file's own `manifest.json`.
+
+## 💰 Linkvertise
+
+Every Download button (sidebar and each version row) routes through
+Linkvertise before handing over the real file — same setup as ClientLibrary.
+Configure it in `script.js`:
+
+```js
+const LINKVERTISE_USER_ID = 499358;
+function isMonetizationOn() { return true; }
+```
+
 ## 🌐 Website Category (Special Behavior)
 
 Packs in the `website` category skip the detail page entirely — clicking
