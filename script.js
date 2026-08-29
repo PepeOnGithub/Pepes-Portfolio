@@ -1,7 +1,7 @@
 // Page Router
 class Router {
   constructor() {
-    this.pages = ['home', 'projects', 'socials', 'library'];
+    this.pages = ['home', 'projects', 'hub', 'socials', 'library'];
     this.setupNav();
   }
 

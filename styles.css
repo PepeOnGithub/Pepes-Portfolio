@@ -88,27 +88,6 @@ body.light-mode {
 
 a { color: inherit; text-decoration: none; }
 
-.skip-link {
-  position: fixed;
-  top: -60px;
-  left: var(--spacing-md);
-  background: var(--color-accent);
-  color: white;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: var(--font-size-sm);
-  z-index: 1100;
-  transition: top var(--transition-fast);
-}
-.skip-link:focus,
-.skip-link:focus-visible {
-  top: var(--spacing-md);
-  outline: 2px solid white;
-  outline-offset: 2px;
-}
-
 #main-content:focus { outline: none; }
 
 /* ===== Top Navigation ===== */
