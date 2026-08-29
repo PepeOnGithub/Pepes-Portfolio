@@ -115,6 +115,28 @@ git push origin main
 
 Your site updates automatically with the new pack!
 
+## 🌐 Website Category (Special Behavior)
+
+Packs in the `website` category skip the detail page entirely — clicking
+the card opens the site directly (in a new tab, unless "Open Links in
+New Tab" is off in Settings).
+
+To add one, no `pack.json` is required. Just create a folder with:
+
+```
+packs/website/glacier-client/
+├── glacierclient.xyz     ← empty file; the filename IS the link
+├── icon.png               ← card thumbnail
+└── bg.png                 ← optional banner (unused since there's no detail page)
+```
+
+The generator treats any file in the folder that isn't `pack.json`,
+`icon.png`, `bg.png`, or a known doc file (README/LICENSE) as the link
+file — its filename becomes `https://<filename>`. Run `python generator.py`
+afterward to pick it up. You can still add a `pack.json` alongside these
+files for a custom name/description/tags; otherwise the folder name is
+used.
+
 ## 🔍 Features
 
 ### Search

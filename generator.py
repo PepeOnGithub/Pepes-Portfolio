@@ -67,6 +67,33 @@ def count_downloads(pack_path):
             pass
     return 0
 
+# Files that are never treated as the "link file" for a website pack
+KNOWN_FILES = {
+    'pack.json', 'icon.png', 'bg.png', '.metadata.json',
+    'readme.md', 'license', 'license.txt'
+}
+
+def find_link_file(pack_path):
+    """
+    For website packs: find a file whose name IS the link, e.g. a file
+    literally named 'glacierclient.xyz' with no content. Returns the
+    domain string (filename) or None if no such file exists.
+    """
+    for entry in pack_path.iterdir():
+        if not entry.is_file():
+            continue
+        if entry.name.lower() in KNOWN_FILES:
+            continue
+        if entry.name.startswith('.'):
+            continue
+        # A link file has a dot (domain.tld) but isn't a recognized asset type
+        if '.' in entry.name and entry.suffix.lower() not in (
+            '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp',
+            '.zip', '.json', '.md', '.txt', '.css', '.js', '.ico'
+        ):
+            return entry.name
+    return None
+
 def generate_packs_json(packs_dir, output_file):
     """Scan packs directory and generate packs.json."""
     packs = []
@@ -90,13 +117,24 @@ def generate_packs_json(packs_dir, output_file):
             # Get metadata
             metadata = get_pack_metadata(pack_path)
 
+            # icon.png / bg.png override the thumbnail/banner if present
+            thumbnail = metadata.get('thumbnail', '📦')
+            icon_path = pack_path / 'icon.png'
+            if icon_path.exists():
+                thumbnail = f'packs/{category}/{pack_path.name}/icon.png'
+
+            banner_url = None
+            bg_path = pack_path / 'bg.png'
+            if bg_path.exists():
+                banner_url = f'packs/{category}/{pack_path.name}/bg.png'
+
             # Build pack entry
             pack_entry = {
                 'id': pack_id,
                 'name': metadata.get('name', pack_path.name.replace('-', ' ').title()),
                 'category': category,
                 'description': metadata.get('description', f'A {category} pack'),
-                'thumbnail': metadata.get('thumbnail', '📦'),
+                'thumbnail': thumbnail,
                 'tags': metadata.get('tags', [category]),
                 'version': metadata.get('version', '1.0.0'),
                 'downloads': count_downloads(pack_path),
@@ -105,6 +143,17 @@ def generate_packs_json(packs_dir, output_file):
                 'downloadUrl': f'packs/{category}/{pack_path.name}.zip',
                 'previewUrl': f'packs/{category}/{pack_path.name}/'
             }
+
+            if banner_url:
+                pack_entry['bannerUrl'] = banner_url
+
+            # Website packs: a file named like a domain (e.g. "glacierclient.xyz",
+            # empty content) supplies the external link
+            if category == 'website':
+                link_file = find_link_file(pack_path)
+                if link_file:
+                    pack_entry['externalUrl'] = f'https://{link_file}'
+                    pack_entry['fileName'] = link_file
 
             packs.append(pack_entry)
             categories[category].append(pack_entry['name'])

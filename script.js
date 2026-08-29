@@ -291,19 +291,20 @@ class PackLibrary {
         id: 7,
         name: 'Glacier Client Web',
         category: 'website',
-        description: 'Source for the Glacier Client landing site and download page.',
+        description: 'The Glacier Client landing site and download page.',
         thumbnail: '',
-        tags: ['website', 'source', 'glacier'],
+        tags: ['website', 'glacier'],
         version: '1.0.0',
         downloads: 156,
         size: '2.4 MB',
         author: 'You',
         createdAt: '2026-03-10',
         updatedAt: '2026-03-15',
-        fileName: 'glacier-client-web.zip',
+        fileName: 'glacierclient.xyz',
         gameVersion: 'N/A',
         downloadUrl: '#',
-        previewUrl: '#'
+        previewUrl: '#',
+        externalUrl: 'https://glacierclient.xyz'
       }
     ];
   }
@@ -410,9 +411,24 @@ class PackLibrary {
       card.addEventListener('click', () => {
         const id = parseInt(card.dataset.packId, 10);
         const pack = this.packs.find(p => p.id === id);
-        if (pack) this.showDetail(pack);
+        if (!pack) return;
+
+        if (pack.category === 'website' && pack.externalUrl) {
+          this.openExternal(pack.externalUrl);
+        } else {
+          this.showDetail(pack);
+        }
       });
     });
+  }
+
+  openExternal(url) {
+    const newTab = localStorage.getItem('newTabLinks') !== 'false';
+    if (newTab) {
+      window.open(url, '_blank', 'noopener');
+    } else {
+      window.location.href = url;
+    }
   }
 
   createCategoryDivider(category) {
@@ -423,9 +439,13 @@ class PackLibrary {
     `;
   }
 
+  isImagePath(value) {
+    return !!value && (value.startsWith('http') || value.includes('/'));
+  }
+
   createPackCard(pack) {
     const letter = pack.name.charAt(0).toUpperCase();
-    const hasImage = pack.thumbnail && pack.thumbnail.startsWith('http');
+    const hasImage = this.isImagePath(pack.thumbnail);
 
     return `
       <div class="pack-card" data-pack-id="${pack.id}">
@@ -448,12 +468,15 @@ class PackLibrary {
   }
 
   showDetail(pack, { push = true } = {}) {
-    const hasImage = pack.thumbnail && pack.thumbnail.startsWith('http');
+    const hasImage = this.isImagePath(pack.thumbnail);
+    const hasBanner = this.isImagePath(pack.bannerUrl);
     const letter = pack.name.charAt(0).toUpperCase();
 
-    document.getElementById('detail-banner').innerHTML = hasImage
-      ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
-      : `<span class="pack-letter">${letter}</span>`;
+    document.getElementById('detail-banner').innerHTML = hasBanner
+      ? `<img src="${pack.bannerUrl}" alt="${this.escapeHtml(pack.name)}">`
+      : hasImage
+        ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
+        : `<span class="pack-letter">${letter}</span>`;
     document.getElementById('detail-thumb').innerHTML = hasImage
       ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
       : `<span class="pack-letter">${letter}</span>`;

@@ -125,7 +125,7 @@ a { color: inherit; text-decoration: none; }
   justify-content: center;
   color: var(--color-accent);
   font-size: var(--font-size-lg);
-  border-radius: var(--radius-md);
+  border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -250,7 +250,7 @@ body.reduce-motion *::after {
 .home-avatar {
   width: 200px;
   height: 200px;
-  border-radius: var(--radius-2xl);
+  border-radius: 50%;
   object-fit: cover;
   box-shadow: var(--shadow-xl), 0 0 40px rgba(72, 156, 73, 0.25);
   border: 3px solid var(--color-accent);
