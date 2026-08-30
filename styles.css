@@ -90,6 +90,7 @@ body.compact-view .packs-grid { grid-template-columns: repeat(auto-fill, minmax(
 
 html {
   scroll-behavior: smooth;
+  font-size: calc(16px * var(--content-scale, 1));
 }
 
 /* ===== Custom Scrollbar ===== */
@@ -2261,6 +2262,39 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
 
 .settings-panel { display: none; }
 .settings-panel.active { display: block; animation: fadeUp 0.3s ease both; }
+
+/* While searching, show every panel so matches from any category are visible */
+.main-content.settings-searching .settings-panel { display: block; animation: none; }
+
+.setting-row-hidden { display: none !important; }
+
+.settings-search-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+}
+
+.settings-search-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 .settings-list {
   display: flex;

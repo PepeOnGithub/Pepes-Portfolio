@@ -590,6 +590,10 @@
         </div>
 
         <div class="sidebar-section">
+          <input type="search" id="settings-search-input" class="settings-search-input" placeholder="Search settings…" autocomplete="off">
+        </div>
+
+        <div class="sidebar-section">
           <div class="category-list">
             <button class="category-row active" data-settings-category="appearance">
               <span><i class="fas fa-palette"></i> Appearance</span>
@@ -659,6 +663,15 @@
               <input type="range" id="hero-visibility-slider" class="setting-slider" min="10" max="100" step="5" value="65">
             </label>
 
+            <label class="setting-row setting-row-slider">
+              <span class="setting-row-icon"><i class="fas fa-text-height"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Font Size</p>
+                <p class="setting-desc">Scale text size across the site</p>
+              </div>
+              <input type="range" id="font-size-slider" class="setting-slider" min="90" max="130" step="5" value="100">
+            </label>
+
             <label class="setting-row setting-row-select">
               <span class="setting-row-icon"><i class="fas fa-swatchbook"></i></span>
               <div class="setting-row-text">
@@ -716,6 +729,18 @@
               </div>
               <span class="custom-checkbox">
                 <input type="checkbox" id="autoplay-showcase-toggle" class="setting-input" autocomplete="off">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-map-pin"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Remember Last Visited Page</p>
+                <p class="setting-desc">Reopen the page you were last on instead of Home</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="remember-last-page-toggle" class="setting-input" autocomplete="off">
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
@@ -841,6 +866,25 @@
               </div>
               <span class="setting-action-label">Clear</span>
             </button>
+
+            <button type="button" class="setting-row setting-row-action" id="export-settings-btn">
+              <span class="setting-row-icon"><i class="fas fa-file-export"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Export Settings</p>
+                <p class="setting-desc">Save your settings to a file you can restore later or on another device</p>
+              </div>
+              <span class="setting-action-label">Export</span>
+            </button>
+
+            <button type="button" class="setting-row setting-row-action" id="import-settings-btn">
+              <span class="setting-row-icon"><i class="fas fa-file-import"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Import Settings</p>
+                <p class="setting-desc">Restore settings from a previously exported file</p>
+              </div>
+              <span class="setting-action-label">Import</span>
+            </button>
+            <input type="file" id="import-settings-input" accept="application/json" class="visually-hidden">
 
             <button type="button" class="setting-row setting-row-action setting-row-danger" id="reset-settings-btn">
               <span class="setting-row-icon"><i class="fas fa-arrow-rotate-left"></i></span>

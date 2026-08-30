@@ -5,6 +5,16 @@ const COUNTER_NAMESPACE = 'pepes-portfolio-pack-downloads';
 const LINKVERTISE_USER_ID = 499358;
 const MONETIZATION_PROVIDER_KEY = 'monetizationProvider';
 
+// Every setting key persisted in localStorage. Single source of truth for
+// "Reset All Settings" and for Export/Import Settings.
+const SETTINGS_KEYS = [
+  'darkMode', 'compactView', 'reduceMotion', 'newTabLinks', 'heroVisibility',
+  'accentColor', 'monetizationProvider', 'defaultSort', 'autoplayShowcase',
+  'askProviderEveryTime', 'libraryViewMode', 'showDownloadCounts',
+  'collapseOldVersions', 'showDiscontinued', 'collapseSectionsByDefault',
+  'collapsedSections', 'hideAssetsModal', 'fontSizeScale', 'rememberLastPage'
+];
+
 function isMonetizationOn() { return true; }
 
 function getMonetizationProvider() {
@@ -133,6 +143,10 @@ class Router {
 
     document.getElementById('main-content').focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (localStorage.getItem('rememberLastPage') === 'true') {
+      localStorage.setItem('lastVisitedPage', pageId);
+    }
 
     if (window.packLibrary) {
       window.packLibrary.showBrowse({ push: false });
@@ -388,15 +402,41 @@ class PackLibrary {
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
         if (!confirm('Reset all settings to their defaults?')) return;
-        [
-          'darkMode', 'compactView', 'reduceMotion', 'newTabLinks', 'heroVisibility',
-          'accentColor', 'monetizationProvider', 'defaultSort', 'autoplayShowcase',
-          'askProviderEveryTime', 'libraryViewMode', 'showDownloadCounts',
-          'collapseOldVersions', 'showDiscontinued', 'collapseSectionsByDefault',
-          'collapsedSections', 'hideAssetsModal'
-        ].forEach(key => localStorage.removeItem(key));
+        SETTINGS_KEYS.forEach(key => localStorage.removeItem(key));
         location.reload();
       });
+    }
+
+    const exportBtn = document.getElementById('export-settings-btn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => this.exportSettings());
+    }
+
+    const importBtn = document.getElementById('import-settings-btn');
+    const importInput = document.getElementById('import-settings-input');
+    if (importBtn && importInput) {
+      importBtn.addEventListener('click', () => importInput.click());
+      importInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) this.importSettings(file);
+        importInput.value = '';
+      });
+    }
+
+    document.getElementById('font-size-slider').addEventListener('input', (e) => {
+      this.setFontSize(e.target.value);
+    });
+
+    const rememberLastPageToggle = document.getElementById('remember-last-page-toggle');
+    if (rememberLastPageToggle) {
+      rememberLastPageToggle.addEventListener('change', (e) => {
+        localStorage.setItem('rememberLastPage', e.target.checked);
+      });
+    }
+
+    const settingsSearchInput = document.getElementById('settings-search-input');
+    if (settingsSearchInput) {
+      settingsSearchInput.addEventListener('input', (e) => this.filterSettingsRows(e.target.value));
     }
 
     document.getElementById('back-to-browse').addEventListener('click', () => {
@@ -2444,6 +2484,12 @@ class PackLibrary {
     const heroVisibility = localStorage.getItem('heroVisibility');
     this.setHeroVisibility(heroVisibility !== null ? heroVisibility : 65, { persist: false });
 
+    const fontSizeScale = localStorage.getItem('fontSizeScale');
+    this.setFontSize(fontSizeScale !== null ? fontSizeScale : 100, { persist: false });
+
+    const rememberLastPageToggle = document.getElementById('remember-last-page-toggle');
+    if (rememberLastPageToggle) rememberLastPageToggle.checked = localStorage.getItem('rememberLastPage') === 'true';
+
     this.syncDropdownSelection(this.monetizationDropdown, getMonetizationProvider());
     this.syncDropdownSelection(this.accentColorDropdown, localStorage.getItem('accentColor') || 'green');
     this.syncDropdownSelection(this.defaultSortDropdown, this.currentFilter.sort);
@@ -2469,6 +2515,67 @@ class PackLibrary {
     document.documentElement.style.setProperty('--hero-overlay-alpha', alpha.toFixed(2));
     document.getElementById('hero-visibility-slider').value = visibility;
     if (persist) localStorage.setItem('heroVisibility', visibility);
+  }
+
+  setFontSize(value, { persist = true } = {}) {
+    const scale = Math.min(130, Math.max(90, parseInt(value, 10) || 100));
+    document.documentElement.style.setProperty('--content-scale', (scale / 100).toFixed(2));
+    document.getElementById('font-size-slider').value = scale;
+    if (persist) localStorage.setItem('fontSizeScale', scale);
+  }
+
+  exportSettings() {
+    const data = {};
+    SETTINGS_KEYS.forEach(key => {
+      const value = localStorage.getItem(key);
+      if (value !== null) data[key] = value;
+    });
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'pepes-portfolio-settings.json';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  importSettings(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      let data;
+      try {
+        data = JSON.parse(reader.result);
+      } catch (e) {
+        alert('That file is not a valid settings export.');
+        return;
+      }
+      if (!data || typeof data !== 'object') {
+        alert('That file is not a valid settings export.');
+        return;
+      }
+      Object.keys(data).forEach(key => {
+        if (SETTINGS_KEYS.includes(key) && typeof data[key] === 'string') {
+          localStorage.setItem(key, data[key]);
+        }
+      });
+      location.reload();
+    };
+    reader.readAsText(file);
+  }
+
+  filterSettingsRows(query) {
+    const term = query.trim().toLowerCase();
+    const main = document.querySelector('#page-settings .main-content');
+    if (main) main.classList.toggle('settings-searching', !!term);
+
+    document.querySelectorAll('#page-settings .setting-row').forEach(row => {
+      const name = row.querySelector('.setting-name');
+      const desc = row.querySelector('.setting-desc');
+      const text = `${name ? name.textContent : ''} ${desc ? desc.textContent : ''}`.toLowerCase();
+      row.classList.toggle('setting-row-hidden', !!term && !text.includes(term));
+    });
   }
 
   setAccentColor(value, { persist = true } = {}) {
@@ -2630,7 +2737,13 @@ function resolveInitialRoute() {
     return;
   }
 
-  const pageId = path === '/' ? 'home' : path.slice(1);
+  let pageId = path === '/' ? 'home' : path.slice(1);
+
+  if (path === '/' && localStorage.getItem('rememberLastPage') === 'true') {
+    const lastPage = localStorage.getItem('lastVisitedPage');
+    if (lastPage && window.router.pages.includes(lastPage)) pageId = lastPage;
+  }
+
   if (window.router.pages.includes(pageId)) {
     window.router.show(pageId, { push: false });
     history.replaceState({ page: pageId }, '', pageId === 'home' ? '/' : `/${pageId}`);
