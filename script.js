@@ -217,6 +217,10 @@ class PackLibrary {
     this.favorites = this.loadFavorites();
     this.collapsedSections = this.loadCollapsedSections();
     this.defaultCollapseSections = localStorage.getItem('collapseSectionsByDefault') === 'true';
+    this.liveDownloadCounts = new Map();
+    this.inFlightDownloadFetches = new Map();
+    this.downloadFetchQueue = [];
+    this.activeDownloadFetches = 0;
     this.ready = this.init();
   }
 
@@ -492,12 +496,14 @@ class PackLibrary {
         : null;
 
       this.incrementDownloads(pack, version).then(count => {
+        this.writeCachedDownloadCount(this.counterKey(pack, version), count);
+        this.liveDownloadCounts.delete(pack.id);
         if (multi) {
           const idx = versions.indexOf(version);
           const el = document.querySelector(`.version-downloads[data-version-index="${idx}"]`);
-          if (el) el.textContent = `${count} downloads`;
+          if (el) el.textContent = `${this.formatCount(count)} downloads`;
           if (this.currentPack === pack && idx === (this.selectedVersionIndex || 0)) {
-            document.getElementById('detail-downloads').textContent = count;
+            document.getElementById('detail-downloads').textContent = this.formatCount(count);
           }
         } else {
           pack.downloads = count;
@@ -1159,16 +1165,33 @@ class PackLibrary {
   renderStatsPage() {
     if (!this.packs.length) return;
 
+    // packs.json's own `downloads` snapshot is essentially always 0 (it only
+    // ever comes from a local .metadata.json that doesn't really exist) -
+    // use whatever's already cached from live fetches, and kick off fetches
+    // for anything not cached yet so the page fills in once they resolve.
+    const liveCount = (pack) => this.liveDownloadCounts.get(pack.id) ?? pack.downloads ?? 0;
+    const uncached = this.packs.filter(p => !this.liveDownloadCounts.has(p.id));
+    if (uncached.length) {
+      Promise.all(uncached.map(pack => {
+        const totalPromise = (pack.versions && pack.versions.length > 1)
+          ? Promise.all(pack.versions.map(v => this.fetchLiveDownloads(pack, v))).then(counts => counts.reduce((a, b) => a + b, 0))
+          : this.fetchLiveDownloads(pack);
+        return totalPromise.then(count => this.liveDownloadCounts.set(pack.id, count));
+      })).then(() => {
+        if (document.getElementById('page-stats').classList.contains('active')) this.renderStatsPage();
+      });
+    }
+
     const active = this.packs.filter(p => !p.discontinued);
-    const totalDownloads = this.packs.reduce((sum, p) => sum + (p.downloads || 0), 0);
-    const mostDownloaded = [...this.packs].sort((a, b) => (b.downloads || 0) - (a.downloads || 0))[0];
+    const totalDownloads = this.packs.reduce((sum, p) => sum + liveCount(p), 0);
+    const mostDownloaded = [...this.packs].sort((a, b) => liveCount(b) - liveCount(a))[0];
     const newest = [...this.packs]
       .filter(p => p.createdAt)
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
     const summary = [
       { icon: 'fa-box-open', label: 'Total Packs', value: this.packs.length },
-      { icon: 'fa-download', label: 'Total Downloads', value: totalDownloads.toLocaleString() },
+      { icon: 'fa-download', label: 'Total Downloads', value: this.formatCount(totalDownloads) },
       { icon: 'fa-bolt', label: 'Active', value: active.length },
       { icon: 'fa-ban', label: 'Discontinued', value: this.packs.length - active.length },
     ];
@@ -1199,7 +1222,7 @@ class PackLibrary {
         <button type="button" class="stats-spotlight-card" data-pack-id="${pack.id}">
           <p class="stats-spotlight-label">${label}</p>
           <p class="stats-spotlight-name">${this.escapeHtml(pack.name)}</p>
-          <p class="stats-spotlight-meta">${(pack.downloads || 0).toLocaleString()} downloads &middot; ${this.capitalizeFirst(pack.category)}</p>
+          <p class="stats-spotlight-meta">${this.formatCount(liveCount(pack))} downloads &middot; ${this.capitalizeFirst(pack.category)}</p>
         </button>
       `;
     };
@@ -1675,6 +1698,35 @@ class PackLibrary {
       }
       divider.addEventListener('click', () => this.toggleSectionCollapsed(divider));
     });
+
+    this.fetchVisibleCardDownloadCounts();
+  }
+
+  // Card download counts come from packs.json's snapshot value (usually 0 -
+  // it's only ever populated from a local .metadata.json that doesn't really
+  // exist), so fetch each visible card's real count from the counter API,
+  // once per pack per session.
+  fetchVisibleCardDownloadCounts() {
+    const cards = document.querySelectorAll('#packs-grid .downloads[data-pack-id]');
+    cards.forEach(el => {
+      const id = parseInt(el.dataset.packId, 10);
+      if (this.liveDownloadCounts.has(id)) {
+        el.textContent = this.formatCount(this.liveDownloadCounts.get(id));
+        return;
+      }
+      const pack = this.packs.find(p => p.id === id);
+      if (!pack) return;
+
+      const totalPromise = (pack.versions && pack.versions.length > 1)
+        ? Promise.all(pack.versions.map(v => this.fetchLiveDownloads(pack, v))).then(counts => counts.reduce((a, b) => a + b, 0))
+        : this.fetchLiveDownloads(pack);
+
+      totalPromise.then(count => {
+        this.liveDownloadCounts.set(id, count);
+        const liveEl = document.querySelector(`#packs-grid .downloads[data-pack-id="${id}"]`);
+        if (liveEl) liveEl.textContent = this.formatCount(count);
+      });
+    });
   }
 
   openExternal(url) {
@@ -1785,7 +1837,7 @@ class PackLibrary {
             <p class="pack-description">${this.escapeHtml(pack.description)}</p>
             <div class="pack-footer">
               <span>by ${this.escapeHtml(pack.author || 'Unknown')}</span>
-              <span class="downloads">${pack.downloads}</span>
+              <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
             </div>
           </div>
           ${favoriteBtn}
@@ -1820,7 +1872,7 @@ class PackLibrary {
           <p class="pack-description">${this.escapeHtml(pack.description)}</p>
           <div class="pack-footer">
             <span>by ${this.escapeHtml(pack.author || 'Unknown')}</span>
-            <span class="downloads">${pack.downloads}</span>
+            <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
           </div>
         </div>
       </div>
@@ -2000,11 +2052,11 @@ class PackLibrary {
 
   updateDownloadsDisplay(pack, count) {
     const downloadsEl = document.getElementById('detail-downloads');
-    if (downloadsEl) downloadsEl.textContent = count;
+    if (downloadsEl) downloadsEl.textContent = this.formatCount(count);
     // Multi-version packs track (and display) each version's downloads separately.
     if (!(pack.versions && pack.versions.length > 1)) {
       document.querySelectorAll('.version-downloads').forEach(el => {
-        el.textContent = `${count} downloads`;
+        el.textContent = `${this.formatCount(count)} downloads`;
       });
     }
   }
@@ -2075,7 +2127,7 @@ class PackLibrary {
     document.getElementById('detail-downloads').textContent = '…';
     this.fetchLiveDownloads(pack, version).then(count => {
       if (this.currentPack === pack && this.selectedVersionIndex === index) {
-        document.getElementById('detail-downloads').textContent = count;
+        document.getElementById('detail-downloads').textContent = this.formatCount(count);
       }
     });
   }
@@ -2108,7 +2160,7 @@ class PackLibrary {
             <span class="version-number">${this.escapeHtml(v.version || '1.0.0')}</span>
             <span class="version-date">${this.formatDate(v.date)}</span>
           </div>
-          <p class="version-file">${this.escapeHtml(v.fileName || 'download.zip')} &middot; ${this.escapeHtml(v.size || '')} &middot; <span class="version-downloads" data-version-index="${i}">${multi ? '&hellip;' : pack.downloads} downloads</span></p>
+          <p class="version-file">${this.escapeHtml(v.fileName || 'download.zip')} &middot; ${this.escapeHtml(v.size || '')} &middot; <span class="version-downloads" data-version-index="${i}">${multi ? '&hellip;' : this.formatCount(pack.downloads)} downloads</span></p>
           <div class="version-tags">
             ${pack.gameVersion && pack.gameVersion !== 'N/A' ? `<span>${this.escapeHtml(pack.gameVersion)}</span>` : ''}
             <span>${this.capitalizeFirst(pack.category)}</span>
@@ -2148,19 +2200,62 @@ class PackLibrary {
       versions.forEach((v, i) => {
         this.fetchLiveDownloads(pack, v).then(count => {
           const el = list.querySelector(`.version-downloads[data-version-index="${i}"]`);
-          if (el) el.textContent = `${count} downloads`;
+          if (el) el.textContent = `${this.formatCount(count)} downloads`;
           if (this.currentPack === pack && i === (this.selectedVersionIndex || 0)) {
-            document.getElementById('detail-downloads').textContent = count;
+            document.getElementById('detail-downloads').textContent = this.formatCount(count);
           }
         });
       });
     }
   }
 
-  async fetchLiveDownloads(pack, version) {
+  // Routes through a small concurrency-limited queue (the counter API 429s
+  // if too many requests land at once, which happens easily when the
+  // library grid fetches a live count per card) and dedupes concurrent
+  // requests for the same pack/version so callers awaiting the same key
+  // share one in-flight request instead of firing duplicates.
+  fetchLiveDownloads(pack, version) {
+    const key = this.counterKey(pack, version);
+
+    // Short-lived cache across page loads: reloading the library repeatedly
+    // (e.g. switching categories back and forth) shouldn't re-hit the
+    // counter API for every pack every time within the same few minutes.
+    const cached = this.readCachedDownloadCount(key);
+    if (cached !== null) return Promise.resolve(cached);
+
+    if (this.inFlightDownloadFetches.has(key)) return this.inFlightDownloadFetches.get(key);
+
+    const promise = this.enqueueDownloadFetch(() => this.rawFetchLiveDownloads(pack, version, key))
+      .then(count => {
+        this.writeCachedDownloadCount(key, count);
+        return count;
+      })
+      .finally(() => this.inFlightDownloadFetches.delete(key));
+    this.inFlightDownloadFetches.set(key, promise);
+    return promise;
+  }
+
+  readCachedDownloadCount(key) {
+    try {
+      const raw = sessionStorage.getItem(`dlcount:${key}`);
+      if (!raw) return null;
+      const { count, t } = JSON.parse(raw);
+      if (Date.now() - t > 5 * 60 * 1000) return null;
+      return count;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  writeCachedDownloadCount(key, count) {
+    try {
+      sessionStorage.setItem(`dlcount:${key}`, JSON.stringify({ count, t: Date.now() }));
+    } catch (e) { /* sessionStorage full/unavailable - not fatal */ }
+  }
+
+  async rawFetchLiveDownloads(pack, version, key) {
     const fallback = version ? 0 : pack.downloads;
     try {
-      const key = this.counterKey(pack, version);
       const res = await fetch(`https://abacus.jasoncameron.dev/get/${COUNTER_NAMESPACE}/${key}`);
       if (!res.ok) return fallback;
       const data = await res.json();
@@ -2168,6 +2263,35 @@ class PackLibrary {
     } catch (error) {
       return fallback;
     }
+  }
+
+  enqueueDownloadFetch(task) {
+    return new Promise((resolve, reject) => {
+      this.downloadFetchQueue.push({ task, resolve, reject });
+      this.pumpDownloadFetchQueue();
+    });
+  }
+
+  pumpDownloadFetchQueue() {
+    // The counter API rate-limits (429s) well before a handful of concurrent
+    // requests - one at a time with a short stagger between dispatches stays
+    // under that, at the cost of the grid's counts filling in progressively
+    // rather than all at once.
+    const MAX_CONCURRENT = 1;
+    const STAGGER_MS = 300;
+    if (this.pumpScheduled || this.activeDownloadFetches >= MAX_CONCURRENT || !this.downloadFetchQueue.length) return;
+
+    this.pumpScheduled = true;
+    setTimeout(() => {
+      this.pumpScheduled = false;
+      if (!this.downloadFetchQueue.length) return;
+      const { task, resolve, reject } = this.downloadFetchQueue.shift();
+      this.activeDownloadFetches++;
+      task().then(resolve, reject).finally(() => {
+        this.activeDownloadFetches--;
+        this.pumpDownloadFetchQueue();
+      });
+    }, this.activeDownloadFetches === 0 && this.downloadFetchQueue.length === 1 ? 0 : STAGGER_MS);
   }
 
   async incrementDownloads(pack, version) {
@@ -2186,6 +2310,24 @@ class PackLibrary {
   capitalizeFirst(str) {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  // 950 -> "950", 1200 -> "1.2k", 1000000 -> "1m", 2500000 -> "2.5m"
+  formatCount(num) {
+    num = Number(num) || 0;
+    if (num < 1000) return String(num);
+    const units = [{ value: 1e9, suffix: 'b' }, { value: 1e6, suffix: 'm' }, { value: 1e3, suffix: 'k' }];
+    for (let i = 0; i < units.length; i++) {
+      const { value, suffix } = units[i];
+      if (num >= value) {
+        const scaled = num / value;
+        let rounded = scaled >= 100 ? Math.round(scaled) : Math.round(scaled * 10) / 10;
+        // e.g. 999999 rounds to 1000k - bump up to the next unit instead.
+        if (rounded >= 1000 && units[i - 1]) return `1${units[i - 1].suffix}`;
+        return `${rounded}${suffix}`;
+      }
+    }
+    return String(num);
   }
 
   escapeHtml(text) {
