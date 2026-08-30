@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -43,10 +45,15 @@ jobs:
       - name: Prepare site output
         run: |
           mkdir -p _site
+          # .mcpack/.mcaddon are Git LFS-tracked and served straight from
+          # GitHub's LFS media endpoint (see generator.py's to_download_url) -
+          # GitHub Pages can't serve LFS content correctly anyway, so they're
+          # left out of the deploy artifact entirely.
           rsync -a --exclude='.git' --exclude='.github' --exclude='.claude' \
             --exclude='_site' --exclude='node_modules' --exclude='*.py' \
             --exclude='lootlabs_cache.json' --exclude='.gitignore' \
-            --exclude='README.md' ./ _site/
+            --exclude='.gitattributes' --exclude='README.md' \
+            --exclude='*.mcpack' --exclude='*.mcaddon' ./ _site/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

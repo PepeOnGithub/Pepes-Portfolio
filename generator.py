@@ -34,6 +34,25 @@ LOOTLABS_API_TOKEN = os.environ.get('LOOTLABS_API_TOKEN')
 SITE_BASE_URL = os.environ.get('SITE_BASE_URL', '').rstrip('/')
 LOOTLABS_CACHE_FILE = 'lootlabs_cache.json'
 
+# ===== Git LFS-tracked downloads =====
+# .mcpack/.mcaddon files are tracked with Git LFS (see .gitattributes) to
+# keep the repo's regular git history small. GitHub Pages does NOT serve LFS
+# content correctly (a Pages URL to an LFS file returns the small pointer
+# text, not the real bytes), so download links for these extensions point at
+# GitHub's LFS media endpoint instead of a relative site path.
+GITHUB_REPOSITORY = os.environ.get('GITHUB_REPOSITORY', 'PepeOnGithub/Pepes-Portfolio')
+GITHUB_REF_NAME = os.environ.get('GITHUB_REF_NAME', 'main')
+LFS_TRACKED_EXTENSIONS = {'.mcpack', '.mcaddon'}
+
+
+def to_download_url(relative_path):
+    """Relative site path -> either itself, or (for LFS-tracked extensions)
+    an absolute media.githubusercontent.com URL."""
+    if Path(relative_path).suffix.lower() not in LFS_TRACKED_EXTENSIONS:
+        return relative_path
+    encoded = '/'.join(urllib.parse.quote(seg) for seg in relative_path.split('/'))
+    return f'https://media.githubusercontent.com/media/{GITHUB_REPOSITORY}/{GITHUB_REF_NAME}/{encoded}'
+
 
 def load_lootlabs_cache(cache_path):
     if cache_path.exists():
@@ -292,7 +311,7 @@ def generate_packs_json(packs_dir, output_file):
                     'version': v_label,
                     'fileName': f.name,
                     'size': format_size(stat.st_size),
-                    'downloadUrl': f'packs/{category}/{pack_path.name}/{f.name}',
+                    'downloadUrl': to_download_url(f'packs/{category}/{pack_path.name}/{f.name}'),
                     'date': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d')
                 }
                 if v_label in changelogs:
