@@ -86,3 +86,30 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Purge Cloudflare cache
+        # The custom domain sits behind Cloudflare, which caches script.js/
+        # styles.css/etc. for hours - without this, a deploy can finish
+        # successfully on GitHub's side while visitors still get the old
+        # files for up to Cache-Control's max-age. Requires CLOUDFLARE_ZONE_ID
+        # and CLOUDFLARE_API_TOKEN (Zone -> Cache Purge permission) repo
+        # secrets; silently skipped if either isn't set.
+        env:
+          CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CF_ZONE_ID" ] || [ -z "$CF_API_TOKEN" ]; then
+            echo "CLOUDFLARE_ZONE_ID/CLOUDFLARE_API_TOKEN not set - skipping cache purge."
+            exit 0
+          fi
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}')
+          body=$(echo "$response" | head -n -1)
+          status=$(echo "$response" | tail -n1)
+          echo "$body"
+          if [ "$status" -ge 300 ] || ! echo "$body" | grep -q '"success":true'; then
+            echo "::warning::Cloudflare cache purge failed (HTTP $status)"
+          fi
