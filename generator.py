@@ -71,7 +71,14 @@ def create_lootlabs_link(title, target_url, cache):
         req_url = f'https://creators.lootlabs.gg/api/public/content_locker?{query}'
         with urllib.request.urlopen(req_url, timeout=15) as resp:
             data = json.loads(resp.read().decode('utf-8'))
-        loot_url = data.get('message', {}).get('loot_url') if isinstance(data.get('message'), dict) else None
+        # LootLabs may return the message as a dict or a list containing a dict.
+        msg = data.get('message')
+        if isinstance(msg, dict):
+            loot_url = msg.get('loot_url')
+        elif isinstance(msg, list) and len(msg) > 0 and isinstance(msg[0], dict):
+            loot_url = msg[0].get('loot_url')
+        else:
+            loot_url = None
         if loot_url:
             cache[target_url] = loot_url
             return loot_url

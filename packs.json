@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-30T18:21:30.653135",
+  "generated": "2026-08-30T19:08:39.397862",
   "total_packs": 43,
   "categories": {
     "addons": [
@@ -73,7 +73,8 @@
       "downloadUrl": "packs/addons/pepes-experience-tome/Pepe's Experience Tome V1.mcaddon",
       "previewUrl": "packs/addons/pepes-experience-tome/",
       "fileName": "Pepe's Experience Tome V1.mcaddon",
-      "showcaseUrl": "https://youtu.be/7M_cfmBuq90"
+      "showcaseUrl": "https://youtu.be/7M_cfmBuq90",
+      "lootUrl": "https://lootdest.org/s?GCENLd4F"
     },
     {
       "id": 2,
@@ -91,7 +92,8 @@
       "downloadUrl": "packs/addons/pepes-hotbar-refiller/Pepe's_Hotbar_Refiller.mcaddon",
       "previewUrl": "packs/addons/pepes-hotbar-refiller/",
       "fileName": "Pepe's_Hotbar_Refiller.mcaddon",
-      "showcaseUrl": "https://youtu.be/tvstyl5fjII"
+      "showcaseUrl": "https://youtu.be/tvstyl5fjII",
+      "lootUrl": "https://lootdest.org/s?CIGKoxK0"
     },
     {
       "id": 3,
@@ -109,7 +111,8 @@
       "downloadUrl": "packs/addons/pepes-item-magnet-addon/Pepe's Item Magnet [Addon].mcaddon",
       "previewUrl": "packs/addons/pepes-item-magnet-addon/",
       "fileName": "Pepe's Item Magnet [Addon].mcaddon",
-      "showcaseUrl": "https://youtu.be/ChjxGuHtt48"
+      "showcaseUrl": "https://youtu.be/ChjxGuHtt48",
+      "lootUrl": "https://lootdest.org/s?ZiJakHSx"
     },
     {
       "id": 4,
@@ -127,7 +130,8 @@
       "downloadUrl": "packs/addons/pepes-void-totem/Pepe's_Void_Totem.mcaddon",
       "previewUrl": "packs/addons/pepes-void-totem/",
       "fileName": "Pepe's_Void_Totem.mcaddon",
-      "showcaseUrl": "https://youtu.be/g2g7eUF0Auo"
+      "showcaseUrl": "https://youtu.be/g2g7eUF0Auo",
+      "lootUrl": "https://loot-link.com/s?HGngwxP2"
     },
     {
       "id": 5,
@@ -146,7 +150,8 @@
       "previewUrl": "packs/clients/allay-client/",
       "mcVersion": "TBD",
       "timelineOrder": 8,
-      "faIcon": "fa-feather"
+      "faIcon": "fa-feather",
+      "lootUrl": "https://lootdest.org/s?CUtpjVKu"
     },
     {
       "id": 6,
@@ -165,7 +170,8 @@
       "previewUrl": "packs/clients/glacier-client/",
       "mcVersion": "TBD",
       "timelineOrder": 11,
-      "faIcon": "fa-snowflake"
+      "faIcon": "fa-snowflake",
+      "lootUrl": "https://loot-link.com/s?PuYxsQkc"
     },
     {
       "id": 7,
@@ -184,7 +190,8 @@
       "previewUrl": "packs/clients/no-dramina-client/",
       "mcVersion": "TBD",
       "timelineOrder": 6,
-      "faIcon": "fa-dove"
+      "faIcon": "fa-dove",
+      "lootUrl": "https://lootdest.org/s?hwKFpr65"
     },
     {
       "id": 8,
@@ -203,7 +210,8 @@
       "previewUrl": "packs/clients/optifine-zephyx/",
       "mcVersion": "TBD",
       "timelineOrder": 9,
-      "faIcon": "fa-bolt"
+      "faIcon": "fa-bolt",
+      "lootUrl": "https://loot-link.com/s?QxUjuYqo"
     },
     {
       "id": 9,
@@ -222,7 +230,8 @@
       "previewUrl": "packs/clients/pepe-client/",
       "mcVersion": "TBD",
       "timelineOrder": 1,
-      "faIcon": "fa-frog"
+      "faIcon": "fa-frog",
+      "lootUrl": "https://lootdest.org/s?J18MkZm2"
     },
     {
       "id": 10,
@@ -241,7 +250,8 @@
       "previewUrl": "packs/clients/project-future/",
       "mcVersion": "TBD",
       "timelineOrder": 5,
-      "faIcon": "fa-rocket"
+      "faIcon": "fa-rocket",
+      "lootUrl": "https://lootdest.org/s?0202tDdu"
     },
     {
       "id": 11,
@@ -260,7 +270,8 @@
       "previewUrl": "packs/clients/project-light/",
       "mcVersion": "TBD",
       "timelineOrder": 10,
-      "faIcon": "fa-lightbulb"
+      "faIcon": "fa-lightbulb",
+      "lootUrl": "https://lootdest.org/s?htuEAeqZ"
     },
     {
       "id": 12,
@@ -279,7 +290,8 @@
       "previewUrl": "packs/clients/solar-client/",
       "mcVersion": "TBD",
       "timelineOrder": 4,
-      "faIcon": "fa-sun"
+      "faIcon": "fa-sun",
+      "lootUrl": "https://lootdest.org/s?dnApZWJN"
     },
     {
       "id": 13,
@@ -298,7 +310,8 @@
       "previewUrl": "packs/clients/sulphur-client/",
       "mcVersion": "TBD",
       "timelineOrder": 7,
-      "faIcon": "fa-fire"
+      "faIcon": "fa-fire",
+      "lootUrl": "https://loot-link.com/s?Dn8EC0JY"
     },
     {
       "id": 14,
@@ -317,7 +330,8 @@
       "previewUrl": "packs/clients/void-client/",
       "mcVersion": "TBD",
       "timelineOrder": 2,
-      "faIcon": "fa-circle-notch"
+      "faIcon": "fa-circle-notch",
+      "lootUrl": "https://lootdest.org/s?xGC0rmlz"
     },
     {
       "id": 15,
@@ -336,7 +350,8 @@
       "previewUrl": "packs/clients/wind-client/",
       "mcVersion": "TBD",
       "timelineOrder": 3,
-      "faIcon": "fa-wind"
+      "faIcon": "fa-wind",
+      "lootUrl": "https://loot-link.com/s?k0AhnUH5"
     },
     {
       "id": 16,
@@ -362,63 +377,72 @@
           "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
           "size": "140.8 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.7.0.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://lootdest.org/s?bvZSLNF2"
         },
         {
           "version": "1.6.0",
           "fileName": "Pepe's_Assets_Pack_V1.6.0.mcpack",
           "size": "1.1 MB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.6.0.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://loot-link.com/s?WtJZJAN4"
         },
         {
           "version": "1.5.0",
           "fileName": "Pepe's_Assets_Pack_V1.5.0.mcpack",
           "size": "367.5 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.5.0.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://lootdest.org/s?nYkDnO7p"
         },
         {
           "version": "1.4.0",
           "fileName": "Pepe's_Assets_Pack_V1.4.0.mcpack",
           "size": "367.4 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.4.0.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://loot-link.com/s?sZlBd55j"
         },
         {
           "version": "1.3.0",
           "fileName": "Pepe's_Assets_Pack_v1.3.0.mcpack",
           "size": "328.6 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.3.0.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://loot-link.com/s?WscYTgLH"
         },
         {
           "version": "1.2.1",
           "fileName": "Pepe's_Assets_Pack_v1.2.1.mcpack",
           "size": "328.6 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.2.1.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://loot-link.com/s?4lp3kA5k"
         },
         {
           "version": "1.2.0",
           "fileName": "Pepe's_Assets_Pack_v1.2.0.mcpack",
           "size": "328.6 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.2.0.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://loot-link.com/s?Xp1zz4pm"
         },
         {
           "version": "1.1.1",
           "fileName": "Pepe's_Assets_Pack_v1.1.1.mcpack",
           "size": "241.6 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.1.1.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://loot-link.com/s?mQf8RIlR"
         },
         {
           "version": "1.0.0",
           "fileName": "Pepe's_Assets_Pack.mcpack",
           "size": "224.9 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack.mcpack",
-          "date": "2026-08-29"
+          "date": "2026-08-29",
+          "lootUrl": "https://loot-link.com/s?b0VjxtVw"
         }
       ],
       "pinned": true,
@@ -443,7 +467,8 @@
           }
         ],
         "critical": "Your game will crash if the Pepe's Pack Assets isn't enabled! Don't forget to activate it!"
-      }
+      },
+      "lootUrl": "https://lootdest.org/s?bvZSLNF2"
     },
     {
       "id": 17,
@@ -460,7 +485,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-animated-crop-growth-highlighter/Pepe's_Animated_Crop_Growth_Highlighter.mcpack",
       "previewUrl": "packs/packs/pepes-animated-crop-growth-highlighter/",
-      "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack"
+      "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack",
+      "lootUrl": "https://loot-link.com/s?oPvMqWvH"
     },
     {
       "id": 18,
@@ -477,7 +503,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-anvil-damage-indicator/Pepe's Anvil Damage Indicator.mcpack",
       "previewUrl": "packs/packs/pepes-anvil-damage-indicator/",
-      "fileName": "Pepe's Anvil Damage Indicator.mcpack"
+      "fileName": "Pepe's Anvil Damage Indicator.mcpack",
+      "lootUrl": "https://lootdest.org/s?IdF8clUf"
     },
     {
       "id": 19,
@@ -495,7 +522,8 @@
       "downloadUrl": "packs/packs/pepes-armor-hider/Pepe's Armor Hider.mcpack",
       "previewUrl": "packs/packs/pepes-armor-hider/",
       "fileName": "Pepe's Armor Hider.mcpack",
-      "showcaseUrl": "https://youtu.be/CxLxCSeSkhM"
+      "showcaseUrl": "https://youtu.be/CxLxCSeSkhM",
+      "lootUrl": "https://loot-link.com/s?XBpUAYZg"
     },
     {
       "id": 20,
@@ -514,7 +542,8 @@
       "previewUrl": "packs/packs/pepes-armorhud/",
       "fileName": "Pepe's_ArmorHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
+      "showcaseUrl": "https://youtu.be/D1iwxA9b1SM",
+      "lootUrl": "https://lootdest.org/s?hfTqT0sf"
     },
     {
       "id": 21,
@@ -533,7 +562,8 @@
       "previewUrl": "packs/packs/pepes-better-armor-bar/",
       "fileName": "Pepe's_Better_Armor_Bar_v1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/G-t17mm3ivc"
+      "showcaseUrl": "https://youtu.be/G-t17mm3ivc",
+      "lootUrl": "https://lootdest.org/s?u5hixCVk"
     },
     {
       "id": 22,
@@ -552,7 +582,8 @@
       "previewUrl": "packs/packs/pepes-better-coordinates/",
       "fileName": "Pepe's_Better_Coordinates.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/riGidGD8V3o"
+      "showcaseUrl": "https://youtu.be/riGidGD8V3o",
+      "lootUrl": "https://loot-link.com/s?wMWiAuuE"
     },
     {
       "id": 23,
@@ -571,7 +602,8 @@
       "previewUrl": "packs/packs/pepes-better-hover-text/",
       "fileName": "Pepe's_Better_Hover_Text_v1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/h2akqm3tPb0"
+      "showcaseUrl": "https://youtu.be/h2akqm3tPb0",
+      "lootUrl": "https://lootdest.org/s?tDPkcQ4S"
     },
     {
       "id": 24,
@@ -589,7 +621,8 @@
       "downloadUrl": "packs/packs/pepes-bundle-item-counter/Pepe's_Bundle_Item_Count_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-bundle-item-counter/",
       "fileName": "Pepe's_Bundle_Item_Count_v1.0.0.mcpack",
-      "showcaseUrl": "https://youtu.be/JsgE-BDViPg"
+      "showcaseUrl": "https://youtu.be/JsgE-BDViPg",
+      "lootUrl": "https://loot-link.com/s?WP1RBkQ4"
     },
     {
       "id": 25,
@@ -607,7 +640,8 @@
       "downloadUrl": "packs/packs/pepes-clock-compass-hud/Pepe's_Compass_&_Clock_HUD.mcpack",
       "previewUrl": "packs/packs/pepes-clock-compass-hud/",
       "fileName": "Pepe's_Compass_&_Clock_HUD.mcpack",
-      "requiresAssets": true
+      "requiresAssets": true,
+      "lootUrl": "https://loot-link.com/s?KOFk5ZPo"
     },
     {
       "id": 26,
@@ -626,7 +660,8 @@
       "previewUrl": "packs/packs/pepes-death-coords/",
       "fileName": "Pepe's_Death_Coords_v1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/H2HtakIRtpA"
+      "showcaseUrl": "https://youtu.be/H2HtakIRtpA",
+      "lootUrl": "https://lootdest.org/s?ezuRbBWa"
     },
     {
       "id": 27,
@@ -645,7 +680,8 @@
       "previewUrl": "packs/packs/pepes-debug-hud/",
       "fileName": "Pepe's DebugHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/dfUXea5s1N4"
+      "showcaseUrl": "https://youtu.be/dfUXea5s1N4",
+      "lootUrl": "https://lootdest.org/s?fYiSGkEE"
     },
     {
       "id": 28,
@@ -664,7 +700,8 @@
       "previewUrl": "packs/packs/pepes-directionhud/",
       "fileName": "Pepe's_DirectionHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/n3TZGPGPjW8"
+      "showcaseUrl": "https://youtu.be/n3TZGPGPjW8",
+      "lootUrl": "https://loot-link.com/s?ecECbRuv"
     },
     {
       "id": 29,
@@ -683,7 +720,8 @@
       "previewUrl": "packs/packs/pepes-durability-viewer/",
       "fileName": "Pepe's_Durability_Viewer.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/73duhxBtYt8"
+      "showcaseUrl": "https://youtu.be/73duhxBtYt8",
+      "lootUrl": "https://lootdest.org/s?KVAHMR8q"
     },
     {
       "id": 30,
@@ -700,7 +738,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-dynamic-3rd-person-crosshair/Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-dynamic-3rd-person-crosshair/",
-      "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack"
+      "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack",
+      "lootUrl": "https://loot-link.com/s?1jnEJwtf"
     },
     {
       "id": 31,
@@ -737,7 +776,8 @@
       "previewUrl": "packs/packs/pepes-fps-counter/",
       "fileName": "Pepe's_FPS_Counter.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/iL6kHJGobFU"
+      "showcaseUrl": "https://youtu.be/iL6kHJGobFU",
+      "lootUrl": "https://loot-link.com/s?SSeKqRZv"
     },
     {
       "id": 33,
@@ -756,7 +796,8 @@
       "previewUrl": "packs/packs/pepes-inventoryhud/",
       "fileName": "Pepe's_InventoryHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/C12DFIh2cto"
+      "showcaseUrl": "https://youtu.be/C12DFIh2cto",
+      "lootUrl": "https://lootdest.org/s?VRTCctu7"
     },
     {
       "id": 34,
@@ -774,7 +815,8 @@
       "downloadUrl": "packs/packs/pepes-level-calculator/Pepe's_Level_Calculator.mcpack",
       "previewUrl": "packs/packs/pepes-level-calculator/",
       "fileName": "Pepe's_Level_Calculator.mcpack",
-      "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
+      "showcaseUrl": "https://youtu.be/KxpeS_AW0vU",
+      "lootUrl": "https://lootdest.org/s?zyaOjIZx"
     },
     {
       "id": 35,
@@ -793,7 +835,8 @@
       "previewUrl": "packs/packs/pepes-offhandhud/",
       "fileName": "Pepe's_OffhandHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/ezj1oGz8nrY"
+      "showcaseUrl": "https://youtu.be/ezj1oGz8nrY",
+      "lootUrl": "https://lootdest.org/s?E9CNBYYx"
     },
     {
       "id": 36,
@@ -812,7 +855,8 @@
       "previewUrl": "packs/packs/pepes-shiny-pots/",
       "fileName": "Pepe's_Shiny_Pots_v1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/7MDhMNq3xk8"
+      "showcaseUrl": "https://youtu.be/7MDhMNq3xk8",
+      "lootUrl": "https://lootdest.org/s?dDgiW1Py"
     },
     {
       "id": 37,
@@ -831,7 +875,8 @@
       "previewUrl": "packs/packs/pepes-speedometer/",
       "fileName": "Pepe's_Speedometer.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/4AmjVyMh2cI"
+      "showcaseUrl": "https://youtu.be/4AmjVyMh2cI",
+      "lootUrl": "https://loot-link.com/s?CMrVXVDS"
     },
     {
       "id": 38,
@@ -849,7 +894,8 @@
       "downloadUrl": "packs/packs/pepes-spinning-projectiles/Pepe's_Spinning_Projectiles_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-spinning-projectiles/",
       "fileName": "Pepe's_Spinning_Projectiles_v1.0.0.mcpack",
-      "showcaseUrl": "https://youtu.be/XDHPswbfPt0"
+      "showcaseUrl": "https://youtu.be/XDHPswbfPt0",
+      "lootUrl": "https://loot-link.com/s?9ia4wjeX"
     },
     {
       "id": 39,
@@ -885,7 +931,8 @@
       "downloadUrl": "packs/packs/pepes-time-changer/Pepe's_Time_Changer_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-time-changer/",
       "fileName": "Pepe's_Time_Changer_v1.0.0.mcpack",
-      "showcaseUrl": "https://youtu.be/1lASU1NnjZc"
+      "showcaseUrl": "https://youtu.be/1lASU1NnjZc",
+      "lootUrl": "https://lootdest.org/s?EgVp5mEa"
     },
     {
       "id": 41,
@@ -904,7 +951,8 @@
       "previewUrl": "packs/packs/pepes-waypoints/",
       "fileName": "Pepe's_Waypoints+_Pack_V1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
+      "showcaseUrl": "https://youtu.be/xwKXiH-RoPc",
+      "lootUrl": "https://lootdest.org/s?0FJ3rxii"
     },
     {
       "id": 42,
