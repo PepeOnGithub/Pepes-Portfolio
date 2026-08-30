@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-30T22:13:10.733963",
+  "generated": "2026-08-30T22:22:02.687496",
   "total_packs": 42,
   "categories": {
     "addons": [
@@ -535,7 +535,7 @@
           "size": "140.8 KB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.7.0.mcpack",
           "date": "2026-08-30",
-          "changelog": "Added support for Better Armor Bar. Added Hand model fix for crossplay servers."
+          "changelog": "Added support for the Better Armor Bar pack, and fixed a hand model issue on cross-platform servers."
         },
         {
           "version": "1.6.0",
@@ -543,7 +543,7 @@
           "size": "1.1 MB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_V1.6.0.mcpack",
           "date": "2026-08-30",
-          "changelog": "Added support for DebugHUD. Added Paperdoll fix."
+          "changelog": "Added support for the Debug HUD pack, and fixed a paperdoll rendering issue."
         },
         {
           "version": "1.5.0",
@@ -551,7 +551,7 @@
           "size": "367.5 KB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_V1.5.0.mcpack",
           "date": "2026-08-30",
-          "changelog": "Added Support for Shiny Pots and added Pots Item IDs."
+          "changelog": "Added support for the Shiny Pots pack, including configurable item IDs."
         },
         {
           "version": "1.4.0",
@@ -559,7 +559,7 @@
           "size": "367.4 KB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_V1.4.0.mcpack",
           "date": "2026-08-30",
-          "changelog": "Added support for Waypoints+ pack. Fixed FPS Counter bug (unknown)."
+          "changelog": "Added support for the Waypoints+ pack. Fixed an intermittent issue affecting the FPS Counter."
         },
         {
           "version": "1.3.0",
@@ -567,7 +567,7 @@
           "size": "328.6 KB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.3.0.mcpack",
           "date": "2026-08-30",
-          "changelog": "Added support and variables for Death Coords & Better Hover Text."
+          "changelog": "Added support and configuration variables for the Death Coords and Better Hover Text packs."
         },
         {
           "version": "1.2.1",
@@ -575,7 +575,7 @@
           "size": "328.6 KB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.2.1.mcpack",
           "date": "2026-08-30",
-          "changelog": "Bug Fixes: Fixed the hand bug (unknown). Fixed the bug of Clock and Compass not rendering (download Clock Compass HUD v1.0.1)."
+          "changelog": "Fixed an intermittent hand-rendering issue, and fixed the Clock & Compass HUD failing to render (requires Clock & Compass HUD v1.0.1 or later)."
         },
         {
           "version": "1.2.0",
@@ -583,7 +583,7 @@
           "size": "328.6 KB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.2.0.mcpack",
           "date": "2026-08-30",
-          "changelog": "Support for Compass & Clock HUD. Fixed all the visual bugs. Added a variable to hide the Level Calculator."
+          "changelog": "Added support for the Clock & Compass HUD pack. Resolved a range of visual issues, and added a variable to toggle the Level Calculator's visibility."
         },
         {
           "version": "1.1.1",
@@ -591,7 +591,7 @@
           "size": "241.6 KB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.1.1.mcpack",
           "date": "2026-08-30",
-          "changelog": "Support for Speedometer. Fixed a bug where some zombie villagers wouldn't load properly."
+          "changelog": "Added support for the Speedometer pack. Fixed an issue causing some zombie villagers to fail to load."
         },
         {
           "version": "1.0.0",

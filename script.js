@@ -346,6 +346,10 @@ class PackLibrary {
       this.setShowDownloadCounts(e.target.checked);
     });
 
+    document.getElementById('show-assets-warning-toggle').addEventListener('change', (e) => {
+      localStorage.setItem('hideAssetsModal', String(!e.target.checked));
+    });
+
     document.getElementById('collapse-old-versions-toggle').addEventListener('change', (e) => {
       localStorage.setItem('collapseOldVersions', e.target.checked);
       if (this.currentPack) this.renderVersionsList(this.currentPack);
@@ -385,7 +389,7 @@ class PackLibrary {
           'accentColor', 'monetizationProvider', 'defaultSort', 'autoplayShowcase',
           'askProviderEveryTime', 'libraryViewMode', 'showDownloadCounts',
           'collapseOldVersions', 'showDiscontinued', 'collapseSectionsByDefault',
-          'collapsedSections'
+          'collapsedSections', 'hideAssetsModal'
         ].forEach(key => localStorage.removeItem(key));
         location.reload();
       });
@@ -2291,6 +2295,9 @@ class PackLibrary {
 
     const collapseSectionsToggle = document.getElementById('collapse-sections-toggle');
     if (collapseSectionsToggle) collapseSectionsToggle.checked = this.defaultCollapseSections;
+
+    const showAssetsWarningToggle = document.getElementById('show-assets-warning-toggle');
+    if (showAssetsWarningToggle) showAssetsWarningToggle.checked = localStorage.getItem('hideAssetsModal') !== 'true';
 
     const heroVisibility = localStorage.getItem('heroVisibility');
     this.setHeroVisibility(heroVisibility !== null ? heroVisibility : 65, { persist: false });
