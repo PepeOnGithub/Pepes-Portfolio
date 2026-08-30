@@ -2843,6 +2843,27 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   .home-hero-content { display: flex; flex-direction: column; align-items: center; }
   .home-cta-row { justify-content: center; }
   .lang-table th:nth-child(2), .lang-table td:nth-child(2) { text-align: right; }
+
+  /* List view: the title row's badges (category/version/assets) don't shrink,
+     and .pack-name has overflow:hidden which (per the flexbox spec) strips its
+     automatic min-content floor — so at narrow widths it was crushed to 0
+     width instead of shrinking gracefully. Wrap the row instead so the name
+     always gets a full line and badges flow onto their own line below it. */
+  .packs-grid.list-view .pack-content { flex-wrap: wrap; row-gap: var(--spacing-xs); }
+  .packs-grid.list-view .pack-title-row { flex-wrap: wrap; flex-basis: 100%; }
+  .packs-grid.list-view .pack-name {
+    flex: 1 0 100%;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .packs-grid.list-view .pack-footer { flex-basis: 100%; justify-content: space-between; }
+
+  /* Bump primary tap targets up toward the ~40px comfortable minimum. */
+  .category-row { min-height: 44px; }
+  .view-toggle-btn { width: 40px; height: 40px; }
+  .pack-favorite-btn { width: 38px; height: 38px; }
+  #sort-dropdown .custom-dropdown-trigger { min-height: 40px; }
 }
 
 /* ===== Footer ===== */
