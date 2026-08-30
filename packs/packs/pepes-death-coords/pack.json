@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Death Coords",
-  "description": "Displays precise coordinates upon death to help you recover your items quickly. Note: Pepe's Assets Pack is required for this pack to work.",
+  "description": "Displays your exact coordinates the moment you die, so you never lose track of where your items dropped.",
   "author": "Pepe",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,7 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "requiresAssets": true,
+  "showcaseUrl": "https://youtu.be/H2HtakIRtpA"
 }

@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Spinning Projectiles",
-  "description": "Feature: Ender pearls, snowballs, and eggs spin while in flight. Note: Visual change only, no gameplay impact.",
+  "description": "Makes ender pearls, snowballs, and eggs spin as they fly, a purely visual touch with zero gameplay impact.",
   "author": "Pepe",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,6 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "showcaseUrl": "https://youtu.be/XDHPswbfPt0"
 }

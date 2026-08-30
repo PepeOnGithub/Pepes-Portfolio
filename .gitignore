@@ -7,3 +7,7 @@ dist/
 build/
 *.zip
 .vscode/
+lootlabs_cache.json
+.claude/
+*.py
+!generator.py

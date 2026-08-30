@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Hotbar Refiller",
-  "description": "Automatically restores broken tools and fully consumed hotbar block stacks from the main inventory.",
+  "description": "Automatically swaps in a fresh tool or restocks a hotbar block stack from your inventory the moment one runs out.",
   "author": "PepeOnMCBE",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,6 @@
     "addons"
   ],
   "category": "addons",
-  "license": "MIT"
+  "license": "MIT",
+  "showcaseUrl": "https://youtu.be/tvstyl5fjII"
 }

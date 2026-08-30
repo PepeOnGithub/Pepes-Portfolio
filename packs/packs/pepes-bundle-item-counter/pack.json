@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Bundle Item Counter",
-  "description": "Counts the amount of items you have in a bundle instead of that bar.",
+  "description": "Replaces the bundle fullness bar with an exact item count, so you know precisely how much space is left.",
   "author": "Pepe",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,6 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "showcaseUrl": "https://youtu.be/JsgE-BDViPg"
 }

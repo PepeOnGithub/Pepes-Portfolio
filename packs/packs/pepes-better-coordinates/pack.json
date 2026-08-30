@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Better Coordinates",
-  "description": "Shows you Force Coords, Chunk Coords, Nether Coords and Nether Coords in Overlord on the HUD. Note: Pepe's Assets Pack is required for this pack to work.",
+  "description": "Adds a full coordinate readout to the HUD, including world, chunk, and Nether coordinates.",
   "author": "Pepe",
   "version": "1.0.1",
   "thumbnail": "📦",
@@ -8,5 +8,7 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "requiresAssets": true,
+  "showcaseUrl": "https://youtu.be/riGidGD8V3o"
 }

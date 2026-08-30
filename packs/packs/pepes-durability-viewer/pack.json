@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Durability Viewer",
-  "description": "Displays item durability directly in-game with a clean and user-friendly interface, enhancing gameplay clarity.",
+  "description": "Displays item durability directly on-screen with a clean, easy-to-read readout.",
   "author": "PepeOnMinecraft",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,7 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "requiresAssets": true,
+  "showcaseUrl": "https://youtu.be/73duhxBtYt8"
 }

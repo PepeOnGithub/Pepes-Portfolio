@@ -1,0 +1,15 @@
+{
+  "name": "Wind Client",
+  "description": "A lighter, faster iteration built on lessons learned from Void Client.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "clients"
+  ],
+  "category": "clients",
+  "license": "MIT",
+  "mcVersion": "TBD",
+  "timelineOrder": 3,
+  "faIcon": "fa-wind"
+}

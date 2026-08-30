@@ -1,0 +1,14 @@
+{
+  "name": "Pepe's Force Spectator",
+  "description": "Forced a first-person spectator camera on death so you could watch the action unfold before respawning. Discontinued and no longer maintained.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "packs"
+  ],
+  "category": "packs",
+  "license": "MIT",
+  "discontinued": true,
+  "showcaseUrl": "https://youtu.be/6pS0mutbWic"
+}

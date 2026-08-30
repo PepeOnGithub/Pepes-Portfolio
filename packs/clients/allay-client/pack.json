@@ -1,0 +1,15 @@
+{
+  "name": "Allay Client",
+  "description": "Named after the Allay, this version brought further polish and refinement.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "clients"
+  ],
+  "category": "clients",
+  "license": "MIT",
+  "mcVersion": "TBD",
+  "timelineOrder": 8,
+  "faIcon": "fa-feather"
+}

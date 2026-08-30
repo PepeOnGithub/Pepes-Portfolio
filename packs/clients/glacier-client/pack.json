@@ -1,0 +1,15 @@
+{
+  "name": "Glacier Client",
+  "description": "The current and flagship client, home base of Glacier Productions.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "clients"
+  ],
+  "category": "clients",
+  "license": "MIT",
+  "mcVersion": "TBD",
+  "timelineOrder": 11,
+  "faIcon": "fa-snowflake"
+}

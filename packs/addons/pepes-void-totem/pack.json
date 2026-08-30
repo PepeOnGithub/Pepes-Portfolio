@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Void Totem",
-  "description": "Hold a Void Totem in your main- or off-hand to be saved from the void.",
+  "description": "Hold a Void Totem in either hand to survive a fall into the void.",
   "author": "Pepe",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,6 @@
     "addons"
   ],
   "category": "addons",
-  "license": "MIT"
+  "license": "MIT",
+  "showcaseUrl": "https://youtu.be/g2g7eUF0Auo"
 }

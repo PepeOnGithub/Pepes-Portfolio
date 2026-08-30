@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Item Magnet Addon",
-  "description": "Activate the Magnet to instantly collect all dropped items within 10 blocks.",
+  "description": "Adds a Magnet item that instantly pulls every dropped item within 10 blocks straight to you.",
   "author": "Pepe",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,6 @@
     "addons"
   ],
   "category": "addons",
-  "license": "MIT"
+  "license": "MIT",
+  "showcaseUrl": "https://youtu.be/ChjxGuHtt48"
 }

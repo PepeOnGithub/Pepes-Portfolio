@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Better Armor Bar",
-  "description": "HUD armor bar coloured by armor material.",
+  "description": "Recolors the HUD armor bar based on your armor's material, so you can tell your protection level at a glance.",
   "author": "Pepe",
   "version": "6.1.0",
   "thumbnail": "📦",
@@ -8,5 +8,7 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "requiresAssets": true,
+  "showcaseUrl": "https://youtu.be/G-t17mm3ivc"
 }

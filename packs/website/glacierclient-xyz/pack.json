@@ -1,0 +1,12 @@
+{
+  "name": "Glacier Client Website",
+  "description": "The official Glacier Client website, home for the client, downloads, and news.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "🌐",
+  "tags": [
+    "website"
+  ],
+  "category": "website",
+  "license": "MIT"
+}

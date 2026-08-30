@@ -10,6 +10,8 @@ import json
 import re
 import sys
 import zipfile
+import urllib.request
+import urllib.parse
 from pathlib import Path
 from datetime import datetime
 
@@ -17,6 +19,66 @@ from datetime import datetime
 if sys.platform == 'win32':
     import io
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+# ===== LootLabs integration (optional, build-time only) =====
+# The LootLabs content-locker API requires a secret API token, so it can
+# never be called from client-side JS without exposing that token to every
+# visitor. Instead, links are generated once here (at build time) and the
+# resulting loot_url is cached into packs.json / lootlabs_cache.json.
+#
+# To enable: set LOOTLABS_API_TOKEN (from the LootLabs panel -> Advanced tab)
+# and SITE_BASE_URL (e.g. "https://pepe.example.com") as environment
+# variables before running this script. Without both set, LootLabs link
+# generation is skipped entirely and existing behavior is unchanged.
+LOOTLABS_API_TOKEN = os.environ.get('LOOTLABS_API_TOKEN')
+SITE_BASE_URL = os.environ.get('SITE_BASE_URL', '').rstrip('/')
+LOOTLABS_CACHE_FILE = 'lootlabs_cache.json'
+
+
+def load_lootlabs_cache(cache_path):
+    if cache_path.exists():
+        try:
+            return json.loads(cache_path.read_text(encoding='utf-8'))
+        except Exception:
+            return {}
+    return {}
+
+
+def save_lootlabs_cache(cache_path, cache):
+    try:
+        cache_path.write_text(json.dumps(cache, indent=2, ensure_ascii=False), encoding='utf-8')
+    except Exception as e:
+        print(f"  Warning: could not write {cache_path}: {e}")
+
+
+def create_lootlabs_link(title, target_url, cache):
+    """Create (or reuse from cache) a LootLabs content-locker link for target_url.
+    Returns None if LootLabs isn't configured or the request fails."""
+    if target_url in cache:
+        return cache[target_url]
+    if not LOOTLABS_API_TOKEN:
+        return None
+    try:
+        params = {
+            'api_token': LOOTLABS_API_TOKEN,
+            'title': title[:30],
+            'url': target_url,
+            'tier_id': '1',
+            'number_of_tasks': '3',
+            'theme': '1',
+        }
+        query = urllib.parse.urlencode(params)
+        req_url = f'https://creators.lootlabs.gg/api/public/content_locker?{query}'
+        with urllib.request.urlopen(req_url, timeout=15) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+        loot_url = data.get('message', {}).get('loot_url') if isinstance(data.get('message'), dict) else None
+        if loot_url:
+            cache[target_url] = loot_url
+            return loot_url
+        print(f"  Warning: LootLabs did not return a loot_url for '{title}': {data}")
+    except Exception as e:
+        print(f"  Warning: LootLabs link creation failed for '{title}': {e}")
+    return None
 
 def get_pack_metadata(pack_path):
     """Extract metadata from a pack directory."""
@@ -160,6 +222,12 @@ def generate_packs_json(packs_dir, output_file):
 
     categories = {}
 
+    lootlabs_enabled = bool(LOOTLABS_API_TOKEN and SITE_BASE_URL)
+    lootlabs_cache_path = packs_dir.parent / LOOTLABS_CACHE_FILE
+    lootlabs_cache = load_lootlabs_cache(lootlabs_cache_path) if lootlabs_enabled else {}
+    if LOOTLABS_API_TOKEN and not SITE_BASE_URL:
+        print("  Warning: LOOTLABS_API_TOKEN is set but SITE_BASE_URL is not - skipping LootLabs link generation.")
+
     # Scan each category directory
     for category_path in sorted(packs_dir.iterdir()):
         if not category_path.is_dir() or category_path.name.startswith('.'):
@@ -250,6 +318,45 @@ def generate_packs_json(packs_dir, output_file):
             if metadata.get('notice'):
                 pack_entry['notice'] = metadata['notice']
 
+            if metadata.get('requiresAssets'):
+                pack_entry['requiresAssets'] = True
+
+            if metadata.get('showcaseUrl'):
+                pack_entry['showcaseUrl'] = metadata['showcaseUrl']
+
+            if metadata.get('mcVersion'):
+                pack_entry['mcVersion'] = metadata['mcVersion']
+
+            if metadata.get('timelineOrder') is not None:
+                pack_entry['timelineOrder'] = metadata['timelineOrder']
+
+            if metadata.get('faIcon'):
+                pack_entry['faIcon'] = metadata['faIcon']
+
+            if metadata.get('comingSoon') and not versions:
+                pack_entry['comingSoon'] = True
+
+            if metadata.get('discontinued'):
+                pack_entry['discontinued'] = True
+                pack_entry['downloadUrl'] = None
+                pack_entry['size'] = 'N/A'
+            elif metadata.get('comingSoon') and not versions:
+                pack_entry['downloadUrl'] = None
+                pack_entry['size'] = 'N/A'
+            elif lootlabs_enabled and category != 'website':
+                for v in versions:
+                    absolute_url = f"{SITE_BASE_URL}/{v['downloadUrl']}"
+                    loot_url = create_lootlabs_link(pack_entry['name'], absolute_url, lootlabs_cache)
+                    if loot_url:
+                        v['lootUrl'] = loot_url
+                if versions:
+                    pack_entry['lootUrl'] = versions[0].get('lootUrl')
+                elif pack_entry.get('downloadUrl'):
+                    absolute_url = f"{SITE_BASE_URL}/{pack_entry['downloadUrl']}"
+                    loot_url = create_lootlabs_link(pack_entry['name'], absolute_url, lootlabs_cache)
+                    if loot_url:
+                        pack_entry['lootUrl'] = loot_url
+
             # Website packs: a file named like a domain (e.g. "glacierclient.xyz",
             # empty content) supplies the external link
             if category == 'website':
@@ -261,6 +368,9 @@ def generate_packs_json(packs_dir, output_file):
             packs.append(pack_entry)
             categories[category].append(pack_entry['name'])
             pack_id += 1
+
+    if lootlabs_enabled:
+        save_lootlabs_cache(lootlabs_cache_path, lootlabs_cache)
 
     # Write packs.json
     output = {

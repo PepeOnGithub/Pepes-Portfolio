@@ -1,10 +1,14 @@
 {
   "name": "Pepe's Assets Pack",
-  "description": "Provides the shared assets and compatibility layer required by every other Pepe's Pack. Place it above all other Pepe's Packs in your load order.",
+  "description": "The shared foundation every other Pepe's Pack builds on: shared textures, UI variables, and compatibility patches in one place. Must be enabled and sorted above every other Pepe's Pack to work.",
   "author": "Pepe",
   "version": "1.7.0",
   "thumbnail": "📦",
-  "tags": ["required", "dependency", "other"],
+  "tags": [
+    "required",
+    "dependency",
+    "other"
+  ],
   "category": "other",
   "license": "MIT",
   "pinned": true,
@@ -15,9 +19,18 @@
     "featuresTitle": "What Does the Assets Pack Do?",
     "featuresIntro": "This essential pack provides the core foundation for all other Pepe's Packs:",
     "features": [
-      { "title": "Seamless Compatibility", "text": "It makes every pack compatible with each other, ensuring they work together without issues." },
-      { "title": "Shared Resources", "text": "It contains crucial assets that multiple packs need, preventing duplication and keeping things tidy." },
-      { "title": "Full Customization", "text": "It allows you to easily configure settings across all your packs from one central place." }
+      {
+        "title": "Seamless Compatibility",
+        "text": "It makes every pack compatible with each other, ensuring they work together without issues."
+      },
+      {
+        "title": "Shared Resources",
+        "text": "It contains crucial assets that multiple packs need, preventing duplication and keeping things tidy."
+      },
+      {
+        "title": "Full Customization",
+        "text": "It allows you to easily configure settings across all your packs from one central place."
+      }
     ],
     "critical": "Your game will crash if the Pepe's Pack Assets isn't enabled! Don't forget to activate it!"
   }

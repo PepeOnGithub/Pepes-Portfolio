@@ -1,0 +1,15 @@
+{
+  "name": "Void Client",
+  "description": "The client that followed Pepe Client, an early step in refining the formula.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "clients"
+  ],
+  "category": "clients",
+  "license": "MIT",
+  "mcVersion": "TBD",
+  "timelineOrder": 2,
+  "faIcon": "fa-circle-notch"
+}

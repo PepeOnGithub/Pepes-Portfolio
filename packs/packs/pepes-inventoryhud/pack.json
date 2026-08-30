@@ -1,6 +1,6 @@
 {
   "name": "Pepe's InventoryHUD",
-  "description": "Displays your inventory on the HUD.",
+  "description": "Mirrors your inventory contents onto the HUD, so you can check what you're carrying without opening a menu.",
   "author": "Pepe",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,7 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "requiresAssets": true,
+  "showcaseUrl": "https://youtu.be/C12DFIh2cto"
 }

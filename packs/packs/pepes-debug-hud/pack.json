@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Debug HUD",
-  "description": "Note: Displays a clean debug HUD with useful in-game information. Press F8 to toggle with KBM.",
+  "description": "A clean, minimal debug overlay with the info you actually want. Press F8 to toggle it with a keyboard and mouse.",
   "author": "Pepe",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,7 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "requiresAssets": true,
+  "showcaseUrl": "https://youtu.be/dfUXea5s1N4"
 }

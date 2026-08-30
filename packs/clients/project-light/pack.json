@@ -1,0 +1,15 @@
+{
+  "name": "Project Light",
+  "description": "A bridge release exploring a lighter-weight client experience.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "clients"
+  ],
+  "category": "clients",
+  "license": "MIT",
+  "mcVersion": "TBD",
+  "timelineOrder": 10,
+  "faIcon": "fa-lightbulb"
+}

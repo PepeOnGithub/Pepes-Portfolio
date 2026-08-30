@@ -1,0 +1,15 @@
+{
+  "name": "Solar Client",
+  "description": "Focused on visuals and performance, continuing the client's evolution.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "clients"
+  ],
+  "category": "clients",
+  "license": "MIT",
+  "mcVersion": "TBD",
+  "timelineOrder": 4,
+  "faIcon": "fa-sun"
+}

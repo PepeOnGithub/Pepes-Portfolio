@@ -1,0 +1,15 @@
+{
+  "name": "Project Future",
+  "description": "An experimental rebrand exploring new features and direction.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "📦",
+  "tags": [
+    "clients"
+  ],
+  "category": "clients",
+  "license": "MIT",
+  "mcVersion": "TBD",
+  "timelineOrder": 5,
+  "faIcon": "fa-rocket"
+}

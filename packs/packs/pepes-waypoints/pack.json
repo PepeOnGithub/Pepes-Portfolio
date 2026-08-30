@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Waypoints+",
-  "description": "Note: Pepe's Assets Pack is required for this pack to work. Waypoints Enable: Look down, sneak for 3 seconds and click on the ground. Disable: Look up, sneak and jump. Greenscreen Enable: Sneak while holding a Slime Ball. Disable: Sneak while holding a Nautilus Shell. Deathpoint Enable: Spawns automatically upon death. Disable: Sneak while holding a Heart of the Sea.",
+  "description": "A full waypoint system: set markers by sneaking and clicking, auto-drop a death point, and toggle a chroma-key greenscreen, all through simple sneak gestures.",
   "author": "Pepe",
   "version": "1.0.1",
   "thumbnail": "📦",
@@ -8,5 +8,7 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "requiresAssets": true,
+  "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
 }

@@ -1,0 +1,12 @@
+{
+  "name": "MCA Glacier Client",
+  "description": "The MCA subdomain for Glacier Client, part of the wider Glacier Productions web ecosystem.",
+  "author": "Pepe",
+  "version": "1.0.0",
+  "thumbnail": "🌐",
+  "tags": [
+    "website"
+  ],
+  "category": "website",
+  "license": "MIT"
+}

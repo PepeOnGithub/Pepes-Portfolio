@@ -1,6 +1,6 @@
 {
   "name": "Pepe's ArmorHUD",
-  "description": "Display the armor you're wearing in the HUD Note: Pepe's Assets Pack is required for this pack to work..",
+  "description": "Shows the armor you're currently wearing as icons on the HUD, no need to open your inventory to check.",
   "author": "Pepe",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,7 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "requiresAssets": true,
+  "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
 }

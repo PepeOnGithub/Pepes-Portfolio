@@ -1,6 +1,6 @@
 {
   "name": "Pepe's Level Calculator",
-  "description": "Calculates the amount of Experience you need to reach the next level.",
+  "description": "Calculates exactly how much XP you need to reach your next level, right on the HUD.",
   "author": "PepeOnMinecraft",
   "version": "1.0.0",
   "thumbnail": "📦",
@@ -8,5 +8,6 @@
     "packs"
   ],
   "category": "packs",
-  "license": "MIT"
+  "license": "MIT",
+  "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
 }

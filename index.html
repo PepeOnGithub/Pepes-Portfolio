@@ -8,7 +8,9 @@
   <meta property="og:description" content="MCBE Texture Pack Creator, Glacier Client Owner, Website & Discord Bot Maker" />
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#489c49">
-  <title>Pepe</title>
+  <title>Pepe's Portfolio</title>
+  <link rel="icon" type="image/png" href="assets/pepe-profile.png">
+  <link rel="apple-touch-icon" href="assets/pepe-profile.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -33,34 +35,48 @@
       <button class="icon-btn" id="settings-toggle" title="Settings" aria-label="Settings" data-page="settings">
         <i class="fas fa-cog"></i>
       </button>
+      <button class="icon-btn mobile-nav-toggle" id="mobile-nav-toggle" title="Menu" aria-label="Toggle navigation menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
   </header>
+
+  <nav class="mobile-nav-drawer" id="mobile-nav-drawer">
+    <a href="#" class="mobile-nav-link active" data-page="home"><i class="fas fa-house"></i> Home</a>
+    <a href="#" class="mobile-nav-link" data-page="socials"><i class="fas fa-share-nodes"></i> Socials</a>
+    <a href="#" class="mobile-nav-link" data-page="library"><i class="fas fa-box-open"></i> Library</a>
+    <a href="#" class="mobile-nav-link" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
+  </nav>
 
   <div id="main-content" tabindex="-1">
 
   <!-- ============ HOME PAGE ============ -->
   <section class="page active" id="page-home">
     <div class="home-hero">
-      <div class="home-hero-media">
-        <img src="assets/pepe-profile.png" alt="Pepe" class="home-avatar">
-      </div>
-      <div class="home-hero-content">
-        <p class="home-eyebrow">Hi, I'm</p>
-        <h1 class="home-name">Pepe</h1>
-        <p class="home-lede">
-          MCBE texture pack creator and Glacier Client owner, building websites, Discord bots,
-          and tooling under <strong>Glacier Productions</strong> &amp; <strong>Pepe's Projects HUB</strong>.
-        </p>
-        <div class="home-cta-row">
-          <button type="button" class="cta-btn cta-primary" data-page="projects">
-            View Projects <i class="fas fa-arrow-right"></i>
-          </button>
-          <button type="button" class="cta-btn cta-secondary" data-page="library">
-            Browse Library <i class="fas fa-box-open"></i>
-          </button>
+      <div class="home-hero-inner">
+        <div class="home-hero-media">
+          <img src="assets/pepe-profile.png" alt="Pepe" class="home-avatar">
+        </div>
+        <div class="home-hero-content">
+          <p class="home-eyebrow">Hi, I'm</p>
+          <h1 class="home-name">Pepe</h1>
+          <p class="home-lede">
+            MCBE texture pack creator and Glacier Client owner, building websites, Discord bots,
+            and tooling under <strong>Glacier Productions</strong> &amp; <strong>Pepe's Projects HUB</strong>.
+          </p>
+          <div class="home-cta-row">
+            <button type="button" class="cta-btn cta-primary" data-page="projects">
+              View Projects <i class="fas fa-arrow-right"></i>
+            </button>
+            <button type="button" class="cta-btn cta-secondary" data-page="library">
+              Browse Library <i class="fas fa-box-open"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="section-divider-full"></div>
 
     <div class="home-skills">
       <h3 class="skills-title">Languages</h3>
@@ -87,7 +103,7 @@
             </tr>
             <tr>
               <td><i class="fab fa-python"></i> Python</td>
-              <td><span class="status-pill known accent">Known</span></td>
+              <td><span class="status-pill known">Known</span></td>
             </tr>
             <tr>
               <td><i class="fas fa-hashtag"></i> C#</td>
@@ -108,89 +124,144 @@
           </tbody>
         </table>
       </div>
+
+      <div class="home-extras">
+        <div class="extra-card">
+          <div class="extra-icon"><i class="fas fa-cake-candles"></i></div>
+          <div class="extra-body">
+            <p class="extra-label">Countdown to my birthday</p>
+            <p class="extra-value" id="birthday-countdown">--</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ============ PROJECTS PAGE ============ -->
   <section class="page" id="page-projects">
     <div class="page-inner">
+      <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
       <h2 class="page-title">Projects</h2>
       <p class="page-subtitle">Every brand, client, and studio I'm part of, in one place.</p>
 
       <div class="project-grid">
-        <div class="project-card featured">
+        <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="project-card">
           <img src="assets/glacier-icon.png" alt="" class="project-icon">
           <h4>Glacier Productions</h4>
           <p>Owner &middot; managing Glacier Client and this HUB ecosystem.</p>
-        </div>
-        <div class="project-card featured">
-          <div class="project-icon-fallback"><i class="fas fa-building"></i></div>
-          <h4>Nyxora Studios</h4>
-          <p>Studio behind original MCBE experiences and tools.</p>
-        </div>
-        <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="project-card">
-          <img src="assets/glacier-icon.png" alt="" class="project-icon">
-          <h4>Glacier Client</h4>
-          <p>Performance-driven client for MCBE.</p>
           <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
         </a>
+        <div class="project-card featured">
+          <img src="assets/nyxora-icon.png" alt="" class="project-icon">
+          <h4>Nyxora Produtions</h4>
+          <p>Studio behind original MCBE experiences and tools.</p>
+        </div>
         <a href="https://discord.gg/Va4fG6J2Rw" target="_blank" rel="noopener" class="project-card">
-          <div class="project-icon-fallback"><i class="fas fa-shield-alt"></i></div>
+          <img src="assets/azelux-icon.png" alt="" class="project-icon">
           <h4>Azelux Client</h4>
           <p>Ex Developer of Azelux Client MCBE.</p>
-          <span class="project-link">Join Server <i class="fab fa-discord"></i></span>
+          <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
         </a>
-        <div class="project-card">
+        <a href="https://discord.gg/flarial" target="_blank" rel="noopener" class="project-card">
           <img src="assets/flarial.svg" alt="" class="project-icon">
           <h4>Flarial Proxy</h4>
           <p>Developer on the Flarial Proxy team.</p>
-        </div>
+          <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
+        </a>
       </div>
     </div>
   </section>
 
   <!-- ============ SOCIALS PAGE ============ -->
   <section class="page" id="page-socials">
-    <div class="page-inner">
-      <h2 class="page-title">Socials</h2>
-      <p class="page-subtitle">Find and follow me across platforms.</p>
+    <div class="socials-hero">
+      <div class="socials-hero-inner">
+        <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
+        <h2 class="page-title">Let's Connect</h2>
+        <p class="page-subtitle">Find and follow me across every platform I'm active on.</p>
+        <div class="socials-stats">
+          <div class="socials-stat"><span class="socials-stat-value">17</span><span class="socials-stat-label">Age</span></div>
+          <div class="socials-stat"><span class="socials-stat-value">9</span><span class="socials-stat-label">Platforms</span></div>
+          <div class="socials-stat"><span class="socials-stat-value">30+</span><span class="socials-stat-label">Packs Shipped</span></div>
+          <div class="socials-stat"><span class="socials-stat-value">2020</span><span class="socials-stat-label">Creating Since</span></div>
+        </div>
+      </div>
+    </div>
 
+    <div class="page-inner">
+      <div class="discord-promo">
+        <div class="discord-promo-text">
+          <div>
+            <h3 class="discord-widget-title"><i class="fab fa-discord"></i> Join the Community</h3>
+            <p class="discord-promo-desc">
+              Get early sneak peeks, vote on what I build next, grab pack releases the moment they drop,
+              and hang out with everyone else who's into this stuff.
+            </p>
+          </div>
+          <ul class="discord-feature-list">
+            <li><i class="fas fa-eye"></i> Sneak peeks before anyone else</li>
+            <li><i class="fas fa-square-poll-vertical"></i> Vote on what gets built next</li>
+            <li><i class="fas fa-bell"></i> Instant pings on new releases</li>
+            <li><i class="fas fa-comments"></i> Chat directly with me and the community</li>
+          </ul>
+          <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" class="discord-join-btn">
+            <i class="fab fa-discord"></i> Join Discord
+          </a>
+        </div>
+        <iframe
+          src="https://discord.com/widget?id=1229043844113502299&theme=dark"
+          width="350"
+          height="500"
+          class="discord-widget-embed"
+          allowtransparency="true"
+          frameborder="0"
+          sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+        ></iframe>
+      </div>
+
+      <div class="content-divider"></div>
+
+      <h3 class="other-socials-title">Find Me Elsewhere Too</h3>
       <div class="social-grid">
-        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" class="social-card social-card--discord">
-          <span class="social-icon"><i class="fab fa-discord"></i></span>
-          <div><h4>Discord</h4><p>Join the community</p></div>
-        </a>
         <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" class="social-card social-card--youtube">
           <span class="social-icon"><i class="fab fa-youtube"></i></span>
-          <div><h4>YouTube</h4><p>@PepeOnYoutube</p></div>
+          <div class="social-card-body"><h4>YouTube</h4><p>@PepeOnYoutube</p></div>
+          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://x.com/_pepeyt_" target="_blank" rel="noopener" class="social-card social-card--x">
           <span class="social-icon"><i class="fab fa-x-twitter"></i></span>
-          <div><h4>X</h4><p>@_pepeyt_</p></div>
+          <div class="social-card-body"><h4>X</h4><p>@_pepeyt_</p></div>
+          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://www.instagram.com/pepeonmeta/" target="_blank" rel="noopener" class="social-card social-card--instagram">
           <span class="social-icon"><i class="fab fa-instagram"></i></span>
-          <div><h4>Instagram</h4><p>@pepeonmeta</p></div>
+          <div class="social-card-body"><h4>Instagram</h4><p>@pepeonmeta</p></div>
+          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://www.tiktok.com/@pepeontt" target="_blank" rel="noopener" class="social-card social-card--tiktok">
           <span class="social-icon"><i class="fab fa-tiktok"></i></span>
-          <div><h4>TikTok</h4><p>@pepeontt</p></div>
+          <div class="social-card-body"><h4>TikTok</h4><p>@pepeontt</p></div>
+          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" class="social-card social-card--github">
           <span class="social-icon"><i class="fab fa-github"></i></span>
-          <div><h4>GitHub</h4><p>@PepeOnGithub</p></div>
+          <div class="social-card-body"><h4>GitHub</h4><p>@PepeOnGithub</p></div>
+          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" class="social-card social-card--paypal">
           <span class="social-icon"><i class="fab fa-paypal"></i></span>
-          <div><h4>PayPal</h4><p>Support my work</p></div>
+          <div class="social-card-body"><h4>PayPal</h4><p>Support my work</p></div>
+          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://mcpedl.com/user/pepeonmcpedl/" target="_blank" rel="noopener" class="social-card social-card--mcpedl">
-          <span class="social-icon"><i class="fas fa-download"></i></span>
-          <div><h4>MCPEDL</h4><p>Browse my packs</p></div>
+          <img src="assets/mcpedl.png" class="social-icon">
+          <div class="social-card-body"><h4>MCPEDL</h4><p>Browse my packs</p></div>
+          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://www.curseforge.com/members/pepeoncf/projects" target="_blank" rel="noopener" class="social-card social-card--curseforge">
-          <span class="social-icon"><i class="fas fa-fire"></i></span>
-          <div><h4>CurseForge</h4><p>Projects &amp; downloads</p></div>
+          <img src="assets/curseforge.png" class="social-icon">
+          <div class="social-card-body"><h4>CurseForge</h4><p>Projects &amp; downloads</p></div>
+          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
       </div>
     </div>
@@ -198,6 +269,14 @@
 
   <!-- ============ LIBRARY PAGE ============ -->
   <section class="page" id="page-library">
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
+        <h2 class="page-title">Pack Library</h2>
+        <p class="page-subtitle">Browse and download packs, clients, addons, and more.</p>
+      </div>
+    </div>
+
     <!-- Search Bar -->
     <div class="search-bar-wrap">
       <div class="search-wrapper">
@@ -208,7 +287,12 @@
           class="search-input"
           placeholder="Search packs, clients, addons..."
           aria-label="Search packs"
+          autocomplete="off"
         >
+        <button type="button" class="search-clear hidden" id="search-clear" aria-label="Clear search">
+          <i class="fas fa-xmark"></i>
+        </button>
+        <ul class="search-suggestions hidden" id="search-suggestions" role="listbox"></ul>
       </div>
     </div>
 
@@ -224,28 +308,38 @@
           <h4 class="sidebar-subtitle">Categories</h4>
           <div class="category-list">
             <button class="category-row active" data-category="">
-              <span>All</span>
+              <span><i class="fas fa-border-all"></i> All</span>
               <span class="count" id="count-all">0</span>
             </button>
             <button class="category-row" data-category="packs">
-              <span>Packs</span>
+              <span><i class="fas fa-box-open"></i> Packs</span>
               <span class="count" id="count-packs">0</span>
             </button>
             <button class="category-row" data-category="clients">
-              <span>Clients</span>
+              <span><i class="fas fa-desktop"></i> Clients</span>
               <span class="count" id="count-clients">0</span>
             </button>
             <button class="category-row" data-category="addons">
-              <span>Addons</span>
+              <span><i class="fas fa-puzzle-piece"></i> Addons</span>
               <span class="count" id="count-addons">0</span>
             </button>
             <button class="category-row" data-category="website">
-              <span>Website</span>
+              <span><i class="fas fa-globe"></i> Website</span>
               <span class="count" id="count-website">0</span>
             </button>
             <button class="category-row" data-category="other">
-              <span>Other</span>
+              <span><i class="fas fa-ellipsis"></i> Other</span>
               <span class="count" id="count-other">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h4 class="sidebar-subtitle">Library</h4>
+          <div class="category-list">
+            <button class="category-row" data-category="favorites">
+              <span><i class="fas fa-heart"></i> Favorites</span>
+              <span class="count" id="count-favorites">0</span>
             </button>
           </div>
         </div>
@@ -255,28 +349,51 @@
       <main class="main-content">
         <div class="results-header">
           <p id="results-text">0 projects</p>
-          <div class="sort-wrap">
-            <label id="sort-label">Sort</label>
-            <div class="custom-dropdown" id="sort-dropdown">
-              <button type="button" class="custom-dropdown-trigger" id="sort-trigger" aria-haspopup="listbox" aria-expanded="false">
-                <span id="sort-trigger-label">Relevance</span>
-                <i class="fas fa-chevron-down"></i>
+          <div class="results-header-right">
+            <div class="view-toggle" id="view-toggle" role="group" aria-label="Toggle view layout">
+              <button type="button" class="view-toggle-btn active" id="view-grid-btn" data-view="grid" aria-label="Grid view" aria-pressed="true">
+                <i class="fas fa-th-large"></i>
               </button>
-              <ul class="custom-dropdown-menu" id="sort-menu" role="listbox" tabindex="-1">
-                <li role="option" data-value="relevance" class="selected">Relevance</li>
-                <li role="option" data-value="name">Name (A-Z)</li>
-                <li role="option" data-value="recent">Recently Added</li>
-                <li role="option" data-value="popular">Most Downloads</li>
-              </ul>
+              <button type="button" class="view-toggle-btn" id="view-list-btn" data-view="list" aria-label="List view" aria-pressed="false">
+                <i class="fas fa-list"></i>
+              </button>
+            </div>
+            <div class="sort-wrap">
+              <label id="sort-label">Sort</label>
+              <div class="custom-dropdown" id="sort-dropdown">
+                <button type="button" class="custom-dropdown-trigger" id="sort-trigger" aria-haspopup="listbox" aria-expanded="false">
+                  <span id="sort-trigger-label">Relevance</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <ul class="custom-dropdown-menu" id="sort-menu" role="listbox" tabindex="-1">
+                  <li role="option" data-value="relevance" class="selected">Relevance</li>
+                  <li role="option" data-value="name">Name (A-Z)</li>
+                  <li role="option" data-value="name-desc">Name (Z-A)</li>
+                  <li role="option" data-value="recent">Recently Added</li>
+                  <li role="option" data-value="oldest">Oldest First</li>
+                  <li role="option" data-value="popular">Most Downloads</li>
+                  <li role="option" data-value="least-popular">Least Downloads</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
 
+        <div class="clients-timeline hidden" id="clients-timeline">
+          <h3 class="clients-timeline-title"><i class="fas fa-timeline"></i> The Client Timeline</h3>
+          <p class="clients-timeline-sub">Every client I've built or rebranded along the way, from the very first to what's live today.</p>
+          <div class="timeline-track" id="timeline-track"></div>
+        </div>
+
         <div id="packs-grid" class="packs-grid">
-          <div class="loading-spinner">
-            <div class="spinner"></div>
-            <p>Loading...</p>
-          </div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-line skeleton-line-title"></div><div class="skeleton-line skeleton-line-sub"></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-line skeleton-line-title"></div><div class="skeleton-line skeleton-line-sub"></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-line skeleton-line-title"></div><div class="skeleton-line skeleton-line-sub"></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-line skeleton-line-title"></div><div class="skeleton-line skeleton-line-sub"></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-line skeleton-line-title"></div><div class="skeleton-line skeleton-line-sub"></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-line skeleton-line-title"></div><div class="skeleton-line skeleton-line-sub"></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-line skeleton-line-title"></div><div class="skeleton-line skeleton-line-sub"></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-line skeleton-line-title"></div><div class="skeleton-line skeleton-line-sub"></div></div>
         </div>
 
         <div id="empty-state" class="empty-state" style="display: none;">
@@ -284,8 +401,6 @@
           <h2>No packs found</h2>
           <p>Try adjusting your search or filters</p>
         </div>
-
-        <p class="end-marker" id="end-marker" style="display:none;">You've reached the end.</p>
       </main>
     </div>
 
@@ -302,11 +417,36 @@
             <div class="detail-heading">
               <h1 id="detail-name"></h1>
               <span class="pack-badge" id="detail-badge"></span>
+              <button type="button" class="assets-required-badge hidden" id="detail-assets-badge">
+                <i class="fas fa-triangle-exclamation"></i> Requires Assets Pack
+              </button>
+              <span class="assets-tag assets-tag-none hidden" id="detail-assets-none-badge">
+                <i class="fas fa-check"></i> No Assets Needed
+              </span>
+              <span class="assets-tag assets-tag-discontinued hidden" id="detail-discontinued-badge">
+                <i class="fas fa-ban"></i> Discontinued
+              </span>
+              <span class="assets-tag assets-tag-coming-soon hidden" id="detail-coming-soon-badge">
+                <i class="fas fa-clock"></i> Coming Soon
+              </span>
             </div>
             <p class="detail-author" id="detail-author"></p>
             <p class="detail-description" id="detail-description"></p>
 
+            <div class="detail-discontinued-notice hidden" id="detail-discontinued-notice">
+              <i class="fas fa-ban"></i> This pack has been discontinued and is no longer available for download.
+            </div>
+
+            <div class="detail-discontinued-notice hidden" id="detail-coming-soon-notice">
+              <i class="fas fa-clock"></i> This client is on the timeline but not released yet. Check back soon!
+            </div>
+
             <div class="detail-notice hidden" id="detail-notice"></div>
+
+            <div class="detail-showcase hidden" id="detail-showcase">
+              <h3>Showcase</h3>
+              <div class="detail-showcase-embed" id="detail-showcase-embed"></div>
+            </div>
 
             <div class="versions-block">
               <h3>Versions</h3>
@@ -321,11 +461,15 @@
             </a>
             <div class="side-divider"></div>
             <div class="side-row">
-              <span class="side-avatar" id="detail-avatar"></span>
+              <img src="assets/pepe-profile.png" class="side-avatar" id="detail-avatar">
               <div>
                 <p class="side-label">Author</p>
                 <p class="side-value" id="detail-author-name"></p>
               </div>
+            </div>
+            <div class="side-stat hidden" id="detail-mcversion-stat">
+              <span class="side-label">MC Version</span>
+              <span class="side-value" id="detail-mcversion"></span>
             </div>
             <div class="side-stat">
               <span class="side-label">Downloads</span>
@@ -345,57 +489,257 @@
     </div>
   </section>
 
+  <!-- ============ ASSETS PACK REQUIRED MODAL ============ -->
+  <div class="assets-modal-overlay hidden" id="assets-modal-overlay">
+    <div class="assets-modal" role="dialog" aria-modal="true" aria-labelledby="assets-modal-title">
+      <button class="assets-modal-close" id="assets-modal-close" aria-label="Close">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <div class="assets-modal-icon"><i class="fas fa-triangle-exclamation"></i></div>
+      <h3 id="assets-modal-title">Pepe's Assets Pack Required</h3>
+      <p id="assets-modal-text">
+        <strong id="assets-modal-pack-name"></strong> needs <strong>Pepe's Assets Pack</strong> to work.
+        Download and import it, then place it above this pack in your load order.
+      </p>
+      <div class="assets-modal-warning">
+        <i class="fas fa-circle-exclamation"></i> This pack will not work without Pepe's Assets Pack installed.
+      </div>
+      <div class="assets-modal-actions">
+        <a href="#" class="btn-download" id="assets-modal-get">
+          <i class="fas fa-download"></i> Download Assets Pack &amp; Continue
+        </a>
+      </div>
+      <label class="assets-modal-remember">
+        <span class="custom-checkbox">
+          <input type="checkbox" id="assets-modal-dont-show" class="setting-input">
+          <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+        </span>
+        Don't show this again
+      </label>
+    </div>
+  </div>
+
   <!-- ============ SETTINGS PAGE ============ -->
   <section class="page" id="page-settings">
-    <div class="page-inner page-inner-narrow">
-      <h2 class="page-title">Settings</h2>
-      <p class="page-subtitle">Customize how the site looks and behaves.</p>
-
-      <div class="settings-list">
-        <label class="setting-row">
-          <div>
-            <p class="setting-name">Dark Mode</p>
-            <p class="setting-desc">Use the dark palette across the site</p>
-          </div>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="dark-mode-toggle" class="setting-input" checked>
-            <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-          </span>
-        </label>
-
-        <label class="setting-row">
-          <div>
-            <p class="setting-name">Compact View</p>
-            <p class="setting-desc">Reduce spacing for denser layouts</p>
-          </div>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="compact-view-toggle" class="setting-input">
-            <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-          </span>
-        </label>
-
-        <label class="setting-row">
-          <div>
-            <p class="setting-name">Reduce Motion</p>
-            <p class="setting-desc">Turn off animations and transitions</p>
-          </div>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="reduce-motion-toggle" class="setting-input">
-            <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-          </span>
-        </label>
-
-        <label class="setting-row">
-          <div>
-            <p class="setting-name">Open Links in New Tab</p>
-            <p class="setting-desc">External links open in a new browser tab</p>
-          </div>
-          <span class="custom-checkbox">
-            <input type="checkbox" id="new-tab-toggle" class="setting-input" checked>
-            <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-          </span>
-        </label>
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
+        <h2 class="page-title">Settings</h2>
+        <p class="page-subtitle">Customize how the site looks and behaves.</p>
       </div>
+    </div>
+
+    <div class="layout-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3 class="sidebar-title"><i class="fas fa-sliders-h"></i> Categories</h3>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="category-list">
+            <button class="category-row active" data-settings-category="appearance">
+              <span><i class="fas fa-palette"></i> Appearance</span>
+            </button>
+            <button class="category-row" data-settings-category="browsing">
+              <span><i class="fas fa-compass"></i> Browsing</span>
+            </button>
+            <button class="category-row" data-settings-category="library">
+              <span><i class="fas fa-box-open"></i> Library</span>
+            </button>
+            <button class="category-row" data-settings-category="downloads">
+              <span><i class="fas fa-download"></i> Downloads</span>
+            </button>
+            <button class="category-row" data-settings-category="data">
+              <span><i class="fas fa-database"></i> Data</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div class="settings-panel active" data-settings-panel="appearance">
+          <div class="settings-list">
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-moon"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Dark Mode</p>
+                <p class="setting-desc">Use the dark palette across the site</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="dark-mode-toggle" class="setting-input" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-compress"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Compact View</p>
+                <p class="setting-desc">Reduce spacing for denser layouts</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="compact-view-toggle" class="setting-input">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Reduce Motion</p>
+                <p class="setting-desc">Turn off animations and transitions</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="reduce-motion-toggle" class="setting-input">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+
+            <label class="setting-row setting-row-slider">
+              <span class="setting-row-icon"><i class="fas fa-image"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Hero Background Visibility</p>
+                <p class="setting-desc">How visible the home banner image is behind the intro text</p>
+              </div>
+              <input type="range" id="hero-visibility-slider" class="setting-slider" min="10" max="100" step="5" value="65">
+            </label>
+
+            <label class="setting-row setting-row-select">
+              <span class="setting-row-icon"><i class="fas fa-swatchbook"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Accent Color</p>
+                <p class="setting-desc">The highlight color used across buttons and links</p>
+              </div>
+              <div class="custom-dropdown" id="accent-color-dropdown">
+                <button type="button" class="custom-dropdown-trigger" id="accent-color-trigger" aria-haspopup="listbox" aria-expanded="false">
+                  <span>Green</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <ul class="custom-dropdown-menu" id="accent-color-menu" role="listbox" tabindex="-1">
+                  <li role="option" data-value="green" class="selected"><span class="color-swatch" style="background:#489c49"></span> Green</li>
+                  <li role="option" data-value="blue"><span class="color-swatch" style="background:#3b82f6"></span> Blue</li>
+                  <li role="option" data-value="purple"><span class="color-swatch" style="background:#8b5cf6"></span> Purple</li>
+                  <li role="option" data-value="pink"><span class="color-swatch" style="background:#ec4899"></span> Pink</li>
+                  <li role="option" data-value="orange"><span class="color-swatch" style="background:#f97316"></span> Orange</li>
+                </ul>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-panel" data-settings-panel="browsing">
+          <div class="settings-list">
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-up-right-from-square"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Open Links in New Tab</p>
+                <p class="setting-desc">External links open in a new browser tab</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="new-tab-toggle" class="setting-input" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-play"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Autoplay Showcase Videos</p>
+                <p class="setting-desc">Start playing a pack's showcase video automatically (muted)</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="autoplay-showcase-toggle" class="setting-input">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-panel" data-settings-panel="library">
+          <div class="settings-list">
+            <label class="setting-row setting-row-select">
+              <span class="setting-row-icon"><i class="fas fa-arrow-down-a-z"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Default Sort Order</p>
+                <p class="setting-desc">How packs are sorted when you open the Library</p>
+              </div>
+              <div class="custom-dropdown" id="default-sort-dropdown">
+                <button type="button" class="custom-dropdown-trigger" id="default-sort-trigger" aria-haspopup="listbox" aria-expanded="false">
+                  <span>Relevance</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <ul class="custom-dropdown-menu" id="default-sort-menu" role="listbox" tabindex="-1">
+                  <li role="option" data-value="relevance" class="selected">Relevance</li>
+                  <li role="option" data-value="name">Name (A-Z)</li>
+                  <li role="option" data-value="name-desc">Name (Z-A)</li>
+                  <li role="option" data-value="recent">Recently Added</li>
+                  <li role="option" data-value="oldest">Oldest First</li>
+                  <li role="option" data-value="popular">Most Downloads</li>
+                  <li role="option" data-value="least-popular">Least Downloads</li>
+                </ul>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-panel" data-settings-panel="downloads">
+          <div class="settings-list">
+            <label class="setting-row setting-row-select">
+              <span class="setting-row-icon"><i class="fas fa-link"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Download Link Provider</p>
+                <p class="setting-desc">Which link shortener wraps pack downloads by default</p>
+              </div>
+              <div class="custom-dropdown" id="monetization-provider-dropdown">
+                <button type="button" class="custom-dropdown-trigger" id="monetization-provider-trigger" aria-haspopup="listbox" aria-expanded="false">
+                  <span>Linkvertise</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <ul class="custom-dropdown-menu" id="monetization-provider-menu" role="listbox" tabindex="-1">
+                  <li role="option" data-value="linkvertise" class="selected">Linkvertise</li>
+                  <li role="option" data-value="lootlabs">LootLabs</li>
+                </ul>
+              </div>
+            </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-circle-question"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Ask Every Time</p>
+                <p class="setting-desc">Choose Linkvertise or LootLabs individually for each download</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="ask-provider-toggle" class="setting-input">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-panel" data-settings-panel="data">
+          <div class="settings-list">
+            <button type="button" class="setting-row setting-row-action" id="clear-favorites-btn">
+              <span class="setting-row-icon"><i class="fas fa-heart-crack"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Clear Favorites</p>
+                <p class="setting-desc">Remove every pack you've favorited</p>
+              </div>
+              <span class="setting-action-label">Clear</span>
+            </button>
+
+            <button type="button" class="setting-row setting-row-action setting-row-danger" id="reset-settings-btn">
+              <span class="setting-row-icon"><i class="fas fa-arrow-rotate-left"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Reset All Settings</p>
+                <p class="setting-desc">Restore every setting on this page to its default value</p>
+              </div>
+              <span class="setting-action-label">Reset</span>
+            </button>
+          </div>
+        </div>
+      </main>
     </div>
   </section>
 
@@ -403,26 +747,58 @@
 
   <!-- Footer -->
   <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="brand-mark"><img src="assets/pepe-profile.png" alt="" class="brand-avatar"></span>
-        <span class="brand-name">Pepe</span>
-      </div>
+    <div class="footer-top">
+      <div class="footer-inner">
+        <div class="footer-col footer-col-brand">
+          <div class="footer-brand">
+            <span class="brand-mark"><img src="assets/pepe-profile.png" alt="" class="brand-avatar"></span>
+            <span class="brand-name">Pepe</span>
+          </div>
+          <p class="footer-tagline">
+            MCBE texture pack creator and Glacier Client owner, building websites, Discord bots,
+            and tooling under Glacier Productions &amp; Pepe's Projects HUB.
+          </p>
+          <div class="footer-socials">
+            <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord"></i></a>
+            <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
 
-      <nav class="footer-links">
-        <a href="#" data-page="home">Home</a>
-        <a href="#" data-page="socials">Socials</a>
-        <a href="#" data-page="library">Library</a>
-      </nav>
+        <div class="footer-col">
+          <h4 class="footer-col-title">Navigate</h4>
+          <nav class="footer-links">
+            <a href="#" data-page="home">Home</a>
+            <a href="#" data-page="socials">Socials</a>
+            <a href="#" data-page="library">Library</a>
+          </nav>
+        </div>
 
-      <div class="footer-socials">
-        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord"></i></a>
-        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-        <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
-        <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" aria-label="PayPal"><i class="fab fa-paypal"></i></a>
+        <div class="footer-col">
+          <h4 class="footer-col-title">Community</h4>
+          <nav class="footer-links">
+            <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener">Discord Server</a>
+            <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener">YouTube Channel</a>
+            <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener">GitHub</a>
+          </nav>
+        </div>
+
+        <div class="footer-col">
+          <h4 class="footer-col-title">Support</h4>
+          <p class="footer-desc">Every pack is free forever. If you'd like to help keep it that way:</p>
+          <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" class="footer-support-btn">
+            <i class="fab fa-paypal"></i> Donate
+          </a>
+        </div>
       </div>
     </div>
-    <p class="footer-copy">&copy; 2026 Pepe. All rights reserved.</p>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; <span id="footer-year">2026</span> Pepe. All rights reserved.</p>
+      <button type="button" class="footer-top-btn" id="footer-top-btn">
+        Back to top <i class="fas fa-arrow-up"></i>
+      </button>
+    </div>
   </footer>
 
   <script src="script.js"></script>
