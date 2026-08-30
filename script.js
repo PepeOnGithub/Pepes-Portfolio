@@ -20,6 +20,73 @@ const SETTINGS_KEYS = [
   'trackDownloadCounts', 'trackRecentlyViewed', 'recentlyViewedPacks'
 ];
 
+// ===== Color conversion helpers (Theme Studio) =====
+function clamp01(n) { return Math.min(1, Math.max(0, n)); }
+
+function hexToRgb(hex) {
+  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '');
+  if (!m) return { r: 72, g: 156, b: 73 };
+  return { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) };
+}
+
+function rgbToHex(r, g, b) {
+  const clamp = (n) => Math.max(0, Math.min(255, Math.round(n)));
+  return '#' + [clamp(r), clamp(g), clamp(b)].map(n => n.toString(16).padStart(2, '0')).join('');
+}
+
+function rgbToHsv(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+  let h = 0;
+  if (d !== 0) {
+    if (max === r) h = ((g - b) / d) % 6;
+    else if (max === g) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60;
+    if (h < 0) h += 360;
+  }
+  const s = max === 0 ? 0 : d / max;
+  return { h, s, v: max };
+}
+
+function hsvToRgb(h, s, v) {
+  const c = v * s;
+  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const m = v - c;
+  let r1 = 0, g1 = 0, b1 = 0;
+  if (h < 60) { r1 = c; g1 = x; } else if (h < 120) { r1 = x; g1 = c; }
+  else if (h < 180) { g1 = c; b1 = x; } else if (h < 240) { g1 = x; b1 = c; }
+  else if (h < 300) { r1 = x; b1 = c; } else { r1 = c; b1 = x; }
+  return { r: (r1 + m) * 255, g: (g1 + m) * 255, b: (b1 + m) * 255 };
+}
+
+// Lighten (positive percent) or darken (negative) a hex color toward white/black.
+function shadeHex(hex, percent) {
+  const { r, g, b } = hexToRgb(hex);
+  const t = percent < 0 ? 0 : 255;
+  const p = Math.abs(percent);
+  return rgbToHex(r + (t - r) * p, g + (t - g) * p, b + (t - b) * p);
+}
+
+const ACCENT_PRESETS = {
+  green: '#489c49',
+  blue: '#3b82f6',
+  purple: '#8b5cf6',
+  pink: '#ec4899',
+  orange: '#f97316'
+};
+
+// Keeps a reskinned <input type="range">'s fill in sync with its value,
+// since CSS has no way to read a range input's current position on its own.
+function updateSliderFill(el) {
+  if (!el) return;
+  const min = parseFloat(el.min) || 0;
+  const max = parseFloat(el.max) || 100;
+  const value = parseFloat(el.value) || 0;
+  const pct = max > min ? ((value - min) / (max - min)) * 100 : 0;
+  el.style.setProperty('--slider-percent', `${pct}%`);
+}
+
 // A boolean setting read straight from localStorage, defaulting when unset.
 function getBoolSetting(key, defaultValue = false) {
   const stored = localStorage.getItem(key);
@@ -288,12 +355,10 @@ class PackLibrary {
     this.monetizationDropdown = new CustomDropdown('monetization-provider-dropdown', (value) => {
       localStorage.setItem(MONETIZATION_PROVIDER_KEY, value);
     });
-    this.accentColorDropdown = new CustomDropdown('accent-color-dropdown', (value) => {
-      this.setAccentColor(value);
-    });
     this.defaultSortDropdown = new CustomDropdown('default-sort-dropdown', (value) => {
       localStorage.setItem('defaultSort', value);
     });
+    this.setupThemeStudio();
     this.syncSortDropdownLabel();
     this.loadTheme();
     this.applyViewMode();
@@ -396,6 +461,8 @@ class PackLibrary {
     document.getElementById('hero-visibility-slider').addEventListener('input', (e) => {
       this.setHeroVisibility(e.target.value);
     });
+
+    document.querySelectorAll('.setting-slider').forEach(updateSliderFill);
 
     document.getElementById('autoplay-showcase-toggle').addEventListener('change', (e) => {
       localStorage.setItem('autoplayShowcase', e.target.checked);
@@ -2089,7 +2156,10 @@ class PackLibrary {
     this.renderNotice(pack);
     this.renderShowcase(pack);
 
-    document.getElementById('versions-sub').textContent = `Download releases of ${pack.name}.`;
+    const hasOlderVersions = !!(pack.versions && pack.versions.length > 1);
+    document.getElementById('versions-sub').textContent = hasOlderVersions
+      ? `Every release of ${pack.name}, newest first. Older versions stay available in case a newer one doesn't work for you.`
+      : `Download the current release of ${pack.name}.`;
     this.renderVersionsList(pack);
 
     this.selectedVersionIndex = 0;
@@ -2642,7 +2712,6 @@ class PackLibrary {
     if (trackDownloadsToggle) trackDownloadsToggle.checked = getBoolSetting('trackDownloadCounts', true);
 
     this.syncDropdownSelection(this.monetizationDropdown, getMonetizationProvider());
-    this.syncDropdownSelection(this.accentColorDropdown, localStorage.getItem('accentColor') || 'green');
     this.syncDropdownSelection(this.defaultSortDropdown, this.currentFilter.sort);
 
     this.setAccentColor(localStorage.getItem('accentColor') || 'green', { persist: false });
@@ -2664,14 +2733,18 @@ class PackLibrary {
     const visibility = Math.min(100, Math.max(10, parseInt(value, 10) || 65));
     const alpha = (1 - visibility / 100) * 0.85 + 0.05;
     document.documentElement.style.setProperty('--hero-overlay-alpha', alpha.toFixed(2));
-    document.getElementById('hero-visibility-slider').value = visibility;
+    const slider = document.getElementById('hero-visibility-slider');
+    slider.value = visibility;
+    updateSliderFill(slider);
     if (persist) localStorage.setItem('heroVisibility', visibility);
   }
 
   setFontSize(value, { persist = true } = {}) {
     const scale = Math.min(130, Math.max(90, parseInt(value, 10) || 100));
     document.documentElement.style.setProperty('--content-scale', (scale / 100).toFixed(2));
-    document.getElementById('font-size-slider').value = scale;
+    const slider = document.getElementById('font-size-slider');
+    slider.value = scale;
+    updateSliderFill(slider);
     if (persist) localStorage.setItem('fontSizeScale', scale);
   }
 
@@ -2744,20 +2817,154 @@ class PackLibrary {
     });
   }
 
+  // `value` is either a preset name ('green', 'blue', ...) or a custom
+  // "#rrggbb" hex string picked in the Theme Studio. Dark/light shades for
+  // custom colors are derived algorithmically (shadeHex) instead of being
+  // hand-picked like the presets, so any color the user picks gets usable
+  // hover/border shades for free.
   setAccentColor(value, { persist = true } = {}) {
-    const presets = {
-      green: { accent: '#489c49', dark: '#3a7a3b', light: '#5fb35f' },
-      blue: { accent: '#3b82f6', dark: '#2563eb', light: '#60a5fa' },
-      purple: { accent: '#8b5cf6', dark: '#7c3aed', light: '#a78bfa' },
-      pink: { accent: '#ec4899', dark: '#db2777', light: '#f472b6' },
-      orange: { accent: '#f97316', dark: '#ea580c', light: '#fb923c' }
-    };
-    const preset = presets[value] || presets.green;
+    const isCustomHex = /^#[0-9a-f]{6}$/i.test(value || '');
+    const accent = isCustomHex ? value : (ACCENT_PRESETS[value] || ACCENT_PRESETS.green);
+    const dark = shadeHex(accent, -0.2);
+    const light = shadeHex(accent, 0.25);
+
     const root = document.documentElement.style;
-    root.setProperty('--color-accent', preset.accent);
-    root.setProperty('--color-accent-dark', preset.dark);
-    root.setProperty('--color-accent-light', preset.light);
-    if (persist) localStorage.setItem('accentColor', value);
+    root.setProperty('--color-accent', accent);
+    root.setProperty('--color-accent-dark', dark);
+    root.setProperty('--color-accent-light', light);
+
+    this.syncThemeStudio(accent);
+
+    if (persist) localStorage.setItem('accentColor', isCustomHex ? accent : value);
+  }
+
+  // ===== Theme Studio =====
+
+  syncThemeStudio(hex) {
+    const { r, g, b } = hexToRgb(hex);
+    const hexInput = document.getElementById('theme-hex-input');
+    const rInput = document.getElementById('theme-r-input');
+    const gInput = document.getElementById('theme-g-input');
+    const bInput = document.getElementById('theme-b-input');
+    const preview = document.getElementById('theme-color-preview');
+    if (hexInput && document.activeElement !== hexInput) hexInput.value = hex;
+    if (rInput && document.activeElement !== rInput) rInput.value = r;
+    if (gInput && document.activeElement !== gInput) gInput.value = g;
+    if (bInput && document.activeElement !== bInput) bInput.value = b;
+    if (preview) preview.style.background = hex;
+
+    if (!this.themeStudioDragging) {
+      const { h, s, v } = rgbToHsv(r, g, b);
+      this.themeHue = h;
+      this.positionThemeStudioHandles(h, s, v);
+    }
+
+    document.querySelectorAll('#theme-preset-swatches .theme-preset-swatch').forEach(el => {
+      el.classList.toggle('selected', el.dataset.hex.toLowerCase() === hex.toLowerCase());
+    });
+  }
+
+  positionThemeStudioHandles(h, s, v) {
+    const svSquare = document.getElementById('theme-sv-square');
+    const svHandle = document.getElementById('theme-sv-handle');
+    const hueSlider = document.getElementById('theme-hue-slider');
+    if (svSquare && svHandle) {
+      svHandle.style.left = `${s * 100}%`;
+      svHandle.style.top = `${(1 - v) * 100}%`;
+      svSquare.style.setProperty('--sv-hue', h);
+    }
+    if (hueSlider) {
+      hueSlider.value = h;
+      updateSliderFill(hueSlider);
+    }
+  }
+
+  applyThemeStudioColor(h, s, v, { persist = true } = {}) {
+    const { r, g, b } = hsvToRgb(h, s, v);
+    const hex = rgbToHex(r, g, b);
+    this.setAccentColor(hex, { persist });
+  }
+
+  setupThemeStudio() {
+    const svSquare = document.getElementById('theme-sv-square');
+    const svHandle = document.getElementById('theme-sv-handle');
+    const hueSlider = document.getElementById('theme-hue-slider');
+    const hexInput = document.getElementById('theme-hex-input');
+    const rInput = document.getElementById('theme-r-input');
+    const gInput = document.getElementById('theme-g-input');
+    const bInput = document.getElementById('theme-b-input');
+    const randomBtn = document.getElementById('theme-random-btn');
+    if (!svSquare || !hueSlider) return;
+
+    this.themeHue = 122;
+
+    const currentSV = () => {
+      const accent = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+      const { r, g, b } = hexToRgb(accent);
+      return rgbToHsv(r, g, b);
+    };
+
+    const pickFromSquare = (clientX, clientY) => {
+      const rect = svSquare.getBoundingClientRect();
+      const s = clamp01((clientX - rect.left) / rect.width);
+      const v = clamp01(1 - (clientY - rect.top) / rect.height);
+      svHandle.style.left = `${s * 100}%`;
+      svHandle.style.top = `${(1 - v) * 100}%`;
+      this.applyThemeStudioColor(this.themeHue, s, v);
+    };
+
+    svSquare.addEventListener('pointerdown', (e) => {
+      this.themeStudioDragging = true;
+      svSquare.setPointerCapture(e.pointerId);
+      pickFromSquare(e.clientX, e.clientY);
+    });
+    svSquare.addEventListener('pointermove', (e) => {
+      if (!this.themeStudioDragging) return;
+      pickFromSquare(e.clientX, e.clientY);
+    });
+    ['pointerup', 'pointercancel'].forEach(evt => {
+      svSquare.addEventListener(evt, () => { this.themeStudioDragging = false; });
+    });
+
+    hueSlider.addEventListener('input', (e) => {
+      this.themeHue = parseFloat(e.target.value);
+      svSquare.style.setProperty('--sv-hue', this.themeHue);
+      updateSliderFill(hueSlider);
+      const { s, v } = currentSV();
+      this.applyThemeStudioColor(this.themeHue, s, v);
+    });
+
+    hexInput.addEventListener('change', (e) => {
+      const value = e.target.value.trim();
+      if (!/^#?[0-9a-f]{6}$/i.test(value)) {
+        hexInput.value = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+        return;
+      }
+      this.setAccentColor(value.startsWith('#') ? value : `#${value}`);
+    });
+
+    const rgbInputChange = () => {
+      const r = Math.min(255, Math.max(0, parseInt(rInput.value, 10) || 0));
+      const g = Math.min(255, Math.max(0, parseInt(gInput.value, 10) || 0));
+      const b = Math.min(255, Math.max(0, parseInt(bInput.value, 10) || 0));
+      this.setAccentColor(rgbToHex(r, g, b));
+    };
+    [rInput, gInput, bInput].forEach(el => el.addEventListener('change', rgbInputChange));
+
+    document.querySelectorAll('#theme-preset-swatches .theme-preset-swatch').forEach(el => {
+      el.addEventListener('click', () => this.setAccentColor(el.dataset.hex));
+    });
+
+    if (randomBtn) {
+      randomBtn.addEventListener('click', () => {
+        const h = Math.random() * 360;
+        const s = 0.45 + Math.random() * 0.55;
+        const v = 0.55 + Math.random() * 0.45;
+        this.themeHue = h;
+        this.positionThemeStudioHandles(h, s, v);
+        this.applyThemeStudioColor(h, s, v);
+      });
+    }
   }
 }
 

@@ -438,16 +438,16 @@
             <div class="detail-heading">
               <h1 id="detail-name"></h1>
               <span class="pack-badge" id="detail-badge"></span>
-              <button type="button" class="assets-required-badge hidden" id="detail-assets-badge">
+              <button type="button" class="assets-required-badge hidden" id="detail-assets-badge" title="This pack depends on Pepe's Assets Pack to work — click for details">
                 <i class="fas fa-triangle-exclamation"></i> Requires Assets Pack
               </button>
-              <span class="assets-tag assets-tag-none hidden" id="detail-assets-none-badge">
+              <span class="assets-tag assets-tag-none hidden" id="detail-assets-none-badge" title="This pack is fully self-contained and needs no other pack installed">
                 <i class="fas fa-check"></i> No Assets Needed
               </span>
-              <span class="assets-tag assets-tag-discontinued hidden" id="detail-discontinued-badge">
+              <span class="assets-tag assets-tag-discontinued hidden" id="detail-discontinued-badge" title="No longer maintained — old files remain available below for archival purposes">
                 <i class="fas fa-ban"></i> Discontinued
               </span>
-              <span class="assets-tag assets-tag-coming-soon hidden" id="detail-coming-soon-badge">
+              <span class="assets-tag assets-tag-coming-soon hidden" id="detail-coming-soon-badge" title="On the roadmap but not released yet">
                 <i class="fas fa-clock"></i> Coming Soon
               </span>
             </div>
@@ -466,6 +466,7 @@
 
             <div class="detail-showcase hidden" id="detail-showcase">
               <h3>Showcase</h3>
+              <p class="versions-sub">A quick look at this pack in action before you download it.</p>
               <div class="detail-showcase-embed" id="detail-showcase-embed"></div>
             </div>
 
@@ -495,22 +496,35 @@
               <div>
                 <p class="side-label">Author</p>
                 <p class="side-value" id="detail-author-name"></p>
+                <p class="side-desc">Who built and maintains this pack</p>
               </div>
             </div>
             <div class="side-stat hidden" id="detail-mcversion-stat">
-              <span class="side-label">MC Version</span>
+              <div>
+                <span class="side-label">MC Version</span>
+                <p class="side-desc">The Minecraft: Bedrock Edition version this was built and tested on</p>
+              </div>
               <span class="side-value" id="detail-mcversion"></span>
             </div>
             <div class="side-stat" id="detail-downloads-stat">
-              <span class="side-label">Downloads</span>
+              <div>
+                <span class="side-label">Downloads</span>
+                <p class="side-desc">Total downloads across every version of this pack</p>
+              </div>
               <span class="side-value" id="detail-downloads"></span>
             </div>
             <div class="side-stat">
-              <span class="side-label">Made on</span>
+              <div>
+                <span class="side-label">Made on</span>
+                <p class="side-desc">The date work on this pack first began</p>
+              </div>
               <span class="side-value" id="detail-made"></span>
             </div>
             <div class="side-stat">
-              <span class="side-label">Updated</span>
+              <div>
+                <span class="side-label">Updated</span>
+                <p class="side-desc">The date the current version was last changed</p>
+              </div>
               <span class="side-value" id="detail-updated"></span>
             </div>
           </aside>
@@ -598,6 +612,9 @@
             <button class="category-row active" data-settings-category="appearance">
               <span><i class="fas fa-palette"></i> Appearance</span>
             </button>
+            <button class="category-row" data-settings-category="theme">
+              <span><i class="fas fa-eye-dropper"></i> Theme Studio</span>
+            </button>
             <button class="category-row" data-settings-category="browsing">
               <span><i class="fas fa-compass"></i> Browsing</span>
             </button>
@@ -672,27 +689,6 @@
               <input type="range" id="font-size-slider" class="setting-slider" min="90" max="130" step="5" value="100">
             </label>
 
-            <label class="setting-row setting-row-select">
-              <span class="setting-row-icon"><i class="fas fa-swatchbook"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Accent Color</p>
-                <p class="setting-desc">The highlight color used across buttons and links</p>
-              </div>
-              <div class="custom-dropdown" id="accent-color-dropdown">
-                <button type="button" class="custom-dropdown-trigger" id="accent-color-trigger" aria-haspopup="listbox" aria-expanded="false">
-                  <span>Green</span>
-                  <i class="fas fa-chevron-down"></i>
-                </button>
-                <ul class="custom-dropdown-menu" id="accent-color-menu" role="listbox" tabindex="-1">
-                  <li role="option" data-value="green" class="selected"><span class="color-swatch" style="background:#489c49"></span> Green</li>
-                  <li role="option" data-value="blue"><span class="color-swatch" style="background:#3b82f6"></span> Blue</li>
-                  <li role="option" data-value="purple"><span class="color-swatch" style="background:#8b5cf6"></span> Purple</li>
-                  <li role="option" data-value="pink"><span class="color-swatch" style="background:#ec4899"></span> Pink</li>
-                  <li role="option" data-value="orange"><span class="color-swatch" style="background:#f97316"></span> Orange</li>
-                </ul>
-              </div>
-            </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-hashtag"></i></span>
               <div class="setting-row-text">
@@ -752,6 +748,58 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
+          </div>
+        </div>
+
+        <div class="settings-panel" data-settings-panel="theme">
+          <div class="theme-studio">
+            <p class="theme-studio-intro">Pick any accent color for the site — drag in the color field, dial in a hue, or type exact hex/RGB values. Changes apply instantly and everywhere the accent color is used (buttons, links, highlights).</p>
+
+            <div class="theme-studio-picker">
+              <div class="theme-sv-square" id="theme-sv-square" style="--sv-hue: 122;">
+                <div class="theme-sv-handle" id="theme-sv-handle"></div>
+              </div>
+              <input type="range" id="theme-hue-slider" class="setting-slider theme-hue-slider" min="0" max="360" step="1" value="122">
+            </div>
+
+            <div class="theme-studio-fields">
+              <div class="theme-field-group">
+                <span class="theme-color-preview" id="theme-color-preview"></span>
+                <label class="theme-field">
+                  <span>Hex</span>
+                  <input type="text" id="theme-hex-input" maxlength="7" spellcheck="false" autocomplete="off" value="#489c49">
+                </label>
+              </div>
+              <div class="theme-field-group theme-field-group-rgb">
+                <label class="theme-field theme-field-narrow">
+                  <span>R</span>
+                  <input type="number" id="theme-r-input" min="0" max="255" value="72">
+                </label>
+                <label class="theme-field theme-field-narrow">
+                  <span>G</span>
+                  <input type="number" id="theme-g-input" min="0" max="255" value="156">
+                </label>
+                <label class="theme-field theme-field-narrow">
+                  <span>B</span>
+                  <input type="number" id="theme-b-input" min="0" max="255" value="73">
+                </label>
+              </div>
+              <button type="button" class="theme-random-btn" id="theme-random-btn">
+                <i class="fas fa-dice"></i> Random
+              </button>
+            </div>
+
+            <p class="theme-studio-label">Quick presets</p>
+            <div class="theme-preset-swatches" id="theme-preset-swatches">
+              <button type="button" class="theme-preset-swatch selected" data-hex="#489c49" style="--swatch-color:#489c49" aria-label="Green"></button>
+              <button type="button" class="theme-preset-swatch" data-hex="#3b82f6" style="--swatch-color:#3b82f6" aria-label="Blue"></button>
+              <button type="button" class="theme-preset-swatch" data-hex="#8b5cf6" style="--swatch-color:#8b5cf6" aria-label="Purple"></button>
+              <button type="button" class="theme-preset-swatch" data-hex="#ec4899" style="--swatch-color:#ec4899" aria-label="Pink"></button>
+              <button type="button" class="theme-preset-swatch" data-hex="#f97316" style="--swatch-color:#f97316" aria-label="Orange"></button>
+              <button type="button" class="theme-preset-swatch" data-hex="#eab308" style="--swatch-color:#eab308" aria-label="Yellow"></button>
+              <button type="button" class="theme-preset-swatch" data-hex="#06b6d4" style="--swatch-color:#06b6d4" aria-label="Cyan"></button>
+              <button type="button" class="theme-preset-swatch" data-hex="#ef4444" style="--swatch-color:#ef4444" aria-label="Red"></button>
+            </div>
           </div>
         </div>
 
