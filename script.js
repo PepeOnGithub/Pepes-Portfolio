@@ -12,7 +12,46 @@ const SETTINGS_KEYS = [
   'accentColor', 'monetizationProvider', 'defaultSort', 'autoplayShowcase',
   'askProviderEveryTime', 'libraryViewMode', 'showDownloadCounts',
   'collapseOldVersions', 'showDiscontinued', 'collapseSectionsByDefault',
-  'collapsedSections', 'hideAssetsModal', 'fontSizeScale', 'rememberLastPage'
+  'collapsedSections', 'hideAssetsModal', 'fontSizeScale', 'rememberLastPage',
+  'highContrastMode', 'sharpCorners', 'reduceTransparency', 'disableCardHover',
+  'hideCategoryBadges', 'hideVersionTags', 'compactDescriptions', 'hideCardAuthor',
+  'stickySearchBar', 'hideCategoryIcons', 'disableSmoothScroll', 'confirmExternalLinks',
+  'scrollToTopOnNav', 'confirmBeforeDownload', 'copyNameOnDownload', 'openGateNewTab',
+  'trackDownloadCounts', 'trackRecentlyViewed', 'recentlyViewedPacks'
+];
+
+// A boolean setting read straight from localStorage, defaulting when unset.
+function getBoolSetting(key, defaultValue = false) {
+  const stored = localStorage.getItem(key);
+  if (stored === null) return defaultValue;
+  return stored === 'true';
+}
+
+// Settings that are nothing more than "toggle a body class, persist the flag".
+// Declarative list so binding + load-time re-application share one code path
+// instead of a hand-written listener/sync pair per setting.
+const SIMPLE_TOGGLE_SETTINGS = [
+  { id: 'high-contrast-toggle', key: 'highContrastMode', className: 'high-contrast' },
+  { id: 'sharp-corners-toggle', key: 'sharpCorners', className: 'sharp-corners' },
+  { id: 'reduce-transparency-toggle', key: 'reduceTransparency', className: 'reduce-transparency' },
+  { id: 'disable-card-hover-toggle', key: 'disableCardHover', className: 'no-card-hover' },
+  { id: 'hide-category-badges-toggle', key: 'hideCategoryBadges', className: 'hide-category-badges' },
+  { id: 'hide-version-tags-toggle', key: 'hideVersionTags', className: 'hide-version-tags' },
+  { id: 'compact-descriptions-toggle', key: 'compactDescriptions', className: 'compact-descriptions' },
+  { id: 'hide-card-author-toggle', key: 'hideCardAuthor', className: 'hide-card-author' },
+  { id: 'sticky-search-toggle', key: 'stickySearchBar', className: 'sticky-search' },
+  { id: 'hide-category-icons-toggle', key: 'hideCategoryIcons', className: 'hide-category-icons' },
+  { id: 'disable-smooth-scroll-toggle', key: 'disableSmoothScroll', className: 'no-smooth-scroll' }
+];
+
+// Settings that are just a persisted boolean flag consulted elsewhere in the
+// code (no direct body-class effect of their own).
+const SIMPLE_FLAG_SETTINGS = [
+  { id: 'confirm-external-links-toggle', key: 'confirmExternalLinks' },
+  { id: 'confirm-before-download-toggle', key: 'confirmBeforeDownload' },
+  { id: 'copy-name-on-download-toggle', key: 'copyNameOnDownload' },
+  { id: 'open-gate-new-tab-toggle', key: 'openGateNewTab' },
+  { id: 'track-recently-viewed-toggle', key: 'trackRecentlyViewed' }
 ];
 
 function isMonetizationOn() { return true; }
@@ -142,7 +181,9 @@ class Router {
     });
 
     document.getElementById('main-content').focus({ preventScroll: true });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (getBoolSetting('scrollToTopOnNav', true)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     if (localStorage.getItem('rememberLastPage') === 'true') {
       localStorage.setItem('lastVisitedPage', pageId);
@@ -439,6 +480,60 @@ class PackLibrary {
       settingsSearchInput.addEventListener('input', (e) => this.filterSettingsRows(e.target.value));
     }
 
+    SIMPLE_TOGGLE_SETTINGS.forEach(({ id, key, className }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('change', (e) => {
+        localStorage.setItem(key, e.target.checked);
+        document.body.classList.toggle(className, e.target.checked);
+      });
+    });
+
+    SIMPLE_FLAG_SETTINGS.forEach(({ id, key }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('change', (e) => {
+        localStorage.setItem(key, e.target.checked);
+      });
+    });
+
+    const scrollToTopToggle = document.getElementById('scroll-to-top-toggle');
+    if (scrollToTopToggle) {
+      scrollToTopToggle.addEventListener('change', (e) => {
+        localStorage.setItem('scrollToTopOnNav', e.target.checked);
+      });
+    }
+
+    const trackDownloadsToggle = document.getElementById('track-downloads-toggle');
+    if (trackDownloadsToggle) {
+      trackDownloadsToggle.addEventListener('change', (e) => {
+        localStorage.setItem('trackDownloadCounts', e.target.checked);
+      });
+    }
+
+    const clearRecentlyViewedBtn = document.getElementById('clear-recently-viewed-btn');
+    if (clearRecentlyViewedBtn) {
+      clearRecentlyViewedBtn.addEventListener('click', () => {
+        localStorage.removeItem('recentlyViewedPacks');
+        alert('Recently viewed packs cleared.');
+      });
+    }
+
+    const copySummaryBtn = document.getElementById('copy-settings-summary-btn');
+    if (copySummaryBtn) {
+      copySummaryBtn.addEventListener('click', () => this.copySettingsSummary());
+    }
+
+    // Confirm before navigating away to an external link, when enabled.
+    document.addEventListener('click', (e) => {
+      if (!getBoolSetting('confirmExternalLinks')) return;
+      const link = e.target.closest('a[href^="http"]');
+      if (!link || link.closest('#detail-download, .version-download-btn')) return;
+      if (!confirm(`Open this external link?\n\n${link.href}`)) {
+        e.preventDefault();
+      }
+    });
+
     document.getElementById('back-to-browse').addEventListener('click', () => {
       if (history.state && history.state.page === 'pack') {
         history.back();
@@ -504,6 +599,22 @@ class PackLibrary {
       if (!link || link.classList.contains('btn-download-disabled')) return;
       if (!this.currentPack || !link.dataset.rawUrl) return;
 
+      if (getBoolSetting('openGateNewTab')) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener');
+      } else {
+        link.removeAttribute('target');
+        link.removeAttribute('rel');
+      }
+
+      if (getBoolSetting('confirmBeforeDownload')) {
+        if (!confirm(`Download "${this.currentPack.name}"?`)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          return;
+        }
+      }
+
       const askEveryTime = localStorage.getItem('askProviderEveryTime') !== 'false';
       const needsAssets = this.currentPack.requiresAssets && !this.currentPack.pinned
         && localStorage.getItem('hideAssetsModal') !== 'true';
@@ -534,6 +645,12 @@ class PackLibrary {
       const version = multi
         ? (link.id === 'detail-download' ? versions[this.selectedVersionIndex || 0] : versions[parseInt(link.dataset.versionIndex, 10)])
         : null;
+
+      if (getBoolSetting('copyNameOnDownload') && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pack.name).catch(() => {});
+      }
+
+      if (!getBoolSetting('trackDownloadCounts', true)) return;
 
       this.incrementDownloads(pack, version).then(count => {
         this.writeCachedDownloadCount(this.counterKey(pack, version), count);
@@ -1919,7 +2036,23 @@ class PackLibrary {
     `;
   }
 
+  trackRecentlyViewed(pack) {
+    if (!getBoolSetting('trackRecentlyViewed')) return;
+    let ids;
+    try {
+      const raw = localStorage.getItem('recentlyViewedPacks');
+      ids = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(ids)) ids = [];
+    } catch (e) {
+      ids = [];
+    }
+    ids = ids.filter(id => id !== pack.id);
+    ids.unshift(pack.id);
+    localStorage.setItem('recentlyViewedPacks', JSON.stringify(ids.slice(0, 20)));
+  }
+
   showDetail(pack, { push = true } = {}) {
+    this.trackRecentlyViewed(pack);
     const hasImage = this.isImagePath(pack.thumbnail);
     const hasBanner = this.isImagePath(pack.bannerUrl);
     const bannerSrc = hasBanner ? pack.bannerUrl : DEFAULT_BANNER_URL;
@@ -2490,6 +2623,24 @@ class PackLibrary {
     const rememberLastPageToggle = document.getElementById('remember-last-page-toggle');
     if (rememberLastPageToggle) rememberLastPageToggle.checked = localStorage.getItem('rememberLastPage') === 'true';
 
+    SIMPLE_TOGGLE_SETTINGS.forEach(({ id, key, className }) => {
+      const checked = getBoolSetting(key, false);
+      document.body.classList.toggle(className, checked);
+      const el = document.getElementById(id);
+      if (el) el.checked = checked;
+    });
+
+    SIMPLE_FLAG_SETTINGS.forEach(({ id, key }) => {
+      const el = document.getElementById(id);
+      if (el) el.checked = getBoolSetting(key, false);
+    });
+
+    const scrollToTopToggle = document.getElementById('scroll-to-top-toggle');
+    if (scrollToTopToggle) scrollToTopToggle.checked = getBoolSetting('scrollToTopOnNav', true);
+
+    const trackDownloadsToggle = document.getElementById('track-downloads-toggle');
+    if (trackDownloadsToggle) trackDownloadsToggle.checked = getBoolSetting('trackDownloadCounts', true);
+
     this.syncDropdownSelection(this.monetizationDropdown, getMonetizationProvider());
     this.syncDropdownSelection(this.accentColorDropdown, localStorage.getItem('accentColor') || 'green');
     this.syncDropdownSelection(this.defaultSortDropdown, this.currentFilter.sort);
@@ -2563,6 +2714,21 @@ class PackLibrary {
       location.reload();
     };
     reader.readAsText(file);
+  }
+
+  copySettingsSummary() {
+    const lines = SETTINGS_KEYS
+      .filter(key => key !== 'recentlyViewedPacks' && key !== 'collapsedSections')
+      .map(key => `${key}: ${localStorage.getItem(key) ?? '(default)'}`);
+    const text = lines.join('\n');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        () => alert('Settings summary copied to clipboard.'),
+        () => alert(text)
+      );
+    } else {
+      alert(text);
+    }
   }
 
   filterSettingsRows(query) {
