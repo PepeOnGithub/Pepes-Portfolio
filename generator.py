@@ -14,6 +14,7 @@ import urllib.request
 import urllib.parse
 from pathlib import Path
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Fix emoji encoding on Windows
 if sys.platform == 'win32':
@@ -82,11 +83,10 @@ def make_download_gate_url(raw_url):
     return f"{SITE_BASE_URL}/download/{token}"
 
 
-def create_lootlabs_link(title, target_url, cache):
-    """Create (or reuse from cache) a LootLabs content-locker link for target_url.
-    Returns None if LootLabs isn't configured or the request fails."""
-    if target_url in cache:
-        return cache[target_url]
+def fetch_lootlabs_link(title, target_url):
+    """Call the LootLabs content-locker API for target_url. Returns the
+    loot_url, or None if LootLabs isn't configured or the request fails.
+    Pure network call - no cache access, so it's safe to run from a thread pool."""
     if not LOOTLABS_API_TOKEN:
         return None
     try:
@@ -111,12 +111,36 @@ def create_lootlabs_link(title, target_url, cache):
         else:
             loot_url = None
         if loot_url:
-            cache[target_url] = loot_url
             return loot_url
         print(f"  Warning: LootLabs did not return a loot_url for '{title}': {data}")
     except Exception as e:
         print(f"  Warning: LootLabs link creation failed for '{title}': {e}")
     return None
+
+
+def resolve_lootlabs_links(requests, cache, max_workers=8):
+    """requests: list of (title, target_url) tuples. Fetches every url not
+    already cached, in parallel (these are independent, latency-bound HTTP
+    calls, so doing them one at a time serially is the slow part of a build
+    with many packs/versions), and fills the results into `cache` in place."""
+    to_fetch = {}
+    for title, url in requests:
+        if url not in cache and url not in to_fetch:
+            to_fetch[url] = title
+    if not to_fetch:
+        return
+
+    print(f"  Fetching {len(to_fetch)} LootLabs link(s), {max_workers} at a time...")
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_url = {
+            executor.submit(fetch_lootlabs_link, title, url): url
+            for url, title in to_fetch.items()
+        }
+        for future in as_completed(future_to_url):
+            url = future_to_url[future]
+            loot_url = future.result()
+            if loot_url:
+                cache[url] = loot_url
 
 def get_pack_metadata(pack_path):
     """Extract metadata from a pack directory."""
@@ -266,6 +290,12 @@ def generate_packs_json(packs_dir, output_file):
     if LOOTLABS_API_TOKEN and not SITE_BASE_URL:
         print("  Warning: LOOTLABS_API_TOKEN is set but SITE_BASE_URL is not - skipping LootLabs link generation.")
 
+    # LootLabs API calls are collected here during the scan and resolved all
+    # at once afterward (in parallel), instead of blocking on each one serially.
+    lootlabs_requests = []              # (title, gate_url)
+    lootlabs_assignments = []           # (container_dict, gate_url) to fill in once resolved
+    lootlabs_top_level_copies = []      # (pack_entry, versions) - copy versions[0]'s lootUrl up
+
     # Scan each category directory
     for category_path in sorted(packs_dir.iterdir()):
         if not category_path.is_dir() or category_path.name.startswith('.'):
@@ -388,16 +418,14 @@ def generate_packs_json(packs_dir, output_file):
             elif lootlabs_enabled and category != 'website':
                 for v in versions:
                     gate_url = make_download_gate_url(v['downloadUrl'])
-                    loot_url = create_lootlabs_link(pack_entry['name'], gate_url, lootlabs_cache)
-                    if loot_url:
-                        v['lootUrl'] = loot_url
+                    lootlabs_requests.append((pack_entry['name'], gate_url))
+                    lootlabs_assignments.append((v, gate_url))
                 if versions:
-                    pack_entry['lootUrl'] = versions[0].get('lootUrl')
+                    lootlabs_top_level_copies.append((pack_entry, versions))
                 elif pack_entry.get('downloadUrl'):
                     gate_url = make_download_gate_url(pack_entry['downloadUrl'])
-                    loot_url = create_lootlabs_link(pack_entry['name'], gate_url, lootlabs_cache)
-                    if loot_url:
-                        pack_entry['lootUrl'] = loot_url
+                    lootlabs_requests.append((pack_entry['name'], gate_url))
+                    lootlabs_assignments.append((pack_entry, gate_url))
 
             # Website packs: a file named like a domain (e.g. "glacierclient.xyz",
             # empty content) supplies the external link
@@ -412,6 +440,16 @@ def generate_packs_json(packs_dir, output_file):
             pack_id += 1
 
     if lootlabs_enabled:
+        resolve_lootlabs_links(lootlabs_requests, lootlabs_cache)
+
+        for container, gate_url in lootlabs_assignments:
+            loot_url = lootlabs_cache.get(gate_url)
+            if loot_url:
+                container['lootUrl'] = loot_url
+
+        for pack_entry, versions in lootlabs_top_level_copies:
+            pack_entry['lootUrl'] = versions[0].get('lootUrl')
+
         save_lootlabs_cache(lootlabs_cache_path, lootlabs_cache)
 
     # Write packs.json
