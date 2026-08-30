@@ -3,7 +3,7 @@
   "description": "Another step in the client's ongoing rebrand and feature journey.",
   "author": "Pepe",
   "version": "1.0.0",
-  "thumbnail": "📦",
+  "thumbnail": "\ud83d\udce6",
   "tags": [
     "clients"
   ],
@@ -11,5 +11,6 @@
   "license": "MIT",
   "mcVersion": "TBD",
   "timelineOrder": 7,
-  "faIcon": "fa-fire"
+  "faIcon": "fa-fire",
+  "discontinued": true
 }

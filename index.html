@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- Keeps every relative URL (styles.css, script.js, packs.json, pack icons)
+       resolving against the site root even after clean-URL routing changes
+       the address bar path via history.pushState/replaceState. -->
+  <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Pepe's portfolio - about, projects, socials, and a personal pack library">
   <meta property="og:title" content="Pepe" />
@@ -9,6 +13,19 @@
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#489c49">
   <title>Pepe's Portfolio</title>
+  <script>
+    // Companion to 404.html's SPA-for-GitHub-Pages redirect: restores the
+    // real path (e.g. /library, /pack/foo) that got encoded into the query
+    // string, before any other script runs.
+    (function(l) {
+      if (l.search[1] === '/') {
+        var decoded = l.search.slice(1).split('&').map(function(s) {
+          return s.replace(/~and~/g, '&');
+        }).join('?');
+        window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+      }
+    }(window.location));
+  </script>
   <link rel="icon" type="image/png" href="assets/pepe-profile.png">
   <link rel="apple-touch-icon" href="assets/pepe-profile.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -24,8 +41,10 @@
       </a>
       <nav class="topnav-links">
         <a href="#" class="topnav-link active" data-page="home">Home</a>
+        <a href="#" class="topnav-link" data-page="projects">Projects</a>
         <a href="#" class="topnav-link" data-page="socials">Socials</a>
         <a href="#" class="topnav-link" data-page="library">Library</a>
+        <a href="#" class="topnav-link" data-page="stats">Stats</a>
       </nav>
     </div>
     <div class="topnav-right">
@@ -43,8 +62,10 @@
 
   <nav class="mobile-nav-drawer" id="mobile-nav-drawer">
     <a href="#" class="mobile-nav-link active" data-page="home"><i class="fas fa-house"></i> Home</a>
+    <a href="#" class="mobile-nav-link" data-page="projects"><i class="fas fa-diagram-project"></i> Projects</a>
     <a href="#" class="mobile-nav-link" data-page="socials"><i class="fas fa-share-nodes"></i> Socials</a>
     <a href="#" class="mobile-nav-link" data-page="library"><i class="fas fa-box-open"></i> Library</a>
+    <a href="#" class="mobile-nav-link" data-page="stats"><i class="fas fa-chart-simple"></i> Stats</a>
     <a href="#" class="mobile-nav-link" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
   </nav>
 
@@ -434,7 +455,7 @@
             <p class="detail-description" id="detail-description"></p>
 
             <div class="detail-discontinued-notice hidden" id="detail-discontinued-notice">
-              <i class="fas fa-ban"></i> This pack has been discontinued and is no longer available for download.
+              <i class="fas fa-ban"></i> This pack is discontinued and no longer maintained, but its old files are still available below for archival purposes.
             </div>
 
             <div class="detail-discontinued-notice hidden" id="detail-coming-soon-notice">
@@ -456,6 +477,15 @@
           </div>
 
           <aside class="detail-side">
+            <div class="version-select-wrap hidden" id="version-select-wrap">
+              <div class="custom-dropdown" id="version-select-dropdown">
+                <button type="button" class="custom-dropdown-trigger" id="version-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                  <span id="version-select-label">Latest</span>
+                  <i class="fas fa-chevron-down"></i>
+                </button>
+                <ul class="custom-dropdown-menu" id="version-select-menu" role="listbox" tabindex="-1"></ul>
+              </div>
+            </div>
             <a href="#" class="btn-download btn-download-full" id="detail-download">
               <i class="fas fa-download"></i> Download
             </a>
@@ -471,7 +501,7 @@
               <span class="side-label">MC Version</span>
               <span class="side-value" id="detail-mcversion"></span>
             </div>
-            <div class="side-stat">
+            <div class="side-stat" id="detail-downloads-stat">
               <span class="side-label">Downloads</span>
               <span class="side-value" id="detail-downloads"></span>
             </div>
@@ -516,6 +546,29 @@
         </span>
         Don't show this again
       </label>
+    </div>
+  </div>
+
+  <!-- ============ DOWNLOAD PROVIDER MODAL ============ -->
+  <div class="assets-modal-overlay hidden" id="download-provider-modal-overlay">
+    <div class="assets-modal" role="dialog" aria-modal="true" aria-labelledby="provider-modal-title">
+      <button class="assets-modal-close" id="download-provider-modal-close" aria-label="Close">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <div class="assets-modal-icon"><i class="fas fa-link"></i></div>
+      <h3 id="provider-modal-title">Choose Download Method</h3>
+      <p id="provider-modal-text">Pick which link shortener to use for this download.</p>
+      <div class="provider-modal-dropdown-wrap">
+        <div class="provider-tabs" id="provider-choice-tabs" role="tablist">
+          <button type="button" class="provider-tab selected" data-value="linkvertise" role="tab" aria-selected="true">Linkvertise</button>
+          <button type="button" class="provider-tab" data-value="lootlabs" role="tab" aria-selected="false">LootLabs</button>
+        </div>
+      </div>
+      <div class="assets-modal-actions">
+        <button type="button" class="btn-download" id="provider-choice-confirm">
+          <i class="fas fa-download"></i> Download
+        </button>
+      </div>
     </div>
   </div>
 
@@ -626,6 +679,18 @@
                 </ul>
               </div>
             </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-hashtag"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Show Download Counts</p>
+                <p class="setting-desc">Display download numbers on pack cards and detail pages</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="show-downloads-toggle" class="setting-input" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
           </div>
         </div>
 
@@ -651,6 +716,18 @@
               </div>
               <span class="custom-checkbox">
                 <input type="checkbox" id="autoplay-showcase-toggle" class="setting-input">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-clock-rotate-left"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Collapse Older Versions</p>
+                <p class="setting-desc">Keep older pack versions tucked away behind a "Show older versions" toggle</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="collapse-old-versions-toggle" class="setting-input" checked>
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
@@ -681,16 +758,52 @@
                 </ul>
               </div>
             </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-ban"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Show Discontinued Packs</p>
+                <p class="setting-desc">Include discontinued packs in Library listings</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="show-discontinued-toggle" class="setting-input" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-chevron-down"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Collapse Sections by Default</p>
+                <p class="setting-desc">Start category and sub-category sections collapsed when you open the Library</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="collapse-sections-toggle" class="setting-input">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
           </div>
         </div>
 
         <div class="settings-panel" data-settings-panel="downloads">
           <div class="settings-list">
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-circle-question"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Ask Every Time</p>
+                <p class="setting-desc">Choose Linkvertise or LootLabs individually for each download</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="ask-provider-toggle" class="setting-input" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+
             <label class="setting-row setting-row-select">
               <span class="setting-row-icon"><i class="fas fa-link"></i></span>
               <div class="setting-row-text">
                 <p class="setting-name">Download Link Provider</p>
-                <p class="setting-desc">Which link shortener wraps pack downloads by default</p>
+                <p class="setting-desc">Which link shortener wraps pack downloads when "Ask Every Time" is off</p>
               </div>
               <div class="custom-dropdown" id="monetization-provider-dropdown">
                 <button type="button" class="custom-dropdown-trigger" id="monetization-provider-trigger" aria-haspopup="listbox" aria-expanded="false">
@@ -702,18 +815,6 @@
                   <li role="option" data-value="lootlabs">LootLabs</li>
                 </ul>
               </div>
-            </label>
-
-            <label class="setting-row">
-              <span class="setting-row-icon"><i class="fas fa-circle-question"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Ask Every Time</p>
-                <p class="setting-desc">Choose Linkvertise or LootLabs individually for each download</p>
-              </div>
-              <span class="custom-checkbox">
-                <input type="checkbox" id="ask-provider-toggle" class="setting-input">
-                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-              </span>
             </label>
           </div>
         </div>
@@ -743,6 +844,68 @@
     </div>
   </section>
 
+  <!-- ============ STATS PAGE ============ -->
+  <section class="page" id="page-stats">
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
+        <h2 class="page-title">Library Stats</h2>
+        <p class="page-subtitle">A live look at the numbers behind everything in the library.</p>
+      </div>
+    </div>
+
+    <div class="stats-content">
+      <div class="stats-summary-grid" id="stats-summary-grid"></div>
+
+      <div class="stats-section">
+        <h3><i class="fas fa-layer-group"></i> By Category</h3>
+        <div class="stats-category-list" id="stats-category-list"></div>
+      </div>
+
+      <div class="stats-spotlight-grid" id="stats-spotlight-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ DOWNLOAD GATE PAGE ============ -->
+  <section class="page" id="page-download">
+    <div class="download-gate-wrap">
+      <div class="download-gate-icon"><i class="fas fa-cloud-arrow-down"></i></div>
+
+      <div id="download-gate-progress-group">
+        <h2 class="download-gate-title" id="download-gate-title">Preparing your download…</h2>
+        <p class="download-gate-sub" id="download-gate-sub">Hang tight, your file will start downloading automatically.</p>
+        <div class="download-gate-progress-track">
+          <div class="download-gate-progress-fill" id="download-gate-progress-fill"></div>
+        </div>
+        <p class="download-gate-percent" id="download-gate-percent">0%</p>
+      </div>
+
+      <div class="download-gate-actions hidden" id="download-gate-actions">
+        <a href="#" class="btn-download" id="download-gate-manual-link"><i class="fas fa-download"></i> Click here if it didn't start</a>
+        <button type="button" class="cta-btn cta-secondary" data-page="library">Back to Library</button>
+      </div>
+
+      <div class="download-gate-error hidden" id="download-gate-error">
+        <i class="fas fa-triangle-exclamation"></i>
+        <p>This download link is invalid or has expired.</p>
+        <button type="button" class="cta-btn cta-primary" data-page="library">Back to Library</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 404 PAGE ============ -->
+  <section class="page" id="page-404">
+    <div class="not-found-wrap">
+      <p class="not-found-code">404</p>
+      <h2 class="not-found-title">Lost in the void</h2>
+      <p class="not-found-desc">There's nothing here. The page or pack you're looking for doesn't exist or may have moved.</p>
+      <div class="not-found-actions">
+        <button type="button" class="cta-btn cta-primary" data-page="home"><i class="fas fa-house"></i> Back to Home</button>
+        <button type="button" class="cta-btn cta-secondary" data-page="library"><i class="fas fa-box-open"></i> Browse Library</button>
+      </div>
+    </div>
+  </section>
+
   </div><!-- /#main-content -->
 
   <!-- Footer -->
@@ -769,8 +932,10 @@
           <h4 class="footer-col-title">Navigate</h4>
           <nav class="footer-links">
             <a href="#" data-page="home">Home</a>
+            <a href="#" data-page="projects">Projects</a>
             <a href="#" data-page="socials">Socials</a>
             <a href="#" data-page="library">Library</a>
+            <a href="#" data-page="settings">Settings</a>
           </nav>
         </div>
 

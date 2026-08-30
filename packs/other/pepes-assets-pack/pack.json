@@ -12,6 +12,17 @@
   "category": "other",
   "license": "MIT",
   "pinned": true,
+  "changelogs": {
+    "1.0.0": "Initial release.",
+    "1.1.1": "Support for Speedometer. Fixed a bug where some zombie villagers wouldn't load properly.",
+    "1.2.0": "Support for Compass & Clock HUD. Fixed all the visual bugs. Added a variable to hide the Level Calculator.",
+    "1.2.1": "Bug Fixes: Fixed the hand bug (unknown). Fixed the bug of Clock and Compass not rendering (download Clock Compass HUD v1.0.1).",
+    "1.3.0": "Added support and variables for Death Coords & Better Hover Text.",
+    "1.4.0": "Added support for Waypoints+ pack. Fixed FPS Counter bug (unknown).",
+    "1.5.0": "Added Support for Shiny Pots and added Pots Item IDs.",
+    "1.6.0": "Added support for DebugHUD. Added Paperdoll fix.",
+    "1.7.0": "Added support for Better Armor Bar. Added Hand model fix for crossplay servers."
+  },
   "notice": {
     "title": "A Must-Have for All Packs!",
     "intro": "To ensure all your Pepe's Packs load and work perfectly, you must enable and place the Pepe's Pack Assets pack above all other packs in your load order.",

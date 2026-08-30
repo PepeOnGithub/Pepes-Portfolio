@@ -3,7 +3,7 @@
   "description": "The client that followed Pepe Client, an early step in refining the formula.",
   "author": "Pepe",
   "version": "1.0.0",
-  "thumbnail": "📦",
+  "thumbnail": "\ud83d\udce6",
   "tags": [
     "clients"
   ],
@@ -11,5 +11,6 @@
   "license": "MIT",
   "mcVersion": "TBD",
   "timelineOrder": 2,
-  "faIcon": "fa-circle-notch"
+  "faIcon": "fa-circle-notch",
+  "discontinued": true
 }

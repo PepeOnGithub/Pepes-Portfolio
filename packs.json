@@ -1,6 +1,6 @@
 {
-  "generated": "2026-08-30T19:08:39.397862",
-  "total_packs": 43,
+  "generated": "2026-08-30T21:54:22.055219",
+  "total_packs": 42,
   "categories": {
     "addons": [
       "Pepe's Experience Tome",
@@ -11,7 +11,6 @@
     "clients": [
       "Allay Client",
       "Glacier Client",
-      "No Dramina Client",
       "Optifine by Zephyx",
       "Pepe Client",
       "Project Future",
@@ -73,8 +72,7 @@
       "downloadUrl": "packs/addons/pepes-experience-tome/Pepe's Experience Tome V1.mcaddon",
       "previewUrl": "packs/addons/pepes-experience-tome/",
       "fileName": "Pepe's Experience Tome V1.mcaddon",
-      "showcaseUrl": "https://youtu.be/7M_cfmBuq90",
-      "lootUrl": "https://lootdest.org/s?GCENLd4F"
+      "showcaseUrl": "https://youtu.be/7M_cfmBuq90"
     },
     {
       "id": 2,
@@ -92,8 +90,7 @@
       "downloadUrl": "packs/addons/pepes-hotbar-refiller/Pepe's_Hotbar_Refiller.mcaddon",
       "previewUrl": "packs/addons/pepes-hotbar-refiller/",
       "fileName": "Pepe's_Hotbar_Refiller.mcaddon",
-      "showcaseUrl": "https://youtu.be/tvstyl5fjII",
-      "lootUrl": "https://lootdest.org/s?CIGKoxK0"
+      "showcaseUrl": "https://youtu.be/tvstyl5fjII"
     },
     {
       "id": 3,
@@ -111,8 +108,7 @@
       "downloadUrl": "packs/addons/pepes-item-magnet-addon/Pepe's Item Magnet [Addon].mcaddon",
       "previewUrl": "packs/addons/pepes-item-magnet-addon/",
       "fileName": "Pepe's Item Magnet [Addon].mcaddon",
-      "showcaseUrl": "https://youtu.be/ChjxGuHtt48",
-      "lootUrl": "https://lootdest.org/s?ZiJakHSx"
+      "showcaseUrl": "https://youtu.be/ChjxGuHtt48"
     },
     {
       "id": 4,
@@ -130,8 +126,7 @@
       "downloadUrl": "packs/addons/pepes-void-totem/Pepe's_Void_Totem.mcaddon",
       "previewUrl": "packs/addons/pepes-void-totem/",
       "fileName": "Pepe's_Void_Totem.mcaddon",
-      "showcaseUrl": "https://youtu.be/g2g7eUF0Auo",
-      "lootUrl": "https://loot-link.com/s?HGngwxP2"
+      "showcaseUrl": "https://youtu.be/g2g7eUF0Auo"
     },
     {
       "id": 5,
@@ -144,77 +139,148 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "0.4 KB",
       "author": "Pepe",
       "downloadUrl": "packs/clients/allay-client.zip",
       "previewUrl": "packs/clients/allay-client/",
       "mcVersion": "TBD",
       "timelineOrder": 8,
       "faIcon": "fa-feather",
-      "lootUrl": "https://lootdest.org/s?CUtpjVKu"
+      "discontinued": true
     },
     {
       "id": 6,
       "name": "Glacier Client",
       "category": "clients",
       "description": "The current and flagship client, home base of Glacier Productions.",
-      "thumbnail": "📦",
+      "thumbnail": "packs/clients/glacier-client/icon.png",
       "tags": [
         "clients"
       ],
-      "version": "1.0.0",
+      "version": "6.2",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "2.2 MB",
       "author": "Pepe",
-      "downloadUrl": "packs/clients/glacier-client.zip",
+      "downloadUrl": "packs/clients/glacier-client/Glacier Client V6.2.mcpack",
       "previewUrl": "packs/clients/glacier-client/",
-      "mcVersion": "TBD",
+      "fileName": "Glacier Client V6.2.mcpack",
+      "versions": [
+        {
+          "version": "6.2",
+          "fileName": "Glacier Client V6.2.mcpack",
+          "size": "2.2 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V6.2.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "6.1",
+          "fileName": "Glacier Client V6.1.mcpack",
+          "size": "3.4 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V6.1.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "6",
+          "fileName": "Glacier Client V6.mcpack",
+          "size": "3.3 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V6.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "5.1",
+          "fileName": "Glacier Client V5.1.mcpack",
+          "size": "2.8 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V5.1.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "4",
+          "fileName": "Glacier Client V4.mcpack",
+          "size": "1.8 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V4.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "3",
+          "fileName": "Glacier Client V3 Beta(2).mcpack",
+          "size": "1.4 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V3 Beta(2).mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "3",
+          "fileName": "Glacier Client V3 Beta.mcpack",
+          "size": "1.4 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V3 Beta.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "3",
+          "fileName": "Glacier Client V3.mcpack",
+          "size": "1.9 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V3.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "2",
+          "fileName": "Glacier Client V2.mcpack",
+          "size": "13.5 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V2.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1",
+          "fileName": "Glacier Client V1.mcpack",
+          "size": "21.2 MB",
+          "downloadUrl": "packs/clients/glacier-client/Glacier Client V1.mcpack",
+          "date": "2026-08-30"
+        }
+      ],
+      "bannerUrl": "packs/clients/glacier-client/pack_banner.png",
+      "mcVersion": "1.26",
       "timelineOrder": 11,
-      "faIcon": "fa-snowflake",
-      "lootUrl": "https://loot-link.com/s?PuYxsQkc"
+      "faIcon": "fa-snowflake"
     },
     {
       "id": 7,
-      "name": "No Dramina Client",
-      "category": "clients",
-      "description": "A stability-focused release aimed at a calmer, more reliable experience.",
-      "thumbnail": "📦",
-      "tags": [
-        "clients"
-      ],
-      "version": "1.0.0",
-      "downloads": 0,
-      "size": "0.3 KB",
-      "author": "Pepe",
-      "downloadUrl": "packs/clients/no-dramina-client.zip",
-      "previewUrl": "packs/clients/no-dramina-client/",
-      "mcVersion": "TBD",
-      "timelineOrder": 6,
-      "faIcon": "fa-dove",
-      "lootUrl": "https://lootdest.org/s?hwKFpr65"
-    },
-    {
-      "id": 8,
       "name": "Optifine by Zephyx",
       "category": "clients",
       "description": "Optifine, built when Pepe was called Zephyx as a money grab.",
-      "thumbnail": "📦",
+      "thumbnail": "packs/clients/optifine-zephyx/icon.png",
       "tags": [
         "clients"
       ],
-      "version": "1.0.0",
+      "version": "2",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "5.1 MB",
       "author": "Zephyx",
-      "downloadUrl": "packs/clients/optifine-zephyx.zip",
+      "downloadUrl": "packs/clients/optifine-zephyx/Zephyxs Optifine V2.mcpack",
       "previewUrl": "packs/clients/optifine-zephyx/",
-      "mcVersion": "TBD",
+      "fileName": "Zephyxs Optifine V2.mcpack",
+      "versions": [
+        {
+          "version": "2",
+          "fileName": "Zephyxs Optifine V2.mcpack",
+          "size": "5.1 MB",
+          "downloadUrl": "packs/clients/optifine-zephyx/Zephyxs Optifine V2.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1.0.4",
+          "fileName": "Zephyxs-Optifine-MCPE-Features-1.19.mcaddon",
+          "size": "136.4 KB",
+          "downloadUrl": "packs/clients/optifine-zephyx/Zephyxs-Optifine-MCPE-Features-1.19.mcaddon",
+          "date": "2026-08-30"
+        }
+      ],
+      "bannerUrl": "packs/clients/optifine-zephyx/pack_banner.png",
+      "mcVersion": "1.19",
       "timelineOrder": 9,
       "faIcon": "fa-bolt",
-      "lootUrl": "https://loot-link.com/s?QxUjuYqo"
+      "discontinued": true
     },
     {
-      "id": 9,
+      "id": 8,
       "name": "Pepe Client",
       "category": "clients",
       "description": "Where it all started, my very first Minecraft Bedrock client.",
@@ -224,77 +290,166 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "0.4 KB",
       "author": "Pepe",
       "downloadUrl": "packs/clients/pepe-client.zip",
       "previewUrl": "packs/clients/pepe-client/",
       "mcVersion": "TBD",
       "timelineOrder": 1,
       "faIcon": "fa-frog",
-      "lootUrl": "https://lootdest.org/s?J18MkZm2"
+      "discontinued": true
     },
     {
-      "id": 10,
+      "id": 9,
       "name": "Project Future",
       "category": "clients",
       "description": "An experimental rebrand exploring new features and direction.",
-      "thumbnail": "📦",
+      "thumbnail": "packs/clients/project-future/icon.png",
       "tags": [
         "clients"
       ],
-      "version": "1.0.0",
+      "version": "1.4",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "22.9 MB",
       "author": "Pepe",
-      "downloadUrl": "packs/clients/project-future.zip",
+      "downloadUrl": "packs/clients/project-future/Future Ui pack v1.4.mcpack",
       "previewUrl": "packs/clients/project-future/",
-      "mcVersion": "TBD",
+      "fileName": "Future Ui pack v1.4.mcpack",
+      "versions": [
+        {
+          "version": "1.4",
+          "fileName": "Future Ui pack v1.4.mcpack",
+          "size": "22.9 MB",
+          "downloadUrl": "packs/clients/project-future/Future Ui pack v1.4.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1.3",
+          "fileName": "Future Ui pack v1.3.mcpack",
+          "size": "15.4 MB",
+          "downloadUrl": "packs/clients/project-future/Future Ui pack v1.3.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1.2",
+          "fileName": "Future Ui pack v1.2.mcpack",
+          "size": "15.4 MB",
+          "downloadUrl": "packs/clients/project-future/Future Ui pack v1.2.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1.0",
+          "fileName": "Future Ui pack v1.0.mcpack",
+          "size": "17.4 MB",
+          "downloadUrl": "packs/clients/project-future/Future Ui pack v1.0.mcpack",
+          "date": "2026-08-30"
+        }
+      ],
+      "bannerUrl": "packs/clients/project-future/pack_banner.png",
+      "mcVersion": "1.17",
       "timelineOrder": 5,
       "faIcon": "fa-rocket",
-      "lootUrl": "https://lootdest.org/s?0202tDdu"
+      "discontinued": true
     },
     {
-      "id": 11,
+      "id": 10,
       "name": "Project Light",
       "category": "clients",
       "description": "A bridge release exploring a lighter-weight client experience.",
-      "thumbnail": "📦",
+      "thumbnail": "packs/clients/project-light/icon.png",
       "tags": [
         "clients"
       ],
-      "version": "1.0.0",
+      "version": "4",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "1.3 MB",
       "author": "Pepe",
-      "downloadUrl": "packs/clients/project-light.zip",
+      "downloadUrl": "packs/clients/project-light/Project Light V4 [Main].mcpack",
       "previewUrl": "packs/clients/project-light/",
-      "mcVersion": "TBD",
+      "fileName": "Project Light V4 [Main].mcpack",
+      "versions": [
+        {
+          "version": "4",
+          "fileName": "Project Light V4 [Main].mcpack",
+          "size": "1.3 MB",
+          "downloadUrl": "packs/clients/project-light/Project Light V4 [Main].mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "2",
+          "fileName": "Project-Light-V2.mcpack",
+          "size": "1.0 MB",
+          "downloadUrl": "packs/clients/project-light/Project-Light-V2.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1.0.0",
+          "fileName": "Light-Client-MCPE-1.19.mcpack",
+          "size": "1.4 MB",
+          "downloadUrl": "packs/clients/project-light/Light-Client-MCPE-1.19.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1.0.0",
+          "fileName": "Project Light [Main].mcpack",
+          "size": "3.2 MB",
+          "downloadUrl": "packs/clients/project-light/Project Light [Main].mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "0.0.1",
+          "fileName": "Project-Light-Dark-Mode.mcpack",
+          "size": "184.8 KB",
+          "downloadUrl": "packs/clients/project-light/Project-Light-Dark-Mode.mcpack",
+          "date": "2026-08-30"
+        }
+      ],
+      "bannerUrl": "packs/clients/project-light/pack_banner.png",
+      "mcVersion": "1.20",
       "timelineOrder": 10,
       "faIcon": "fa-lightbulb",
-      "lootUrl": "https://lootdest.org/s?htuEAeqZ"
+      "discontinued": true
     },
     {
-      "id": 12,
+      "id": 11,
       "name": "Solar Client",
       "category": "clients",
       "description": "Focused on visuals and performance, continuing the client's evolution.",
-      "thumbnail": "📦",
+      "thumbnail": "packs/clients/solar-client/icon.png",
       "tags": [
         "clients"
       ],
-      "version": "1.0.0",
+      "version": "2",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "13.4 MB",
       "author": "Pepe",
-      "downloadUrl": "packs/clients/solar-client.zip",
+      "downloadUrl": "packs/clients/solar-client/Solar Client v2.mcpack",
       "previewUrl": "packs/clients/solar-client/",
-      "mcVersion": "TBD",
+      "fileName": "Solar Client v2.mcpack",
+      "versions": [
+        {
+          "version": "2",
+          "fileName": "Solar Client v2.mcpack",
+          "size": "13.4 MB",
+          "downloadUrl": "packs/clients/solar-client/Solar Client v2.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1",
+          "fileName": "SolarClientv1.mcpack",
+          "size": "2.6 MB",
+          "downloadUrl": "packs/clients/solar-client/SolarClientv1.mcpack",
+          "date": "2026-08-30"
+        }
+      ],
+      "bannerUrl": "packs/clients/solar-client/pack_banner.png",
+      "mcVersion": "1.19",
       "timelineOrder": 4,
       "faIcon": "fa-sun",
-      "lootUrl": "https://lootdest.org/s?dnApZWJN"
+      "discontinued": true
     },
     {
-      "id": 13,
+      "id": 12,
       "name": "Sulphur Client",
       "category": "clients",
       "description": "Another step in the client's ongoing rebrand and feature journey.",
@@ -304,17 +459,17 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "0.4 KB",
       "author": "Pepe",
       "downloadUrl": "packs/clients/sulphur-client.zip",
       "previewUrl": "packs/clients/sulphur-client/",
       "mcVersion": "TBD",
       "timelineOrder": 7,
       "faIcon": "fa-fire",
-      "lootUrl": "https://loot-link.com/s?Dn8EC0JY"
+      "discontinued": true
     },
     {
-      "id": 14,
+      "id": 13,
       "name": "Void Client",
       "category": "clients",
       "description": "The client that followed Pepe Client, an early step in refining the formula.",
@@ -324,37 +479,39 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "0.4 KB",
       "author": "Pepe",
       "downloadUrl": "packs/clients/void-client.zip",
       "previewUrl": "packs/clients/void-client/",
       "mcVersion": "TBD",
       "timelineOrder": 2,
       "faIcon": "fa-circle-notch",
-      "lootUrl": "https://lootdest.org/s?xGC0rmlz"
+      "discontinued": true
     },
     {
-      "id": 15,
+      "id": 14,
       "name": "Wind Client",
       "category": "clients",
       "description": "A lighter, faster iteration built on lessons learned from Void Client.",
-      "thumbnail": "📦",
+      "thumbnail": "packs/clients/wind-client/icon.png",
       "tags": [
         "clients"
       ],
-      "version": "1.0.0",
+      "version": "1.8.0",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "11.2 MB",
       "author": "Pepe",
-      "downloadUrl": "packs/clients/wind-client.zip",
+      "downloadUrl": "packs/clients/wind-client/Wind Client.mcpack",
       "previewUrl": "packs/clients/wind-client/",
-      "mcVersion": "TBD",
+      "fileName": "Wind Client.mcpack",
+      "bannerUrl": "packs/clients/wind-client/pack_banner.png",
+      "mcVersion": "1.18",
       "timelineOrder": 3,
       "faIcon": "fa-wind",
-      "lootUrl": "https://loot-link.com/s?k0AhnUH5"
+      "discontinued": true
     },
     {
-      "id": 16,
+      "id": 15,
       "name": "Pepe's Assets Pack",
       "category": "other",
       "description": "The shared foundation every other Pepe's Pack builds on: shared textures, UI variables, and compatibility patches in one place. Must be enabled and sorted above every other Pepe's Pack to work.",
@@ -378,7 +535,7 @@
           "size": "140.8 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.7.0.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://lootdest.org/s?bvZSLNF2"
+          "changelog": "Added support for Better Armor Bar. Added Hand model fix for crossplay servers."
         },
         {
           "version": "1.6.0",
@@ -386,7 +543,7 @@
           "size": "1.1 MB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.6.0.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://loot-link.com/s?WtJZJAN4"
+          "changelog": "Added support for DebugHUD. Added Paperdoll fix."
         },
         {
           "version": "1.5.0",
@@ -394,7 +551,7 @@
           "size": "367.5 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.5.0.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://lootdest.org/s?nYkDnO7p"
+          "changelog": "Added Support for Shiny Pots and added Pots Item IDs."
         },
         {
           "version": "1.4.0",
@@ -402,7 +559,7 @@
           "size": "367.4 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.4.0.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://loot-link.com/s?sZlBd55j"
+          "changelog": "Added support for Waypoints+ pack. Fixed FPS Counter bug (unknown)."
         },
         {
           "version": "1.3.0",
@@ -410,7 +567,7 @@
           "size": "328.6 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.3.0.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://loot-link.com/s?WscYTgLH"
+          "changelog": "Added support and variables for Death Coords & Better Hover Text."
         },
         {
           "version": "1.2.1",
@@ -418,7 +575,7 @@
           "size": "328.6 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.2.1.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://loot-link.com/s?4lp3kA5k"
+          "changelog": "Bug Fixes: Fixed the hand bug (unknown). Fixed the bug of Clock and Compass not rendering (download Clock Compass HUD v1.0.1)."
         },
         {
           "version": "1.2.0",
@@ -426,7 +583,7 @@
           "size": "328.6 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.2.0.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://loot-link.com/s?Xp1zz4pm"
+          "changelog": "Support for Compass & Clock HUD. Fixed all the visual bugs. Added a variable to hide the Level Calculator."
         },
         {
           "version": "1.1.1",
@@ -434,7 +591,7 @@
           "size": "241.6 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.1.1.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://loot-link.com/s?mQf8RIlR"
+          "changelog": "Support for Speedometer. Fixed a bug where some zombie villagers wouldn't load properly."
         },
         {
           "version": "1.0.0",
@@ -442,7 +599,7 @@
           "size": "224.9 KB",
           "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack.mcpack",
           "date": "2026-08-29",
-          "lootUrl": "https://loot-link.com/s?b0VjxtVw"
+          "changelog": "Initial release."
         }
       ],
       "pinned": true,
@@ -467,11 +624,10 @@
           }
         ],
         "critical": "Your game will crash if the Pepe's Pack Assets isn't enabled! Don't forget to activate it!"
-      },
-      "lootUrl": "https://lootdest.org/s?bvZSLNF2"
+      }
     },
     {
-      "id": 17,
+      "id": 16,
       "name": "Pepe's Animated Crop Growth Highlighter",
       "category": "packs",
       "description": "Highlights fully-grown crops with an animated marker, making it easy to spot what's ready to harvest.",
@@ -485,11 +641,10 @@
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-animated-crop-growth-highlighter/Pepe's_Animated_Crop_Growth_Highlighter.mcpack",
       "previewUrl": "packs/packs/pepes-animated-crop-growth-highlighter/",
-      "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack",
-      "lootUrl": "https://loot-link.com/s?oPvMqWvH"
+      "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack"
     },
     {
-      "id": 18,
+      "id": 17,
       "name": "Pepe's Anvil Damage Indicator",
       "category": "packs",
       "description": "Adds a color-coded damage overlay to anvils, so you can tell how close one is to breaking at a glance.",
@@ -503,11 +658,10 @@
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-anvil-damage-indicator/Pepe's Anvil Damage Indicator.mcpack",
       "previewUrl": "packs/packs/pepes-anvil-damage-indicator/",
-      "fileName": "Pepe's Anvil Damage Indicator.mcpack",
-      "lootUrl": "https://lootdest.org/s?IdF8clUf"
+      "fileName": "Pepe's Anvil Damage Indicator.mcpack"
     },
     {
-      "id": 19,
+      "id": 18,
       "name": "Pepe's Armor Hider",
       "category": "packs",
       "description": "Hides your armor during normal play so your skin shows through, while keeping it visible on mobs, armor stands, and other players. Sneak to reveal your own gear instantly.",
@@ -522,11 +676,10 @@
       "downloadUrl": "packs/packs/pepes-armor-hider/Pepe's Armor Hider.mcpack",
       "previewUrl": "packs/packs/pepes-armor-hider/",
       "fileName": "Pepe's Armor Hider.mcpack",
-      "showcaseUrl": "https://youtu.be/CxLxCSeSkhM",
-      "lootUrl": "https://loot-link.com/s?XBpUAYZg"
+      "showcaseUrl": "https://youtu.be/CxLxCSeSkhM"
     },
     {
-      "id": 20,
+      "id": 19,
       "name": "Pepe's ArmorHUD",
       "category": "packs",
       "description": "Shows the armor you're currently wearing as icons on the HUD, no need to open your inventory to check.",
@@ -542,11 +695,10 @@
       "previewUrl": "packs/packs/pepes-armorhud/",
       "fileName": "Pepe's_ArmorHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/D1iwxA9b1SM",
-      "lootUrl": "https://lootdest.org/s?hfTqT0sf"
+      "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
     },
     {
-      "id": 21,
+      "id": 20,
       "name": "Pepe's Better Armor Bar",
       "category": "packs",
       "description": "Recolors the HUD armor bar based on your armor's material, so you can tell your protection level at a glance.",
@@ -562,11 +714,10 @@
       "previewUrl": "packs/packs/pepes-better-armor-bar/",
       "fileName": "Pepe's_Better_Armor_Bar_v1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/G-t17mm3ivc",
-      "lootUrl": "https://lootdest.org/s?u5hixCVk"
+      "showcaseUrl": "https://youtu.be/G-t17mm3ivc"
     },
     {
-      "id": 22,
+      "id": 21,
       "name": "Pepe's Better Coordinates",
       "category": "packs",
       "description": "Adds a full coordinate readout to the HUD, including world, chunk, and Nether coordinates.",
@@ -582,11 +733,10 @@
       "previewUrl": "packs/packs/pepes-better-coordinates/",
       "fileName": "Pepe's_Better_Coordinates.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/riGidGD8V3o",
-      "lootUrl": "https://loot-link.com/s?wMWiAuuE"
+      "showcaseUrl": "https://youtu.be/riGidGD8V3o"
     },
     {
-      "id": 23,
+      "id": 22,
       "name": "Pepe's Better Hover Text",
       "category": "packs",
       "description": "Enriches inventory tooltips with extra detail: exact durability, technical item and aux IDs, and Suspicious Stew effect identification.",
@@ -602,11 +752,10 @@
       "previewUrl": "packs/packs/pepes-better-hover-text/",
       "fileName": "Pepe's_Better_Hover_Text_v1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/h2akqm3tPb0",
-      "lootUrl": "https://lootdest.org/s?tDPkcQ4S"
+      "showcaseUrl": "https://youtu.be/h2akqm3tPb0"
     },
     {
-      "id": 24,
+      "id": 23,
       "name": "Pepe's Bundle Item Counter",
       "category": "packs",
       "description": "Replaces the bundle fullness bar with an exact item count, so you know precisely how much space is left.",
@@ -621,11 +770,10 @@
       "downloadUrl": "packs/packs/pepes-bundle-item-counter/Pepe's_Bundle_Item_Count_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-bundle-item-counter/",
       "fileName": "Pepe's_Bundle_Item_Count_v1.0.0.mcpack",
-      "showcaseUrl": "https://youtu.be/JsgE-BDViPg",
-      "lootUrl": "https://loot-link.com/s?WP1RBkQ4"
+      "showcaseUrl": "https://youtu.be/JsgE-BDViPg"
     },
     {
-      "id": 25,
+      "id": 24,
       "name": "Pepe's Clock & Compass HUD",
       "category": "packs",
       "description": "Displays a compact clock and compass readout on the HUD, so you always know the time and your facing at a glance.",
@@ -640,11 +788,10 @@
       "downloadUrl": "packs/packs/pepes-clock-compass-hud/Pepe's_Compass_&_Clock_HUD.mcpack",
       "previewUrl": "packs/packs/pepes-clock-compass-hud/",
       "fileName": "Pepe's_Compass_&_Clock_HUD.mcpack",
-      "requiresAssets": true,
-      "lootUrl": "https://loot-link.com/s?KOFk5ZPo"
+      "requiresAssets": true
     },
     {
-      "id": 26,
+      "id": 25,
       "name": "Pepe's Death Coords",
       "category": "packs",
       "description": "Displays your exact coordinates the moment you die, so you never lose track of where your items dropped.",
@@ -660,11 +807,10 @@
       "previewUrl": "packs/packs/pepes-death-coords/",
       "fileName": "Pepe's_Death_Coords_v1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/H2HtakIRtpA",
-      "lootUrl": "https://lootdest.org/s?ezuRbBWa"
+      "showcaseUrl": "https://youtu.be/H2HtakIRtpA"
     },
     {
-      "id": 27,
+      "id": 26,
       "name": "Pepe's Debug HUD",
       "category": "packs",
       "description": "A clean, minimal debug overlay with the info you actually want. Press F8 to toggle it with a keyboard and mouse.",
@@ -680,11 +826,10 @@
       "previewUrl": "packs/packs/pepes-debug-hud/",
       "fileName": "Pepe's DebugHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/dfUXea5s1N4",
-      "lootUrl": "https://lootdest.org/s?fYiSGkEE"
+      "showcaseUrl": "https://youtu.be/dfUXea5s1N4"
     },
     {
-      "id": 28,
+      "id": 27,
       "name": "Pepe's DirectionHUD",
       "category": "packs",
       "description": "Adds a compact heading indicator to the HUD, showing the exact direction you're facing.",
@@ -700,11 +845,10 @@
       "previewUrl": "packs/packs/pepes-directionhud/",
       "fileName": "Pepe's_DirectionHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/n3TZGPGPjW8",
-      "lootUrl": "https://loot-link.com/s?ecECbRuv"
+      "showcaseUrl": "https://youtu.be/n3TZGPGPjW8"
     },
     {
-      "id": 29,
+      "id": 28,
       "name": "Pepe's Durability Viewer",
       "category": "packs",
       "description": "Displays item durability directly on-screen with a clean, easy-to-read readout.",
@@ -720,11 +864,10 @@
       "previewUrl": "packs/packs/pepes-durability-viewer/",
       "fileName": "Pepe's_Durability_Viewer.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/73duhxBtYt8",
-      "lootUrl": "https://lootdest.org/s?KVAHMR8q"
+      "showcaseUrl": "https://youtu.be/73duhxBtYt8"
     },
     {
-      "id": 30,
+      "id": 29,
       "name": "Pepe's Dynamic 3rd Person Crosshair",
       "category": "packs",
       "description": "Shows your crosshair in third-person mode, staying compatible with custom crosshair and PvP packs. Place it above other packs that modify the crosshair.",
@@ -738,11 +881,10 @@
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-dynamic-3rd-person-crosshair/Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-dynamic-3rd-person-crosshair/",
-      "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack",
-      "lootUrl": "https://loot-link.com/s?1jnEJwtf"
+      "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack"
     },
     {
-      "id": 31,
+      "id": 30,
       "name": "Pepe's Force Spectator",
       "category": "packs",
       "description": "Forced a first-person spectator camera on death so you could watch the action unfold before respawning. Discontinued and no longer maintained.",
@@ -752,15 +894,15 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "N/A",
+      "size": "0.4 KB",
       "author": "Pepe",
-      "downloadUrl": null,
+      "downloadUrl": "packs/packs/pepes-force-spectator.zip",
       "previewUrl": "packs/packs/pepes-force-spectator/",
       "showcaseUrl": "https://youtu.be/6pS0mutbWic",
       "discontinued": true
     },
     {
-      "id": 32,
+      "id": 31,
       "name": "Pepe's FPS Counter",
       "category": "packs",
       "description": "A lightweight, accurate FPS counter for your HUD, so you can keep an eye on performance while you play.",
@@ -776,11 +918,10 @@
       "previewUrl": "packs/packs/pepes-fps-counter/",
       "fileName": "Pepe's_FPS_Counter.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/iL6kHJGobFU",
-      "lootUrl": "https://loot-link.com/s?SSeKqRZv"
+      "showcaseUrl": "https://youtu.be/iL6kHJGobFU"
     },
     {
-      "id": 33,
+      "id": 32,
       "name": "Pepe's InventoryHUD",
       "category": "packs",
       "description": "Mirrors your inventory contents onto the HUD, so you can check what you're carrying without opening a menu.",
@@ -796,11 +937,10 @@
       "previewUrl": "packs/packs/pepes-inventoryhud/",
       "fileName": "Pepe's_InventoryHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/C12DFIh2cto",
-      "lootUrl": "https://lootdest.org/s?VRTCctu7"
+      "showcaseUrl": "https://youtu.be/C12DFIh2cto"
     },
     {
-      "id": 34,
+      "id": 33,
       "name": "Pepe's Level Calculator",
       "category": "packs",
       "description": "Calculates exactly how much XP you need to reach your next level, right on the HUD.",
@@ -815,11 +955,10 @@
       "downloadUrl": "packs/packs/pepes-level-calculator/Pepe's_Level_Calculator.mcpack",
       "previewUrl": "packs/packs/pepes-level-calculator/",
       "fileName": "Pepe's_Level_Calculator.mcpack",
-      "showcaseUrl": "https://youtu.be/KxpeS_AW0vU",
-      "lootUrl": "https://lootdest.org/s?zyaOjIZx"
+      "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
     },
     {
-      "id": 35,
+      "id": 34,
       "name": "Pepe's OffhandHUD",
       "category": "packs",
       "description": "Shows the item held in your offhand right on the HUD, alongside your main hand.",
@@ -835,11 +974,10 @@
       "previewUrl": "packs/packs/pepes-offhandhud/",
       "fileName": "Pepe's_OffhandHUD.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/ezj1oGz8nrY",
-      "lootUrl": "https://lootdest.org/s?E9CNBYYx"
+      "showcaseUrl": "https://youtu.be/ezj1oGz8nrY"
     },
     {
-      "id": 36,
+      "id": 35,
       "name": "Pepe's Shiny Pots",
       "category": "packs",
       "description": "Gives decorated pots a shiny, eye-catching hotbar texture.",
@@ -855,11 +993,10 @@
       "previewUrl": "packs/packs/pepes-shiny-pots/",
       "fileName": "Pepe's_Shiny_Pots_v1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/7MDhMNq3xk8",
-      "lootUrl": "https://lootdest.org/s?dDgiW1Py"
+      "showcaseUrl": "https://youtu.be/7MDhMNq3xk8"
     },
     {
-      "id": 37,
+      "id": 36,
       "name": "Pepe's Speedometer",
       "category": "packs",
       "description": "Tracks and displays your current movement speed on the HUD in real time.",
@@ -875,11 +1012,10 @@
       "previewUrl": "packs/packs/pepes-speedometer/",
       "fileName": "Pepe's_Speedometer.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/4AmjVyMh2cI",
-      "lootUrl": "https://loot-link.com/s?CMrVXVDS"
+      "showcaseUrl": "https://youtu.be/4AmjVyMh2cI"
     },
     {
-      "id": 38,
+      "id": 37,
       "name": "Pepe's Spinning Projectiles",
       "category": "packs",
       "description": "Makes ender pearls, snowballs, and eggs spin as they fly, a purely visual touch with zero gameplay impact.",
@@ -894,11 +1030,10 @@
       "downloadUrl": "packs/packs/pepes-spinning-projectiles/Pepe's_Spinning_Projectiles_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-spinning-projectiles/",
       "fileName": "Pepe's_Spinning_Projectiles_v1.0.0.mcpack",
-      "showcaseUrl": "https://youtu.be/XDHPswbfPt0",
-      "lootUrl": "https://loot-link.com/s?9ia4wjeX"
+      "showcaseUrl": "https://youtu.be/XDHPswbfPt0"
     },
     {
-      "id": 39,
+      "id": 38,
       "name": "Pepe's Status Effect HUD",
       "category": "packs",
       "description": "Displayed your active potion effects and their remaining duration on the HUD. Discontinued and no longer maintained.",
@@ -908,15 +1043,15 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "N/A",
+      "size": "0.4 KB",
       "author": "Pepe",
-      "downloadUrl": null,
+      "downloadUrl": "packs/packs/pepes-status-effect-hud.zip",
       "previewUrl": "packs/packs/pepes-status-effect-hud/",
       "showcaseUrl": "https://youtu.be/xL4tqxtJ6Vo",
       "discontinued": true
     },
     {
-      "id": 40,
+      "id": 39,
       "name": "Pepe's Time Changer",
       "category": "packs",
       "description": "Switch between day and night on demand using selectable subpacks.",
@@ -931,11 +1066,10 @@
       "downloadUrl": "packs/packs/pepes-time-changer/Pepe's_Time_Changer_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-time-changer/",
       "fileName": "Pepe's_Time_Changer_v1.0.0.mcpack",
-      "showcaseUrl": "https://youtu.be/1lASU1NnjZc",
-      "lootUrl": "https://lootdest.org/s?EgVp5mEa"
+      "showcaseUrl": "https://youtu.be/1lASU1NnjZc"
     },
     {
-      "id": 41,
+      "id": 40,
       "name": "Pepe's Waypoints+",
       "category": "packs",
       "description": "A full waypoint system: set markers by sneaking and clicking, auto-drop a death point, and toggle a chroma-key greenscreen, all through simple sneak gestures.",
@@ -951,11 +1085,10 @@
       "previewUrl": "packs/packs/pepes-waypoints/",
       "fileName": "Pepe's_Waypoints+_Pack_V1.0.0.mcpack",
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/xwKXiH-RoPc",
-      "lootUrl": "https://lootdest.org/s?0FJ3rxii"
+      "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
     },
     {
-      "id": 42,
+      "id": 41,
       "name": "Glacier Client Website",
       "category": "website",
       "description": "The official Glacier Client website, home for the client, downloads, and news.",
@@ -973,7 +1106,7 @@
       "fileName": "glacierclient.xyz"
     },
     {
-      "id": 43,
+      "id": 42,
       "name": "MCA Glacier Client",
       "category": "website",
       "description": "The MCA subdomain for Glacier Client, part of the wider Glacier Productions web ecosystem.",

@@ -12,10 +12,51 @@ function getMonetizationProvider() {
   return stored === 'lootlabs' ? 'lootlabs' : 'linkvertise';
 }
 
+// ===== Download gate tokens =====
+// Monetized links never point straight at a raw .mcpack file - they point at
+// our own /download/<token> page instead, which decodes the real file and
+// finishes the download from there. This keeps the actual file URL out of
+// the Linkvertise/LootLabs redirect chain, so a bypass tool scanning that
+// chain for a recognizable download-file URL has nothing to latch onto; it
+// has to actually load our page and let this script run to get the file.
+function base64UrlEncode(str) {
+  return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function base64UrlDecode(str) {
+  let s = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (s.length % 4) s += '=';
+  return decodeURIComponent(escape(atob(s)));
+}
+
+// t: 0 means "no expiry" (used for build-time-baked LootLabs links, which
+// may legitimately be clicked long after the site was built).
+function encodeDownloadToken(rawUrl, expiring) {
+  return base64UrlEncode(JSON.stringify({ u: rawUrl, t: expiring ? Date.now() : 0 }));
+}
+
+const DOWNLOAD_TOKEN_MAX_AGE_MS = 30 * 60 * 1000;
+
+function decodeDownloadToken(token) {
+  try {
+    const payload = JSON.parse(base64UrlDecode(token));
+    if (!payload || typeof payload.u !== 'string') return { invalid: true };
+    if (payload.t && Date.now() - payload.t > DOWNLOAD_TOKEN_MAX_AGE_MS) return { expired: true };
+    return { url: payload.u };
+  } catch (e) {
+    return { invalid: true };
+  }
+}
+
+function getDownloadGateUrl(rawUrl, { expiring = true } = {}) {
+  return `${location.origin}/download/${encodeDownloadToken(rawUrl, expiring)}`;
+}
+
 function getLinkvertiseUrl(targetUrl) {
   if (!LINKVERTISE_USER_ID) return targetUrl;
   try {
-    const encoded = encodeURIComponent(btoa(targetUrl));
+    const gateUrl = getDownloadGateUrl(targetUrl, { expiring: true });
+    const encoded = encodeURIComponent(btoa(gateUrl));
     const random = Math.random() * 1000;
     return `https://link-to.net/${LINKVERTISE_USER_ID}/${random}/dynamic/?r=${encoded}`;
   } catch (e) {
@@ -24,13 +65,15 @@ function getLinkvertiseUrl(targetUrl) {
 }
 
 // lootUrl is a link pre-generated at build time (see generator.py) via the
-// LootLabs content-locker API. It can't be generated client-side without
-// exposing a secret API token to every visitor, so packs without a cached
-// lootUrl fall back to Linkvertise when LootLabs is selected.
-function getMonetizedUrl(targetUrl, lootUrl) {
+// LootLabs content-locker API, already wrapping our /download/<token> gate
+// (not the raw file) for the same anti-bypass reason as getLinkvertiseUrl.
+// It can't be generated client-side without exposing a secret API token to
+// every visitor, so packs without a cached lootUrl fall back to Linkvertise
+// when LootLabs is selected.
+function getMonetizedUrl(targetUrl, lootUrl, forcedProvider) {
   if (!targetUrl || targetUrl === '#' || !isMonetizationOn()) return targetUrl;
 
-  const provider = getMonetizationProvider();
+  const provider = forcedProvider || getMonetizationProvider();
   if (provider === 'lootlabs' && lootUrl) return lootUrl;
 
   return getLinkvertiseUrl(targetUrl);
@@ -38,7 +81,7 @@ function getMonetizedUrl(targetUrl, lootUrl) {
 
 class Router {
   constructor() {
-    this.pages = ['home', 'projects', 'socials', 'library', 'settings'];
+    this.pages = ['home', 'projects', 'socials', 'library', 'settings', 'stats'];
     this.setupNav();
     this.setupMobileNav();
   }
@@ -93,10 +136,11 @@ class Router {
 
     if (window.packLibrary) {
       window.packLibrary.showBrowse({ push: false });
+      if (pageId === 'stats') window.packLibrary.renderStatsPage();
     }
 
     if (push) {
-      history.pushState({ page: pageId }, '', `#${pageId}`);
+      history.pushState({ page: pageId }, '', pageId === 'home' ? '/' : `/${pageId}`);
     }
     document.title = "Pepe's Portfolio";
   }
@@ -149,6 +193,8 @@ class CustomDropdown {
   }
 
   select(value, text) {
+    this.value = value;
+    this.trigger.dataset.value = value;
     this.label.textContent = text;
     this.menu.querySelectorAll('li').forEach(li => {
       li.classList.toggle('selected', li.dataset.value === value);
@@ -169,6 +215,8 @@ class PackLibrary {
     };
     this.viewMode = localStorage.getItem('libraryViewMode') === 'list' ? 'list' : 'grid';
     this.favorites = this.loadFavorites();
+    this.collapsedSections = this.loadCollapsedSections();
+    this.defaultCollapseSections = localStorage.getItem('collapseSectionsByDefault') === 'true';
     this.ready = this.init();
   }
 
@@ -194,6 +242,7 @@ class PackLibrary {
     this.updateCategoryCounts();
     this.renderClientsTimeline();
     this.syncCategorySidebar();
+    this.syncSettingsCategorySidebar();
     this.applyFilters();
   }
 
@@ -202,16 +251,22 @@ class PackLibrary {
     if (!track) return;
 
     const clients = this.packs
-      .filter(p => p.category === 'clients' && p.timelineOrder != null)
-      .sort((a, b) => a.timelineOrder - b.timelineOrder);
+      .filter(p => p.category === 'clients' && p.timelineOrder != null);
 
-    if (clients.length === 0) {
+    // Pinned packs (like Assets Pack) always float to the top regardless of timeline order
+    const sortedClients = [...clients].sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return (a.timelineOrder || 0) - (b.timelineOrder || 0);
+    });
+
+    if (sortedClients.length === 0) {
       document.getElementById('clients-timeline').classList.add('hidden-empty');
       return;
     }
 
-    const nodesHtml = clients.map((pack, i) => `
-      <button type="button" class="timeline-node ${i === clients.length - 1 ? 'timeline-node-current' : ''}" data-pack-id="${pack.id}">
+    const nodesHtml = sortedClients.map((pack, i) => `
+      <button type="button" class="timeline-node ${i === sortedClients.length - 1 ? 'timeline-node-current' : ''}" data-pack-id="${pack.id}">
         <span class="timeline-dot"></span>
         <span class="timeline-label">${this.escapeHtml(pack.name)}</span>
       </button>
@@ -254,6 +309,10 @@ class PackLibrary {
       btn.addEventListener('click', (e) => this.handleCategoryClick(e));
     });
 
+    document.querySelectorAll('#page-settings .category-row').forEach(btn => {
+      btn.addEventListener('click', () => this.handleSettingsCategoryClick(btn));
+    });
+
     document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
 
     document.getElementById('view-grid-btn').addEventListener('click', () => this.setViewMode('grid'));
@@ -283,8 +342,31 @@ class PackLibrary {
       localStorage.setItem('autoplayShowcase', e.target.checked);
     });
 
-    document.getElementById('ask-provider-toggle').addEventListener('change', (e) => {
+    document.getElementById('show-downloads-toggle').addEventListener('change', (e) => {
+      this.setShowDownloadCounts(e.target.checked);
+    });
+
+    document.getElementById('collapse-old-versions-toggle').addEventListener('change', (e) => {
+      localStorage.setItem('collapseOldVersions', e.target.checked);
+      if (this.currentPack) this.renderVersionsList(this.currentPack);
+    });
+
+    document.getElementById('show-discontinued-toggle').addEventListener('change', (e) => {
+      localStorage.setItem('showDiscontinued', e.target.checked);
+      this.updateCategoryCounts();
+      this.applyFilters();
+    });
+
+    document.getElementById('collapse-sections-toggle').addEventListener('change', (e) => {
+      this.defaultCollapseSections = e.target.checked;
+      localStorage.setItem('collapseSectionsByDefault', e.target.checked);
+      this.render();
+    });
+
+    const askProviderToggle = document.getElementById('ask-provider-toggle');
+    askProviderToggle.addEventListener('change', (e) => {
       localStorage.setItem('askProviderEveryTime', e.target.checked);
+      this.updateMonetizationProviderDropdownState(e.target.checked);
     });
 
     document.getElementById('clear-favorites-btn').addEventListener('click', () => {
@@ -294,28 +376,20 @@ class PackLibrary {
       }
     });
 
-    document.getElementById('reset-settings-btn').addEventListener('click', () => {
-      if (!confirm('Reset all settings to their defaults?')) return;
-      [
-        'darkMode', 'compactView', 'reduceMotion', 'newTabLinks', 'heroVisibility',
-        'accentColor', 'monetizationProvider', 'defaultSort', 'autoplayShowcase',
-        'askProviderEveryTime', 'libraryViewMode'
-      ].forEach(key => localStorage.removeItem(key));
-      location.reload();
-    });
-
-    document.querySelectorAll('#page-settings .category-row').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const category = btn.dataset.settingsCategory;
-
-        document.querySelectorAll('#page-settings .category-row').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        document.querySelectorAll('.settings-panel').forEach(panel => {
-          panel.classList.toggle('active', panel.dataset.settingsPanel === category);
-        });
+    const resetBtn = document.getElementById('reset-settings-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (!confirm('Reset all settings to their defaults?')) return;
+        [
+          'darkMode', 'compactView', 'reduceMotion', 'newTabLinks', 'heroVisibility',
+          'accentColor', 'monetizationProvider', 'defaultSort', 'autoplayShowcase',
+          'askProviderEveryTime', 'libraryViewMode', 'showDownloadCounts',
+          'collapseOldVersions', 'showDiscontinued', 'collapseSectionsByDefault',
+          'collapsedSections'
+        ].forEach(key => localStorage.removeItem(key));
+        location.reload();
       });
-    });
+    }
 
     document.getElementById('back-to-browse').addEventListener('click', () => {
       if (history.state && history.state.page === 'pack') {
@@ -325,30 +399,42 @@ class PackLibrary {
       }
     });
 
-    document.getElementById('detail-download').addEventListener('click', (e) => {
-      const href = e.currentTarget.getAttribute('href');
-      if (!href || href === '#') e.preventDefault();
+    // ===== Version selector (multi-version packs) =====
+    const versionTrigger = document.getElementById('version-select-trigger');
+    const versionMenu = document.getElementById('version-select-menu');
+    versionTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = versionMenu.classList.toggle('open');
+      versionTrigger.classList.toggle('open', isOpen);
+      versionTrigger.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('version-select-dropdown').contains(e.target)) {
+        versionMenu.classList.remove('open');
+        versionTrigger.classList.remove('open');
+        versionTrigger.setAttribute('aria-expanded', 'false');
+      }
+    });
 
-      if (!this.currentPack) return;
-      const pack = this.currentPack;
-      this.incrementDownloads(pack).then(count => {
-        pack.downloads = count;
-        if (this.currentPack === pack) this.updateDownloadsDisplay(pack, count);
+    // ===== Download provider choice modal =====
+    this.selectedProvider = getMonetizationProvider();
+    document.querySelectorAll('#provider-choice-tabs .provider-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        this.selectedProvider = tab.dataset.value;
+        document.querySelectorAll('#provider-choice-tabs .provider-tab').forEach(t => {
+          t.classList.toggle('selected', t === tab);
+          t.setAttribute('aria-selected', String(t === tab));
+        });
       });
     });
 
-    document.addEventListener('click', (e) => {
-      if (this.assetsModalBypass) return;
-      const link = e.target.closest('#detail-download, .version-download-btn');
-      if (!link) return;
-      if (!this.currentPack || !this.currentPack.requiresAssets) return;
-      if (localStorage.getItem('hideAssetsModal') === 'true') return;
+    document.getElementById('download-provider-modal-close').addEventListener('click', () => this.hideProviderModal());
+    document.getElementById('download-provider-modal-overlay').addEventListener('click', (e) => {
+      if (e.target.id === 'download-provider-modal-overlay') this.hideProviderModal();
+    });
+    document.getElementById('provider-choice-confirm').addEventListener('click', () => this.confirmProviderModal());
 
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      this.showAssetsModal(this.currentPack, link);
-    }, true);
-
+    // ===== Assets-required modal =====
     document.getElementById('assets-modal-close').addEventListener('click', () => this.hideAssetsModal());
     document.getElementById('assets-modal-overlay').addEventListener('click', (e) => {
       if (e.target.id === 'assets-modal-overlay') this.hideAssetsModal();
@@ -357,11 +443,134 @@ class PackLibrary {
       const link = this.pendingDownloadLink;
       this.hideAssetsModal();
       if (link) {
-        this.assetsModalBypass = true;
+        this.downloadFlowBypass = true;
         link.click();
-        this.assetsModalBypass = false;
+        this.downloadFlowBypass = false;
       }
     });
+
+    // ===== Download click interception (provider choice + assets requirement) =====
+    document.addEventListener('click', (e) => {
+      if (this.downloadFlowBypass) return;
+      const link = e.target.closest('#detail-download, .version-download-btn');
+      if (!link || link.classList.contains('btn-download-disabled')) return;
+      if (!this.currentPack || !link.dataset.rawUrl) return;
+
+      const askEveryTime = localStorage.getItem('askProviderEveryTime') !== 'false';
+      const needsAssets = this.currentPack.requiresAssets && !this.currentPack.pinned
+        && localStorage.getItem('hideAssetsModal') !== 'true';
+
+      if (!askEveryTime && !needsAssets) return; // let the plain <a href> navigate normally
+
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      this.pendingDownloadLink = link;
+
+      if (askEveryTime) {
+        this.showProviderModal(needsAssets);
+      } else {
+        this.showAssetsModal(this.currentPack, link);
+      }
+    }, true);
+
+    // Increment the download counter whenever a download link actually navigates
+    // (either a plain click that wasn't intercepted, or a bypassed re-click after modals).
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('#detail-download, .version-download-btn');
+      if (!link || link.classList.contains('btn-download-disabled') || !link.dataset.rawUrl) return;
+      if (!this.currentPack) return;
+      const pack = this.currentPack;
+      const versions = pack.versions;
+      const multi = versions && versions.length > 1;
+      const version = multi
+        ? (link.id === 'detail-download' ? versions[this.selectedVersionIndex || 0] : versions[parseInt(link.dataset.versionIndex, 10)])
+        : null;
+
+      this.incrementDownloads(pack, version).then(count => {
+        if (multi) {
+          const idx = versions.indexOf(version);
+          const el = document.querySelector(`.version-downloads[data-version-index="${idx}"]`);
+          if (el) el.textContent = `${count} downloads`;
+          if (this.currentPack === pack && idx === (this.selectedVersionIndex || 0)) {
+            document.getElementById('detail-downloads').textContent = count;
+          }
+        } else {
+          pack.downloads = count;
+          if (this.currentPack === pack) this.updateDownloadsDisplay(pack, count);
+        }
+      });
+    });
+  }
+
+  handleSettingsCategoryClick(btn) {
+    const category = btn.dataset.settingsCategory;
+    localStorage.setItem('selectedSettingsCategory', category);
+
+    document.querySelectorAll('#page-settings .category-row').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.settings-panel').forEach(panel => {
+      panel.classList.toggle('active', panel.dataset.settingsPanel === category);
+    });
+  }
+
+  syncSettingsCategorySidebar() {
+    const saved = localStorage.getItem('selectedSettingsCategory');
+    const btn = saved && document.querySelector(`#page-settings .category-row[data-settings-category="${saved}"]`);
+    if (btn) this.handleSettingsCategoryClick(btn);
+  }
+
+  // Toggle the "Download Link Provider" dropdown disabled state.
+  // When "Ask Every Time" is checked (default), the dropdown is greyed out since it's not used.
+  updateMonetizationProviderDropdownState(isChecked) {
+    const dropdown = document.getElementById('monetization-provider-dropdown');
+    if (!dropdown) return;
+    dropdown.classList.toggle('monetization-provider-dropdown-disabled', isChecked);
+  }
+
+  // ===== Download Provider Modal =====
+
+  showProviderModal(chainToAssets) {
+    this.providerModalChainsToAssets = chainToAssets;
+
+    const confirmBtn = document.getElementById('provider-choice-confirm');
+    confirmBtn.innerHTML = chainToAssets
+      ? `Next <i class="fas fa-arrow-right"></i>`
+      : `<i class="fas fa-download"></i> Download`;
+
+    this.selectedProvider = getMonetizationProvider();
+    document.querySelectorAll('#provider-choice-tabs .provider-tab').forEach(tab => {
+      const selected = tab.dataset.value === this.selectedProvider;
+      tab.classList.toggle('selected', selected);
+      tab.setAttribute('aria-selected', String(selected));
+    });
+
+    document.getElementById('download-provider-modal-overlay').classList.remove('hidden');
+  }
+
+  hideProviderModal() {
+    document.getElementById('download-provider-modal-overlay').classList.add('hidden');
+  }
+
+  confirmProviderModal() {
+    const provider = this.selectedProvider || 'linkvertise';
+    this.hideProviderModal();
+
+    const link = this.pendingDownloadLink;
+    if (!link) return;
+
+    const rawUrl = link.dataset.rawUrl;
+    const lootUrl = link.dataset.lootUrl || null;
+    link.href = getMonetizedUrl(rawUrl, lootUrl, provider);
+
+    if (this.providerModalChainsToAssets) {
+      this.showAssetsModal(this.currentPack, link);
+    } else {
+      this.downloadFlowBypass = true;
+      link.click();
+      this.downloadFlowBypass = false;
+    }
   }
 
   getAssetsPack() {
@@ -931,13 +1140,78 @@ class PackLibrary {
   }
 
   updateCategoryCounts() {
-    document.getElementById('count-all').textContent = this.packs.length;
+    const showDiscontinued = localStorage.getItem('showDiscontinued') !== 'false';
+    const countablePacks = showDiscontinued ? this.packs : this.packs.filter(p => !p.discontinued);
+
+    document.getElementById('count-all').textContent = countablePacks.length;
     CATEGORY_ORDER.forEach(cat => {
-      const count = this.packs.filter(p => p.category === cat).length;
+      const count = countablePacks.filter(p => p.category === cat).length;
       const elem = document.getElementById(`count-${cat}`);
       if (elem) elem.textContent = count;
     });
     this.updateFavoritesCount();
+  }
+
+  renderStatsPage() {
+    if (!this.packs.length) return;
+
+    const active = this.packs.filter(p => !p.discontinued);
+    const totalDownloads = this.packs.reduce((sum, p) => sum + (p.downloads || 0), 0);
+    const mostDownloaded = [...this.packs].sort((a, b) => (b.downloads || 0) - (a.downloads || 0))[0];
+    const newest = [...this.packs]
+      .filter(p => p.createdAt)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+    const summary = [
+      { icon: 'fa-box-open', label: 'Total Packs', value: this.packs.length },
+      { icon: 'fa-download', label: 'Total Downloads', value: totalDownloads.toLocaleString() },
+      { icon: 'fa-bolt', label: 'Active', value: active.length },
+      { icon: 'fa-ban', label: 'Discontinued', value: this.packs.length - active.length },
+    ];
+    document.getElementById('stats-summary-grid').innerHTML = summary.map(s => `
+      <div class="stats-summary-card">
+        <i class="fas ${s.icon}"></i>
+        <p class="stats-summary-value">${s.value}</p>
+        <p class="stats-summary-label">${s.label}</p>
+      </div>
+    `).join('');
+
+    const maxCatCount = Math.max(1, ...CATEGORY_ORDER.map(cat => this.packs.filter(p => p.category === cat).length));
+    document.getElementById('stats-category-list').innerHTML = CATEGORY_ORDER.map(cat => {
+      const count = this.packs.filter(p => p.category === cat).length;
+      const pct = Math.round((count / maxCatCount) * 100);
+      return `
+        <div class="stats-category-row">
+          <span class="stats-category-name">${this.capitalizeFirst(cat)}</span>
+          <div class="stats-category-bar-track"><div class="stats-category-bar-fill" style="width:${pct}%"></div></div>
+          <span class="stats-category-count">${count}</span>
+        </div>
+      `;
+    }).join('');
+
+    const spotlightCard = (label, pack) => {
+      if (!pack) return '';
+      return `
+        <button type="button" class="stats-spotlight-card" data-pack-id="${pack.id}">
+          <p class="stats-spotlight-label">${label}</p>
+          <p class="stats-spotlight-name">${this.escapeHtml(pack.name)}</p>
+          <p class="stats-spotlight-meta">${(pack.downloads || 0).toLocaleString()} downloads &middot; ${this.capitalizeFirst(pack.category)}</p>
+        </button>
+      `;
+    };
+    document.getElementById('stats-spotlight-grid').innerHTML =
+      spotlightCard('Most Downloaded', mostDownloaded) + spotlightCard('Newest Addition', newest);
+
+    document.querySelectorAll('.stats-spotlight-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = parseInt(card.dataset.packId, 10);
+        const pack = this.packs.find(p => p.id === id);
+        if (pack) {
+          window.router.show('library', { push: false });
+          this.showDetail(pack);
+        }
+      });
+    });
   }
 
   loadFavorites() {
@@ -952,6 +1226,51 @@ class PackLibrary {
 
   saveFavorites() {
     localStorage.setItem('favoritePacks', JSON.stringify([...this.favorites]));
+  }
+
+  loadCollapsedSections() {
+    try {
+      const raw = localStorage.getItem('collapsedSections');
+      const arr = raw ? JSON.parse(raw) : [];
+      return new Set(Array.isArray(arr) ? arr : []);
+    } catch (e) {
+      return new Set();
+    }
+  }
+
+  saveCollapsedSections() {
+    localStorage.setItem('collapsedSections', JSON.stringify([...this.collapsedSections]));
+  }
+
+  // A leading "!" marks a section the user explicitly re-opened despite the
+  // "Collapse Sections by Default" setting being on.
+  isSectionCollapsed(key) {
+    if (this.collapsedSections.has(`!${key}`)) return false;
+    if (this.collapsedSections.has(key)) return true;
+    return this.defaultCollapseSections;
+  }
+
+  toggleSectionCollapsed(divider) {
+    const key = divider.dataset.sectionKey;
+    const collapsed = divider.classList.toggle('section-collapsed');
+    if (collapsed) {
+      this.collapsedSections.add(key);
+      this.collapsedSections.delete(`!${key}`);
+    } else {
+      this.collapsedSections.delete(key);
+      if (this.defaultCollapseSections) this.collapsedSections.add(`!${key}`);
+      else this.collapsedSections.delete(`!${key}`);
+    }
+    this.saveCollapsedSections();
+
+    const isTopLevel = divider.classList.contains('category-section-divider');
+    let el = divider.nextElementSibling;
+    while (el) {
+      if (isTopLevel && el.classList.contains('category-section-divider')) break;
+      if (!isTopLevel && (el.classList.contains('category-section-divider') || el.classList.contains('category-sub-divider'))) break;
+      el.classList.toggle('section-hidden', collapsed);
+      el = el.nextElementSibling;
+    }
   }
 
   isFavorite(packId) {
@@ -1131,6 +1450,10 @@ class PackLibrary {
   applyFilters() {
     let filtered = [...this.packs];
 
+    if (localStorage.getItem('showDiscontinued') === 'false') {
+      filtered = filtered.filter(pack => !pack.discontinued);
+    }
+
     if (this.currentFilter.search) {
       const search = this.currentFilter.search;
       filtered = filtered.filter(pack =>
@@ -1143,9 +1466,10 @@ class PackLibrary {
     if (this.currentFilter.category === 'favorites') {
       filtered = filtered.filter(pack => this.favorites.has(pack.id));
     } else if (this.currentFilter.category) {
+      // A pinned pack (e.g. the Assets Pack) always belongs to the Packs
+      // category only, regardless of its own actual category field.
       filtered = filtered.filter(pack =>
-        pack.category === this.currentFilter.category ||
-        (pack.pinned && this.currentFilter.category === 'packs')
+        pack.pinned ? this.currentFilter.category === 'packs' : pack.category === this.currentFilter.category
       );
     }
 
@@ -1175,7 +1499,14 @@ class PackLibrary {
     }
 
     // Pinned packs always float to the top, regardless of sort order.
-    filtered.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+    // Also separate discontinued packs into their own group at the end.
+    filtered.sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      if (a.discontinued && !b.discontinued) return 1;
+      if (!a.discontinued && b.discontinued) return -1;
+      return 0;
+    });
 
     this.filteredPacks = filtered;
     this.render();
@@ -1222,14 +1553,43 @@ class PackLibrary {
     // Reusable card renderer
     const renderPackCards = (packs) => packs.map(pack => this.createPackCard(pack)).join('');
 
-    // The Packs category is the only one where Assets Pack compatibility matters,
-    // so sub-group it by requiresAssets instead of rendering as one flat list.
+    // Packs sub-groups by Assets Pack compatibility; Clients sub-groups by
+    // whether they're still actively maintained. Every other category
+    // renders as one flat list.
     const renderCategoryPacks = (packsInCat, cat) => {
+      if (cat === 'clients') {
+        const pinned = packsInCat.filter(p => p.pinned);
+        const rest = packsInCat.filter(p => !p.pinned);
+        const working = rest.filter(p => !p.discontinued);
+        const discontinued = rest.filter(p => p.discontinued);
+
+        let html = '';
+        if (pinned.length > 0) html += renderPackCards(pinned);
+        if (working.length > 0) {
+          html += this.createSubDivider('Working', 'assets-none');
+          html += renderPackCards(working);
+        }
+        if (discontinued.length > 0) {
+          html += this.createSubDivider('Discontinued', 'discontinued');
+          html += renderPackCards(discontinued);
+        }
+        return html;
+      }
+
       if (cat !== 'packs') return renderPackCards(packsInCat);
 
-      const needsAssets = packsInCat.filter(p => p.requiresAssets);
-      const noAssets = packsInCat.filter(p => !p.requiresAssets);
+      // Pinned packs (e.g. the Assets Pack) always float above every sub-group.
+      const pinned = packsInCat.filter(p => p.pinned);
+      const rest = packsInCat.filter(p => !p.pinned);
+      const discontinued = rest.filter(p => p.discontinued);
+      const active = rest.filter(p => !p.discontinued);
+      const needsAssets = active.filter(p => p.requiresAssets);
+      const noAssets = active.filter(p => !p.requiresAssets);
+
       let html = '';
+      if (pinned.length > 0) {
+        html += renderPackCards(pinned);
+      }
       if (needsAssets.length > 0) {
         html += this.createSubDivider('Assets Required', 'assets-required');
         html += renderPackCards(needsAssets);
@@ -1237,6 +1597,10 @@ class PackLibrary {
       if (noAssets.length > 0) {
         html += this.createSubDivider('No Assets Needed', 'assets-none');
         html += renderPackCards(noAssets);
+      }
+      if (discontinued.length > 0) {
+        html += this.createSubDivider('Discontinued', 'discontinued');
+        html += renderPackCards(discontinued);
       }
       return html;
     };
@@ -1262,8 +1626,8 @@ class PackLibrary {
         .join('');
 
       grid.innerHTML = html;
-    } else if (this.currentFilter.category === 'packs') {
-      grid.innerHTML = renderCategoryPacks(this.filteredPacks, 'packs');
+    } else if (this.currentFilter.category === 'packs' || this.currentFilter.category === 'clients') {
+      grid.innerHTML = renderCategoryPacks(this.filteredPacks, this.currentFilter.category);
     } else {
       // Single category view
       grid.innerHTML = renderPackCards(this.filteredPacks);
@@ -1290,6 +1654,23 @@ class PackLibrary {
         this.toggleFavorite(id);
       });
     });
+
+    // Collapsible category/sub-category sections: apply any already-collapsed
+    // state (a divider carries the class from createCategoryDivider/createSubDivider,
+    // but its sibling cards need it re-applied on every fresh render) and wire clicks.
+    grid.querySelectorAll('.category-section-divider, .category-sub-divider').forEach(divider => {
+      if (divider.classList.contains('section-collapsed')) {
+        const isTopLevel = divider.classList.contains('category-section-divider');
+        let el = divider.nextElementSibling;
+        while (el) {
+          if (isTopLevel && el.classList.contains('category-section-divider')) break;
+          if (!isTopLevel && (el.classList.contains('category-section-divider') || el.classList.contains('category-sub-divider'))) break;
+          el.classList.add('section-hidden');
+          el = el.nextElementSibling;
+        }
+      }
+      divider.addEventListener('click', () => this.toggleSectionCollapsed(divider));
+    });
   }
 
   openExternal(url) {
@@ -1303,20 +1684,29 @@ class PackLibrary {
 
   createCategoryDivider(category) {
     const label = category === 'pinned' ? 'Pinned' : this.capitalizeFirst(category);
+    const key = `cat-${category}`;
+    const collapsed = this.isSectionCollapsed(key);
     return `
-      <div class="category-section-divider">
+      <div class="category-section-divider ${collapsed ? 'section-collapsed' : ''}" data-section-key="${key}">
         <span></span><p>${label}</p><span></span>
+        <i class="fas fa-chevron-down divider-toggle-icon"></i>
       </div>
     `;
   }
 
   createSubDivider(label, kind) {
-    const icon = kind === 'assets-required'
-      ? '<i class="fas fa-triangle-exclamation"></i>'
-      : '<i class="fas fa-check"></i>';
+    const icons = {
+      'assets-required': '<i class="fas fa-triangle-exclamation"></i>',
+      'assets-none': '<i class="fas fa-check"></i>',
+      'discontinued': '<i class="fas fa-ban"></i>'
+    };
+    const icon = icons[kind] || '';
+    const key = `sub-${kind}`;
+    const collapsed = this.isSectionCollapsed(key);
     return `
-      <div class="category-sub-divider category-sub-divider-${kind}">
+      <div class="category-sub-divider category-sub-divider-${kind} ${collapsed ? 'section-collapsed' : ''}" data-section-key="${key}">
         ${icon} <span>${label}</span>
+        <i class="fas fa-chevron-down divider-toggle-icon"></i>
       </div>
     `;
   }
@@ -1473,20 +1863,33 @@ class PackLibrary {
     document.getElementById('versions-sub').textContent = `Download releases of ${pack.name}.`;
     this.renderVersionsList(pack);
 
+    this.selectedVersionIndex = 0;
+    const hasMultipleVersions = !!(pack.versions && pack.versions.length > 1);
+    document.getElementById('version-select-wrap').classList.toggle('hidden', !hasMultipleVersions || pack.comingSoon);
+    if (hasMultipleVersions) this.renderVersionSelectMenu(pack);
+
     const detailDownload = document.getElementById('detail-download');
-    if (pack.discontinued) {
-      detailDownload.classList.add('btn-download-disabled');
-      detailDownload.removeAttribute('href');
-      detailDownload.innerHTML = `<i class="fas fa-ban"></i> No Longer Available`;
-    } else if (pack.comingSoon) {
+    detailDownload.removeAttribute('data-raw-url');
+    detailDownload.removeAttribute('data-loot-url');
+    if (pack.comingSoon) {
       detailDownload.classList.add('btn-download-disabled');
       detailDownload.removeAttribute('href');
       detailDownload.innerHTML = `<i class="fas fa-clock"></i> Coming Soon`;
+    } else if (!pack.downloadUrl && !(pack.versions && pack.versions.length)) {
+      detailDownload.classList.add('btn-download-disabled');
+      detailDownload.removeAttribute('href');
+      detailDownload.innerHTML = `<i class="fas fa-ban"></i> No Longer Available`;
     } else {
       detailDownload.classList.remove('btn-download-disabled');
       const latestVersion = (pack.versions && pack.versions[0]) || pack;
-      detailDownload.href = getMonetizedUrl(latestVersion.downloadUrl || pack.downloadUrl, latestVersion.lootUrl || pack.lootUrl);
-      detailDownload.innerHTML = `<i class="fas fa-download"></i> Download`;
+      const rawUrl = latestVersion.downloadUrl || pack.downloadUrl;
+      const lootUrl = latestVersion.lootUrl || pack.lootUrl || '';
+      detailDownload.dataset.rawUrl = rawUrl;
+      detailDownload.dataset.lootUrl = lootUrl;
+      detailDownload.href = getMonetizedUrl(rawUrl, lootUrl);
+      detailDownload.innerHTML = pack.discontinued
+        ? `<i class="fas fa-download"></i> Download (Archived)`
+        : `<i class="fas fa-download"></i> Download`;
     }
     this.applyLinkTargets();
 
@@ -1496,17 +1899,26 @@ class PackLibrary {
     document.getElementById('detail-updated').textContent = this.formatDate(pack.updatedAt || pack.createdAt);
 
     this.currentPack = pack;
-    this.updateDownloadsDisplay(pack, pack.downloads);
-    this.fetchLiveDownloads(pack).then(count => {
-      if (this.currentPack === pack) this.updateDownloadsDisplay(pack, count);
-    });
+    if (hasMultipleVersions) {
+      // renderVersionsList() above already fetches each version's own count
+      // and fills in #detail-downloads for the currently selected version.
+      document.getElementById('detail-downloads').textContent = '…';
+    } else {
+      this.updateDownloadsDisplay(pack, pack.downloads);
+      this.fetchLiveDownloads(pack).then(count => {
+        pack.downloads = count;
+        if (this.currentPack === pack) this.updateDownloadsDisplay(pack, count);
+      });
+    }
 
     document.getElementById('browse-view').classList.add('hidden');
     document.getElementById('detail-view').classList.remove('hidden');
+    document.querySelector('#page-library .page-hero').classList.add('hidden');
+    document.querySelector('#page-library .search-bar-wrap').classList.add('hidden');
     window.scrollTo(0, 0);
 
     if (push) {
-      history.pushState({ page: 'pack', id: pack.id }, '', `#pack-${pack.id}`);
+      history.pushState({ page: 'pack', id: pack.id }, '', `/pack/${this.packSlug(pack)}`);
     }
     document.title = `${pack.name} · Pepe`;
   }
@@ -1514,9 +1926,11 @@ class PackLibrary {
   showBrowse({ push = true } = {}) {
     document.getElementById('detail-view').classList.add('hidden');
     document.getElementById('browse-view').classList.remove('hidden');
+    document.querySelector('#page-library .page-hero').classList.remove('hidden');
+    document.querySelector('#page-library .search-bar-wrap').classList.remove('hidden');
 
     if (push) {
-      history.pushState({ page: 'library' }, '', '#library');
+      history.pushState({ page: 'library' }, '', '/library');
     }
     document.title = 'Pepe';
   }
@@ -1528,8 +1942,18 @@ class PackLibrary {
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
-  counterKey(pack) {
-    const base = (pack.fileName || pack.name || `pack-${pack.id}`)
+  packSlug(pack) {
+    return (pack.name || `pack-${pack.id}`)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  // Pass a `version` object (from pack.versions) to get a counter key scoped
+  // to that specific version, so multi-version packs track downloads per version.
+  counterKey(pack, version) {
+    const source = version || pack;
+    const base = (source.fileName || pack.name || `pack-${pack.id}`)
       .toLowerCase()
       .replace(/\.[a-z0-9]+$/i, '')
       .replace(/[^a-z0-9]+/g, '-')
@@ -1573,9 +1997,12 @@ class PackLibrary {
   updateDownloadsDisplay(pack, count) {
     const downloadsEl = document.getElementById('detail-downloads');
     if (downloadsEl) downloadsEl.textContent = count;
-    document.querySelectorAll('.version-downloads').forEach(el => {
-      el.textContent = `${count} downloads`;
-    });
+    // Multi-version packs track (and display) each version's downloads separately.
+    if (!(pack.versions && pack.versions.length > 1)) {
+      document.querySelectorAll('.version-downloads').forEach(el => {
+        el.textContent = `${count} downloads`;
+      });
+    }
   }
 
   renderNotice(pack) {
@@ -1609,11 +2036,51 @@ class PackLibrary {
     box.classList.remove('hidden');
   }
 
+  renderVersionSelectMenu(pack) {
+    const menu = document.getElementById('version-select-menu');
+    menu.innerHTML = pack.versions.map((v, i) => `
+      <li role="option" data-index="${i}" class="${i === 0 ? 'selected' : ''}">${this.escapeHtml(v.version || '1.0.0')}</li>
+    `).join('');
+    document.getElementById('version-select-label').textContent = pack.versions[0].version || '1.0.0';
+
+    menu.querySelectorAll('li').forEach(li => {
+      li.addEventListener('click', () => {
+        this.selectPackVersion(pack, parseInt(li.dataset.index, 10));
+        menu.classList.remove('open');
+        document.getElementById('version-select-trigger').classList.remove('open');
+      });
+    });
+  }
+
+  selectPackVersion(pack, index) {
+    const version = pack.versions[index];
+    if (!version) return;
+    this.selectedVersionIndex = index;
+
+    document.getElementById('version-select-label').textContent = version.version || '1.0.0';
+    document.querySelectorAll('#version-select-menu li').forEach(li => {
+      li.classList.toggle('selected', parseInt(li.dataset.index, 10) === index);
+    });
+
+    const detailDownload = document.getElementById('detail-download');
+    detailDownload.dataset.rawUrl = version.downloadUrl;
+    detailDownload.dataset.lootUrl = version.lootUrl || '';
+    detailDownload.href = getMonetizedUrl(version.downloadUrl, version.lootUrl);
+    this.applyLinkTargets();
+
+    document.getElementById('detail-downloads').textContent = '…';
+    this.fetchLiveDownloads(pack, version).then(count => {
+      if (this.currentPack === pack && this.selectedVersionIndex === index) {
+        document.getElementById('detail-downloads').textContent = count;
+      }
+    });
+  }
+
   renderVersionsList(pack) {
     const list = document.getElementById('versions-list');
     const block = list.closest('.versions-block');
 
-    if (pack.discontinued || pack.comingSoon) {
+    if (pack.comingSoon || (!pack.downloadUrl && !(pack.versions && pack.versions.length))) {
       block.classList.add('hidden');
       list.innerHTML = '';
       return;
@@ -1627,62 +2094,88 @@ class PackLibrary {
       downloadUrl: pack.downloadUrl,
       date: pack.createdAt
     }]);
+    const multi = versions.length > 1;
+    const collapseOld = multi && localStorage.getItem('collapseOldVersions') !== 'false';
 
-    list.innerHTML = versions.map((v, i) => `
+    const rowHtml = (v, i) => `
       <div class="version-row">
         <div class="version-info">
           <div class="version-top">
             <span class="version-number">${this.escapeHtml(v.version || '1.0.0')}</span>
             <span class="version-date">${this.formatDate(v.date)}</span>
           </div>
-          <p class="version-file">${this.escapeHtml(v.fileName || 'download.zip')} &middot; ${this.escapeHtml(v.size || '')} &middot; <span class="version-downloads">${pack.downloads} downloads</span></p>
+          <p class="version-file">${this.escapeHtml(v.fileName || 'download.zip')} &middot; ${this.escapeHtml(v.size || '')} &middot; <span class="version-downloads" data-version-index="${i}">${multi ? '&hellip;' : pack.downloads} downloads</span></p>
           <div class="version-tags">
             ${pack.gameVersion && pack.gameVersion !== 'N/A' ? `<span>${this.escapeHtml(pack.gameVersion)}</span>` : ''}
             <span>${this.capitalizeFirst(pack.category)}</span>
             ${i === 0 && versions.length > 1 ? '<span class="latest-tag">Latest</span>' : ''}
           </div>
+          ${v.changelog ? `<p class="version-changelog">${this.escapeHtml(v.changelog)}</p>` : ''}
         </div>
-        <a href="${getMonetizedUrl(v.downloadUrl, v.lootUrl)}" class="btn-download version-download-btn" data-version-index="${i}">
+        <a href="${getMonetizedUrl(v.downloadUrl, v.lootUrl)}" class="btn-download version-download-btn" data-version-index="${i}" data-raw-url="${v.downloadUrl}" data-loot-url="${v.lootUrl || ''}">
           <i class="fas fa-download"></i> Download
         </a>
       </div>
-    `).join('');
+    `;
 
-    list.querySelectorAll('.version-download-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const href = btn.getAttribute('href');
-        if (!href || href === '#') btn.removeAttribute('href');
-        this.incrementDownloads(pack).then(count => {
-          pack.downloads = count;
-          this.updateDownloadsDisplay(pack, count);
-        });
+    if (collapseOld) {
+      const older = versions.length - 1;
+      list.innerHTML = rowHtml(versions[0], 0) +
+        `<div class="older-versions hidden" id="older-versions">${versions.slice(1).map((v, i) => rowHtml(v, i + 1)).join('')}</div>` +
+        `<button type="button" class="show-older-versions-btn" id="show-older-versions-btn">
+          <i class="fas fa-chevron-down"></i> Show ${older} older version${older !== 1 ? 's' : ''}
+        </button>`;
+
+      document.getElementById('show-older-versions-btn').addEventListener('click', (e) => {
+        const older = document.getElementById('older-versions');
+        const nowShown = older.classList.toggle('hidden') === false;
+        e.currentTarget.innerHTML = nowShown
+          ? `<i class="fas fa-chevron-up"></i> Hide older versions`
+          : `<i class="fas fa-chevron-down"></i> Show ${versions.length - 1} older version${versions.length - 1 !== 1 ? 's' : ''}`;
       });
-    });
+    } else {
+      list.innerHTML = versions.map((v, i) => rowHtml(v, i)).join('');
+    }
 
     this.applyLinkTargets();
-  }
 
-  async fetchLiveDownloads(pack) {
-    try {
-      const key = this.counterKey(pack);
-      const res = await fetch(`https://abacus.jasoncameron.dev/get/${COUNTER_NAMESPACE}/${key}`);
-      if (!res.ok) return pack.downloads;
-      const data = await res.json();
-      return typeof data.value === 'number' ? data.value : pack.downloads;
-    } catch (error) {
-      return pack.downloads;
+    // Each version of a multi-version pack tracks its downloads separately.
+    if (multi) {
+      versions.forEach((v, i) => {
+        this.fetchLiveDownloads(pack, v).then(count => {
+          const el = list.querySelector(`.version-downloads[data-version-index="${i}"]`);
+          if (el) el.textContent = `${count} downloads`;
+          if (this.currentPack === pack && i === (this.selectedVersionIndex || 0)) {
+            document.getElementById('detail-downloads').textContent = count;
+          }
+        });
+      });
     }
   }
 
-  async incrementDownloads(pack) {
+  async fetchLiveDownloads(pack, version) {
+    const fallback = version ? 0 : pack.downloads;
     try {
-      const key = this.counterKey(pack);
-      const res = await fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NAMESPACE}/${key}`);
-      if (!res.ok) return pack.downloads + 1;
+      const key = this.counterKey(pack, version);
+      const res = await fetch(`https://abacus.jasoncameron.dev/get/${COUNTER_NAMESPACE}/${key}`);
+      if (!res.ok) return fallback;
       const data = await res.json();
-      return typeof data.value === 'number' ? data.value : pack.downloads + 1;
+      return typeof data.value === 'number' ? data.value : fallback;
     } catch (error) {
-      return pack.downloads + 1;
+      return fallback;
+    }
+  }
+
+  async incrementDownloads(pack, version) {
+    const fallback = (version ? 0 : pack.downloads) + 1;
+    try {
+      const key = this.counterKey(pack, version);
+      const res = await fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NAMESPACE}/${key}`);
+      if (!res.ok) return fallback;
+      const data = await res.json();
+      return typeof data.value === 'number' ? data.value : fallback;
+    } catch (error) {
+      return fallback;
     }
   }
 
@@ -1719,6 +2212,7 @@ class PackLibrary {
   }
 
   setCompactView(isCompact) {
+    const toggle = document.getElementById('compact-view-toggle');
     if (isCompact) {
       document.body.classList.add('compact-view');
       localStorage.setItem('compactView', 'true');
@@ -1726,6 +2220,14 @@ class PackLibrary {
       document.body.classList.remove('compact-view');
       localStorage.setItem('compactView', 'false');
     }
+    if (toggle) toggle.checked = isCompact;
+  }
+
+  setShowDownloadCounts(isShown) {
+    const toggle = document.getElementById('show-downloads-toggle');
+    document.body.classList.toggle('hide-download-counts', !isShown);
+    localStorage.setItem('showDownloadCounts', isShown ? 'true' : 'false');
+    if (toggle) toggle.checked = isShown;
   }
 
   setReduceMotion(isReduced) {
@@ -1779,6 +2281,16 @@ class PackLibrary {
     }
 
     this.setNewTabLinks(newTabLinks !== 'false');
+    this.setShowDownloadCounts(localStorage.getItem('showDownloadCounts') !== 'false');
+
+    const collapseOldVersionsToggle = document.getElementById('collapse-old-versions-toggle');
+    if (collapseOldVersionsToggle) collapseOldVersionsToggle.checked = localStorage.getItem('collapseOldVersions') !== 'false';
+
+    const showDiscontinuedToggle = document.getElementById('show-discontinued-toggle');
+    if (showDiscontinuedToggle) showDiscontinuedToggle.checked = localStorage.getItem('showDiscontinued') !== 'false';
+
+    const collapseSectionsToggle = document.getElementById('collapse-sections-toggle');
+    if (collapseSectionsToggle) collapseSectionsToggle.checked = this.defaultCollapseSections;
 
     const heroVisibility = localStorage.getItem('heroVisibility');
     this.setHeroVisibility(heroVisibility !== null ? heroVisibility : 65, { persist: false });
@@ -1790,7 +2302,10 @@ class PackLibrary {
     this.setAccentColor(localStorage.getItem('accentColor') || 'green', { persist: false });
 
     document.getElementById('autoplay-showcase-toggle').checked = localStorage.getItem('autoplayShowcase') === 'true';
-    document.getElementById('ask-provider-toggle').checked = localStorage.getItem('askProviderEveryTime') === 'true';
+    // "Ask Every Time" should be default true. If it's never been set, or set to true, enable it. Only false explicitly disables it.
+    const askProviderToggle = document.getElementById('ask-provider-toggle');
+    askProviderToggle.checked = localStorage.getItem('askProviderEveryTime') !== 'false';
+    this.updateMonetizationProviderDropdownState(askProviderToggle.checked);
   }
 
   syncDropdownSelection(dropdown, value) {
@@ -1862,29 +2377,119 @@ function updateBirthdayCountdown() {
   el.textContent = `${days} day${days === 1 ? '' : 's'} to go 🎂`;
 }
 
-function resolveInitialRoute() {
-  const hash = location.hash.slice(1);
+function show404() {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-404').classList.add('active');
+  document.title = "Page Not Found · Pepe";
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-  if (hash.startsWith('pack-')) {
-    const id = parseInt(hash.slice(5), 10);
-    const pack = window.packLibrary.packs.find(p => p.id === id);
-    window.router.show('library', { push: false });
-    if (pack) {
-      history.replaceState({ page: 'library' }, '', '#library');
-      window.packLibrary.showDetail(pack, { push: true });
+function showDownloadGate(token) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-download').classList.add('active');
+  document.title = 'Preparing Download · Pepe';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const progressGroup = document.getElementById('download-gate-progress-group');
+  const errorGroup = document.getElementById('download-gate-error');
+  const actions = document.getElementById('download-gate-actions');
+  const title = document.getElementById('download-gate-title');
+  const sub = document.getElementById('download-gate-sub');
+  const fill = document.getElementById('download-gate-progress-fill');
+  const pct = document.getElementById('download-gate-percent');
+  const manualLink = document.getElementById('download-gate-manual-link');
+
+  errorGroup.classList.add('hidden');
+  actions.classList.add('hidden');
+  progressGroup.classList.remove('hidden');
+  title.textContent = 'Preparing your download…';
+  sub.textContent = "Hang tight, your file will start downloading automatically.";
+  fill.style.width = '0%';
+  pct.textContent = '0%';
+
+  const result = decodeDownloadToken(token);
+  if (result.invalid || result.expired) {
+    progressGroup.classList.add('hidden');
+    errorGroup.classList.remove('hidden');
+    errorGroup.querySelector('p').textContent = result.expired
+      ? 'This download link has expired. Go back to the pack and download it again.'
+      : 'This download link is invalid.';
+    return;
+  }
+
+  manualLink.href = result.url;
+  const duration = 2200;
+  const start = performance.now();
+
+  function tick(now) {
+    const progress = Math.min(100, ((now - start) / duration) * 100);
+    fill.style.width = `${progress}%`;
+    pct.textContent = `${Math.round(progress)}%`;
+    if (progress < 100) {
+      requestAnimationFrame(tick);
     } else {
-      history.replaceState({ page: 'library' }, '', '#library');
+      title.textContent = 'Your download has started!';
+      sub.textContent = "If nothing happened, use the button below.";
+      actions.classList.remove('hidden');
+
+      const link = document.createElement('a');
+      link.href = result.url;
+      link.setAttribute('download', '');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     }
+  }
+  requestAnimationFrame(tick);
+}
+
+function resolveInitialRoute() {
+  let path = location.pathname.replace(/\/+$/, '') || '/';
+
+  // Back-compat for old hash-based links (#library, #pack-20) shared before
+  // the site switched to clean paths.
+  if (path === '/' && location.hash) {
+    const hash = location.hash.slice(1);
+    if (hash.startsWith('pack-')) {
+      path = `/pack/${hash.slice(5)}`;
+    } else if (window.router.pages.includes(hash)) {
+      path = `/${hash}`;
+    }
+  }
+
+  const downloadMatch = path.match(/^\/download\/(.+)$/);
+  if (downloadMatch) {
+    showDownloadGate(downloadMatch[1]);
     return;
   }
 
-  if (hash && window.router.pages.includes(hash)) {
-    window.router.show(hash, { push: false });
-    history.replaceState({ page: hash }, '', `#${hash}`);
+  const packMatch = path.match(/^\/pack\/(.+)$/);
+  if (packMatch) {
+    const identifier = decodeURIComponent(packMatch[1]);
+    const numericId = /^\d+$/.test(identifier) ? parseInt(identifier, 10) : null;
+    const pack = window.packLibrary.packs.find(p =>
+      window.packLibrary.packSlug(p) === identifier || p.id === numericId
+    );
+    if (!pack) {
+      show404();
+      history.replaceState({ page: '404' }, '', path);
+      return;
+    }
+    window.router.show('library', { push: false });
+    history.replaceState({ page: 'library' }, '', '/library');
+    window.packLibrary.showDetail(pack, { push: true });
     return;
   }
 
-  history.replaceState({ page: 'home' }, '', location.pathname + location.search);
+  const pageId = path === '/' ? 'home' : path.slice(1);
+  if (window.router.pages.includes(pageId)) {
+    window.router.show(pageId, { push: false });
+    history.replaceState({ page: pageId }, '', pageId === 'home' ? '/' : `/${pageId}`);
+    return;
+  }
+
+  show404();
+  history.replaceState({ page: '404' }, '', path);
 }
 
 window.addEventListener('popstate', (e) => {
@@ -1892,6 +2497,11 @@ window.addEventListener('popstate', (e) => {
 
   if (!state) {
     resolveInitialRoute();
+    return;
+  }
+
+  if (state.page === '404') {
+    show404();
     return;
   }
 
@@ -1903,10 +2513,4 @@ window.addEventListener('popstate', (e) => {
   }
 
   window.router.show(state.page, { push: false });
-});
-
-window.addEventListener('hashchange', () => {
-  if (window.packLibrary && window.packLibrary.packs.length) {
-    resolveInitialRoute();
-  }
 });

@@ -3,13 +3,14 @@
   "description": "Focused on visuals and performance, continuing the client's evolution.",
   "author": "Pepe",
   "version": "1.0.0",
-  "thumbnail": "📦",
+  "thumbnail": "\ud83d\udce6",
   "tags": [
     "clients"
   ],
   "category": "clients",
   "license": "MIT",
-  "mcVersion": "TBD",
+  "mcVersion": "1.19",
   "timelineOrder": 4,
-  "faIcon": "fa-sun"
+  "faIcon": "fa-sun",
+  "discontinued": true
 }

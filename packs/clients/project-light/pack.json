@@ -3,13 +3,14 @@
   "description": "A bridge release exploring a lighter-weight client experience.",
   "author": "Pepe",
   "version": "1.0.0",
-  "thumbnail": "📦",
+  "thumbnail": "\ud83d\udce6",
   "tags": [
     "clients"
   ],
   "category": "clients",
   "license": "MIT",
-  "mcVersion": "TBD",
+  "mcVersion": "1.20",
   "timelineOrder": 10,
-  "faIcon": "fa-lightbulb"
+  "faIcon": "fa-lightbulb",
+  "discontinued": true
 }

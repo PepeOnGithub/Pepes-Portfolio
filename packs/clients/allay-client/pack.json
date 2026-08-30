@@ -3,7 +3,7 @@
   "description": "Named after the Allay, this version brought further polish and refinement.",
   "author": "Pepe",
   "version": "1.0.0",
-  "thumbnail": "📦",
+  "thumbnail": "\ud83d\udce6",
   "tags": [
     "clients"
   ],
@@ -11,5 +11,6 @@
   "license": "MIT",
   "mcVersion": "TBD",
   "timelineOrder": 8,
-  "faIcon": "fa-feather"
+  "faIcon": "fa-feather",
+  "discontinued": true
 }

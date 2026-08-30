@@ -3,7 +3,7 @@
   "description": "Where it all started, my very first Minecraft Bedrock client.",
   "author": "Pepe",
   "version": "1.0.0",
-  "thumbnail": "📦",
+  "thumbnail": "\ud83d\udce6",
   "tags": [
     "clients"
   ],
@@ -11,5 +11,6 @@
   "license": "MIT",
   "mcVersion": "TBD",
   "timelineOrder": 1,
-  "faIcon": "fa-frog"
+  "faIcon": "fa-frog",
+  "discontinued": true
 }

@@ -51,6 +51,18 @@ def save_lootlabs_cache(cache_path, cache):
         print(f"  Warning: could not write {cache_path}: {e}")
 
 
+def make_download_gate_url(raw_url):
+    """Build a /download/<token> gate URL matching encodeDownloadToken() in
+    script.js (t: 0 = no expiry, since these are baked once at build time and
+    may be clicked long after). Routes LootLabs' redirect through our own
+    page instead of the raw file, same anti-bypass reasoning as the
+    client-side Linkvertise wrapping."""
+    import base64
+    payload = json.dumps({'u': raw_url, 't': 0}, separators=(',', ':'))
+    token = base64.urlsafe_b64encode(payload.encode('utf-8')).decode('ascii').rstrip('=')
+    return f"{SITE_BASE_URL}/download/{token}"
+
+
 def create_lootlabs_link(title, target_url, cache):
     """Create (or reuse from cache) a LootLabs content-locker link for target_url.
     Returns None if LootLabs isn't configured or the request fails."""
@@ -269,18 +281,23 @@ def generate_packs_json(packs_dir, output_file):
             # Multiple versions can live side by side in one pack folder.
             asset_files = find_asset_files(pack_path)
 
+            changelogs = metadata.get('changelogs') or {}
+
             versions = []
             for f in asset_files:
                 stat = f.stat()
                 m = VERSION_IN_FILENAME.search(f.name)
                 v_label = m.group(1) if m else (read_version_from_archive(f) or metadata.get('version', '1.0.0'))
-                versions.append({
+                version_entry = {
                     'version': v_label,
                     'fileName': f.name,
                     'size': format_size(stat.st_size),
                     'downloadUrl': f'packs/{category}/{pack_path.name}/{f.name}',
                     'date': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d')
-                })
+                }
+                if v_label in changelogs:
+                    version_entry['changelog'] = changelogs[v_label]
+                versions.append(version_entry)
 
             if versions:
                 latest = versions[0]
@@ -345,22 +362,21 @@ def generate_packs_json(packs_dir, output_file):
 
             if metadata.get('discontinued'):
                 pack_entry['discontinued'] = True
-                pack_entry['downloadUrl'] = None
-                pack_entry['size'] = 'N/A'
-            elif metadata.get('comingSoon') and not versions:
+
+            if metadata.get('comingSoon') and not versions:
                 pack_entry['downloadUrl'] = None
                 pack_entry['size'] = 'N/A'
             elif lootlabs_enabled and category != 'website':
                 for v in versions:
-                    absolute_url = f"{SITE_BASE_URL}/{v['downloadUrl']}"
-                    loot_url = create_lootlabs_link(pack_entry['name'], absolute_url, lootlabs_cache)
+                    gate_url = make_download_gate_url(v['downloadUrl'])
+                    loot_url = create_lootlabs_link(pack_entry['name'], gate_url, lootlabs_cache)
                     if loot_url:
                         v['lootUrl'] = loot_url
                 if versions:
                     pack_entry['lootUrl'] = versions[0].get('lootUrl')
                 elif pack_entry.get('downloadUrl'):
-                    absolute_url = f"{SITE_BASE_URL}/{pack_entry['downloadUrl']}"
-                    loot_url = create_lootlabs_link(pack_entry['name'], absolute_url, lootlabs_cache)
+                    gate_url = make_download_gate_url(pack_entry['downloadUrl'])
+                    loot_url = create_lootlabs_link(pack_entry['name'], gate_url, lootlabs_cache)
                     if loot_url:
                         pack_entry['lootUrl'] = loot_url
 
@@ -403,21 +419,23 @@ def generate_sitemap(packs_json_path):
             data = json.load(f)
 
         packs = data.get('packs', [])
+        base = SITE_BASE_URL or 'https://pepe.glacierclient.xyz'
 
         sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n'
         sitemap += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
 
         # Add homepage
         sitemap += '  <url>\n'
-        sitemap += '    <loc>https://yoursite.com/</loc>\n'
+        sitemap += f'    <loc>{base}/</loc>\n'
         sitemap += f'    <lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod>\n'
         sitemap += '    <priority>1.0</priority>\n'
         sitemap += '  </url>\n'
 
-        # Add pack pages
+        # Add pack pages (clean /pack/<slug> URLs, matching packSlug() in script.js)
         for pack in packs:
+            slug = re.sub(r'^-+|-+$', '', re.sub(r'[^a-z0-9]+', '-', pack['name'].lower())) or f'pack-{pack["id"]}'
             sitemap += '  <url>\n'
-            sitemap += f'    <loc>https://yoursite.com/#pack-{pack["id"]}</loc>\n'
+            sitemap += f'    <loc>{base}/pack/{slug}</loc>\n'
             sitemap += f'    <lastmod>{datetime.now().strftime("%Y-%m-%d")}</lastmod>\n'
             sitemap += '    <priority>0.8</priority>\n'
             sitemap += '  </url>\n'
