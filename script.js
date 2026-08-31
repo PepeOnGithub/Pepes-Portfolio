@@ -2535,6 +2535,25 @@ class PackLibrary {
     }
     block.classList.remove('hidden');
 
+    // Group extensions by version
+    const groupedByVersion = {};
+    pack.extensions.forEach(ext => {
+      const version = ext.version || 'Latest';
+      if (!groupedByVersion[version]) {
+        groupedByVersion[version] = [];
+      }
+      groupedByVersion[version].push(ext);
+    });
+
+    // Sort versions (numeric versions descending, Latest at end)
+    const sortedVersions = Object.keys(groupedByVersion).sort((a, b) => {
+      if (a === 'Latest') return 1;
+      if (b === 'Latest') return -1;
+      const aNum = parseFloat(a);
+      const bNum = parseFloat(b);
+      return bNum - aNum;
+    });
+
     const rowHtml = (ext) => `
       <div class="version-row">
         <div class="version-info">
@@ -2549,7 +2568,38 @@ class PackLibrary {
       </div>
     `;
 
-    list.innerHTML = pack.extensions.map(ext => rowHtml(ext)).join('');
+    let html = '';
+    sortedVersions.forEach((version, idx) => {
+      const versionLabel = version === 'Latest' ? `${pack.name} (Latest)` : `${pack.name} v${version}`;
+      const groupId = `ext-group-${idx}`;
+      html += `<div class="extension-version-group">
+        <button class="extension-version-label" data-group-id="${groupId}" style="background: none; border: none; cursor: pointer; width: 100%; text-align: left; padding: 0; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-chevron-down"></i> ${this.escapeHtml(versionLabel)}
+        </button>
+        <div class="extension-version-items" id="${groupId}">
+          ${groupedByVersion[version].map(ext => rowHtml(ext)).join('')}
+        </div>
+      </div>`;
+    });
+
+    list.innerHTML = html;
+
+    // Add collapse/expand functionality
+    document.querySelectorAll('.extension-version-label').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const groupId = btn.dataset.groupId;
+        const items = document.getElementById(groupId);
+        const icon = btn.querySelector('i');
+
+        items.classList.toggle('hidden');
+        if (items.classList.contains('hidden')) {
+          icon.className = 'fas fa-chevron-right';
+        } else {
+          icon.className = 'fas fa-chevron-down';
+        }
+      });
+    });
+
     this.applyLinkTargets();
   }
 

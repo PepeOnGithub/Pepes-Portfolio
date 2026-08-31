@@ -275,6 +275,49 @@ def clean_extension_name(filename):
     name = ' '.join(n.strip() for n in name.split() if n.strip())
     return name.strip()
 
+def extract_extension_version(filename, filepath=None):
+    """Extract version from extension filename or mcpack manifest."""
+    import re
+    # Look for patterns like V6, v5, V4, etc.
+    match = re.search(r'[Vv](\d+(?:\.\d+)*)', filename)
+    if match:
+        return match.group(1)
+
+    # Fallback: read version from manifest in the mcpack
+    if filepath and filepath.suffix.lower() in {'.mcpack', '.mcaddon'}:
+        try:
+            with zipfile.ZipFile(filepath, 'r') as zf:
+                for name in zf.namelist():
+                    if name.endswith('manifest.json'):
+                        with zf.open(name) as f:
+                            manifest = json.load(f)
+                        # Try to get version from header or modules
+                        version = manifest.get('header', {}).get('version')
+                        if version:
+                            if isinstance(version, (list, tuple)):
+                                return str(version[0]) if version else None
+                            return str(version)
+                        break
+        except Exception:
+            pass
+
+    return None
+
+def extract_icon_from_mcpack(mcpack_path, output_path):
+    """Extract pack.png or icon.png from an mcpack file to the output path."""
+    try:
+        with zipfile.ZipFile(mcpack_path, 'r') as zf:
+            # Look for pack.png or icon.png in the pack
+            for name in zf.namelist():
+                if name.endswith(('pack.png', 'icon.png')):
+                    # Extract to output path with name icon.png
+                    with zf.open(name) as source, open(output_path, 'wb') as target:
+                        target.write(source.read())
+                    return True
+    except Exception as e:
+        pass
+    return False
+
 def find_link_file(pack_path):
     """
     For website packs: find a file whose name IS the link, e.g. a file
@@ -336,6 +379,12 @@ def generate_packs_json(packs_dir, output_file):
             icon_path = pack_path / 'icon.png'
             if icon_path.exists():
                 thumbnail = f'packs/{category}/{pack_path.name}/icon.png'
+            else:
+                # Try to extract icon from the first mcpack file
+                asset_files_for_icon = find_asset_files(pack_path)
+                if asset_files_for_icon:
+                    if extract_icon_from_mcpack(asset_files_for_icon[0], icon_path):
+                        thumbnail = f'packs/{category}/{pack_path.name}/icon.png'
 
             banner_url = None
             for banner_name in ('pack_banner.png', 'bg.png'):
@@ -404,13 +453,27 @@ def generate_packs_json(packs_dir, output_file):
 
             # Add extensions if present
             extensions = []
+            # Try to infer default version from pack folder name
+            pack_folder_version = None
+            if 'v6' in pack_path.name.lower():
+                pack_folder_version = '6'
+            elif 'v5' in pack_path.name.lower():
+                pack_folder_version = '5'
+            elif 'v4' in pack_path.name.lower():
+                pack_folder_version = '4'
+
             for ext_file in extension_files:
                 stat = ext_file.stat()
+                ext_version = extract_extension_version(ext_file.name, ext_file) or pack_folder_version
+                # If still no version and extensions are unversioned, default to v4
+                if not ext_version and not pack_folder_version:
+                    ext_version = '4'
                 extensions.append({
                     'name': clean_extension_name(ext_file.name),
                     'fileName': ext_file.name,
                     'size': format_size(stat.st_size),
                     'downloadUrl': to_download_url(f'packs/{category}/{pack_path.name}/{ext_file.name}'),
+                    'version': ext_version or 'Latest'
                 })
             if extensions:
                 pack_entry['extensions'] = extensions

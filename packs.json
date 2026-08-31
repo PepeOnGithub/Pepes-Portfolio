@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-31T08:26:54.881738",
+  "generated": "2026-08-31T08:35:04.324230",
   "total_packs": 54,
   "categories": {
     "addons": [
@@ -149,7 +149,7 @@
       "name": "Allay Client",
       "category": "clients",
       "description": "Named after the Allay, this version brought further polish and refinement.",
-      "thumbnail": "📦",
+      "thumbnail": "packs/clients/allay-client/icon.png",
       "tags": [
         "clients"
       ],
@@ -419,73 +419,85 @@
           "name": "Glacier Client V6 Cape Physics",
           "fileName": "Glacier Client V6 Cape Physics [Extension].mcpack",
           "size": "220.1 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Cape%20Physics%20%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Cape%20Physics%20%5BExtension%5D.mcpack",
+          "version": "6"
         },
         {
           "name": "Glacier Client V6 Enchantment Glint",
           "fileName": "Glacier Client V6 Enchantment Glint [Extension].mcpack",
           "size": "288.9 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Enchantment%20Glint%20%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Enchantment%20Glint%20%5BExtension%5D.mcpack",
+          "version": "6"
         },
         {
           "name": "Glacier Client V6 Hit Colors",
           "fileName": "Glacier Client V6 Hit Colors [Extension].mcpack",
           "size": "292.5 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Hit%20Colors%20%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Hit%20Colors%20%5BExtension%5D.mcpack",
+          "version": "6"
         },
         {
           "name": "Glacier Client V6 Hitbox",
           "fileName": "Glacier Client V6 Hitbox [Extension].mcpack",
           "size": "273.1 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Hitbox%20%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Hitbox%20%5BExtension%5D.mcpack",
+          "version": "6"
         },
         {
           "name": "Glacier Client V6 Projectile Particles",
           "fileName": "Glacier Client V6 Projectile Particles [Extension].mcpack",
           "size": "312.0 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Projectile%20Particles%20%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6%20Projectile%20Particles%20%5BExtension%5D.mcpack",
+          "version": "6"
         },
         {
           "name": "Glacier v5 Cape Physics",
           "fileName": "Glacier_v5_Cape_Physics_[Extension].mcpack",
           "size": "121.3 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_v5_Cape_Physics_%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_v5_Cape_Physics_%5BExtension%5D.mcpack",
+          "version": "5"
         },
         {
           "name": "Glacier v5 Hit Color",
           "fileName": "Glacier_v5_Hit_Color_[Extension].mcpack",
           "size": "149.0 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_v5_Hit_Color_%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_v5_Hit_Color_%5BExtension%5D.mcpack",
+          "version": "5"
         },
         {
           "name": "Glacier Chunk Borders",
           "fileName": "Glacier_Chunk_Borders_[Extension].mcpack",
           "size": "168.8 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_Chunk_Borders_%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_Chunk_Borders_%5BExtension%5D.mcpack",
+          "version": "4"
         },
         {
           "name": "Glacier Freelook",
           "fileName": "Glacier_Freelook_[Extension].mcpack",
           "size": "163.2 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_Freelook_%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_Freelook_%5BExtension%5D.mcpack",
+          "version": "4"
         },
         {
           "name": "Glacier HitBox",
           "fileName": "Glacier_HitBox_[Extension].mcpack",
           "size": "138.6 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_HitBox_%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_HitBox_%5BExtension%5D.mcpack",
+          "version": "4"
         },
         {
           "name": "Glacier HitColor",
           "fileName": "Glacier_HitColor_[Extension].mcpack",
           "size": "150.6 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_HitColor_%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_HitColor_%5BExtension%5D.mcpack",
+          "version": "4"
         },
         {
           "name": "Glacier Waypoints+",
           "fileName": "Glacier_Waypoints+_[Extension].mcpack",
           "size": "162.7 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_Waypoints%2B_%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier_Waypoints%2B_%5BExtension%5D.mcpack",
+          "version": "4"
         }
       ],
       "bannerUrl": "packs/clients/glacier-client/pack_banner.png",
@@ -564,7 +576,7 @@
       "name": "Pepe Client",
       "category": "clients",
       "description": "Where it all started, my very first Minecraft Bedrock client.",
-      "thumbnail": "📦",
+      "thumbnail": "packs/clients/pepe-client/icon.png",
       "tags": [
         "clients"
       ],
@@ -734,25 +746,29 @@
           "name": "Project Light Chunk Border",
           "fileName": "Project Light Chunk Border [Extension].mcpack",
           "size": "818.9 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20Chunk%20Border%20%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20Chunk%20Border%20%5BExtension%5D.mcpack",
+          "version": "1"
         },
         {
           "name": "Project Light Chunk Border .mcpack",
           "fileName": "Project Light Chunk Border [Extension].mcpack.mcpack",
           "size": "148.3 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20Chunk%20Border%20%5BExtension%5D.mcpack.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20Chunk%20Border%20%5BExtension%5D.mcpack.mcpack",
+          "version": "1"
         },
         {
           "name": "Project Light Freelook",
           "fileName": "Project Light Freelook [Extension].mcpack",
           "size": "150.3 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20Freelook%20%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20Freelook%20%5BExtension%5D.mcpack",
+          "version": "0"
         },
         {
           "name": "Project Light Hitbox",
           "fileName": "Project Light Hitbox [Extension].mcpack",
           "size": "148.3 KB",
-          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20Hitbox%20%5BExtension%5D.mcpack"
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20Hitbox%20%5BExtension%5D.mcpack",
+          "version": "1"
         }
       ],
       "bannerUrl": "packs/clients/project-light/pack_banner.png",
@@ -896,7 +912,7 @@
       "name": "Pepe's Charged Overlay Pack",
       "category": "cosmetics",
       "description": "Cosmetic enhancement pack from Pepe's collection",
-      "thumbnail": "✨",
+      "thumbnail": "packs/cosmetics/pepes-charged-overlay-pack/icon.png",
       "tags": [
         "cosmetics"
       ],
@@ -913,7 +929,7 @@
       "name": "Pepe's Halo Pack",
       "category": "cosmetics",
       "description": "Cosmetic enhancement pack from Pepe's collection",
-      "thumbnail": "✨",
+      "thumbnail": "packs/cosmetics/pepes-halo-pack/icon.png",
       "tags": [
         "cosmetics"
       ],
@@ -1309,7 +1325,7 @@
       "name": "Pepes Pepe'S Anvil Damage Indicator",
       "category": "packs",
       "description": "Pack: pepes-pepe's-anvil-damage-indicator",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's-anvil-damage-indicator/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1324,7 +1340,7 @@
       "name": "Pepes Pepe'S Armor Hider",
       "category": "packs",
       "description": "Pack: pepes-pepe's-armor-hider",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's-armor-hider/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1339,7 +1355,7 @@
       "name": "Pepes Pepe'S Charged Overlay Pack",
       "category": "packs",
       "description": "Pack: pepes-pepe's-charged-overlay-pack",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's-charged-overlay-pack/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1354,7 +1370,7 @@
       "name": "Pepes Pepe'S Halo Pack",
       "category": "packs",
       "description": "Pack: pepes-pepe's-halo-pack",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's-halo-pack/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1369,7 +1385,7 @@
       "name": "Pepes Pepe'S_Animated_Crop_Growth_Highlighter",
       "category": "packs",
       "description": "Pack: pepes-pepe's_animated_crop_growth_highlighter",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's_animated_crop_growth_highlighter/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1384,7 +1400,7 @@
       "name": "Pepes Pepe'S_Bundle_Item_Count_V1.0.0",
       "category": "packs",
       "description": "Pack: pepes-pepe's_bundle_item_count_v1.0.0",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's_bundle_item_count_v1.0.0/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1399,7 +1415,7 @@
       "name": "Pepes Pepe'S_Dynamic_3Rd_Person Crosshair_V1.0.0",
       "category": "packs",
       "description": "Pack: pepes-pepe's_dynamic_3rd_person-crosshair_v1.0.0",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's_dynamic_3rd_person-crosshair_v1.0.0/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1414,7 +1430,7 @@
       "name": "Pepes Pepe'S_Shiny_Pots_V1.0.0",
       "category": "packs",
       "description": "Pack: pepes-pepe's_shiny_pots_v1.0.0",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's_shiny_pots_v1.0.0/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1429,7 +1445,7 @@
       "name": "Pepes Pepe'S_Spinning_Projectiles_V1.0.0",
       "category": "packs",
       "description": "Pack: pepes-pepe's_spinning_projectiles_v1.0.0",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's_spinning_projectiles_v1.0.0/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
@@ -1444,7 +1460,7 @@
       "name": "Pepes Pepe'S_Time_Changer_V1.0.0",
       "category": "packs",
       "description": "Pack: pepes-pepe's_time_changer_v1.0.0",
-      "thumbnail": "📦",
+      "thumbnail": "packs/packs/pepes-pepe's_time_changer_v1.0.0/icon.png",
       "tags": [],
       "version": "1.0.0",
       "downloads": 0,
