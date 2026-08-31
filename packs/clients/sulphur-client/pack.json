@@ -1,16 +1,16 @@
 {
-  "name": "Sulphur Client",
-  "description": "Another step in the client's ongoing rebrand and feature journey.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "\ud83d\udce6",
-  "tags": [
-    "clients"
-  ],
-  "category": "clients",
-  "license": "MIT",
-  "mcVersion": "TBD",
-  "timelineOrder": 7,
-  "faIcon": "fa-fire",
-  "discontinued": true
+    "name":  "Sulphur Client",
+    "description":  "Another step in the client\u0027s ongoing rebrand and feature journey.",
+    "author":  "Pepe",
+    "version":  "1.0.0",
+    "thumbnail":  "📦",
+    "tags":  [
+                 "clients"
+             ],
+    "category":  "clients",
+    "license":  "MIT",
+    "mcVersion":  "TBD",
+    "timelineOrder":  7,
+    "faIcon":  "fa-fire",
+    "discontinued":  true
 }

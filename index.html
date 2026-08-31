@@ -201,9 +201,9 @@
         <h2 class="page-title">Let's Connect</h2>
         <p class="page-subtitle">Find and follow me across every platform I'm active on.</p>
         <div class="socials-stats">
-          <div class="socials-stat"><span class="socials-stat-value">17</span><span class="socials-stat-label">Age</span></div>
+          <div class="socials-stat"><span class="socials-stat-value" id="socials-age">--</span><span class="socials-stat-label">Age</span></div>
           <div class="socials-stat"><span class="socials-stat-value">9</span><span class="socials-stat-label">Platforms</span></div>
-          <div class="socials-stat"><span class="socials-stat-value">30+</span><span class="socials-stat-label">Packs Shipped</span></div>
+          <div class="socials-stat"><span class="socials-stat-value" id="socials-packs">--</span><span class="socials-stat-label">Packs Shipped</span></div>
           <div class="socials-stat"><span class="socials-stat-value">2020</span><span class="socials-stat-label">Creating Since</span></div>
         </div>
       </div>
@@ -335,6 +335,14 @@
             <button class="category-row" data-category="packs">
               <span><i class="fas fa-box-open"></i> Packs</span>
               <span class="count" id="count-packs">0</span>
+            </button>
+            <button class="category-row" data-category="cosmetics">
+              <span><i class="fas fa-sparkles"></i> Cosmetics</span>
+              <span class="count" id="count-cosmetics">0</span>
+            </button>
+            <button class="category-row" data-category="utility">
+              <span><i class="fas fa-wrench"></i> Utility</span>
+              <span class="count" id="count-utility">0</span>
             </button>
             <button class="category-row" data-category="clients">
               <span><i class="fas fa-desktop"></i> Clients</span>
@@ -474,6 +482,12 @@
               <h3>Versions</h3>
               <p class="versions-sub" id="versions-sub"></p>
               <div class="versions-list" id="versions-list"></div>
+            </div>
+
+            <div class="versions-block hidden" id="extensions-block">
+              <h3>Extensions</h3>
+              <p class="versions-sub">Optional add-ons for this pack to customize your experience.</p>
+              <div class="extensions-list" id="extensions-list"></div>
             </div>
           </div>
 

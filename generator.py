@@ -256,6 +256,25 @@ def find_asset_files(pack_path):
     files.sort(key=lambda e: version_key(e.name), reverse=True)
     return files
 
+def find_extension_files(pack_path):
+    """
+    Find every extension file (files with [Extension] in the name) in a pack
+    folder. Extensions are optional add-ons for a pack, sorted by version.
+    """
+    files = [
+        entry for entry in pack_path.iterdir()
+        if entry.is_file() and '[Extension]' in entry.name and entry.suffix.lower() in ASSET_EXTENSIONS
+    ]
+    files.sort(key=lambda e: version_key(e.name), reverse=True)
+    return files
+
+def clean_extension_name(filename):
+    """Extract clean extension name from filename like 'Glacier_Freelook_[Extension].mcpack'."""
+    name = filename.rsplit('.', 1)[0]  # Remove extension
+    name = name.replace('[Extension]', '').replace('_', ' ').replace('-', ' ')
+    name = ' '.join(n.strip() for n in name.split() if n.strip())
+    return name.strip()
+
 def find_link_file(pack_path):
     """
     For website packs: find a file whose name IS the link, e.g. a file
@@ -329,6 +348,7 @@ def generate_packs_json(packs_dir, output_file):
             # downloads point at actual importable files and sizes are accurate.
             # Multiple versions can live side by side in one pack folder.
             asset_files = find_asset_files(pack_path)
+            extension_files = find_extension_files(pack_path)
 
             changelogs = metadata.get('changelogs') or {}
 
@@ -381,6 +401,19 @@ def generate_packs_json(packs_dir, output_file):
 
             if len(versions) > 1:
                 pack_entry['versions'] = versions
+
+            # Add extensions if present
+            extensions = []
+            for ext_file in extension_files:
+                stat = ext_file.stat()
+                extensions.append({
+                    'name': clean_extension_name(ext_file.name),
+                    'fileName': ext_file.name,
+                    'size': format_size(stat.st_size),
+                    'downloadUrl': to_download_url(f'packs/{category}/{pack_path.name}/{ext_file.name}'),
+                })
+            if extensions:
+                pack_entry['extensions'] = extensions
 
             if banner_url:
                 pack_entry['bannerUrl'] = banner_url

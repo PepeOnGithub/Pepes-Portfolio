@@ -304,6 +304,10 @@ class Router {
       localStorage.setItem('lastVisitedPage', pageId);
     }
 
+    if (pageId === 'socials') {
+      this.updateSocialsStats();
+    }
+
     if (window.packLibrary) {
       window.packLibrary.showBrowse({ push: false });
       if (pageId === 'stats') window.packLibrary.renderStatsPage();
@@ -313,6 +317,25 @@ class Router {
       history.pushState({ page: pageId }, '', pageId === 'home' ? '/' : `/${pageId}`);
     }
     document.title = "Pepe's Portfolio";
+  }
+
+  updateSocialsStats() {
+    // Update age (born December 26)
+    const today = new Date();
+    const birthDate = new Date(2006, 11, 26);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    const ageEl = document.getElementById('socials-age');
+    if (ageEl) ageEl.textContent = age;
+
+    // Update packs shipped count
+    if (window.packLibrary && window.packLibrary.packs) {
+      const packsEl = document.getElementById('socials-packs');
+      if (packsEl) packsEl.textContent = window.packLibrary.packs.length;
+    }
   }
 }
 
@@ -2209,6 +2232,7 @@ class PackLibrary {
       ? `Every release of ${pack.name}, newest first. Older versions stay available in case a newer one doesn't work for you.`
       : `Download the current release of ${pack.name}.`;
     this.renderVersionsList(pack);
+    this.renderExtensionsList(pack);
 
     this.selectedVersionIndex = 0;
     const hasMultipleVersions = !!(pack.versions && pack.versions.length > 1);
@@ -2386,9 +2410,9 @@ class PackLibrary {
   renderVersionSelectMenu(pack) {
     const menu = document.getElementById('version-select-menu');
     menu.innerHTML = pack.versions.map((v, i) => `
-      <li role="option" data-index="${i}" class="${i === 0 ? 'selected' : ''}">${this.escapeHtml(v.version || '1.0.0')}</li>
+      <li role="option" data-index="${i}" class="${i === 0 ? 'selected' : ''}">${this.escapeHtml(pack.name)} v${this.escapeHtml(v.version || '1.0.0')}</li>
     `).join('');
-    document.getElementById('version-select-label').textContent = pack.versions[0].version || '1.0.0';
+    document.getElementById('version-select-label').textContent = `${pack.name} v${pack.versions[0].version || '1.0.0'}`;
 
     menu.querySelectorAll('li').forEach(li => {
       li.addEventListener('click', () => {
@@ -2404,7 +2428,7 @@ class PackLibrary {
     if (!version) return;
     this.selectedVersionIndex = index;
 
-    document.getElementById('version-select-label').textContent = version.version || '1.0.0';
+    document.getElementById('version-select-label').textContent = `${pack.name} v${version.version || '1.0.0'}`;
     document.querySelectorAll('#version-select-menu li').forEach(li => {
       li.classList.toggle('selected', parseInt(li.dataset.index, 10) === index);
     });
@@ -2448,7 +2472,7 @@ class PackLibrary {
       <div class="version-row">
         <div class="version-info">
           <div class="version-top">
-            <span class="version-number">${this.escapeHtml(v.version || '1.0.0')}</span>
+            <span class="version-number">${this.escapeHtml(pack.name)} v${this.escapeHtml(v.version || '1.0.0')}</span>
             <span class="version-date">${this.formatDate(v.date)}</span>
           </div>
           <p class="version-file">${this.escapeHtml(v.fileName || 'download.zip')} &middot; ${this.escapeHtml(v.size || '')} &middot; <span class="version-downloads" data-version-index="${i}">${multi ? '&hellip;' : this.formatCount(pack.downloads)} downloads</span></p>
@@ -2498,6 +2522,35 @@ class PackLibrary {
         });
       });
     }
+  }
+
+  renderExtensionsList(pack) {
+    const list = document.getElementById('extensions-list');
+    const block = document.getElementById('extensions-block');
+
+    if (!pack.extensions || !pack.extensions.length) {
+      block.classList.add('hidden');
+      list.innerHTML = '';
+      return;
+    }
+    block.classList.remove('hidden');
+
+    const rowHtml = (ext) => `
+      <div class="version-row">
+        <div class="version-info">
+          <div class="version-top">
+            <span class="version-number">${this.escapeHtml(pack.name)} - ${this.escapeHtml(ext.name)}</span>
+          </div>
+          <p class="version-file">${this.escapeHtml(ext.fileName)} &middot; ${this.escapeHtml(ext.size)}</p>
+        </div>
+        <a href="${getMonetizedUrl(ext.downloadUrl)}" class="btn-download version-download-btn" data-raw-url="${ext.downloadUrl}" data-loot-url="">
+          <i class="fas fa-download"></i> Download
+        </a>
+      </div>
+    `;
+
+    list.innerHTML = pack.extensions.map(ext => rowHtml(ext)).join('');
+    this.applyLinkTargets();
   }
 
   // Routes through a small concurrency-limited queue (the counter API 429s

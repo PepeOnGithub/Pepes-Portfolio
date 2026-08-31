@@ -1,16 +1,16 @@
 {
-  "name": "Pepe Client",
-  "description": "Where it all started, my very first Minecraft Bedrock client.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "\ud83d\udce6",
-  "tags": [
-    "clients"
-  ],
-  "category": "clients",
-  "license": "MIT",
-  "mcVersion": "TBD",
-  "timelineOrder": 1,
-  "faIcon": "fa-frog",
-  "discontinued": true
+    "name":  "Pepe Client",
+    "description":  "Where it all started, my very first Minecraft Bedrock client.",
+    "author":  "Pepe",
+    "version":  "1.0.0",
+    "thumbnail":  "📦",
+    "tags":  [
+                 "clients"
+             ],
+    "category":  "clients",
+    "license":  "MIT",
+    "mcVersion":  "TBD",
+    "timelineOrder":  1,
+    "faIcon":  "fa-frog",
+    "discontinued":  true
 }

@@ -2241,6 +2241,8 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
 .versions-list { display: flex; flex-direction: column; gap: var(--spacing-md); }
 .versions-list .version-row { margin: 0; }
 
+.extensions-list { display: flex; flex-direction: column; gap: var(--spacing-md); }
+
 .older-versions { display: flex; flex-direction: column; gap: var(--spacing-md); }
 .older-versions.hidden { display: none; }
 

@@ -2,217 +2,277 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://pepe.glacierclient.xyz/</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-experience-tome</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-hotbar-refiller</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-item-magnet-addon</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-void-totem</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/allay-client</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/glacier-client</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/optifine-by-zephyx</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-client</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/project-future</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/project-light</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/solar-client</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/sulphur-client</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/void-client</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/wind-client</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-charged-overlay-pack</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-halo-pack</loc>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-assets-pack</loc>
-    <lastmod>2026-08-30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-animated-crop-growth-highlighter</loc>
-    <lastmod>2026-08-30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-anvil-damage-indicator</loc>
-    <lastmod>2026-08-30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-armor-hider</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-armorhud</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-better-armor-bar</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-better-coordinates</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-better-hover-text</loc>
-    <lastmod>2026-08-30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-bundle-item-counter</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-clock-compass-hud</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-death-coords</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-debug-hud</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-directionhud</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-durability-viewer</loc>
-    <lastmod>2026-08-30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-dynamic-3rd-person-crosshair</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-force-spectator</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-fps-counter</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-inventoryhud</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-level-calculator</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-offhandhud</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-shiny-pots</loc>
-    <lastmod>2026-08-30</lastmod>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-anvil-damage-indicator</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-armor-hider</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-charged-overlay-pack</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-halo-pack</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-animated-crop-growth-highlighter</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-bundle-item-count-v1-0-0</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-dynamic-3rd-person-crosshair-v1-0-0</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-shiny-pots-v1-0-0</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-spinning-projectiles-v1-0-0</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepes-pepe-s-time-changer-v1-0-0</loc>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-speedometer</loc>
-    <lastmod>2026-08-30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-spinning-projectiles</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-status-effect-hud</loc>
-    <lastmod>2026-08-30</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-time-changer</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/pepe-s-waypoints</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-animated-crop-growth-highlighter</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-anvil-damage-indicator</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-armor-hider</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-bundle-item-counter</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-dynamic-3rd-person-crosshair</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-shiny-pots</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-spinning-projectiles</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pepe.glacierclient.xyz/pack/pepe-s-time-changer</loc>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/glacier-client-website</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://pepe.glacierclient.xyz/pack/mca-glacier-client</loc>
-    <lastmod>2026-08-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>
