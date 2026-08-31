@@ -5,6 +5,54 @@ const COUNTER_NAMESPACE = 'pepes-portfolio-pack-downloads';
 const LINKVERTISE_USER_ID = 499358;
 const MONETIZATION_PROVIDER_KEY = 'monetizationProvider';
 
+// ===== Anti link-bypasser =====
+// "Link bypasser" sites/extensions let visitors skip past Linkvertise/
+// LootLabs without completing them, by loading our /download/<token> gate
+// themselves (usually inside an iframe, or via an automated headless-browser
+// fetch) and grabbing the real file URL out of it. Both of the checks below
+// only run client-side JS, so they only catch bypassers that actually render
+// the page in a browser (iframe embeds, headless-browser automation) — a
+// pure server-side HTTP scraper never executes this script at all and can't
+// be stopped from a static site. This list is inherently a moving target;
+// add newly-spotted bypasser domains here as they show up.
+const BYPASS_TOOL_DOMAINS = [
+  'bypass.city',
+  'bypass.vip',
+  'unlockcontent.net',
+  'boost.ink',
+  'social-unlock.com',
+  'quickkey.cc',
+  'key-bypasser.com',
+  'linkbypass.net',
+  'adfly-bypasser.com'
+];
+
+function isKnownBypassReferrer() {
+  if (!document.referrer) return false;
+  try {
+    const host = new URL(document.referrer).hostname.toLowerCase();
+    return BYPASS_TOOL_DOMAINS.some(domain => host === domain || host.endsWith(`.${domain}`));
+  } catch (e) {
+    return false;
+  }
+}
+
+// Bypasser sites/extensions commonly iframe the real target page so their own
+// script can drive it (click through, read the resulting file URL) without
+// the visitor ever seeing linkvertise/lootlabs. Break out of any frame whose
+// parent isn't this same site.
+(function bustFrame() {
+  try {
+    if (window.top !== window.self) {
+      window.top.location.href = window.self.location.href;
+    }
+  } catch (e) {
+    // Cross-origin parent blocked the navigation — fall back to hiding the
+    // page content so at least nothing usable renders inside the iframe.
+    document.documentElement.style.display = 'none';
+  }
+})();
+
 // Every setting key persisted in localStorage. Single source of truth for
 // "Reset All Settings" and for Export/Import Settings.
 const SETTINGS_KEYS = [
@@ -3035,6 +3083,14 @@ function showDownloadGate(token) {
   sub.textContent = "Hang tight, your file will start downloading automatically.";
   fill.style.width = '0%';
   pct.textContent = '0%';
+
+  if (isKnownBypassReferrer()) {
+    progressGroup.classList.add('hidden');
+    errorGroup.classList.remove('hidden');
+    errorGroup.querySelector('p').textContent =
+      "This download can't be completed through a link bypasser. Please open the pack page directly on Pepe's Portfolio and download it from there.";
+    return;
+  }
 
   const result = decodeDownloadToken(token);
   if (result.invalid || result.expired) {
