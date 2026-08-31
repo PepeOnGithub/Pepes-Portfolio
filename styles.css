@@ -1687,23 +1687,30 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   flex-shrink: 0;
 }
 
+/* This was the actual root cause of the "overlapping" list-view bug in every
+   category: flex-direction was `row`, so the title row (name + badges) and
+   the footer (author + downloads) were laid out side by side sharing the
+   card's width, instead of stacked — squeezing both into a sliver and
+   crushing .pack-name to 0 width. It should match the base (grid-view)
+   .pack-content column layout; list view only needs a tighter gap. */
 .packs-grid.list-view .pack-content {
   flex: 1;
   min-width: 0;
   padding: var(--spacing-md) var(--spacing-lg);
-  flex-direction: row;
-  align-items: center;
-  gap: var(--spacing-lg);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-xs);
 }
 
 .packs-grid.list-view .pack-title-row {
-  flex: 1;
   min-width: 0;
   margin-bottom: 0;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .packs-grid.list-view .pack-name {
+  flex-shrink: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2843,21 +2850,6 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   .home-hero-content { display: flex; flex-direction: column; align-items: center; }
   .home-cta-row { justify-content: center; }
   .lang-table th:nth-child(2), .lang-table td:nth-child(2) { text-align: right; }
-
-  /* List view: the title row's badges (category/version/assets) don't shrink,
-     and .pack-name has overflow:hidden which (per the flexbox spec) strips its
-     automatic min-content floor — so at narrow widths it was crushed to 0
-     width instead of shrinking gracefully. Wrap the row instead so the name
-     always gets a full line and badges flow onto their own line below it. */
-  .packs-grid.list-view .pack-content { flex-wrap: wrap; row-gap: var(--spacing-xs); }
-  .packs-grid.list-view .pack-title-row { flex-wrap: wrap; flex-basis: 100%; }
-  .packs-grid.list-view .pack-name {
-    flex: 1 0 100%;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-  }
-  .packs-grid.list-view .pack-footer { flex-basis: 100%; justify-content: space-between; }
 
   /* Bump primary tap targets up toward the ~40px comfortable minimum. */
   .category-row { min-height: 44px; }
