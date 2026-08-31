@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-31T08:23:13.623044",
+  "generated": "2026-08-31T08:26:54.881738",
   "total_packs": 54,
   "categories": {
     "addons": [
@@ -153,12 +153,13 @@
       "tags": [
         "clients"
       ],
-      "version": "1.0.0",
+      "version": "1",
       "downloads": 0,
-      "size": "0.4 KB",
+      "size": "1.4 MB",
       "author": "Pepe",
-      "downloadUrl": "packs/clients/allay-client.zip",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/allay-client/AllayMc%20Client%20v1.mcpack",
       "previewUrl": "packs/clients/allay-client/",
+      "fileName": "AllayMc Client v1.mcpack",
       "mcVersion": "TBD",
       "timelineOrder": 8,
       "faIcon": "fa-feather",
@@ -312,14 +313,14 @@
           "fileName": "Glacier Client V3 Beta(2).mcpack",
           "size": "1.4 MB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V3%20Beta%282%29.mcpack",
-          "date": "2026-08-30"
+          "date": "2026-08-31"
         },
         {
           "version": "3",
           "fileName": "Glacier Client V3 Beta.mcpack",
           "size": "1.4 MB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V3%20Beta.mcpack",
-          "date": "2026-08-30"
+          "date": "2026-08-31"
         },
         {
           "version": "3",
@@ -327,6 +328,13 @@
           "size": "1.9 MB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V3.mcpack",
           "date": "2026-08-30"
+        },
+        {
+          "version": "3",
+          "fileName": "GlacierClientV3.mcpack",
+          "size": "1.9 MB",
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/GlacierClientV3.mcpack",
+          "date": "2026-08-31"
         },
         {
           "version": "2",
@@ -341,6 +349,34 @@
           "size": "21.2 MB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V1.mcpack",
           "date": "2026-08-30"
+        },
+        {
+          "version": "1.10.1",
+          "fileName": "Glacier [16x].mcpack",
+          "size": "22.2 MB",
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20%5B16x%5D.mcpack",
+          "date": "2026-08-31"
+        },
+        {
+          "version": "1.19.0",
+          "fileName": "GlacierClient(2).mcpack",
+          "size": "21.2 MB",
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/GlacierClient%282%29.mcpack",
+          "date": "2026-08-31"
+        },
+        {
+          "version": "1.19.0",
+          "fileName": "GlacierClient.mcpack",
+          "size": "21.2 MB",
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/GlacierClient.mcpack",
+          "date": "2026-08-31"
+        },
+        {
+          "version": "1.19.0",
+          "fileName": "GlacierClient.zip",
+          "size": "13.5 MB",
+          "downloadUrl": "packs/clients/glacier-client/GlacierClient.zip",
+          "date": "2026-08-31"
         },
         {
           "version": "1.0.0",
@@ -866,10 +902,11 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "77.9 KB",
       "author": "Pepe",
-      "downloadUrl": "packs/cosmetics/pepes-charged-overlay-pack.zip",
-      "previewUrl": "packs/cosmetics/pepes-charged-overlay-pack/"
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/cosmetics/pepes-charged-overlay-pack/Pepe%27s%20Charged%20Overlay%20Pack.mcpack",
+      "previewUrl": "packs/cosmetics/pepes-charged-overlay-pack/",
+      "fileName": "Pepe's Charged Overlay Pack.mcpack"
     },
     {
       "id": 16,
@@ -882,10 +919,11 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.2 KB",
+      "size": "48.8 KB",
       "author": "Pepe",
-      "downloadUrl": "packs/cosmetics/pepes-halo-pack.zip",
-      "previewUrl": "packs/cosmetics/pepes-halo-pack/"
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/cosmetics/pepes-halo-pack/Pepe%27s%20Halo%20Pack.mcpack",
+      "previewUrl": "packs/cosmetics/pepes-halo-pack/",
+      "fileName": "Pepe's Halo Pack.mcpack"
     },
     {
       "id": 17,

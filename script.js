@@ -1,4 +1,4 @@
-const CATEGORY_ORDER = ['packs', 'clients', 'addons', 'website', 'other'];
+const CATEGORY_ORDER = ['packs', 'cosmetics', 'utility', 'clients', 'addons', 'website', 'other'];
 
 const DEFAULT_BANNER_URL = 'assets/default-banner.png';
 const COUNTER_NAMESPACE = 'pepes-portfolio-pack-downloads';
