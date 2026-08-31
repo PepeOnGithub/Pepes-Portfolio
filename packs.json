@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-31T08:18:55.981689",
+  "generated": "2026-08-31T08:23:13.623044",
   "total_packs": 54,
   "categories": {
     "addons": [
@@ -503,6 +503,13 @@
           "date": "2026-08-31"
         },
         {
+          "version": "1.0.0",
+          "fileName": "Optifine-by-Zephyx.zip",
+          "size": "14.3 MB",
+          "downloadUrl": "packs/clients/optifine-zephyx/Optifine-by-Zephyx.zip",
+          "date": "2026-08-31"
+        },
+        {
           "version": "1.0.4",
           "fileName": "Zephyxs-Optifine-MCPE-Features-1.19.mcaddon",
           "size": "136.4 KB",
@@ -812,13 +819,36 @@
       "tags": [
         "clients"
       ],
-      "version": "1.8.0",
+      "version": "2",
       "downloads": 0,
-      "size": "11.2 MB",
+      "size": "50.4 MB",
       "author": "Pepe",
-      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/wind-client/Wind%20Client.mcpack",
+      "downloadUrl": "packs/clients/wind-client/WindClientV2.zip",
       "previewUrl": "packs/clients/wind-client/",
-      "fileName": "Wind Client.mcpack",
+      "fileName": "WindClientV2.zip",
+      "versions": [
+        {
+          "version": "2",
+          "fileName": "WindClientV2.zip",
+          "size": "50.4 MB",
+          "downloadUrl": "packs/clients/wind-client/WindClientV2.zip",
+          "date": "2026-08-31"
+        },
+        {
+          "version": "1.8.0",
+          "fileName": "Wind Client.mcpack",
+          "size": "11.2 MB",
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/wind-client/Wind%20Client.mcpack",
+          "date": "2026-08-30"
+        },
+        {
+          "version": "1.0.0",
+          "fileName": "Wind Client.zip",
+          "size": "16.4 MB",
+          "downloadUrl": "packs/clients/wind-client/Wind Client.zip",
+          "date": "2026-08-31"
+        }
+      ],
       "bannerUrl": "packs/clients/wind-client/pack_banner.png",
       "mcVersion": "1.18",
       "timelineOrder": 3,
