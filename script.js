@@ -3400,7 +3400,21 @@ class PackLibrary {
     this.syncDropdownSelection(this.monetizationDropdown, getMonetizationProvider());
     this.syncDropdownSelection(this.defaultSortDropdown, this.currentFilter.sort);
 
-    this.setAccentColor(localStorage.getItem('accentColor') || 'green', { persist: false });
+    const sharedParams = new URLSearchParams(location.search);
+    const sharedAccent = sharedParams.get('accent');
+    const sharedHex = sharedAccent && /^[0-9a-f]{6}$/i.test(sharedAccent) ? `#${sharedAccent}` : null;
+    const sharedRadius = sharedParams.get('radius');
+    const sharedGradient = sharedParams.get('gradient');
+    const isShared = !!sharedHex;
+    this.setAccentColor(sharedHex || localStorage.getItem('accentColor') || 'green', { persist: isShared });
+    this.setThemeRadiusStyle(
+      ['default', 'sharp', 'pill'].includes(sharedRadius) ? sharedRadius : (localStorage.getItem('themeRadiusStyle') || 'default'),
+      { persist: isShared }
+    );
+    this.setAccentGradient(
+      isShared ? sharedGradient === '1' : localStorage.getItem('accentGradient') === 'true',
+      { persist: isShared }
+    );
 
     document.getElementById('autoplay-showcase-toggle').checked = localStorage.getItem('autoplayShowcase') === 'true';
     // "Ask Every Time" should be default true. If it's never been set, or set to true, enable it. Only false explicitly disables it.
@@ -3545,9 +3559,137 @@ class PackLibrary {
       this.positionThemeStudioHandles(h, s, v);
     }
 
-    document.querySelectorAll('#theme-preset-swatches .theme-preset-swatch').forEach(el => {
+    document.querySelectorAll('.theme-preset-swatches .theme-preset-swatch').forEach(el => {
       el.classList.toggle('selected', el.dataset.hex.toLowerCase() === hex.toLowerCase());
     });
+
+    this.updateThemeContrastReadout();
+  }
+
+  // ===== Theme Studio: corner style, gradient accent, contrast, looks, code =====
+
+  setThemeRadiusStyle(style, { persist = true } = {}) {
+    document.body.classList.toggle('sharp-corners', style === 'sharp');
+    document.body.classList.toggle('pill-corners', style === 'pill');
+
+    const sharpToggle = document.getElementById('sharp-corners-toggle');
+    if (sharpToggle) sharpToggle.checked = style === 'sharp';
+
+    document.querySelectorAll('#theme-corner-style-group .theme-toggle-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.radius === style);
+    });
+
+    if (persist) {
+      localStorage.setItem('themeRadiusStyle', style);
+      localStorage.setItem('sharpCorners', style === 'sharp');
+    }
+  }
+
+  setAccentGradient(enabled, { persist = true } = {}) {
+    document.body.classList.toggle('accent-gradient', !!enabled);
+    const toggle = document.getElementById('theme-gradient-toggle');
+    if (toggle) toggle.checked = !!enabled;
+    if (persist) localStorage.setItem('accentGradient', !!enabled);
+  }
+
+  // Relative luminance / contrast ratio per WCAG, used so users can see at a
+  // glance whether white text on their chosen accent stays readable.
+  updateThemeContrastReadout() {
+    const el = document.getElementById('theme-contrast-readout');
+    if (!el) return;
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+    const { r, g, b } = hexToRgb(accent);
+    const luminance = ([r, g, b].map(c => {
+      const s = c / 255;
+      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    }));
+    const L = 0.2126 * luminance[0] + 0.7152 * luminance[1] + 0.0722 * luminance[2];
+    const ratio = (1 + 0.05) / (L + 0.05);
+    const passesAA = ratio >= 4.5;
+    el.innerHTML = `White text on this accent: <strong>${ratio.toFixed(2)}:1</strong> — <span class="${passesAA ? 'contrast-pass' : 'contrast-fail'}">${passesAA ? 'AA Pass' : 'AA Fail'}</span>`;
+  }
+
+  applyThemeLook(look) {
+    this.setAccentColor(look.accent);
+    this.setThemeRadiusStyle(look.radius);
+    this.setAccentGradient(!!look.gradient);
+  }
+
+  getThemeCode() {
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+    const radius = localStorage.getItem('themeRadiusStyle') || 'default';
+    const gradient = localStorage.getItem('accentGradient') === 'true';
+    return btoa(JSON.stringify({ accent, radius, gradient }));
+  }
+
+  applyThemeCode(code) {
+    try {
+      const data = JSON.parse(atob(code.trim()));
+      if (!/^#[0-9a-f]{6}$/i.test(data.accent || '')) throw new Error('bad accent');
+      this.applyThemeLook({
+        accent: data.accent,
+        radius: ['default', 'sharp', 'pill'].includes(data.radius) ? data.radius : 'default',
+        gradient: !!data.gradient
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // ===== Theme Studio: custom saved swatches =====
+
+  getCustomThemeSwatches() {
+    try {
+      const raw = JSON.parse(localStorage.getItem('customThemeSwatches') || '[]');
+      return Array.isArray(raw) ? raw.filter(hex => /^#[0-9a-f]{6}$/i.test(hex)) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  renderCustomThemeSwatches() {
+    const container = document.getElementById('theme-custom-swatches');
+    const label = document.getElementById('theme-custom-label');
+    if (!container) return;
+    const swatches = this.getCustomThemeSwatches();
+    if (label) label.classList.toggle('hidden', swatches.length === 0);
+
+    container.innerHTML = swatches.map(hex => `
+      <span class="theme-custom-swatch-wrap">
+        <button type="button" class="theme-preset-swatch" data-hex="${hex}" style="--swatch-color:${hex}" aria-label="Saved color ${hex}"></button>
+        <button type="button" class="theme-custom-swatch-remove" data-hex="${hex}" aria-label="Remove saved color ${hex}">&times;</button>
+      </span>
+    `).join('');
+
+    const currentAccent = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+    container.querySelectorAll('.theme-preset-swatch').forEach(el => {
+      el.classList.toggle('selected', el.dataset.hex.toLowerCase() === currentAccent.toLowerCase());
+      el.addEventListener('click', () => this.setAccentColor(el.dataset.hex));
+    });
+    container.querySelectorAll('.theme-custom-swatch-remove').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.removeCustomThemeSwatch(el.dataset.hex);
+      });
+    });
+  }
+
+  saveCustomThemeSwatch(hex) {
+    const swatches = this.getCustomThemeSwatches();
+    const normalized = hex.toLowerCase();
+    if (!swatches.some(h => h.toLowerCase() === normalized)) {
+      swatches.unshift(hex);
+      if (swatches.length > 12) swatches.length = 12;
+      localStorage.setItem('customThemeSwatches', JSON.stringify(swatches));
+    }
+    this.renderCustomThemeSwatches();
+  }
+
+  removeCustomThemeSwatch(hex) {
+    const swatches = this.getCustomThemeSwatches().filter(h => h.toLowerCase() !== hex.toLowerCase());
+    localStorage.setItem('customThemeSwatches', JSON.stringify(swatches));
+    this.renderCustomThemeSwatches();
   }
 
   positionThemeStudioHandles(h, s, v) {
@@ -3641,6 +3783,8 @@ class PackLibrary {
       el.addEventListener('click', () => this.setAccentColor(el.dataset.hex));
     });
 
+    this.renderCustomThemeSwatches();
+
     if (randomBtn) {
       randomBtn.addEventListener('click', () => {
         const h = Math.random() * 360;
@@ -3649,6 +3793,80 @@ class PackLibrary {
         this.themeHue = h;
         this.positionThemeStudioHandles(h, s, v);
         this.applyThemeStudioColor(h, s, v);
+      });
+    }
+
+    const savePresetBtn = document.getElementById('theme-save-preset-btn');
+    if (savePresetBtn) {
+      savePresetBtn.addEventListener('click', () => {
+        const accent = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+        this.saveCustomThemeSwatch(accent);
+        savePresetBtn.innerHTML = '<i class="fas fa-check"></i> Saved';
+        setTimeout(() => { savePresetBtn.innerHTML = '<i class="fas fa-bookmark"></i> Save'; }, 1200);
+      });
+    }
+
+    const shareBtn = document.getElementById('theme-share-btn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        const accent = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim();
+        const url = new URL(location.href);
+        url.search = '';
+        url.searchParams.set('accent', accent.replace('#', ''));
+        url.searchParams.set('radius', localStorage.getItem('themeRadiusStyle') || 'default');
+        url.searchParams.set('gradient', localStorage.getItem('accentGradient') === 'true' ? '1' : '0');
+        const finish = () => {
+          shareBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
+          setTimeout(() => { shareBtn.innerHTML = '<i class="fas fa-link"></i> Share'; }, 1200);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url.toString()).then(finish, finish);
+        } else {
+          finish();
+        }
+      });
+    }
+
+    document.querySelectorAll('#theme-corner-style-group .theme-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => this.setThemeRadiusStyle(btn.dataset.radius));
+    });
+
+    const gradientToggle = document.getElementById('theme-gradient-toggle');
+    if (gradientToggle) {
+      gradientToggle.addEventListener('change', (e) => this.setAccentGradient(e.target.checked));
+    }
+
+    document.querySelectorAll('#theme-look-presets .theme-look-card').forEach(card => {
+      card.addEventListener('click', () => {
+        try {
+          this.applyThemeLook(JSON.parse(card.dataset.look));
+        } catch (e) { /* malformed preset data, ignore */ }
+      });
+    });
+
+    const codeInput = document.getElementById('theme-code-input');
+    const codeCopyBtn = document.getElementById('theme-code-copy-btn');
+    const codeApplyBtn = document.getElementById('theme-code-apply-btn');
+    if (codeCopyBtn) {
+      codeCopyBtn.addEventListener('click', () => {
+        const code = this.getThemeCode();
+        if (codeInput) codeInput.value = code;
+        const finish = () => {
+          codeCopyBtn.innerHTML = '<i class="fas fa-check"></i> Copied';
+          setTimeout(() => { codeCopyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy'; }, 1200);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(finish, finish);
+        } else {
+          finish();
+        }
+      });
+    }
+    if (codeApplyBtn && codeInput) {
+      codeApplyBtn.addEventListener('click', () => {
+        const ok = this.applyThemeCode(codeInput.value);
+        codeApplyBtn.innerHTML = ok ? '<i class="fas fa-check"></i> Applied' : '<i class="fas fa-xmark"></i> Invalid';
+        setTimeout(() => { codeApplyBtn.innerHTML = '<i class="fas fa-check"></i> Apply'; }, 1200);
       });
     }
   }

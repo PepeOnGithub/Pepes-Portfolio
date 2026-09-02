@@ -978,8 +978,81 @@
                   <input type="number" id="theme-b-input" min="0" max="255" value="73">
                 </label>
               </div>
-              <button type="button" class="theme-random-btn" id="theme-random-btn">
-                <i class="fas fa-dice"></i> Random
+              <div class="theme-actions-row">
+                <button type="button" class="theme-random-btn" id="theme-random-btn">
+                  <i class="fas fa-dice"></i> Random
+                </button>
+                <button type="button" class="theme-random-btn" id="theme-save-preset-btn">
+                  <i class="fas fa-bookmark"></i> Save
+                </button>
+                <button type="button" class="theme-random-btn" id="theme-share-btn">
+                  <i class="fas fa-link"></i> Share
+                </button>
+              </div>
+            </div>
+
+            <p class="theme-studio-label">Live preview</p>
+            <div class="theme-preview-card" id="theme-preview-card">
+              <div class="theme-preview-top">
+                <span class="theme-preview-avatar"><i class="fas fa-cube"></i></span>
+                <div class="theme-preview-lines">
+                  <span class="theme-preview-line theme-preview-line-title"></span>
+                  <span class="theme-preview-line theme-preview-line-sub"></span>
+                </div>
+                <span class="theme-preview-badge">New</span>
+              </div>
+              <div class="theme-preview-row">
+                <button type="button" class="theme-preview-btn-primary">Download</button>
+                <span class="theme-preview-link"><i class="fas fa-heart"></i> Favorite</span>
+                <span class="theme-preview-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+              </div>
+              <div class="theme-contrast-readout" id="theme-contrast-readout"></div>
+            </div>
+
+            <p class="theme-studio-label">Style</p>
+            <div class="theme-style-row">
+              <div class="theme-style-group">
+                <span class="theme-style-group-label">Corners</span>
+                <div class="theme-toggle-group" id="theme-corner-style-group">
+                  <button type="button" class="theme-toggle-btn" data-radius="default">Rounded</button>
+                  <button type="button" class="theme-toggle-btn" data-radius="sharp">Sharp</button>
+                  <button type="button" class="theme-toggle-btn" data-radius="pill">Pill</button>
+                </div>
+              </div>
+              <label class="theme-gradient-toggle">
+                <span class="custom-checkbox">
+                  <input type="checkbox" id="theme-gradient-toggle" class="setting-input" autocomplete="off">
+                  <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+                </span>
+                <span>Gradient accent</span>
+              </label>
+            </div>
+
+            <p class="theme-studio-label">Full looks</p>
+            <div class="theme-look-presets" id="theme-look-presets">
+              <button type="button" class="theme-look-card" data-look='{"accent":"#489c49","radius":"default","gradient":false}'>
+                <span class="theme-look-swatch" style="--look-a:#489c49;--look-b:#3a7a3b"></span>
+                <span>Classic</span>
+              </button>
+              <button type="button" class="theme-look-card" data-look='{"accent":"#8b5cf6","radius":"pill","gradient":true}'>
+                <span class="theme-look-swatch" style="--look-a:#8b5cf6;--look-b:#5b21b6"></span>
+                <span>Nebula</span>
+              </button>
+              <button type="button" class="theme-look-card" data-look='{"accent":"#06b6d4","radius":"sharp","gradient":false}'>
+                <span class="theme-look-swatch" style="--look-a:#06b6d4;--look-b:#0e7490"></span>
+                <span>Terminal</span>
+              </button>
+              <button type="button" class="theme-look-card" data-look='{"accent":"#f97316","radius":"pill","gradient":true}'>
+                <span class="theme-look-swatch" style="--look-a:#f97316;--look-b:#c2410c"></span>
+                <span>Sunset</span>
+              </button>
+              <button type="button" class="theme-look-card" data-look='{"accent":"#ec4899","radius":"default","gradient":true}'>
+                <span class="theme-look-swatch" style="--look-a:#ec4899;--look-b:#9d174d"></span>
+                <span>Bubblegum</span>
+              </button>
+              <button type="button" class="theme-look-card" data-look='{"accent":"#9a9ea3","radius":"sharp","gradient":false}'>
+                <span class="theme-look-swatch" style="--look-a:#9a9ea3;--look-b:#6b7076"></span>
+                <span>Mono</span>
               </button>
             </div>
 
@@ -993,6 +1066,17 @@
               <button type="button" class="theme-preset-swatch" data-hex="#eab308" style="--swatch-color:#eab308" aria-label="Yellow"></button>
               <button type="button" class="theme-preset-swatch" data-hex="#06b6d4" style="--swatch-color:#06b6d4" aria-label="Cyan"></button>
               <button type="button" class="theme-preset-swatch" data-hex="#ef4444" style="--swatch-color:#ef4444" aria-label="Red"></button>
+            </div>
+
+            <p class="theme-studio-label theme-custom-label hidden" id="theme-custom-label">Your saved colors</p>
+            <div class="theme-preset-swatches theme-custom-swatches" id="theme-custom-swatches"></div>
+
+            <p class="theme-studio-label">Theme code</p>
+            <p class="theme-studio-intro theme-code-intro">Copy this code to back up your whole look, or paste one someone shared with you.</p>
+            <div class="theme-code-row">
+              <input type="text" id="theme-code-input" class="theme-code-field" spellcheck="false" autocomplete="off" placeholder="Paste a theme code…">
+              <button type="button" class="theme-random-btn" id="theme-code-copy-btn"><i class="fas fa-copy"></i> Copy</button>
+              <button type="button" class="theme-random-btn" id="theme-code-apply-btn"><i class="fas fa-check"></i> Apply</button>
             </div>
           </div>
         </div>
