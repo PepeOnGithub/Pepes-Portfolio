@@ -1846,7 +1846,6 @@ class PackLibrary {
           <div class="pack-content">
             <div class="pack-title-row">
               <span class="pack-name">${this.escapeHtml(pack.name)}</span>
-              <span class="pack-badge">${this.capitalizeFirst(pack.category)}</span>
               ${mcVersionTag}
               ${assetsTag}
               ${comingSoonTag}
@@ -1857,7 +1856,7 @@ class PackLibrary {
             </div>
             <p class="pack-description">${this.escapeHtml(pack.description)}</p>
             <div class="pack-footer">
-              <span>by ${this.escapeHtml(pack.author || 'Unknown')}</span>
+              <span class="pack-footer-author"><span class="pack-badge">${this.capitalizeFirst(pack.category)}</span> by ${this.escapeHtml(pack.author || 'Unknown')}</span>
               <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
             </div>
           </div>
@@ -2034,7 +2033,7 @@ class PackLibrary {
     }
     document.title = 'Profile · Pepe';
 
-    const nameEl = document.getElementById('user-profile-name');
+    const nameEl = document.getElementById('user-profile-name-text');
     const avatarEl = document.getElementById('user-profile-avatar');
     const joinedEl = document.getElementById('user-profile-joined');
     const statsEl = document.getElementById('user-profile-stats');
@@ -2719,7 +2718,7 @@ class PackLibrary {
           <div class="comment-body">
             <div class="comment-header">
               <span class="comment-author comment-author-link" data-user-id="${profileLink}">${this.escapeHtml(c.user.name || 'Unknown')}</span>
-              ${c.isAuthor ? `<span class="author-badge" title="This is the site owner">Author</span>` : ''}
+              ${c.isAuthor ? `<span class="author-badge" title="Verified: this is the site owner"><i class="fas fa-check"></i></span>` : ''}
               <span class="comment-time">${this.formatDate(c.createdAt)}</span>
               ${isOwn ? `<button type="button" class="comment-delete-btn" data-comment-id="${c.id}" title="Delete"><i class="fas fa-trash"></i></button>` : ''}
             </div>

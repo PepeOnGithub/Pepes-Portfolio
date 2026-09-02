@@ -1781,8 +1781,24 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   flex-shrink: 0;
   border-top: none;
   padding-top: 0;
+  margin-top: var(--spacing-xs);
   gap: var(--spacing-lg);
 }
+
+/* The category badge moved here from the title row (it was crowding out
+   the pack name and getting clipped) - keep it inline with "by <author>"
+   instead of on its own line. */
+.pack-footer-author {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pack-footer-author .pack-badge { flex-shrink: 0; }
 
 /* ===== Clients Timeline ===== */
 .clients-timeline {
@@ -4317,17 +4333,19 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
 .comment-author-link:hover { color: var(--color-accent); text-decoration: underline; }
 img.comment-author-link:hover { opacity: 0.85; text-decoration: none; }
 
+/* A verified-style tick (TikTok/Twitter-style) rather than a text pill -
+   marks the site owner's own name only, everywhere it appears. */
 .author-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px var(--spacing-sm);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs);
-  font-weight: 700;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
   flex-shrink: 0;
-  background: rgba(72, 156, 73, 0.14);
-  border: 1px solid rgba(72, 156, 73, 0.45);
-  color: var(--color-accent);
+  border-radius: 50%;
+  background: #20d5ec;
+  color: var(--color-bg-primary);
+  font-size: 9px;
 }
 
 .comment-report-btn {
@@ -4373,6 +4391,9 @@ img.comment-author-link:hover { opacity: 0.85; text-decoration: none; }
 .user-profile-name {
   margin: 0;
   font-size: var(--font-size-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
 }
 
 .user-profile-joined, .user-profile-stats {
