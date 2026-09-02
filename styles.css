@@ -1057,8 +1057,12 @@ body.reduce-motion *::after {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   list-style: none;
-  overflow: hidden;
-  z-index: 50;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Cap at ~4 rows and scroll past that instead of growing indefinitely
+     (each row is ~40px: spacing-sm padding top/bottom + font-size-sm text). */
+  max-height: 160px;
+  z-index: 9999;
   display: none;
 }
 
@@ -1147,12 +1151,12 @@ body.reduce-motion *::after {
   top: calc(100% + var(--spacing-xs));
   left: 0;
   right: 0;
-  z-index: 50;
+  z-index: 9999;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
-  overflow: hidden;
+  overflow-x: hidden;
   max-height: 320px;
   overflow-y: auto;
 }
@@ -2530,6 +2534,13 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   gap: var(--spacing-md);
   position: sticky;
   top: calc(var(--spacing-xl) + 100px);
+  /* position:sticky always creates a stacking context, even without an
+     explicit z-index - without this, its version-select dropdown (however
+     high its own z-index) is trapped inside that context and compared
+     against .site-footer (also positioned) at the same stack level, where
+     DOM order alone decides and the later footer wins. A positive z-index
+     here lifts the whole sticky box above the footer. */
+  z-index: 2;
 }
 
 .side-divider { height: 1px; background: var(--color-border); margin: var(--spacing-xs) 0; }
@@ -3689,7 +3700,7 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   position: absolute;
   top: calc(100% + var(--spacing-sm));
   right: 0;
-  z-index: 200;
+  z-index: 9999;
   min-width: 260px;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
@@ -3746,6 +3757,9 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   display: flex;
   flex-direction: column;
   gap: 2px;
+  max-height: 168px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .auth-account-item {
