@@ -1,16 +1,16 @@
 {
-    "name":  "Wind Client",
-    "description":  "A lighter, faster iteration built on lessons learned from Void Client.",
-    "author":  "Pepe",
-    "version":  "1.0.0",
-    "thumbnail":  "📦",
-    "tags":  [
-                 "clients"
-             ],
-    "category":  "clients",
-    "license":  "MIT",
-    "mcVersion":  "1.18",
-    "timelineOrder":  3,
-    "faIcon":  "fa-wind",
-    "discontinued":  true
+    "name": "Wind Client",
+    "description": "A lighter, faster iteration built on the lessons learned from Void Client, trimming excess and sharpening performance for a snappier experience.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "clients"
+    ],
+    "category": "clients",
+    "license": "MIT",
+    "mcVersion": "1.18",
+    "timelineOrder": 3,
+    "faIcon": "fa-wind",
+    "discontinued": true
 }

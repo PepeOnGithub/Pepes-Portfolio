@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's ArmorHUD",
-  "description": "Shows the armor you're currently wearing as icons on the HUD, no need to open your inventory to check.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
+    "name": "Pepe's ArmorHUD",
+    "description": "Displays the armor you're currently wearing as compact icons directly on the HUD, so you can check your protection at a glance without opening your inventory.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
 }

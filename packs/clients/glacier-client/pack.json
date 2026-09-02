@@ -1,15 +1,15 @@
 {
-    "name":  "Glacier Client",
-    "description":  "The current and flagship client, home base of Glacier Productions.",
-    "author":  "Pepe",
-    "version":  "1.0.0",
-    "thumbnail":  "📦",
-    "tags":  [
-                 "clients"
-             ],
-    "category":  "clients",
-    "license":  "MIT",
-    "mcVersion":  "1.26",
-    "timelineOrder":  11,
-    "faIcon":  "fa-snowflake"
+    "name": "Glacier Client",
+    "description": "The current flagship client and home base of Glacier Productions, built to bring together the full range of performance, visual, and quality-of-life improvements the team has developed across its history.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "clients"
+    ],
+    "category": "clients",
+    "license": "MIT",
+    "mcVersion": "1.26",
+    "timelineOrder": 11,
+    "faIcon": "fa-snowflake"
 }

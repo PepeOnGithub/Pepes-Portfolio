@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's DirectionHUD",
-  "description": "Adds a compact heading indicator to the HUD, showing the exact direction you're facing.",
-  "author": "Pepe",
-  "version": "1.0.1",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/n3TZGPGPjW8"
+    "name": "Pepe's DirectionHUD",
+    "description": "Adds a compact heading indicator to the HUD, showing the exact cardinal direction you're facing at all times.",
+    "author": "Pepe",
+    "version": "1.0.1",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/n3TZGPGPjW8"
 }

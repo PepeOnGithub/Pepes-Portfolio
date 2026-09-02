@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's Durability Viewer",
-  "description": "Displays item durability directly on-screen with a clean, easy-to-read readout.",
-  "author": "PepeOnMinecraft",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/73duhxBtYt8"
+    "name": "Pepe's Durability Viewer",
+    "description": "Displays item durability directly on-screen in a clean, easy-to-read readout, so you always know how much life your tools and armor have left.",
+    "author": "PepeOnMinecraft",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/73duhxBtYt8"
 }

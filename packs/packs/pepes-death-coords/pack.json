@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's Death Coords",
-  "description": "Displays your exact coordinates the moment you die, so you never lose track of where your items dropped.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/H2HtakIRtpA"
+    "name": "Pepe's Death Coords",
+    "description": "Captures and displays your exact coordinates the moment you die, so you never lose track of where your items dropped and can recover them with confidence.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/H2HtakIRtpA"
 }

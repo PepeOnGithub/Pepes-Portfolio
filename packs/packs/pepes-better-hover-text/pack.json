@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's Better Hover Text",
-  "description": "Enriches inventory tooltips with extra detail: exact durability, technical item and aux IDs, and Suspicious Stew effect identification.",
-  "author": "Pepe",
-  "version": "0.0.3",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/h2akqm3tPb0"
+    "name": "Pepe's Better Hover Text",
+    "description": "Enriches inventory tooltips with the detail serious players actually want: exact durability values, technical item and aux IDs, and identification of Suspicious Stew effects.",
+    "author": "Pepe",
+    "version": "0.0.3",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/h2akqm3tPb0"
 }

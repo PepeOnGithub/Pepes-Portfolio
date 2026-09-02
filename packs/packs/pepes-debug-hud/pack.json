@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's Debug HUD",
-  "description": "A clean, minimal debug overlay with the info you actually want. Press F8 to toggle it with a keyboard and mouse.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/dfUXea5s1N4"
+    "name": "Pepe's Debug HUD",
+    "description": "A clean, minimal debug overlay showing only the information you actually want. Press F8 to toggle it instantly with keyboard and mouse.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/dfUXea5s1N4"
 }

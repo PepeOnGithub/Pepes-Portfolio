@@ -1,9 +1,9 @@
 {
-    "author":  "Pepe",
-    "name":  "Pepe\u0027s Charged Overlay Pack",
-    "license":  "MIT",
-    "description":  "Cosmetic enhancement pack from Pepe\u0027s collection",
-    "category":  "cosmetics",
-    "thumbnail":  "✨",
-    "version":  "1.0.0"
+    "author": "Pepe",
+    "name": "Pepe's Charged Overlay Pack",
+    "license": "MIT",
+    "description": "Adds a charged particle-style overlay effect to your character, giving combat and movement a bit of extra visual flair without altering gameplay.",
+    "category": "cosmetics",
+    "thumbnail": "\u2728",
+    "version": "1.0.0"
 }

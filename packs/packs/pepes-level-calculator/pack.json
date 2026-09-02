@@ -1,13 +1,13 @@
 {
-  "name": "Pepe's Level Calculator",
-  "description": "Calculates exactly how much XP you need to reach your next level, right on the HUD.",
-  "author": "PepeOnMinecraft",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
+    "name": "Pepe's Level Calculator",
+    "description": "Calculates exactly how much experience you need to reach your next level and displays it directly on the HUD, taking the guesswork out of grinding XP.",
+    "author": "PepeOnMinecraft",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
 }

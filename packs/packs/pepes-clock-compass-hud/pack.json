@@ -1,13 +1,13 @@
 {
-  "name": "Pepe's Clock & Compass HUD",
-  "description": "Displays a compact clock and compass readout on the HUD, so you always know the time and your facing at a glance.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true
+    "name": "Pepe's Clock & Compass HUD",
+    "description": "Displays a compact clock and compass readout directly on the HUD, so you always know the time of day and the direction you're facing without checking your inventory.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true
 }

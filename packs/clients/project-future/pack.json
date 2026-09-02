@@ -1,16 +1,16 @@
 {
-    "name":  "Project Future",
-    "description":  "An experimental rebrand exploring new features and direction.",
-    "author":  "Pepe",
-    "version":  "1.0.0",
-    "thumbnail":  "📦",
-    "tags":  [
-                 "clients"
-             ],
-    "category":  "clients",
-    "license":  "MIT",
-    "mcVersion":  "1.17",
-    "timelineOrder":  5,
-    "faIcon":  "fa-rocket",
-    "discontinued":  true
+    "name": "Project Future",
+    "description": "An experimental rebrand built to explore new features and a new creative direction for the client line, testing ideas that would go on to shape later releases.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "clients"
+    ],
+    "category": "clients",
+    "license": "MIT",
+    "mcVersion": "1.17",
+    "timelineOrder": 5,
+    "faIcon": "fa-rocket",
+    "discontinued": true
 }

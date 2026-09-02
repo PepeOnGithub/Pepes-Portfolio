@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-02T06:41:59.865560",
+  "generated": "2026-09-02T07:13:52.508664",
   "total_packs": 44,
   "categories": {
     "addons": [
@@ -66,7 +66,7 @@
       "id": 1,
       "name": "Pepe's Experience Tome",
       "category": "addons",
-      "description": "Adds Crystallized Lapis and the XP Tome, an item that can bank up to 64 levels of experience for later. Find them hidden in ancient structures.",
+      "description": "Introduces Crystallized Lapis and the Experience Tome, an item that lets you bank up to 64 levels of experience for safekeeping and withdraw them whenever you need a quick level boost. Both are found as rare loot hidden within ancient structures, rewarding players who explore off the beaten path.",
       "thumbnail": "packs/addons/pepes-experience-tome/icon.png",
       "tags": [
         "addons",
@@ -87,7 +87,7 @@
       "id": 2,
       "name": "Pepe's Hotbar Refiller",
       "category": "addons",
-      "description": "Automatically swaps in a fresh tool or restocks a hotbar block stack from your inventory the moment one runs out.",
+      "description": "Keeps your hotbar combat-ready by automatically swapping in a fresh tool or topping up a depleted block stack from your inventory the instant one runs out, removing the need to pause and manually restock mid-fight or mid-build.",
       "thumbnail": "packs/addons/pepes-hotbar-refiller/icon.png",
       "tags": [
         "addons",
@@ -109,11 +109,14 @@
       "id": 3,
       "name": "Pepe's Item Magnet Addon",
       "category": "addons",
-      "description": "Adds a Magnet item that instantly pulls every dropped item within 10 blocks straight to you.",
+      "description": "Adds a craftable Magnet item that instantly draws every dropped item within a 10-block radius directly to you, making item collection after mob farming, mining, or PvP encounters effortless.",
       "thumbnail": "packs/addons/pepes-item-magnet-addon/icon.png",
       "tags": [
         "addons",
+        "PvP",
         "Building",
+        "Mobs",
+        "Farming",
         "Utility"
       ],
       "version": "1.0.0",
@@ -131,7 +134,7 @@
       "id": 4,
       "name": "Pepe's Void Totem",
       "category": "addons",
-      "description": "Hold a Void Totem in either hand to survive a fall into the void.",
+      "description": "Adds the Void Totem, a protective charm that can be held in either hand to survive an otherwise fatal fall into the void, giving players a second chance when a build goes wrong or a jump comes up short.",
       "thumbnail": "packs/addons/pepes-void-totem/icon.png",
       "tags": [
         "addons"
@@ -151,10 +154,11 @@
       "id": 5,
       "name": "Allay Client",
       "category": "clients",
-      "description": "Named after the Allay, this version brought further polish and refinement.",
+      "description": "Named after the Allay, this release of the client brought a further round of polish and refinement to the experience, tightening up the feature set and interface established by earlier versions.",
       "thumbnail": "packs/clients/allay-client/icon.png",
       "tags": [
         "clients",
+        "Utility",
         "Client"
       ],
       "version": "1",
@@ -175,7 +179,7 @@
       "id": 6,
       "name": "Glacier Client",
       "category": "clients",
-      "description": "The current and flagship client, home base of Glacier Productions.",
+      "description": "The current flagship client and home base of Glacier Productions, built to bring together the full range of performance, visual, and quality-of-life improvements the team has developed across its history.",
       "thumbnail": "packs/clients/glacier-client/icon.png",
       "tags": [
         "clients",
@@ -518,10 +522,11 @@
       "id": 7,
       "name": "Optifine by Zephyx",
       "category": "clients",
-      "description": "Optifine, built when Pepe was called Zephyx as a money grab.",
+      "description": "An early Optifine-branded release built during the client's original run under the name Zephyx, before the project rebranded to Pepe and later evolved into the Glacier Client lineage.",
       "thumbnail": "packs/clients/optifine-zephyx/icon.png",
       "tags": [
-        "clients"
+        "clients",
+        "Client"
       ],
       "version": "3",
       "downloads": 0,
@@ -586,7 +591,7 @@
       "id": 8,
       "name": "Pepe Client",
       "category": "clients",
-      "description": "Where it all started, my very first Minecraft Bedrock client.",
+      "description": "Where it all started: the very first Minecraft Bedrock client released under the Pepe name, laying the groundwork for every client that followed in this collection.",
       "thumbnail": "packs/clients/pepe-client/icon.png",
       "tags": [
         "clients",
@@ -626,11 +631,12 @@
       "id": 9,
       "name": "Project Future",
       "category": "clients",
-      "description": "An experimental rebrand exploring new features and direction.",
+      "description": "An experimental rebrand built to explore new features and a new creative direction for the client line, testing ideas that would go on to shape later releases.",
       "thumbnail": "packs/clients/project-future/icon.png",
       "tags": [
         "clients",
-        "Utility"
+        "Utility",
+        "Client"
       ],
       "version": "1.4",
       "downloads": 0,
@@ -681,7 +687,7 @@
       "id": 10,
       "name": "Project Light",
       "category": "clients",
-      "description": "A bridge release exploring a lighter-weight client experience.",
+      "description": "A bridge release positioned between major versions, exploring a lighter-weight client experience with a leaner feature set and reduced overhead.",
       "thumbnail": "packs/clients/project-light/icon.png",
       "tags": [
         "clients",
@@ -802,7 +808,7 @@
       "id": 11,
       "name": "Solar Client",
       "category": "clients",
-      "description": "Focused on visuals and performance, continuing the client's evolution.",
+      "description": "Focused squarely on visuals and performance, this release continues the client's ongoing evolution with refined rendering and a smoother overall feel.",
       "thumbnail": "packs/clients/solar-client/icon.png",
       "tags": [
         "clients",
@@ -850,7 +856,7 @@
       "id": 12,
       "name": "Sulphur Client",
       "category": "clients",
-      "description": "Another step in the client's ongoing rebrand and feature journey.",
+      "description": "Another step in the client's ongoing rebrand and feature journey, building on the foundation of previous releases while introducing its own set of refinements.",
       "thumbnail": "📦",
       "tags": [
         "clients",
@@ -858,7 +864,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.4 KB",
+      "size": "0.5 KB",
       "author": "Pepe",
       "downloadUrl": "packs/clients/sulphur-client.zip",
       "previewUrl": "packs/clients/sulphur-client/",
@@ -873,7 +879,7 @@
       "id": 13,
       "name": "Void Client",
       "category": "clients",
-      "description": "The client that followed Pepe Client, an early step in refining the formula.",
+      "description": "The client that directly followed Pepe Client, marking an early and important step in refining the formula that later releases would build upon.",
       "thumbnail": "📦",
       "tags": [
         "clients",
@@ -881,7 +887,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.4 KB",
+      "size": "0.5 KB",
       "author": "Pepe",
       "downloadUrl": "packs/clients/void-client.zip",
       "previewUrl": "packs/clients/void-client/",
@@ -896,10 +902,11 @@
       "id": 14,
       "name": "Wind Client",
       "category": "clients",
-      "description": "A lighter, faster iteration built on lessons learned from Void Client.",
+      "description": "A lighter, faster iteration built on the lessons learned from Void Client, trimming excess and sharpening performance for a snappier experience.",
       "thumbnail": "packs/clients/wind-client/icon.png",
       "tags": [
         "clients",
+        "Utility",
         "Client"
       ],
       "version": "2",
@@ -944,11 +951,12 @@
       "id": 15,
       "name": "Pepe's Charged Overlay Pack",
       "category": "cosmetics",
-      "description": "Cosmetic enhancement pack from Pepe's collection",
+      "description": "Adds a charged particle-style overlay effect to your character, giving combat and movement a bit of extra visual flair without altering gameplay.",
       "thumbnail": "packs/cosmetics/pepes-charged-overlay-pack/icon.png",
       "tags": [
         "cosmetics",
-        "Visual"
+        "Visual",
+        "Effects"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -964,10 +972,11 @@
       "id": 16,
       "name": "Pepe's Halo Pack",
       "category": "cosmetics",
-      "description": "Cosmetic enhancement pack from Pepe's collection",
+      "description": "Adds a customizable halo effect that hovers above your character, a simple cosmetic touch for players who want to stand out in a crowd.",
       "thumbnail": "packs/cosmetics/pepes-halo-pack/icon.png",
       "tags": [
-        "cosmetics"
+        "cosmetics",
+        "Effects"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -983,7 +992,7 @@
       "id": 17,
       "name": "Pepe's Assets Pack",
       "category": "other",
-      "description": "The shared foundation every other Pepe's Pack builds on: shared textures, UI variables, and compatibility patches in one place. Must be enabled and sorted above every other Pepe's Pack to work.",
+      "description": "The shared foundation every other Pepe's Pack builds on: common textures, UI variables, and compatibility patches consolidated in one place. Must be enabled and sorted above every other Pepe's Pack to work correctly.",
       "thumbnail": "packs/other/pepes-assets-pack/icon.png",
       "tags": [
         "required",
@@ -1102,7 +1111,7 @@
       "id": 18,
       "name": "Pepe's ArmorHUD",
       "category": "packs",
-      "description": "Shows the armor you're currently wearing as icons on the HUD, no need to open your inventory to check.",
+      "description": "Displays the armor you're currently wearing as compact icons directly on the HUD, so you can check your protection at a glance without opening your inventory.",
       "thumbnail": "packs/packs/pepes-armorhud/icon.png",
       "tags": [
         "packs",
@@ -1126,7 +1135,7 @@
       "id": 19,
       "name": "Pepe's Better Armor Bar",
       "category": "packs",
-      "description": "Recolors the HUD armor bar based on your armor's material, so you can tell your protection level at a glance.",
+      "description": "Recolors the HUD armor bar to reflect your equipped armor's material, letting you read your protection level at a glance instead of counting icons.",
       "thumbnail": "packs/packs/pepes-better-armor-bar/icon.png",
       "tags": [
         "packs",
@@ -1149,7 +1158,7 @@
       "id": 20,
       "name": "Pepe's Better Coordinates",
       "category": "packs",
-      "description": "Adds a full coordinate readout to the HUD, including world, chunk, and Nether coordinates.",
+      "description": "Adds a complete coordinate readout to the HUD, covering overworld, chunk, and Nether coordinates together so you always know exactly where you stand.",
       "thumbnail": "packs/packs/pepes-better-coordinates/icon.png",
       "tags": [
         "packs",
@@ -1171,7 +1180,7 @@
       "id": 21,
       "name": "Pepe's Better Hover Text",
       "category": "packs",
-      "description": "Enriches inventory tooltips with extra detail: exact durability, technical item and aux IDs, and Suspicious Stew effect identification.",
+      "description": "Enriches inventory tooltips with the detail serious players actually want: exact durability values, technical item and aux IDs, and identification of Suspicious Stew effects.",
       "thumbnail": "packs/packs/pepes-better-hover-text/icon.png",
       "tags": [
         "packs",
@@ -1194,11 +1203,12 @@
       "id": 22,
       "name": "Pepe's Clock & Compass HUD",
       "category": "packs",
-      "description": "Displays a compact clock and compass readout on the HUD, so you always know the time and your facing at a glance.",
+      "description": "Displays a compact clock and compass readout directly on the HUD, so you always know the time of day and the direction you're facing without checking your inventory.",
       "thumbnail": "📦",
       "tags": [
         "packs",
-        "HUD"
+        "HUD",
+        "UI"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1215,7 +1225,7 @@
       "id": 23,
       "name": "Pepe's Death Coords",
       "category": "packs",
-      "description": "Displays your exact coordinates the moment you die, so you never lose track of where your items dropped.",
+      "description": "Captures and displays your exact coordinates the moment you die, so you never lose track of where your items dropped and can recover them with confidence.",
       "thumbnail": "packs/packs/pepes-death-coords/icon.png",
       "tags": [
         "packs"
@@ -1236,7 +1246,7 @@
       "id": 24,
       "name": "Pepe's Debug HUD",
       "category": "packs",
-      "description": "A clean, minimal debug overlay with the info you actually want. Press F8 to toggle it with a keyboard and mouse.",
+      "description": "A clean, minimal debug overlay showing only the information you actually want. Press F8 to toggle it instantly with keyboard and mouse.",
       "thumbnail": "packs/packs/pepes-debug-hud/icon.png",
       "tags": [
         "packs",
@@ -1259,7 +1269,7 @@
       "id": 25,
       "name": "Pepe's DirectionHUD",
       "category": "packs",
-      "description": "Adds a compact heading indicator to the HUD, showing the exact direction you're facing.",
+      "description": "Adds a compact heading indicator to the HUD, showing the exact cardinal direction you're facing at all times.",
       "thumbnail": "packs/packs/pepes-directionhud/icon.png",
       "tags": [
         "packs",
@@ -1281,10 +1291,11 @@
       "id": 26,
       "name": "Pepe's Durability Viewer",
       "category": "packs",
-      "description": "Displays item durability directly on-screen with a clean, easy-to-read readout.",
+      "description": "Displays item durability directly on-screen in a clean, easy-to-read readout, so you always know how much life your tools and armor have left.",
       "thumbnail": "packs/packs/pepes-durability-viewer/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "Combat"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1302,14 +1313,14 @@
       "id": 27,
       "name": "Pepe's Force Spectator",
       "category": "packs",
-      "description": "Forced a first-person spectator camera on death so you could watch the action unfold before respawning. Discontinued and no longer maintained.",
+      "description": "Forced a first-person spectator camera on death, letting you watch the action unfold before respawning. This pack has since been discontinued and is no longer maintained.",
       "thumbnail": "📦",
       "tags": [
         "packs"
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.4 KB",
+      "size": "0.5 KB",
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-force-spectator.zip",
       "previewUrl": "packs/packs/pepes-force-spectator/",
@@ -1322,7 +1333,7 @@
       "id": 28,
       "name": "Pepe's FPS Counter",
       "category": "packs",
-      "description": "A lightweight, accurate FPS counter for your HUD, so you can keep an eye on performance while you play.",
+      "description": "A lightweight, accurate FPS counter for your HUD, letting you keep a constant eye on performance while you play without any added overhead.",
       "thumbnail": "packs/packs/pepes-fps-counter/icon.png",
       "tags": [
         "packs",
@@ -1344,7 +1355,7 @@
       "id": 29,
       "name": "Pepe's InventoryHUD",
       "category": "packs",
-      "description": "Mirrors your inventory contents onto the HUD, so you can check what you're carrying without opening a menu.",
+      "description": "Mirrors the contents of your inventory onto the HUD in real time, so you can check what you're carrying without ever opening a menu.",
       "thumbnail": "packs/packs/pepes-inventoryhud/icon.png",
       "tags": [
         "packs",
@@ -1367,7 +1378,7 @@
       "id": 30,
       "name": "Pepe's Level Calculator",
       "category": "packs",
-      "description": "Calculates exactly how much XP you need to reach your next level, right on the HUD.",
+      "description": "Calculates exactly how much experience you need to reach your next level and displays it directly on the HUD, taking the guesswork out of grinding XP.",
       "thumbnail": "packs/packs/pepes-level-calculator/icon.png",
       "tags": [
         "packs",
@@ -1389,7 +1400,7 @@
       "id": 31,
       "name": "Pepe's OffhandHUD",
       "category": "packs",
-      "description": "Shows the item held in your offhand right on the HUD, alongside your main hand.",
+      "description": "Shows the item currently held in your offhand right on the HUD, displayed alongside your main hand for a complete picture of your loadout.",
       "thumbnail": "packs/packs/pepes-offhandhud/icon.png",
       "tags": [
         "packs",
@@ -1411,7 +1422,7 @@
       "id": 32,
       "name": "Pepe's Speedometer",
       "category": "packs",
-      "description": "Tracks and displays your current movement speed on the HUD in real time.",
+      "description": "Tracks and displays your current movement speed on the HUD in real time, handy for elytra flight, sprinting, and speedrun-style play.",
       "thumbnail": "packs/packs/pepes-speedometer/icon.png",
       "tags": [
         "packs",
@@ -1433,7 +1444,7 @@
       "id": 33,
       "name": "Pepe's Status Effect HUD",
       "category": "packs",
-      "description": "Displayed your active potion effects and their remaining duration on the HUD. Discontinued and no longer maintained.",
+      "description": "Displayed your active potion effects and their remaining duration directly on the HUD. This pack has since been discontinued and is no longer maintained.",
       "thumbnail": "📦",
       "tags": [
         "packs",
@@ -1442,7 +1453,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.4 KB",
+      "size": "0.5 KB",
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-status-effect-hud.zip",
       "previewUrl": "packs/packs/pepes-status-effect-hud/",
@@ -1455,7 +1466,7 @@
       "id": 34,
       "name": "Pepe's Waypoints+",
       "category": "packs",
-      "description": "A full waypoint system: set markers by sneaking and clicking, auto-drop a death point, and toggle a chroma-key greenscreen, all through simple sneak gestures.",
+      "description": "A full waypoint system built for practical navigation: set markers by sneaking and clicking, automatically drop a marker at your death location, and toggle a chroma-key greenscreen mode, all through simple sneak gestures.",
       "thumbnail": "packs/packs/pepes-waypoints/icon.png",
       "tags": [
         "packs"
@@ -1476,10 +1487,11 @@
       "id": 35,
       "name": "Pepe's Animated Crop Growth Highlighter",
       "category": "utility",
-      "description": "Utility enhancement pack from Pepe's collection",
+      "description": "Highlights nearby crops with an animated overlay that reflects their current growth stage, making it easy to spot exactly which crops are ready to harvest at a glance.",
       "thumbnail": "packs/utility/pepes-animated-crop-growth-highlighter/icon.png",
       "tags": [
         "utility",
+        "Visual",
         "Animated",
         "Farming"
       ],
@@ -1497,7 +1509,7 @@
       "id": 36,
       "name": "Pepe's Anvil Damage Indicator",
       "category": "utility",
-      "description": "Utility enhancement pack from Pepe's collection",
+      "description": "Adds a clear visual indicator to the anvil interface showing exactly how much durability damage an enchant or repair will cost before you commit to it.",
       "thumbnail": "packs/utility/pepes-anvil-damage-indicator/icon.png",
       "tags": [
         "utility",
@@ -1517,7 +1529,7 @@
       "id": 37,
       "name": "Pepe's Armor Hider",
       "category": "utility",
-      "description": "Utility enhancement pack from Pepe's collection",
+      "description": "Lets you hide individual pieces of equipped armor from view while keeping their full protective stats and enchantments active, so your character's look stays exactly how you want it.",
       "thumbnail": "packs/utility/pepes-armor-hider/icon.png",
       "tags": [
         "utility",
@@ -1537,7 +1549,7 @@
       "id": 38,
       "name": "Pepe's Bundle Item Counter",
       "category": "utility",
-      "description": "Utility enhancement pack from Pepe's collection",
+      "description": "Adds a live item count directly onto bundle icons, so you can see how full each bundle is without needing to open it and inspect its contents.",
       "thumbnail": "packs/utility/pepes-bundle-item-counter/icon.png",
       "tags": [
         "utility",
@@ -1557,7 +1569,7 @@
       "id": 39,
       "name": "Pepe's Dynamic 3rd Person Crosshair",
       "category": "utility",
-      "description": "Utility enhancement pack from Pepe's collection",
+      "description": "Adds a proper crosshair to third-person camera mode that tracks your aim accurately, making third-person play far more precise for building, combat, and interaction.",
       "thumbnail": "packs/utility/pepes-dynamic-3rd-person-crosshair/icon.png",
       "tags": [
         "utility",
@@ -1577,11 +1589,12 @@
       "id": 40,
       "name": "Pepe's Shiny Pots",
       "category": "utility",
-      "description": "Utility enhancement pack from Pepe's collection",
+      "description": "Gives decorated pots a subtle shine effect, making them easier to spot amid clutter and adding a small extra bit of visual polish to your builds.",
       "thumbnail": "packs/utility/pepes-shiny-pots/icon.png",
       "tags": [
         "utility",
-        "Visual"
+        "Visual",
+        "Effects"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1597,7 +1610,7 @@
       "id": 41,
       "name": "Pepe's Spinning Projectiles",
       "category": "utility",
-      "description": "Utility enhancement pack from Pepe's collection",
+      "description": "Adds a smooth spinning animation to thrown and shot projectiles in flight, giving arrows, tridents, and other thrown items a bit more visual flair.",
       "thumbnail": "packs/utility/pepes-spinning-projectiles/icon.png",
       "tags": [
         "utility"
@@ -1616,7 +1629,7 @@
       "id": 42,
       "name": "Pepe's Time Changer",
       "category": "utility",
-      "description": "Utility enhancement pack from Pepe's collection",
+      "description": "Adds simple in-game controls to set the world time instantly, saving you from typing out commands whenever you want to skip to day, night, or a specific time.",
       "thumbnail": "packs/utility/pepes-time-changer/icon.png",
       "tags": [
         "utility"
@@ -1635,7 +1648,7 @@
       "id": 43,
       "name": "Glacier Client Website",
       "category": "website",
-      "description": "The official Glacier Client website, home for the client, downloads, and news.",
+      "description": "The official Glacier Client website, serving as the central home for the client's downloads, changelogs, and the latest news from the Glacier Productions team.",
       "thumbnail": "🌐",
       "tags": [
         "website",
@@ -1643,7 +1656,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "0.4 KB",
       "author": "Pepe",
       "downloadUrl": "packs/website/glacierclient-xyz.zip",
       "previewUrl": "packs/website/glacierclient-xyz/",
@@ -1656,7 +1669,7 @@
       "id": 44,
       "name": "MCA Glacier Client",
       "category": "website",
-      "description": "The MCA subdomain for Glacier Client, part of the wider Glacier Productions web ecosystem.",
+      "description": "The MCA subdomain supporting Glacier Client, part of the wider Glacier Productions web ecosystem that powers the project's online presence.",
       "thumbnail": "🌐",
       "tags": [
         "website",
@@ -1664,7 +1677,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.3 KB",
+      "size": "0.4 KB",
       "author": "Pepe",
       "downloadUrl": "packs/website/mca-glacierclient-xyz.zip",
       "previewUrl": "packs/website/mca-glacierclient-xyz/",

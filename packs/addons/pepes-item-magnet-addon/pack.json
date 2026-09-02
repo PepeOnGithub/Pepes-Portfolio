@@ -1,13 +1,13 @@
 {
-  "name": "Pepe's Item Magnet Addon",
-  "description": "Adds a Magnet item that instantly pulls every dropped item within 10 blocks straight to you.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "addons"
-  ],
-  "category": "addons",
-  "license": "MIT",
-  "showcaseUrl": "https://youtu.be/ChjxGuHtt48"
+    "name": "Pepe's Item Magnet Addon",
+    "description": "Adds a craftable Magnet item that instantly draws every dropped item within a 10-block radius directly to you, making item collection after mob farming, mining, or PvP encounters effortless.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "addons"
+    ],
+    "category": "addons",
+    "license": "MIT",
+    "showcaseUrl": "https://youtu.be/ChjxGuHtt48"
 }

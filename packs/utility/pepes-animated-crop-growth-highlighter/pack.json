@@ -1,9 +1,9 @@
 {
-    "author":  "Pepe",
-    "name":  "Pepe\u0027s Animated Crop Growth Highlighter",
-    "license":  "MIT",
-    "description":  "Utility enhancement pack from Pepe\u0027s collection",
-    "category":  "utility",
-    "thumbnail":  "🔧",
-    "version":  "1.0.0"
+    "author": "Pepe",
+    "name": "Pepe's Animated Crop Growth Highlighter",
+    "license": "MIT",
+    "description": "Highlights nearby crops with an animated overlay that reflects their current growth stage, making it easy to spot exactly which crops are ready to harvest at a glance.",
+    "category": "utility",
+    "thumbnail": "\ud83d\udd27",
+    "version": "1.0.0"
 }

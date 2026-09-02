@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's OffhandHUD",
-  "description": "Shows the item held in your offhand right on the HUD, alongside your main hand.",
-  "author": "Pepe",
-  "version": "1.0.1",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/ezj1oGz8nrY"
+    "name": "Pepe's OffhandHUD",
+    "description": "Shows the item currently held in your offhand right on the HUD, displayed alongside your main hand for a complete picture of your loadout.",
+    "author": "Pepe",
+    "version": "1.0.1",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/ezj1oGz8nrY"
 }

@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's Status Effect HUD",
-  "description": "Displayed your active potion effects and their remaining duration on the HUD. Discontinued and no longer maintained.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "discontinued": true,
-  "showcaseUrl": "https://youtu.be/xL4tqxtJ6Vo"
+    "name": "Pepe's Status Effect HUD",
+    "description": "Displayed your active potion effects and their remaining duration directly on the HUD. This pack has since been discontinued and is no longer maintained.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "discontinued": true,
+    "showcaseUrl": "https://youtu.be/xL4tqxtJ6Vo"
 }

@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's FPS Counter",
-  "description": "A lightweight, accurate FPS counter for your HUD, so you can keep an eye on performance while you play.",
-  "author": "Pepe",
-  "version": "1.0.1",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/iL6kHJGobFU"
+    "name": "Pepe's FPS Counter",
+    "description": "A lightweight, accurate FPS counter for your HUD, letting you keep a constant eye on performance while you play without any added overhead.",
+    "author": "Pepe",
+    "version": "1.0.1",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/iL6kHJGobFU"
 }

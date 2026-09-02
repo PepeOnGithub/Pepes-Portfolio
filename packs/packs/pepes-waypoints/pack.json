@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's Waypoints+",
-  "description": "A full waypoint system: set markers by sneaking and clicking, auto-drop a death point, and toggle a chroma-key greenscreen, all through simple sneak gestures.",
-  "author": "Pepe",
-  "version": "1.0.1",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
+    "name": "Pepe's Waypoints+",
+    "description": "A full waypoint system built for practical navigation: set markers by sneaking and clicking, automatically drop a marker at your death location, and toggle a chroma-key greenscreen mode, all through simple sneak gestures.",
+    "author": "Pepe",
+    "version": "1.0.1",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
 }

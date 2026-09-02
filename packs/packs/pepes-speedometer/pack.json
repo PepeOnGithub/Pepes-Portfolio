@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's Speedometer",
-  "description": "Tracks and displays your current movement speed on the HUD in real time.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/4AmjVyMh2cI"
+    "name": "Pepe's Speedometer",
+    "description": "Tracks and displays your current movement speed on the HUD in real time, handy for elytra flight, sprinting, and speedrun-style play.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/4AmjVyMh2cI"
 }

@@ -1,13 +1,13 @@
 {
-  "name": "Pepe's Experience Tome",
-  "description": "Adds Crystallized Lapis and the XP Tome, an item that can bank up to 64 levels of experience for later. Find them hidden in ancient structures.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "addons"
-  ],
-  "category": "addons",
-  "license": "MIT",
-  "showcaseUrl": "https://youtu.be/7M_cfmBuq90"
+    "name": "Pepe's Experience Tome",
+    "description": "Introduces Crystallized Lapis and the Experience Tome, an item that lets you bank up to 64 levels of experience for safekeeping and withdraw them whenever you need a quick level boost. Both are found as rare loot hidden within ancient structures, rewarding players who explore off the beaten path.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "addons"
+    ],
+    "category": "addons",
+    "license": "MIT",
+    "showcaseUrl": "https://youtu.be/7M_cfmBuq90"
 }

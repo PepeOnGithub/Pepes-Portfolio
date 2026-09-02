@@ -1,9 +1,9 @@
 {
-    "author":  "Pepe",
-    "name":  "Pepe\u0027s Time Changer",
-    "license":  "MIT",
-    "description":  "Utility enhancement pack from Pepe\u0027s collection",
-    "category":  "utility",
-    "thumbnail":  "🔧",
-    "version":  "1.0.0"
+    "author": "Pepe",
+    "name": "Pepe's Time Changer",
+    "license": "MIT",
+    "description": "Adds simple in-game controls to set the world time instantly, saving you from typing out commands whenever you want to skip to day, night, or a specific time.",
+    "category": "utility",
+    "thumbnail": "\ud83d\udd27",
+    "version": "1.0.0"
 }

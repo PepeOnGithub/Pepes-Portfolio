@@ -1,16 +1,16 @@
 {
-    "name":  "Void Client",
-    "description":  "The client that followed Pepe Client, an early step in refining the formula.",
-    "author":  "Pepe",
-    "version":  "1.0.0",
-    "thumbnail":  "📦",
-    "tags":  [
-                 "clients"
-             ],
-    "category":  "clients",
-    "license":  "MIT",
-    "mcVersion":  "TBD",
-    "timelineOrder":  2,
-    "faIcon":  "fa-circle-notch",
-    "discontinued":  true
+    "name": "Void Client",
+    "description": "The client that directly followed Pepe Client, marking an early and important step in refining the formula that later releases would build upon.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "clients"
+    ],
+    "category": "clients",
+    "license": "MIT",
+    "mcVersion": "TBD",
+    "timelineOrder": 2,
+    "faIcon": "fa-circle-notch",
+    "discontinued": true
 }

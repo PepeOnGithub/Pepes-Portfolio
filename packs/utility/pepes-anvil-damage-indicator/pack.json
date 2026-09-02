@@ -1,9 +1,9 @@
 {
-    "author":  "Pepe",
-    "name":  "Pepe\u0027s Anvil Damage Indicator",
-    "license":  "MIT",
-    "description":  "Utility enhancement pack from Pepe\u0027s collection",
-    "category":  "utility",
-    "thumbnail":  "🔧",
-    "version":  "1.0.0"
+    "author": "Pepe",
+    "name": "Pepe's Anvil Damage Indicator",
+    "license": "MIT",
+    "description": "Adds a clear visual indicator to the anvil interface showing exactly how much durability damage an enchant or repair will cost before you commit to it.",
+    "category": "utility",
+    "thumbnail": "\ud83d\udd27",
+    "version": "1.0.0"
 }

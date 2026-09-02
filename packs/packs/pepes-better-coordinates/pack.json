@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's Better Coordinates",
-  "description": "Adds a full coordinate readout to the HUD, including world, chunk, and Nether coordinates.",
-  "author": "Pepe",
-  "version": "1.0.1",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/riGidGD8V3o"
+    "name": "Pepe's Better Coordinates",
+    "description": "Adds a complete coordinate readout to the HUD, covering overworld, chunk, and Nether coordinates together so you always know exactly where you stand.",
+    "author": "Pepe",
+    "version": "1.0.1",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/riGidGD8V3o"
 }

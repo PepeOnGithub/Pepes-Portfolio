@@ -1,13 +1,13 @@
 {
-  "name": "Pepe's Hotbar Refiller",
-  "description": "Automatically swaps in a fresh tool or restocks a hotbar block stack from your inventory the moment one runs out.",
-  "author": "PepeOnMCBE",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "addons"
-  ],
-  "category": "addons",
-  "license": "MIT",
-  "showcaseUrl": "https://youtu.be/tvstyl5fjII"
+    "name": "Pepe's Hotbar Refiller",
+    "description": "Keeps your hotbar combat-ready by automatically swapping in a fresh tool or topping up a depleted block stack from your inventory the instant one runs out, removing the need to pause and manually restock mid-fight or mid-build.",
+    "author": "PepeOnMCBE",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "addons"
+    ],
+    "category": "addons",
+    "license": "MIT",
+    "showcaseUrl": "https://youtu.be/tvstyl5fjII"
 }

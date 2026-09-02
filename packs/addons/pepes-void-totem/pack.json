@@ -1,13 +1,13 @@
 {
-  "name": "Pepe's Void Totem",
-  "description": "Hold a Void Totem in either hand to survive a fall into the void.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "addons"
-  ],
-  "category": "addons",
-  "license": "MIT",
-  "showcaseUrl": "https://youtu.be/g2g7eUF0Auo"
+    "name": "Pepe's Void Totem",
+    "description": "Adds the Void Totem, a protective charm that can be held in either hand to survive an otherwise fatal fall into the void, giving players a second chance when a build goes wrong or a jump comes up short.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "addons"
+    ],
+    "category": "addons",
+    "license": "MIT",
+    "showcaseUrl": "https://youtu.be/g2g7eUF0Auo"
 }

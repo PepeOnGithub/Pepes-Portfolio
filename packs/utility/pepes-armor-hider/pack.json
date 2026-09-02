@@ -1,9 +1,9 @@
 {
-    "author":  "Pepe",
-    "name":  "Pepe\u0027s Armor Hider",
-    "license":  "MIT",
-    "description":  "Utility enhancement pack from Pepe\u0027s collection",
-    "category":  "utility",
-    "thumbnail":  "🔧",
-    "version":  "1.0.0"
+    "author": "Pepe",
+    "name": "Pepe's Armor Hider",
+    "license": "MIT",
+    "description": "Lets you hide individual pieces of equipped armor from view while keeping their full protective stats and enchantments active, so your character's look stays exactly how you want it.",
+    "category": "utility",
+    "thumbnail": "\ud83d\udd27",
+    "version": "1.0.0"
 }

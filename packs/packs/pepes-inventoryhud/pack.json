@@ -1,14 +1,14 @@
 {
-  "name": "Pepe's InventoryHUD",
-  "description": "Mirrors your inventory contents onto the HUD, so you can check what you're carrying without opening a menu.",
-  "author": "Pepe",
-  "version": "1.0.0",
-  "thumbnail": "📦",
-  "tags": [
-    "packs"
-  ],
-  "category": "packs",
-  "license": "MIT",
-  "requiresAssets": true,
-  "showcaseUrl": "https://youtu.be/C12DFIh2cto"
+    "name": "Pepe's InventoryHUD",
+    "description": "Mirrors the contents of your inventory onto the HUD in real time, so you can check what you're carrying without ever opening a menu.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udce6",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/C12DFIh2cto"
 }
