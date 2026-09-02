@@ -1246,6 +1246,29 @@ body.reduce-motion *::after {
   color: var(--color-text-primary);
 }
 
+/* ===== Filter dropdowns (Library categories/tags, Settings sections) =====
+   A <details> forced open on desktop (via the `open` attribute already in
+   the markup) so it renders exactly like a plain heading + list there; JS
+   only removes `open` at mobile widths, where the summary becomes a real
+   dropdown trigger. Base rules here must stay desktop-safe. */
+.filter-dropdown summary {
+  list-style: none;
+  cursor: default;
+}
+
+.filter-dropdown summary::-webkit-details-marker { display: none; }
+
+.filter-dropdown-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.filter-dropdown-current,
+.filter-dropdown-chevron {
+  display: none;
+}
+
 /* ===== Categories ===== */
 .category-list {
   display: flex;
@@ -3187,30 +3210,60 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   .pack-favorite-btn { width: 38px; height: 38px; }
   #sort-dropdown .custom-dropdown-trigger { min-height: 40px; }
 
-  /* Categories (Library filters and Settings sections both use this
-     component) become a wrapping row of compact pills instead of a tall
-     vertical stack, which otherwise pushed the actual content well below
-     the fold on a phone. Wrapping (not scrolling) keeps every option
-     visible at a glance with no scrollbar/track to render. */
-  .category-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
-  }
-
-  .category-row {
-    flex-shrink: 0;
-    width: auto;
+  /* Categories (Library filters + Settings sections) and Tags collapse
+     into a proper dropdown - a closed-by-default <details> whose summary
+     shows the current selection, instead of a tall vertical stack or a
+     wrapping pill grid, both of which pushed the actual content well
+     below the fold on a phone. */
+  .filter-dropdown-summary {
+    cursor: pointer;
+    justify-content: space-between;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-md);
+  }
+
+  .filter-dropdown-summary .sidebar-subtitle { flex-shrink: 0; }
+
+  .filter-dropdown-current {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-align: right;
   }
 
-  .category-row .count {
-    margin-left: var(--spacing-xs);
+  .filter-dropdown-chevron {
+    display: inline-block;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    transition: transform var(--transition-fast);
   }
 
-  .tag-chip { flex-shrink: 0; }
+  .filter-dropdown[open] > .filter-dropdown-summary .filter-dropdown-chevron {
+    transform: rotate(180deg);
+  }
+
+  .filter-dropdown .category-list,
+  .filter-dropdown .tag-chip-list {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
+  .filter-dropdown .category-list {
+    flex-direction: column;
+  }
 }
 
 /* ===== Footer ===== */

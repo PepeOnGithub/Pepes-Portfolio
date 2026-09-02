@@ -444,6 +444,30 @@ class PackLibrary {
     this.syncCategorySidebar();
     this.syncSettingsCategorySidebar();
     this.applyFilters();
+    this.setupFilterDropdowns();
+  }
+
+  // Categories/Tags use a <details> that's forced open on desktop (via the
+  // `open` attribute in the markup) and starts collapsed on mobile, where
+  // the summary becomes a real dropdown trigger. Re-applied on resize so
+  // rotating a device or resizing past the breakpoint doesn't leave a
+  // dropdown stuck in the wrong state.
+  setupFilterDropdowns() {
+    const ids = ['library-category-dropdown', 'library-tags-dropdown', 'settings-category-dropdown'];
+    const apply = () => {
+      const isMobile = window.innerWidth <= 768;
+      ids.forEach(id => {
+        const details = document.getElementById(id);
+        if (!details) return;
+        if (isMobile) {
+          details.removeAttribute('open');
+        } else {
+          details.setAttribute('open', '');
+        }
+      });
+    };
+    apply();
+    window.addEventListener('resize', apply);
   }
 
   renderClientsTimeline() {
@@ -877,6 +901,10 @@ class PackLibrary {
     document.querySelectorAll('.settings-panel').forEach(panel => {
       panel.classList.toggle('active', panel.dataset.settingsPanel === category);
     });
+
+    const currentEl = document.getElementById('settings-category-current');
+    if (currentEl) currentEl.textContent = btn.querySelector('span').textContent.trim();
+    this.closeFilterDropdownOnMobile('settings-category-dropdown');
   }
 
   syncSettingsCategorySidebar() {
@@ -1023,8 +1051,18 @@ class PackLibrary {
         }
         btn.classList.toggle('active');
         this.applyFilters();
+        this.updateTagsDropdownLabel();
       });
     });
+
+    this.updateTagsDropdownLabel();
+  }
+
+  updateTagsDropdownLabel() {
+    const el = document.getElementById('library-tags-current');
+    if (!el) return;
+    const count = this.currentFilter.tags.size;
+    el.textContent = count === 0 ? 'Any' : `${count} selected`;
   }
 
   updateCategoryCounts() {
@@ -1338,12 +1376,30 @@ class PackLibrary {
     document.querySelectorAll('#page-library .category-row').forEach(btn => btn.classList.remove('active'));
     row.classList.add('active');
 
+    const currentEl = document.getElementById('library-category-current');
+    if (currentEl) currentEl.textContent = row.querySelector('span:first-child').textContent.trim();
+    this.closeFilterDropdownOnMobile('library-category-dropdown');
+
     this.applyFilters();
+  }
+
+  // On mobile, picking a single-select option (category / settings section)
+  // should collapse the dropdown back down, like a native <select>. Desktop
+  // keeps every <details> forced open, so this is a no-op there.
+  closeFilterDropdownOnMobile(id) {
+    if (window.innerWidth > 768) return;
+    const details = document.getElementById(id);
+    if (details) details.removeAttribute('open');
   }
 
   syncCategorySidebar() {
     document.querySelectorAll('#page-library .category-row').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.category === this.currentFilter.category);
+      const isActive = btn.dataset.category === this.currentFilter.category;
+      btn.classList.toggle('active', isActive);
+      if (isActive) {
+        const currentEl = document.getElementById('library-category-current');
+        if (currentEl) currentEl.textContent = btn.querySelector('span:first-child').textContent.trim();
+      }
     });
   }
 
