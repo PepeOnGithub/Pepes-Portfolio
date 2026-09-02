@@ -1714,15 +1714,20 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   width: 64px;
   height: 64px;
   flex-shrink: 0;
+  border-radius: var(--radius-md);
+  margin: var(--spacing-sm);
 }
 
+/* Keep the same rounded/bordered/shadowed tile the grid view uses instead
+   of flattening it edge-to-edge - a flush square with no border read as
+   an unstyled placeholder next to every other card style on the site. */
 .packs-grid.list-view .pack-icon-badge {
   position: static;
   width: 100%;
   height: 100%;
-  border-radius: 0;
-  border: none;
-  box-shadow: none;
+  border-radius: var(--radius-md);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .packs-grid.list-view .pinned-badge {
@@ -1759,7 +1764,10 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   white-space: nowrap;
 }
 
-.packs-grid.list-view .pack-description { display: none; }
+.packs-grid.list-view .pack-description {
+  margin-bottom: 0;
+  -webkit-line-clamp: 1;
+}
 
 .packs-grid.list-view .pack-footer {
   flex-shrink: 0;
@@ -3209,6 +3217,50 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   .view-toggle-btn { width: 40px; height: 40px; }
   .pack-favorite-btn { width: 38px; height: 38px; }
   #sort-dropdown .custom-dropdown-trigger { min-height: 40px; }
+
+  /* A side-by-side list row doesn't have enough width left for the title
+     to share space with badges and downloads/favorite on a phone - it was
+     wrapping into a cramped, disordered stack. Below this width, list view
+     just falls back to the same stacked-card layout grid view already
+     uses (all the list-view-only overrides are undone). */
+  .packs-grid.list-view .pack-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .packs-grid.list-view .pack-thumbnail {
+    width: 100%;
+    height: 150px;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .packs-grid.list-view .pack-icon-badge {
+    position: absolute;
+    left: var(--spacing-md);
+    bottom: var(--spacing-md);
+    width: 44px;
+    height: 44px;
+  }
+
+  .packs-grid.list-view .pack-content {
+    padding: var(--spacing-lg);
+  }
+
+  .packs-grid.list-view .pack-name {
+    white-space: normal;
+  }
+
+  .packs-grid.list-view .pack-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+  }
+
+  .packs-grid.list-view .pack-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-md);
+    margin-top: auto;
+  }
 
   /* Categories (Library filters + Settings sections) and Tags collapse
      into a proper dropdown - a closed-by-default <details> whose summary
