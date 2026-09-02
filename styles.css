@@ -146,8 +146,19 @@ body.hide-card-author .pack-footer span:first-child { display: none; }
   padding: 0;
   box-sizing: border-box;
   /* Kills the gray/blue flash mobile browsers paint over a tapped element
-     (buttons, links, cards) before any hover/active styles even apply. */
-  -webkit-tap-highlight-color: transparent;
+     (buttons, links, cards) before any hover/active styles even apply.
+     rgba(0,0,0,0) instead of the transparent keyword, and repeated on
+     html/body directly - some WebViews only honor it on those, or ignore
+     the keyword form. */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html, body {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+a, button, input, textarea, select, summary, [role="button"], [tabindex] {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 html {
@@ -3177,16 +3188,14 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   #sort-dropdown .custom-dropdown-trigger { min-height: 40px; }
 
   /* Categories (Library filters and Settings sections both use this
-     component) become a horizontally-scrollable row of pills instead of a
-     tall vertical stack, which otherwise pushes the actual content well
-     below the fold on a phone. */
+     component) become a wrapping row of compact pills instead of a tall
+     vertical stack, which otherwise pushed the actual content well below
+     the fold on a phone. Wrapping (not scrolling) keeps every option
+     visible at a glance with no scrollbar/track to render. */
   .category-list {
     flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;
     gap: var(--spacing-sm);
-    padding-bottom: var(--spacing-xs);
   }
 
   .category-row {
@@ -3199,15 +3208,6 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
 
   .category-row .count {
     margin-left: var(--spacing-xs);
-  }
-
-  /* Tags get the same horizontal-scroll treatment instead of wrapping
-     across several lines. */
-  .tag-chip-list {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: var(--spacing-xs);
   }
 
   .tag-chip { flex-shrink: 0; }
