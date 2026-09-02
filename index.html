@@ -663,8 +663,16 @@
           <input type="text" id="profile-display-name" placeholder="Shown instead of your account name" autocomplete="off" maxlength="60">
         </label>
         <label class="profile-field">
-          <span>Avatar URL</span>
-          <input type="text" id="profile-avatar-url" placeholder="https://... (leave blank to keep current)" autocomplete="off" maxlength="500">
+          <span>Profile Picture</span>
+          <div class="profile-avatar-upload">
+            <img src="assets/pepe-profile.png" alt="" class="profile-avatar-preview" id="profile-avatar-preview" loading="lazy" decoding="async">
+            <div class="profile-avatar-upload-actions">
+              <button type="button" class="btn-secondary-small" id="profile-avatar-pick-btn">Choose Image</button>
+              <button type="button" class="btn-secondary-small profile-avatar-remove-btn hidden" id="profile-avatar-remove-btn">Remove</button>
+              <input type="file" id="profile-avatar-file" accept="image/png,image/jpeg,image/webp" class="hidden">
+            </div>
+          </div>
+          <p class="profile-avatar-error hidden" id="profile-avatar-error"></p>
         </label>
         <label class="profile-field">
           <span>Banner URL</span>

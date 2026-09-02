@@ -3919,6 +3919,35 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   box-shadow: 0 0 0 3px rgba(72, 156, 73, 0.15);
 }
 
+.profile-avatar-upload {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.profile-avatar-preview {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.profile-avatar-upload-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.profile-avatar-remove-btn.hidden { display: none; }
+
+.profile-avatar-error {
+  color: #e0616f;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  margin-top: var(--spacing-xs);
+}
+
 .profile-form-error {
   color: #e0616f;
   font-size: var(--font-size-sm);

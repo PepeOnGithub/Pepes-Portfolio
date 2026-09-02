@@ -2291,6 +2291,36 @@ class PackLibrary {
 
     document.getElementById('profile-modal-close').addEventListener('click', () => this.closeProfileModal());
     document.getElementById('profile-save-btn').addEventListener('click', () => this.saveProfile());
+    document.getElementById('profile-avatar-pick-btn').addEventListener('click', () => {
+      document.getElementById('profile-avatar-file').click();
+    });
+    document.getElementById('profile-avatar-remove-btn').addEventListener('click', () => {
+      this.pendingAvatarDataUrl = '';
+      document.getElementById('profile-avatar-file').value = '';
+      document.getElementById('profile-avatar-preview').src = 'assets/pepe-profile.png';
+      document.getElementById('profile-avatar-remove-btn').classList.add('hidden');
+      document.getElementById('profile-avatar-error').classList.add('hidden');
+    });
+    document.getElementById('profile-avatar-file').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const errorEl = document.getElementById('profile-avatar-error');
+      errorEl.classList.add('hidden');
+      if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
+        errorEl.textContent = 'Please choose a PNG, JPEG, or WebP image.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      try {
+        const dataUrl = await this.resizeImageToAvatarDataUrl(file);
+        this.pendingAvatarDataUrl = dataUrl;
+        document.getElementById('profile-avatar-preview').src = dataUrl;
+        document.getElementById('profile-avatar-remove-btn').classList.remove('hidden');
+      } catch (err) {
+        errorEl.textContent = 'Could not process that image. Please try another.';
+        errorEl.classList.remove('hidden');
+      }
+    });
 
     document.getElementById('comment-submit-btn').addEventListener('click', () => this.submitComment());
 
@@ -2465,10 +2495,39 @@ class PackLibrary {
     document.getElementById('auth-account-menu').classList.add('hidden');
     document.getElementById('profile-username').value = this.currentUser.username || '';
     document.getElementById('profile-display-name').value = this.currentUser.name || '';
-    document.getElementById('profile-avatar-url').value = '';
     document.getElementById('profile-banner-url').value = '';
     document.getElementById('profile-form-error').classList.add('hidden');
+    document.getElementById('profile-avatar-error').classList.add('hidden');
+    document.getElementById('profile-avatar-file').value = '';
+    document.getElementById('profile-avatar-preview').src = this.currentUser.avatarUrl || 'assets/pepe-profile.png';
+    document.getElementById('profile-avatar-remove-btn').classList.add('hidden');
+    this.pendingAvatarDataUrl = undefined;
     document.getElementById('profile-modal-overlay').classList.remove('hidden');
+  }
+
+  resizeImageToAvatarDataUrl(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Could not read file'));
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('Could not read image'));
+        img.onload = () => {
+          const size = 256;
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          const scale = Math.max(size / img.naturalWidth, size / img.naturalHeight);
+          const w = img.naturalWidth * scale;
+          const h = img.naturalHeight * scale;
+          ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+          resolve(canvas.toDataURL('image/webp', 0.85));
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   closeProfileModal() {
@@ -2481,7 +2540,6 @@ class PackLibrary {
 
     const username = document.getElementById('profile-username').value.trim();
     const displayName = document.getElementById('profile-display-name').value.trim();
-    const avatarUrl = document.getElementById('profile-avatar-url').value.trim();
     const bannerUrl = document.getElementById('profile-banner-url').value.trim();
 
     try {
@@ -2491,7 +2549,7 @@ class PackLibrary {
         body: JSON.stringify({
           username: username || null,
           displayName: displayName || null,
-          avatarUrl: avatarUrl || null,
+          avatarUrl: this.pendingAvatarDataUrl !== undefined ? this.pendingAvatarDataUrl : null,
           bannerUrl: bannerUrl || null,
         }),
       });
