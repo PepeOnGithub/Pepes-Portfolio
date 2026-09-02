@@ -675,8 +675,16 @@
           <p class="profile-avatar-error hidden" id="profile-avatar-error"></p>
         </label>
         <label class="profile-field">
-          <span>Banner URL</span>
-          <input type="text" id="profile-banner-url" placeholder="https://... (shown on your account menu)" autocomplete="off" maxlength="500">
+          <span>Banner</span>
+          <div class="profile-banner-upload">
+            <img src="" alt="" class="profile-banner-preview hidden" id="profile-banner-preview" loading="lazy" decoding="async">
+            <div class="profile-banner-upload-actions">
+              <button type="button" class="btn-secondary-small" id="profile-banner-pick-btn">Choose Image</button>
+              <button type="button" class="btn-secondary-small profile-banner-remove-btn hidden" id="profile-banner-remove-btn">Remove</button>
+              <input type="file" id="profile-banner-file" accept="image/png,image/jpeg,image/webp" class="hidden">
+            </div>
+          </div>
+          <p class="profile-banner-error hidden" id="profile-banner-error"></p>
         </label>
         <p class="profile-form-error hidden" id="profile-form-error"></p>
       </div>

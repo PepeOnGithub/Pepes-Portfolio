@@ -2312,10 +2312,45 @@ class PackLibrary {
         return;
       }
       try {
-        const dataUrl = await this.resizeImageToAvatarDataUrl(file);
+        const dataUrl = await this.resizeImageToDataUrl(file, 256, 256);
         this.pendingAvatarDataUrl = dataUrl;
         document.getElementById('profile-avatar-preview').src = dataUrl;
         document.getElementById('profile-avatar-remove-btn').classList.remove('hidden');
+      } catch (err) {
+        errorEl.textContent = 'Could not process that image. Please try another.';
+        errorEl.classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('profile-banner-pick-btn').addEventListener('click', () => {
+      document.getElementById('profile-banner-file').click();
+    });
+    document.getElementById('profile-banner-remove-btn').addEventListener('click', () => {
+      this.pendingBannerDataUrl = '';
+      document.getElementById('profile-banner-file').value = '';
+      const preview = document.getElementById('profile-banner-preview');
+      preview.src = '';
+      preview.classList.add('hidden');
+      document.getElementById('profile-banner-remove-btn').classList.add('hidden');
+      document.getElementById('profile-banner-error').classList.add('hidden');
+    });
+    document.getElementById('profile-banner-file').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const errorEl = document.getElementById('profile-banner-error');
+      errorEl.classList.add('hidden');
+      if (!/^image\/(png|jpeg|webp)$/.test(file.type)) {
+        errorEl.textContent = 'Please choose a PNG, JPEG, or WebP image.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      try {
+        const dataUrl = await this.resizeImageToDataUrl(file, 960, 240);
+        this.pendingBannerDataUrl = dataUrl;
+        const preview = document.getElementById('profile-banner-preview');
+        preview.src = dataUrl;
+        preview.classList.remove('hidden');
+        document.getElementById('profile-banner-remove-btn').classList.remove('hidden');
       } catch (err) {
         errorEl.textContent = 'Could not process that image. Please try another.';
         errorEl.classList.remove('hidden');
@@ -2460,7 +2495,7 @@ class PackLibrary {
 
     const avatar = this.currentUser.avatarUrl || 'assets/pepe-profile.png';
     document.getElementById('auth-user-avatar').src = avatar;
-    document.getElementById('auth-pill-username').textContent = this.currentUser.username || this.currentUser.name || 'Account';
+    document.getElementById('auth-pill-username').textContent = this.currentUser.name || this.currentUser.username || 'Account';
 
     const activeToken = this.getSessionToken();
     const listEl = document.getElementById('auth-account-list');
@@ -2495,17 +2530,35 @@ class PackLibrary {
     document.getElementById('auth-account-menu').classList.add('hidden');
     document.getElementById('profile-username').value = this.currentUser.username || '';
     document.getElementById('profile-display-name').value = this.currentUser.name || '';
-    document.getElementById('profile-banner-url').value = '';
     document.getElementById('profile-form-error').classList.add('hidden');
+
     document.getElementById('profile-avatar-error').classList.add('hidden');
     document.getElementById('profile-avatar-file').value = '';
     document.getElementById('profile-avatar-preview').src = this.currentUser.avatarUrl || 'assets/pepe-profile.png';
     document.getElementById('profile-avatar-remove-btn').classList.add('hidden');
     this.pendingAvatarDataUrl = undefined;
+
+    const bannerPreview = document.getElementById('profile-banner-preview');
+    document.getElementById('profile-banner-error').classList.add('hidden');
+    document.getElementById('profile-banner-file').value = '';
+    if (this.currentUser.bannerUrl) {
+      bannerPreview.src = this.currentUser.bannerUrl;
+      bannerPreview.classList.remove('hidden');
+      document.getElementById('profile-banner-remove-btn').classList.remove('hidden');
+    } else {
+      bannerPreview.src = '';
+      bannerPreview.classList.add('hidden');
+      document.getElementById('profile-banner-remove-btn').classList.add('hidden');
+    }
+    this.pendingBannerDataUrl = undefined;
+
     document.getElementById('profile-modal-overlay').classList.remove('hidden');
   }
 
-  resizeImageToAvatarDataUrl(file) {
+  // Cover-crops an uploaded image onto a canvas of the given size and
+  // returns it as a compressed WebP data URL (used for both the square
+  // avatar and the wide banner - just called with different dimensions).
+  resizeImageToDataUrl(file, width, height) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onerror = () => reject(new Error('Could not read file'));
@@ -2513,15 +2566,14 @@ class PackLibrary {
         const img = new Image();
         img.onerror = () => reject(new Error('Could not read image'));
         img.onload = () => {
-          const size = 256;
           const canvas = document.createElement('canvas');
-          canvas.width = size;
-          canvas.height = size;
+          canvas.width = width;
+          canvas.height = height;
           const ctx = canvas.getContext('2d');
-          const scale = Math.max(size / img.naturalWidth, size / img.naturalHeight);
+          const scale = Math.max(width / img.naturalWidth, height / img.naturalHeight);
           const w = img.naturalWidth * scale;
           const h = img.naturalHeight * scale;
-          ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+          ctx.drawImage(img, (width - w) / 2, (height - h) / 2, w, h);
           resolve(canvas.toDataURL('image/webp', 0.85));
         };
         img.src = reader.result;
@@ -2540,7 +2592,6 @@ class PackLibrary {
 
     const username = document.getElementById('profile-username').value.trim();
     const displayName = document.getElementById('profile-display-name').value.trim();
-    const bannerUrl = document.getElementById('profile-banner-url').value.trim();
 
     try {
       const res = await this.authFetch('/api/profile', {
@@ -2550,7 +2601,7 @@ class PackLibrary {
           username: username || null,
           displayName: displayName || null,
           avatarUrl: this.pendingAvatarDataUrl !== undefined ? this.pendingAvatarDataUrl : null,
-          bannerUrl: bannerUrl || null,
+          bannerUrl: this.pendingBannerDataUrl !== undefined ? this.pendingBannerDataUrl : null,
         }),
       });
       const data = await res.json();
