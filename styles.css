@@ -3685,7 +3685,9 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   gap: var(--spacing-sm);
   height: 38px;
   padding: 0 var(--spacing-md);
-  border-radius: var(--radius-xl);
+  /* Match the other header buttons (settings, theme, hamburger), not a
+     fully-rounded pill shape. */
+  border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   background: var(--color-bg-tertiary);
   color: var(--color-text-primary);
@@ -3721,9 +3723,7 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   min-width: 260px;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  /* Match the auth-pill trigger's rounder corners instead of the sharper
-     radius other (rectangular) dropdown triggers use. */
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   padding: var(--spacing-sm);
   display: flex;
