@@ -404,7 +404,8 @@ class PackLibrary {
     this.currentFilter = {
       search: '',
       category: localStorage.getItem('selectedCategory') || '',
-      sort: localStorage.getItem('defaultSort') || 'relevance'
+      sort: localStorage.getItem('defaultSort') || 'relevance',
+      tags: new Set()
     };
     this.viewMode = localStorage.getItem('libraryViewMode') === 'list' ? 'list' : 'grid';
     this.favorites = this.loadFavorites();
@@ -438,6 +439,7 @@ class PackLibrary {
     this.applyViewMode();
     await this.loadPacks();
     this.updateCategoryCounts();
+    this.renderTagChips();
     this.renderClientsTimeline();
     this.syncCategorySidebar();
     this.syncSettingsCategorySidebar();
@@ -707,7 +709,9 @@ class PackLibrary {
         searchInput.value = '';
         this.currentFilter.search = '';
         this.currentFilter.category = '';
+        this.currentFilter.tags.clear();
         this.syncCategorySidebar();
+        this.renderTagChips();
         this.applyFilters();
         document.getElementById('search-clear').classList.add('hidden');
       });
@@ -980,6 +984,47 @@ class PackLibrary {
       this.filteredPacks = [];
       this.packsLoadError = true;
     }
+  }
+
+  renderTagChips() {
+    const listEl = document.getElementById('tag-chip-list');
+    if (!listEl) return;
+
+    // Category names are already filterable via the Categories list above,
+    // so only surface the more descriptive keyword-derived tags here.
+    const categoryNames = new Set(CATEGORY_ORDER);
+    const counts = new Map();
+    this.packs.forEach(pack => {
+      (pack.tags || []).forEach(tag => {
+        if (categoryNames.has(tag.toLowerCase())) return;
+        counts.set(tag, (counts.get(tag) || 0) + 1);
+      });
+    });
+
+    const tags = [...counts.keys()].sort((a, b) => counts.get(b) - counts.get(a) || a.localeCompare(b));
+    if (tags.length === 0) {
+      listEl.innerHTML = '<p class="tag-chip-empty">No tags yet</p>';
+      return;
+    }
+
+    listEl.innerHTML = tags.map(tag => `
+      <button type="button" class="tag-chip${this.currentFilter.tags.has(tag) ? ' active' : ''}" data-tag="${this.escapeHtml(tag)}">
+        ${this.escapeHtml(tag)} <span class="tag-chip-count">${counts.get(tag)}</span>
+      </button>
+    `).join('');
+
+    listEl.querySelectorAll('.tag-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag;
+        if (this.currentFilter.tags.has(tag)) {
+          this.currentFilter.tags.delete(tag);
+        } else {
+          this.currentFilter.tags.add(tag);
+        }
+        btn.classList.toggle('active');
+        this.applyFilters();
+      });
+    });
   }
 
   updateCategoryCounts() {
@@ -1323,6 +1368,10 @@ class PackLibrary {
       );
     }
 
+    if (this.currentFilter.tags.size > 0) {
+      filtered = filtered.filter(pack => (pack.tags || []).some(tag => this.currentFilter.tags.has(tag)));
+    }
+
     if (this.currentFilter.category === 'favorites') {
       filtered = filtered.filter(pack => this.favorites.has(pack.id));
     } else if (this.currentFilter.category) {
@@ -1403,7 +1452,7 @@ class PackLibrary {
       grid.innerHTML = '';
       emptyState.style.display = 'block';
       const clearBtn = document.getElementById('empty-state-clear-btn');
-      const hasActiveFilters = !!this.currentFilter.search || !!this.currentFilter.category;
+      const hasActiveFilters = !!this.currentFilter.search || !!this.currentFilter.category || this.currentFilter.tags.size > 0;
       if (this.packsLoadError) {
         emptyState.querySelector('h2').textContent = "Couldn't load packs";
         emptyState.querySelector('p').textContent = 'Please check your connection and refresh the page.';
@@ -1684,6 +1733,32 @@ class PackLibrary {
     return `<span class="updated-badge" title="This favorite has been updated since you last viewed it"><i class="fas fa-star"></i> Updated</span>`;
   }
 
+  isNewPack(pack) {
+    if (!pack.addedAt) return false;
+    const ageMs = Date.now() - new Date(pack.addedAt).getTime();
+    return ageMs >= 0 && ageMs < 14 * 24 * 60 * 60 * 1000;
+  }
+
+  newBadge(pack) {
+    if (!this.isNewPack(pack)) return '';
+    return `<span class="new-badge" title="Added in the last 14 days">New</span>`;
+  }
+
+  popularThreshold() {
+    const downloadCounts = this.packs
+      .map(p => this.liveDownloadCounts.get(p.id) ?? p.downloads ?? 0)
+      .filter(n => n > 0)
+      .sort((a, b) => b - a);
+    if (downloadCounts.length < 5) return Infinity;
+    return downloadCounts[Math.floor(downloadCounts.length * 0.1)] ?? Infinity;
+  }
+
+  popularBadge(pack) {
+    const count = this.liveDownloadCounts.get(pack.id) ?? pack.downloads ?? 0;
+    if (count === 0 || count < this.popularThreshold()) return '';
+    return `<span class="popular-badge" title="One of the most downloaded packs"><i class="fas fa-fire"></i> Popular</span>`;
+  }
+
   createPackCard(pack) {
     const hasImage = this.isImagePath(pack.thumbnail);
     const requiredBadge = pack.pinned
@@ -1694,6 +1769,8 @@ class PackLibrary {
     const comingSoonTag = this.comingSoonTag(pack);
     const favoriteBtn = this.favoriteButton(pack);
     const updatedBadge = this.updatedBadge(pack);
+    const newBadge = this.newBadge(pack);
+    const popularBadge = this.popularBadge(pack);
 
     if (this.viewMode === 'list') {
       const iconBadge = hasImage
@@ -1713,6 +1790,8 @@ class PackLibrary {
               ${assetsTag}
               ${comingSoonTag}
               ${requiredBadge}
+              ${newBadge}
+              ${popularBadge}
               ${updatedBadge}
             </div>
             <p class="pack-description">${this.escapeHtml(pack.description)}</p>
@@ -1749,6 +1828,8 @@ class PackLibrary {
             ${mcVersionTag}
             ${assetsTag}
             ${comingSoonTag}
+            ${newBadge}
+            ${popularBadge}
             ${updatedBadge}
           </div>
           <p class="pack-description">${this.escapeHtml(pack.description)}</p>
@@ -2367,7 +2448,7 @@ class PackLibrary {
     document.getElementById('comment-form').classList.toggle('hidden', !this.currentUser);
 
     try {
-      const res = await fetch(`${API_BASE}/api/comments/${this.packSlug(pack)}`);
+      const res = await this.authFetch(`/api/comments/${this.packSlug(pack)}`);
       const data = await res.json();
       if (this.currentPack !== pack) return;
       this.renderComments(data.comments || []);
@@ -2382,9 +2463,19 @@ class PackLibrary {
       listEl.innerHTML = '<p class="comments-empty">No comments yet. Be the first!</p>';
       return;
     }
-    listEl.innerHTML = comments.map((c) => {
+
+    const byParent = new Map();
+    comments.forEach((c) => {
+      const key = c.parentId || 'root';
+      if (!byParent.has(key)) byParent.set(key, []);
+      byParent.get(key).push(c);
+    });
+
+    const renderOne = (c, depth) => {
       const isOwn = this.currentUser && this.currentUser.id === c.user.id;
       const avatar = c.user.avatarUrl || 'assets/pepe-profile.png';
+      const replies = byParent.get(c.id) || [];
+      const canReply = depth === 0; // one level of nesting keeps threads readable
       return `
         <div class="comment-item" data-comment-id="${c.id}">
           <img class="comment-avatar" src="${avatar}" alt="" loading="lazy" decoding="async">
@@ -2395,34 +2486,81 @@ class PackLibrary {
               ${isOwn ? `<button type="button" class="comment-delete-btn" data-comment-id="${c.id}" title="Delete"><i class="fas fa-trash"></i></button>` : ''}
             </div>
             <p class="comment-text">${this.escapeHtml(c.text)}</p>
+            <div class="comment-actions">
+              <button type="button" class="comment-like-btn${c.likedByMe ? ' liked' : ''}" data-comment-id="${c.id}">
+                <i class="${c.likedByMe ? 'fas' : 'far'} fa-heart"></i> ${c.likeCount > 0 ? c.likeCount : ''}
+              </button>
+              ${canReply ? `<button type="button" class="comment-reply-btn" data-comment-id="${c.id}">Reply</button>` : ''}
+            </div>
+            <div class="comment-reply-form hidden" id="reply-form-${c.id}">
+              <textarea placeholder="Write a reply..." maxlength="1000" rows="1" data-parent-id="${c.id}"></textarea>
+              <button type="button" class="btn-secondary-small comment-reply-submit-btn" data-parent-id="${c.id}">Reply</button>
+            </div>
+            ${replies.length ? `<div class="comment-replies">${replies.map((r) => renderOne(r, depth + 1)).join('')}</div>` : ''}
           </div>
         </div>
       `;
-    }).join('');
+    };
+
+    listEl.innerHTML = (byParent.get('root') || []).map((c) => renderOne(c, 0)).join('');
 
     listEl.querySelectorAll('.comment-delete-btn').forEach((btn) => {
       btn.addEventListener('click', () => this.deleteComment(btn.dataset.commentId));
     });
+    listEl.querySelectorAll('.comment-like-btn').forEach((btn) => {
+      btn.addEventListener('click', () => this.toggleCommentLike(btn.dataset.commentId));
+    });
+    listEl.querySelectorAll('.comment-reply-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!this.currentUser) return;
+        const form = document.getElementById(`reply-form-${btn.dataset.commentId}`);
+        form.classList.toggle('hidden');
+        if (!form.classList.contains('hidden')) form.querySelector('textarea').focus();
+      });
+    });
+    listEl.querySelectorAll('.comment-reply-submit-btn').forEach((btn) => {
+      btn.addEventListener('click', () => this.submitComment(btn.dataset.parentId));
+    });
   }
 
-  async submitComment() {
+  async submitComment(parentId = null) {
     if (!this.currentUser || !this.currentPack) return;
-    const input = document.getElementById('comment-input');
+    const input = parentId
+      ? document.querySelector(`#reply-form-${parentId} textarea`)
+      : document.getElementById('comment-input');
     const text = input.value.trim();
     if (!text) return;
 
-    const btn = document.getElementById('comment-submit-btn');
+    const btn = parentId
+      ? document.querySelector(`.comment-reply-submit-btn[data-parent-id="${parentId}"]`)
+      : document.getElementById('comment-submit-btn');
     btn.disabled = true;
     try {
       const res = await this.authFetch(`/api/comments/${this.packSlug(this.currentPack)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify(parentId ? { text, parentId: Number(parentId) } : { text }),
       });
       if (res.ok) {
         input.value = '';
         this.loadComments(this.currentPack);
       }
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async toggleCommentLike(commentId) {
+    if (!this.currentUser) return;
+    const btn = document.querySelector(`.comment-like-btn[data-comment-id="${commentId}"]`);
+    if (!btn) return;
+    btn.disabled = true;
+    try {
+      const res = await this.authFetch(`/api/comment/${commentId}/like`, { method: 'POST' });
+      if (!res.ok) return;
+      const data = await res.json();
+      btn.classList.toggle('liked', data.likedByMe);
+      btn.innerHTML = `<i class="${data.likedByMe ? 'fas' : 'far'} fa-heart"></i> ${data.likeCount > 0 ? data.likeCount : ''}`;
     } finally {
       btn.disabled = false;
     }

@@ -1,6 +1,6 @@
 {
-  "generated": "2026-08-31T08:35:04.324230",
-  "total_packs": 54,
+  "generated": "2026-09-02T06:41:59.865560",
+  "total_packs": 44,
   "categories": {
     "addons": [
       "Pepe's Experience Tome",
@@ -42,16 +42,6 @@
       "Pepe's InventoryHUD",
       "Pepe's Level Calculator",
       "Pepe's OffhandHUD",
-      "Pepes Pepe'S Anvil Damage Indicator",
-      "Pepes Pepe'S Armor Hider",
-      "Pepes Pepe'S Charged Overlay Pack",
-      "Pepes Pepe'S Halo Pack",
-      "Pepes Pepe'S_Animated_Crop_Growth_Highlighter",
-      "Pepes Pepe'S_Bundle_Item_Count_V1.0.0",
-      "Pepes Pepe'S_Dynamic_3Rd_Person Crosshair_V1.0.0",
-      "Pepes Pepe'S_Shiny_Pots_V1.0.0",
-      "Pepes Pepe'S_Spinning_Projectiles_V1.0.0",
-      "Pepes Pepe'S_Time_Changer_V1.0.0",
       "Pepe's Speedometer",
       "Pepe's Status Effect HUD",
       "Pepe's Waypoints+"
@@ -79,7 +69,8 @@
       "description": "Adds Crystallized Lapis and the XP Tome, an item that can bank up to 64 levels of experience for later. Find them hidden in ancient structures.",
       "thumbnail": "packs/addons/pepes-experience-tome/icon.png",
       "tags": [
-        "addons"
+        "addons",
+        "Utility"
       ],
       "version": "1",
       "downloads": 0,
@@ -87,6 +78,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/addons/pepes-experience-tome/Pepe%27s%20Experience%20Tome%20V1.mcaddon",
       "previewUrl": "packs/addons/pepes-experience-tome/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's Experience Tome V1.mcaddon",
       "showcaseUrl": "https://youtu.be/7M_cfmBuq90"
     },
@@ -97,7 +90,9 @@
       "description": "Automatically swaps in a fresh tool or restocks a hotbar block stack from your inventory the moment one runs out.",
       "thumbnail": "packs/addons/pepes-hotbar-refiller/icon.png",
       "tags": [
-        "addons"
+        "addons",
+        "UI",
+        "Building"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -105,6 +100,8 @@
       "author": "PepeOnMCBE",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/addons/pepes-hotbar-refiller/Pepe%27s_Hotbar_Refiller.mcaddon",
       "previewUrl": "packs/addons/pepes-hotbar-refiller/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Hotbar_Refiller.mcaddon",
       "showcaseUrl": "https://youtu.be/tvstyl5fjII"
     },
@@ -115,7 +112,9 @@
       "description": "Adds a Magnet item that instantly pulls every dropped item within 10 blocks straight to you.",
       "thumbnail": "packs/addons/pepes-item-magnet-addon/icon.png",
       "tags": [
-        "addons"
+        "addons",
+        "Building",
+        "Utility"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -123,6 +122,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/addons/pepes-item-magnet-addon/Pepe%27s%20Item%20Magnet%20%5BAddon%5D.mcaddon",
       "previewUrl": "packs/addons/pepes-item-magnet-addon/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's Item Magnet [Addon].mcaddon",
       "showcaseUrl": "https://youtu.be/ChjxGuHtt48"
     },
@@ -141,6 +142,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/addons/pepes-void-totem/Pepe%27s_Void_Totem.mcaddon",
       "previewUrl": "packs/addons/pepes-void-totem/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Void_Totem.mcaddon",
       "showcaseUrl": "https://youtu.be/g2g7eUF0Auo"
     },
@@ -151,7 +154,8 @@
       "description": "Named after the Allay, this version brought further polish and refinement.",
       "thumbnail": "packs/clients/allay-client/icon.png",
       "tags": [
-        "clients"
+        "clients",
+        "Client"
       ],
       "version": "1",
       "downloads": 0,
@@ -159,6 +163,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/allay-client/AllayMc%20Client%20v1.mcpack",
       "previewUrl": "packs/clients/allay-client/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:48:25+02:00",
       "fileName": "AllayMc Client v1.mcpack",
       "mcVersion": "TBD",
       "timelineOrder": 8,
@@ -172,7 +178,8 @@
       "description": "The current and flagship client, home base of Glacier Productions.",
       "thumbnail": "packs/clients/glacier-client/icon.png",
       "tags": [
-        "clients"
+        "clients",
+        "Client"
       ],
       "version": "6.2",
       "downloads": 0,
@@ -180,6 +187,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6.2.mcpack",
       "previewUrl": "packs/clients/glacier-client/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:28:33+02:00",
       "fileName": "Glacier Client V6.2.mcpack",
       "versions": [
         {
@@ -520,6 +529,8 @@
       "author": "Zephyx",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/optifine-zephyx/Optifine_by_Zephyx-v3%5BUnofficial%20Port%5D.mcpack",
       "previewUrl": "packs/clients/optifine-zephyx/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Optifine_by_Zephyx-v3[Unofficial Port].mcpack",
       "versions": [
         {
@@ -578,7 +589,8 @@
       "description": "Where it all started, my very first Minecraft Bedrock client.",
       "thumbnail": "packs/clients/pepe-client/icon.png",
       "tags": [
-        "clients"
+        "clients",
+        "Client"
       ],
       "version": "2.0",
       "downloads": 0,
@@ -586,6 +598,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/clients/pepe-client/PepeClientBetav2.0.zip",
       "previewUrl": "packs/clients/pepe-client/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:48:25+02:00",
       "fileName": "PepeClientBetav2.0.zip",
       "versions": [
         {
@@ -615,7 +629,8 @@
       "description": "An experimental rebrand exploring new features and direction.",
       "thumbnail": "packs/clients/project-future/icon.png",
       "tags": [
-        "clients"
+        "clients",
+        "Utility"
       ],
       "version": "1.4",
       "downloads": 0,
@@ -623,6 +638,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-future/Future%20Ui%20pack%20v1.4.mcpack",
       "previewUrl": "packs/clients/project-future/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:23:23+02:00",
       "fileName": "Future Ui pack v1.4.mcpack",
       "versions": [
         {
@@ -667,7 +684,9 @@
       "description": "A bridge release exploring a lighter-weight client experience.",
       "thumbnail": "packs/clients/project-light/icon.png",
       "tags": [
-        "clients"
+        "clients",
+        "Utility",
+        "Client"
       ],
       "version": "4",
       "downloads": 0,
@@ -675,6 +694,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20V4%20%5BMain%5D.mcpack",
       "previewUrl": "packs/clients/project-light/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Project Light V4 [Main].mcpack",
       "versions": [
         {
@@ -784,7 +805,8 @@
       "description": "Focused on visuals and performance, continuing the client's evolution.",
       "thumbnail": "packs/clients/solar-client/icon.png",
       "tags": [
-        "clients"
+        "clients",
+        "Client"
       ],
       "version": "2",
       "downloads": 0,
@@ -792,6 +814,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/solar-client/Solar%20Client%20v2.mcpack",
       "previewUrl": "packs/clients/solar-client/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Solar Client v2.mcpack",
       "versions": [
         {
@@ -829,7 +853,8 @@
       "description": "Another step in the client's ongoing rebrand and feature journey.",
       "thumbnail": "📦",
       "tags": [
-        "clients"
+        "clients",
+        "Client"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -837,6 +862,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/clients/sulphur-client.zip",
       "previewUrl": "packs/clients/sulphur-client/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "mcVersion": "TBD",
       "timelineOrder": 7,
       "faIcon": "fa-fire",
@@ -849,7 +876,8 @@
       "description": "The client that followed Pepe Client, an early step in refining the formula.",
       "thumbnail": "📦",
       "tags": [
-        "clients"
+        "clients",
+        "Client"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -857,6 +885,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/clients/void-client.zip",
       "previewUrl": "packs/clients/void-client/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "mcVersion": "TBD",
       "timelineOrder": 2,
       "faIcon": "fa-circle-notch",
@@ -869,7 +899,8 @@
       "description": "A lighter, faster iteration built on lessons learned from Void Client.",
       "thumbnail": "packs/clients/wind-client/icon.png",
       "tags": [
-        "clients"
+        "clients",
+        "Client"
       ],
       "version": "2",
       "downloads": 0,
@@ -877,6 +908,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/clients/wind-client/WindClientV2.zip",
       "previewUrl": "packs/clients/wind-client/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "WindClientV2.zip",
       "versions": [
         {
@@ -914,7 +947,8 @@
       "description": "Cosmetic enhancement pack from Pepe's collection",
       "thumbnail": "packs/cosmetics/pepes-charged-overlay-pack/icon.png",
       "tags": [
-        "cosmetics"
+        "cosmetics",
+        "Visual"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -922,6 +956,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/cosmetics/pepes-charged-overlay-pack/Pepe%27s%20Charged%20Overlay%20Pack.mcpack",
       "previewUrl": "packs/cosmetics/pepes-charged-overlay-pack/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:48:25+02:00",
       "fileName": "Pepe's Charged Overlay Pack.mcpack"
     },
     {
@@ -939,6 +975,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/cosmetics/pepes-halo-pack/Pepe%27s%20Halo%20Pack.mcpack",
       "previewUrl": "packs/cosmetics/pepes-halo-pack/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:48:25+02:00",
       "fileName": "Pepe's Halo Pack.mcpack"
     },
     {
@@ -950,7 +988,8 @@
       "tags": [
         "required",
         "dependency",
-        "other"
+        "other",
+        "Textures"
       ],
       "version": "1.7.0",
       "downloads": 0,
@@ -958,6 +997,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.7.0.mcpack",
       "previewUrl": "packs/other/pepes-assets-pack/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T22:24:00+02:00",
       "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
       "versions": [
         {
@@ -1064,7 +1105,10 @@
       "description": "Shows the armor you're currently wearing as icons on the HUD, no need to open your inventory to check.",
       "thumbnail": "packs/packs/pepes-armorhud/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD",
+        "Combat",
+        "UI"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1072,6 +1116,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-armorhud/Pepe%27s_ArmorHUD.mcpack",
       "previewUrl": "packs/packs/pepes-armorhud/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_ArmorHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
@@ -1083,7 +1129,9 @@
       "description": "Recolors the HUD armor bar based on your armor's material, so you can tell your protection level at a glance.",
       "thumbnail": "packs/packs/pepes-better-armor-bar/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD",
+        "Combat"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1091,6 +1139,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-armor-bar/Pepe%27s_Better_Armor_Bar_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-better-armor-bar/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Better_Armor_Bar_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/G-t17mm3ivc"
@@ -1102,7 +1152,8 @@
       "description": "Adds a full coordinate readout to the HUD, including world, chunk, and Nether coordinates.",
       "thumbnail": "packs/packs/pepes-better-coordinates/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD"
       ],
       "version": "1.0.1",
       "downloads": 0,
@@ -1110,6 +1161,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-coordinates/Pepe%27s_Better_Coordinates.mcpack",
       "previewUrl": "packs/packs/pepes-better-coordinates/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Better_Coordinates.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/riGidGD8V3o"
@@ -1121,7 +1174,9 @@
       "description": "Enriches inventory tooltips with extra detail: exact durability, technical item and aux IDs, and Suspicious Stew effect identification.",
       "thumbnail": "packs/packs/pepes-better-hover-text/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "UI",
+        "Effects"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1129,6 +1184,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-hover-text/Pepe%27s_Better_Hover_Text_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-better-hover-text/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Better_Hover_Text_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/h2akqm3tPb0"
@@ -1140,7 +1197,8 @@
       "description": "Displays a compact clock and compass readout on the HUD, so you always know the time and your facing at a glance.",
       "thumbnail": "📦",
       "tags": [
-        "packs"
+        "packs",
+        "HUD"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1148,6 +1206,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-clock-compass-hud/Pepe%27s_Compass_%26_Clock_HUD.mcpack",
       "previewUrl": "packs/packs/pepes-clock-compass-hud/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Compass_&_Clock_HUD.mcpack",
       "requiresAssets": true
     },
@@ -1166,6 +1226,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-death-coords/Pepe%27s_Death_Coords_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-death-coords/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Death_Coords_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/H2HtakIRtpA"
@@ -1177,7 +1239,9 @@
       "description": "A clean, minimal debug overlay with the info you actually want. Press F8 to toggle it with a keyboard and mouse.",
       "thumbnail": "packs/packs/pepes-debug-hud/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD",
+        "Visual"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1185,6 +1249,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-debug-hud/Pepe%27s%20DebugHUD.mcpack",
       "previewUrl": "packs/packs/pepes-debug-hud/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's DebugHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/dfUXea5s1N4"
@@ -1196,7 +1262,8 @@
       "description": "Adds a compact heading indicator to the HUD, showing the exact direction you're facing.",
       "thumbnail": "packs/packs/pepes-directionhud/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD"
       ],
       "version": "1.0.1",
       "downloads": 0,
@@ -1204,6 +1271,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-directionhud/Pepe%27s_DirectionHUD.mcpack",
       "previewUrl": "packs/packs/pepes-directionhud/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_DirectionHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/n3TZGPGPjW8"
@@ -1223,6 +1292,8 @@
       "author": "PepeOnMinecraft",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-durability-viewer/Pepe%27s_Durability_Viewer.mcpack",
       "previewUrl": "packs/packs/pepes-durability-viewer/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Durability_Viewer.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/73duhxBtYt8"
@@ -1242,6 +1313,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-force-spectator.zip",
       "previewUrl": "packs/packs/pepes-force-spectator/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "showcaseUrl": "https://youtu.be/6pS0mutbWic",
       "discontinued": true
     },
@@ -1252,7 +1325,8 @@
       "description": "A lightweight, accurate FPS counter for your HUD, so you can keep an eye on performance while you play.",
       "thumbnail": "packs/packs/pepes-fps-counter/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD"
       ],
       "version": "1.0.1",
       "downloads": 0,
@@ -1260,6 +1334,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-fps-counter/Pepe%27s_FPS_Counter.mcpack",
       "previewUrl": "packs/packs/pepes-fps-counter/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_FPS_Counter.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/iL6kHJGobFU"
@@ -1271,7 +1347,9 @@
       "description": "Mirrors your inventory contents onto the HUD, so you can check what you're carrying without opening a menu.",
       "thumbnail": "packs/packs/pepes-inventoryhud/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD",
+        "UI"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1279,6 +1357,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-inventoryhud/Pepe%27s_InventoryHUD.mcpack",
       "previewUrl": "packs/packs/pepes-inventoryhud/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_InventoryHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/C12DFIh2cto"
@@ -1290,7 +1370,9 @@
       "description": "Calculates exactly how much XP you need to reach your next level, right on the HUD.",
       "thumbnail": "packs/packs/pepes-level-calculator/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD",
+        "Utility"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1298,6 +1380,8 @@
       "author": "PepeOnMinecraft",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-level-calculator/Pepe%27s_Level_Calculator.mcpack",
       "previewUrl": "packs/packs/pepes-level-calculator/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Level_Calculator.mcpack",
       "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
     },
@@ -1308,7 +1392,8 @@
       "description": "Shows the item held in your offhand right on the HUD, alongside your main hand.",
       "thumbnail": "packs/packs/pepes-offhandhud/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD"
       ],
       "version": "1.0.1",
       "downloads": 0,
@@ -1316,18 +1401,21 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-offhandhud/Pepe%27s_OffhandHUD.mcpack",
       "previewUrl": "packs/packs/pepes-offhandhud/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_OffhandHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/ezj1oGz8nrY"
     },
     {
-      "id": 42,
+      "id": 32,
       "name": "Pepe's Speedometer",
       "category": "packs",
       "description": "Tracks and displays your current movement speed on the HUD in real time.",
       "thumbnail": "packs/packs/pepes-speedometer/icon.png",
       "tags": [
-        "packs"
+        "packs",
+        "HUD"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1335,18 +1423,22 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-speedometer/Pepe%27s_Speedometer.mcpack",
       "previewUrl": "packs/packs/pepes-speedometer/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Speedometer.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/4AmjVyMh2cI"
     },
     {
-      "id": 43,
+      "id": 33,
       "name": "Pepe's Status Effect HUD",
       "category": "packs",
       "description": "Displayed your active potion effects and their remaining duration on the HUD. Discontinued and no longer maintained.",
       "thumbnail": "📦",
       "tags": [
-        "packs"
+        "packs",
+        "HUD",
+        "Effects"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1354,11 +1446,13 @@
       "author": "Pepe",
       "downloadUrl": "packs/packs/pepes-status-effect-hud.zip",
       "previewUrl": "packs/packs/pepes-status-effect-hud/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "showcaseUrl": "https://youtu.be/xL4tqxtJ6Vo",
       "discontinued": true
     },
     {
-      "id": 44,
+      "id": 34,
       "name": "Pepe's Waypoints+",
       "category": "packs",
       "description": "A full waypoint system: set markers by sneaking and clicking, auto-drop a death point, and toggle a chroma-key greenscreen, all through simple sneak gestures.",
@@ -1372,18 +1466,22 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-waypoints/Pepe%27s_Waypoints%2B_Pack_V1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-waypoints/",
+      "addedAt": "2026-08-29T20:47:45+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "fileName": "Pepe's_Waypoints+_Pack_V1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
     },
     {
-      "id": 45,
+      "id": 35,
       "name": "Pepe's Animated Crop Growth Highlighter",
       "category": "utility",
       "description": "Utility enhancement pack from Pepe's collection",
       "thumbnail": "packs/utility/pepes-animated-crop-growth-highlighter/icon.png",
       "tags": [
-        "utility"
+        "utility",
+        "Animated",
+        "Farming"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1391,16 +1489,19 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-animated-crop-growth-highlighter/Pepe%27s_Animated_Crop_Growth_Highlighter.mcpack",
       "previewUrl": "packs/utility/pepes-animated-crop-growth-highlighter/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack"
     },
     {
-      "id": 46,
+      "id": 36,
       "name": "Pepe's Anvil Damage Indicator",
       "category": "utility",
       "description": "Utility enhancement pack from Pepe's collection",
       "thumbnail": "packs/utility/pepes-anvil-damage-indicator/icon.png",
       "tags": [
-        "utility"
+        "utility",
+        "Combat"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1408,16 +1509,19 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-anvil-damage-indicator/Pepe%27s%20Anvil%20Damage%20Indicator.mcpack",
       "previewUrl": "packs/utility/pepes-anvil-damage-indicator/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Pepe's Anvil Damage Indicator.mcpack"
     },
     {
-      "id": 47,
+      "id": 37,
       "name": "Pepe's Armor Hider",
       "category": "utility",
       "description": "Utility enhancement pack from Pepe's collection",
       "thumbnail": "packs/utility/pepes-armor-hider/icon.png",
       "tags": [
-        "utility"
+        "utility",
+        "Combat"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1425,16 +1529,19 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-armor-hider/Pepe%27s%20Armor%20Hider.mcpack",
       "previewUrl": "packs/utility/pepes-armor-hider/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Pepe's Armor Hider.mcpack"
     },
     {
-      "id": 48,
+      "id": 38,
       "name": "Pepe's Bundle Item Counter",
       "category": "utility",
       "description": "Utility enhancement pack from Pepe's collection",
       "thumbnail": "packs/utility/pepes-bundle-item-counter/icon.png",
       "tags": [
-        "utility"
+        "utility",
+        "Utility"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1442,16 +1549,19 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-bundle-item-counter/Pepe%27s_Bundle_Item_Count_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-bundle-item-counter/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Pepe's_Bundle_Item_Count_v1.0.0.mcpack"
     },
     {
-      "id": 49,
+      "id": 39,
       "name": "Pepe's Dynamic 3rd Person Crosshair",
       "category": "utility",
       "description": "Utility enhancement pack from Pepe's collection",
       "thumbnail": "packs/utility/pepes-dynamic-3rd-person-crosshair/icon.png",
       "tags": [
-        "utility"
+        "utility",
+        "HUD"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1459,16 +1569,19 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-dynamic-3rd-person-crosshair/Pepe%27s_Dynamic_3rd_Person%20Crosshair_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-dynamic-3rd-person-crosshair/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack"
     },
     {
-      "id": 50,
+      "id": 40,
       "name": "Pepe's Shiny Pots",
       "category": "utility",
       "description": "Utility enhancement pack from Pepe's collection",
       "thumbnail": "packs/utility/pepes-shiny-pots/icon.png",
       "tags": [
-        "utility"
+        "utility",
+        "Visual"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1476,10 +1589,12 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-shiny-pots/Pepe%27s_Shiny_Pots_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-shiny-pots/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Pepe's_Shiny_Pots_v1.0.0.mcpack"
     },
     {
-      "id": 51,
+      "id": 41,
       "name": "Pepe's Spinning Projectiles",
       "category": "utility",
       "description": "Utility enhancement pack from Pepe's collection",
@@ -1493,10 +1608,12 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-spinning-projectiles/Pepe%27s_Spinning_Projectiles_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-spinning-projectiles/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Pepe's_Spinning_Projectiles_v1.0.0.mcpack"
     },
     {
-      "id": 52,
+      "id": 42,
       "name": "Pepe's Time Changer",
       "category": "utility",
       "description": "Utility enhancement pack from Pepe's collection",
@@ -1510,16 +1627,19 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-time-changer/Pepe%27s_Time_Changer_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-time-changer/",
+      "addedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-08-31T08:22:54+02:00",
       "fileName": "Pepe's_Time_Changer_v1.0.0.mcpack"
     },
     {
-      "id": 53,
+      "id": 43,
       "name": "Glacier Client Website",
       "category": "website",
       "description": "The official Glacier Client website, home for the client, downloads, and news.",
       "thumbnail": "🌐",
       "tags": [
-        "website"
+        "website",
+        "Client"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1527,17 +1647,20 @@
       "author": "Pepe",
       "downloadUrl": "packs/website/glacierclient-xyz.zip",
       "previewUrl": "packs/website/glacierclient-xyz/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "externalUrl": "https://glacierclient.xyz",
       "fileName": "glacierclient.xyz"
     },
     {
-      "id": 54,
+      "id": 44,
       "name": "MCA Glacier Client",
       "category": "website",
       "description": "The MCA subdomain for Glacier Client, part of the wider Glacier Productions web ecosystem.",
       "thumbnail": "🌐",
       "tags": [
-        "website"
+        "website",
+        "Client"
       ],
       "version": "1.0.0",
       "downloads": 0,
@@ -1545,6 +1668,8 @@
       "author": "Pepe",
       "downloadUrl": "packs/website/mca-glacierclient-xyz.zip",
       "previewUrl": "packs/website/mca-glacierclient-xyz/",
+      "addedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-08-30T18:33:32+02:00",
       "externalUrl": "https://mca.glacierclient.xyz",
       "fileName": "mca.glacierclient.xyz"
     }

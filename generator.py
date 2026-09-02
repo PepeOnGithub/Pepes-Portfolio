@@ -9,6 +9,7 @@ import os
 import json
 import re
 import sys
+import subprocess
 import zipfile
 import urllib.request
 import urllib.parse
@@ -163,6 +164,109 @@ def get_pack_metadata(pack_path):
         'thumbnail': '📦',
         'author': 'Pepe'
     }
+
+# Keyword -> tag lookup used to derive extra, descriptive tags from a pack's
+# own name/description text (in addition to its category tag), so the
+# library's tag filter has something more useful to filter on than "packs" /
+# "addons" / etc.
+KEYWORD_TAGS = [
+    ('pvp', 'PvP'),
+    ('crosshair', 'HUD'),
+    ('hud', 'HUD'),
+    ('damage indicator', 'Combat'),
+    ('armor', 'Combat'),
+    ('shader', 'Shaders'),
+    ('shiny', 'Visual'),
+    ('glow', 'Visual'),
+    ('overlay', 'Visual'),
+    ('animated', 'Animated'),
+    ('texture', 'Textures'),
+    ('sound', 'Audio'),
+    ('music', 'Audio'),
+    ('gui', 'UI'),
+    ('inventory', 'UI'),
+    ('hotbar', 'UI'),
+    ('block', 'Building'),
+    ('mob', 'Mobs'),
+    ('entity', 'Mobs'),
+    ('particle', 'Effects'),
+    ('effect', 'Effects'),
+    ('realistic', 'Realistic'),
+    ('cape', 'Cosmetic'),
+    ('skin', 'Cosmetic'),
+    ('crop', 'Farming'),
+    ('farm', 'Farming'),
+    ('xp', 'Utility'),
+    ('experience', 'Utility'),
+    ('bundle', 'Utility'),
+    ('magnet', 'Utility'),
+    ('client', 'Client'),
+]
+
+
+def derive_tags(name, description, base_tags):
+    """Merge a pack's explicit tags with extra tags inferred from keywords
+    found in its own name/description, capped to keep the filter list tidy."""
+    text = f'{name} {description}'.lower()
+    tags = list(dict.fromkeys(base_tags))  # preserve order, dedupe
+    for keyword, tag in KEYWORD_TAGS:
+        if keyword in text and tag not in tags:
+            tags.append(tag)
+    return tags[:6]
+
+
+_GIT_DATE_CACHE = None
+
+
+def _load_git_dates(repo_root):
+    """Scan git history once and map each tracked file path (posix, relative
+    to repo root) to its first-commit and most-recent-commit ISO date."""
+    global _GIT_DATE_CACHE
+    if _GIT_DATE_CACHE is not None:
+        return _GIT_DATE_CACHE
+
+    first_seen = {}
+    last_seen = {}
+    try:
+        result = subprocess.run(
+            ['git', 'log', '--name-only', '--format=\x01%aI'],
+            cwd=repo_root, capture_output=True, text=True, check=True
+        )
+        output = result.stdout
+    except Exception as e:
+        print(f"Warning: could not read git history for pack dates: {e}")
+        _GIT_DATE_CACHE = ({}, {})
+        return _GIT_DATE_CACHE
+
+    current_date = None
+    for line in output.splitlines():
+        if line.startswith('\x01'):
+            current_date = line[1:]
+            continue
+        path = line.strip()
+        if not path or current_date is None:
+            continue
+        # git log lists commits newest-first, so the first time we see a path
+        # is its most recent touch, and the last time is its original add.
+        if path not in last_seen:
+            last_seen[path] = current_date
+        first_seen[path] = current_date
+
+    _GIT_DATE_CACHE = (first_seen, last_seen)
+    return _GIT_DATE_CACHE
+
+
+def get_pack_dates(pack_path, repo_root):
+    """Return (added_at, updated_at) ISO date strings for a pack folder,
+    based on when its files first/last appeared in git history."""
+    first_seen, last_seen = _load_git_dates(repo_root)
+    prefix = pack_path.relative_to(repo_root).as_posix() + '/'
+    added_candidates = [d for p, d in first_seen.items() if p.startswith(prefix)]
+    updated_candidates = [d for p, d in last_seen.items() if p.startswith(prefix)]
+    added_at = min(added_candidates) if added_candidates else None
+    updated_at = max(updated_candidates) if updated_candidates else None
+    return added_at, updated_at
+
 
 def get_directory_size(path):
     """Calculate total size of directory."""
@@ -453,6 +557,16 @@ def generate_packs_json(packs_dir, output_file):
                 'downloadUrl': download_url,
                 'previewUrl': f'packs/{category}/{pack_path.name}/'
             }
+
+            pack_entry['tags'] = derive_tags(
+                pack_entry['name'], pack_entry['description'], metadata.get('tags', [category])
+            )
+
+            added_at, updated_at = get_pack_dates(pack_path, packs_dir.parent)
+            if added_at:
+                pack_entry['addedAt'] = added_at
+            if updated_at:
+                pack_entry['updatedAt'] = updated_at
 
             if file_name:
                 pack_entry['fileName'] = file_name
