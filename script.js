@@ -320,14 +320,16 @@ class Router {
   }
 
   updateSocialsStats() {
-    // Update age (born December 26)
+    // Recomputed fresh from the real calendar date on every page load - no
+    // stored/incrementing value anywhere, so this only ever changes once a
+    // year, on the actual birthday below, never per-day.
     const today = new Date();
-    const birthDate = new Date(2006, 11, 26);
+    const birthDate = new Date(2006, 11, 26); // year, month (0-indexed), day
     let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
+    const hasHadBirthdayThisYear =
+      today.getMonth() > birthDate.getMonth() ||
+      (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+    if (!hasHadBirthdayThisYear) age--;
     const ageEl = document.getElementById('socials-age');
     if (ageEl) ageEl.textContent = age;
 
