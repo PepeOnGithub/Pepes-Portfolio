@@ -3176,6 +3176,41 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   .pack-favorite-btn { width: 38px; height: 38px; }
   #sort-dropdown .custom-dropdown-trigger { min-height: 40px; }
 
+  /* Categories (Library filters and Settings sections both use this
+     component) become a horizontally-scrollable row of pills instead of a
+     tall vertical stack, which otherwise pushes the actual content well
+     below the fold on a phone. */
+  .category-list {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
+  }
+
+  .category-row {
+    flex-shrink: 0;
+    width: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    white-space: nowrap;
+  }
+
+  .category-row .count {
+    margin-left: var(--spacing-xs);
+  }
+
+  /* Tags get the same horizontal-scroll treatment instead of wrapping
+     across several lines. */
+  .tag-chip-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: var(--spacing-xs);
+  }
+
+  .tag-chip { flex-shrink: 0; }
 }
 
 /* ===== Footer ===== */
