@@ -1032,15 +1032,26 @@ body.reduce-motion *::after {
   transform: scale(1.08);
 }
 
+/* X and GitHub's dark-mode accents are light, so the icon glyph needs a
+   dark color on hover instead of the white every other card uses. */
+.social-card--x:hover .social-icon,
+.social-card--github:hover .social-icon {
+  color: #15181c;
+}
+
 .social-card h4 { font-size: var(--font-size-base); font-weight: 700; }
 .social-card p { color: var(--color-text-secondary); font-size: var(--font-size-sm); }
 
 .social-card--discord { --brand: #5865f2; }
 .social-card--youtube { --brand: #ff0000; }
-.social-card--x { --brand: #000000; }
+/* X, TikTok, and GitHub's real brand colors are pure/near black, which
+   disappears into the dark theme's own card background on hover - use
+   each platform's recognized dark-mode accent instead so the hover fill
+   actually reads as a color, like every other card here. */
+.social-card--x { --brand: #e7e9ea; }
 .social-card--instagram { --brand: #e1306c; }
-.social-card--tiktok { --brand: #000000; }
-.social-card--github { --brand: #000000; }
+.social-card--tiktok { --brand: #25f4ee; }
+.social-card--github { --brand: #e7e9ea; }
 .social-card--paypal { --brand: #00457c; }
 .social-card--mcpedl { --brand: var(--color-accent); }
 .social-card--curseforge { --brand: #f16436; }
