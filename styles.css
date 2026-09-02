@@ -166,6 +166,14 @@ html {
   font-size: calc(16px * var(--content-scale, 1));
 }
 
+/* <picture> (used for the WebP+fallback icons/banners) has no box of its
+   own by default, so a percentage-sized <img> inside it can't resolve
+   against its real container and falls back to its intrinsic size -
+   breaking centering anywhere an icon sits in a flex/absolute container.
+   display:contents removes the wrapper from layout entirely so the <img>
+   behaves exactly as if it were the direct child. */
+picture { display: contents; }
+
 /* ===== Custom Scrollbar ===== */
 * {
   scrollbar-width: thin;
@@ -3219,47 +3227,34 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   #sort-dropdown .custom-dropdown-trigger { min-height: 40px; }
 
   /* A side-by-side list row doesn't have enough width left for the title
-     to share space with badges and downloads/favorite on a phone - it was
-     wrapping into a cramped, disordered stack. Below this width, list view
-     just falls back to the same stacked-card layout grid view already
-     uses (all the list-view-only overrides are undone). */
-  .packs-grid.list-view .pack-card {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .packs-grid.list-view .pack-thumbnail {
-    width: 100%;
-    height: 150px;
-    margin: 0;
-    border-radius: 0;
-  }
-
-  .packs-grid.list-view .pack-icon-badge {
-    position: absolute;
-    left: var(--spacing-md);
-    bottom: var(--spacing-md);
-    width: 44px;
-    height: 44px;
-  }
-
+     to share space with every badge, the description, and downloads on a
+     phone - it was wrapping into a cramped, disordered stack. Rather than
+     falling back to the full-height grid card (defeats the point of a
+     compact list), trim the row down to what actually fits on one line:
+     icon, name, one badge, and the count/favorite. */
   .packs-grid.list-view .pack-content {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 
-  .packs-grid.list-view .pack-name {
-    white-space: normal;
+  .packs-grid.list-view .pack-title-row {
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
 
-  .packs-grid.list-view .pack-description {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
+  .packs-grid.list-view .pack-title-row .mc-version-tag,
+  .packs-grid.list-view .pack-title-row .assets-tag,
+  .packs-grid.list-view .pack-title-row .new-badge,
+  .packs-grid.list-view .pack-title-row .popular-badge,
+  .packs-grid.list-view .pack-title-row .updated-badge,
+  .packs-grid.list-view .pinned-badge {
+    display: none;
   }
+
+  .packs-grid.list-view .pack-description { display: none; }
 
   .packs-grid.list-view .pack-footer {
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--spacing-md);
-    margin-top: auto;
+    font-size: var(--font-size-xs);
+    gap: var(--spacing-sm);
   }
 
   /* Categories (Library filters + Settings sections) and Tags collapse

@@ -2322,7 +2322,7 @@ class PackLibrary {
     document.getElementById('auth-logout-btn').addEventListener('click', () => this.logout());
     document.getElementById('auth-edit-profile-btn').addEventListener('click', () => this.openProfileModal());
     document.getElementById('auth-view-profile-btn').addEventListener('click', () => {
-      if (this.currentUser) this.showUserProfile(this.currentUser.id);
+      if (this.currentUser) this.showUserProfile(this.currentUser.username || this.currentUser.id);
     });
     document.getElementById('user-profile-back-link').addEventListener('click', (e) => {
       e.preventDefault();
@@ -2712,12 +2712,13 @@ class PackLibrary {
       const avatar = c.user.avatarUrl || 'assets/pepe-profile.png';
       const replies = byParent.get(c.id) || [];
       const canReply = depth === 0; // one level of nesting keeps threads readable
+      const profileLink = c.user.username || c.user.id;
       return `
         <div class="comment-item" data-comment-id="${c.id}">
-          <img class="comment-avatar comment-author-link" data-user-id="${c.user.id}" src="${avatar}" alt="" loading="lazy" decoding="async">
+          <img class="comment-avatar comment-author-link" data-user-id="${profileLink}" src="${avatar}" alt="" loading="lazy" decoding="async">
           <div class="comment-body">
             <div class="comment-header">
-              <span class="comment-author comment-author-link" data-user-id="${c.user.id}">${this.escapeHtml(c.user.name || 'Unknown')}</span>
+              <span class="comment-author comment-author-link" data-user-id="${profileLink}">${this.escapeHtml(c.user.name || 'Unknown')}</span>
               ${c.isAuthor ? `<span class="author-badge" title="This is the site owner">Author</span>` : ''}
               <span class="comment-time">${this.formatDate(c.createdAt)}</span>
               ${isOwn ? `<button type="button" class="comment-delete-btn" data-comment-id="${c.id}" title="Delete"><i class="fas fa-trash"></i></button>` : ''}
