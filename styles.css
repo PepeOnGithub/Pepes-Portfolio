@@ -3152,6 +3152,9 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
 @media (max-width: 768px) {
   .topnav { padding: var(--spacing-md); }
   .topnav-links { display: none; }
+  /* Already reachable from the hamburger drawer - no need to duplicate it
+     in the header, where it just eats space next to the account pill. */
+  #settings-toggle { display: none; }
   .mobile-nav-toggle { display: flex; }
   .mobile-nav-drawer { display: flex; }
   .search-bar-wrap { padding: var(--spacing-md); }
@@ -3718,7 +3721,9 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   min-width: 260px;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  /* Match the auth-pill trigger's rounder corners instead of the sharper
+     radius other (rectangular) dropdown triggers use. */
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
   padding: var(--spacing-sm);
   display: flex;
