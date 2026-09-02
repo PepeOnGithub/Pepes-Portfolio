@@ -324,7 +324,7 @@ class Router {
     // stored/incrementing value anywhere, so this only ever changes once a
     // year, on the actual birthday below, never per-day.
     const today = new Date();
-    const birthDate = new Date(2006, 11, 26); // year, month (0-indexed), day
+    const birthDate = new Date(2008, 11, 26); // year, month (0-indexed), day
     let age = today.getFullYear() - birthDate.getFullYear();
     const hasHadBirthdayThisYear =
       today.getMonth() > birthDate.getMonth() ||
