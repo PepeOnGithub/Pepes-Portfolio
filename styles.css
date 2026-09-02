@@ -145,6 +145,9 @@ body.hide-card-author .pack-footer span:first-child { display: none; }
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* Kills the gray/blue flash mobile browsers paint over a tapped element
+     (buttons, links, cards) before any hover/active styles even apply. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
