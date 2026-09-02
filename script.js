@@ -1,7 +1,7 @@
 const CATEGORY_ORDER = ['packs', 'cosmetics', 'utility', 'clients', 'addons', 'website', 'other'];
 
 const DEFAULT_BANNER_URL = 'assets/default-banner.png';
-const COUNTER_NAMESPACE = 'pepes-portfolio-pack-downloads';
+const API_BASE = 'https://pepes-portfolio-api.pepeoncloudeflare.workers.dev';
 const LINKVERTISE_USER_ID = 499358;
 const MONETIZATION_PROVIDER_KEY = 'monetizationProvider';
 
@@ -418,7 +418,10 @@ class PackLibrary {
   }
 
   async init() {
+    this.currentUser = null;
+    this.captureSessionFromUrl();
     this.setupEventListeners();
+    this.setupAuth();
     this.sortDropdown = new CustomDropdown('sort-dropdown', (value) => {
       this.currentFilter.sort = value;
       this.applyFilters();
@@ -680,6 +683,58 @@ class PackLibrary {
       }
     });
 
+    document.getElementById('detail-share-btn').addEventListener('click', () => this.copyPackLink());
+    document.getElementById('detail-copy-info-btn').addEventListener('click', () => this.copyPackInfo());
+
+    document.querySelectorAll('#rating-stars-input .rating-star').forEach(btn => {
+      const value = parseInt(btn.dataset.value, 10);
+      btn.addEventListener('click', () => {
+        if (this.currentPack) this.submitPackRating(this.currentPack, value);
+      });
+      btn.addEventListener('mouseenter', () => {
+        document.querySelectorAll('#rating-stars-input .rating-star').forEach(b => {
+          b.classList.toggle('rating-star-hover', parseInt(b.dataset.value, 10) <= value);
+        });
+      });
+    });
+    document.getElementById('rating-stars-input').addEventListener('mouseleave', () => {
+      document.querySelectorAll('#rating-stars-input .rating-star').forEach(b => b.classList.remove('rating-star-hover'));
+    });
+
+    const emptyClearBtn = document.getElementById('empty-state-clear-btn');
+    if (emptyClearBtn) {
+      emptyClearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        this.currentFilter.search = '';
+        this.currentFilter.category = '';
+        this.syncCategorySidebar();
+        this.applyFilters();
+        document.getElementById('search-clear').classList.add('hidden');
+      });
+    }
+
+    // ===== Global keyboard shortcuts (Library page) =====
+    document.addEventListener('keydown', (e) => {
+      const tag = (e.target.tagName || '').toLowerCase();
+      const typing = tag === 'input' || tag === 'textarea' || e.target.isContentEditable;
+
+      if (e.key === '/' && !typing) {
+        const libraryPage = document.getElementById('page-library');
+        if (libraryPage && !libraryPage.classList.contains('hidden')) {
+          e.preventDefault();
+          searchInput.focus();
+        }
+        return;
+      }
+
+      if (e.key === 'Escape' && !typing) {
+        const detailView = document.getElementById('detail-view');
+        if (detailView && !detailView.classList.contains('hidden')) {
+          document.getElementById('back-to-browse').click();
+        }
+      }
+    });
+
     // ===== Version selector (multi-version packs) =====
     const versionTrigger = document.getElementById('version-select-trigger');
     const versionMenu = document.getElementById('version-select-menu');
@@ -912,536 +967,19 @@ class PackLibrary {
 
   async loadPacks() {
     try {
-      const response = await fetch('packs.json', { cache: 'no-store' });
-      if (response.ok) {
-        const data = await response.json();
-        this.packs = data.packs || [];
-      } else {
-        this.packs = this.getDefaultPacks();
-      }
-      if (this.packs.length === 0) {
-        this.packs = this.getDefaultPacks();
-      }
+      const response = await fetch('packs.json');
+      if (!response.ok) throw new Error(`packs.json request failed: ${response.status}`);
+      const data = await response.json();
+      this.packs = data.packs || [];
+      this.packsLoadError = false;
       this.filteredPacks = [...this.packs];
       return this.packs;
     } catch (error) {
       console.error('Error loading packs:', error);
-      this.packs = this.getDefaultPacks();
-      this.filteredPacks = [...this.packs];
+      this.packs = [];
+      this.filteredPacks = [];
+      this.packsLoadError = true;
     }
-  }
-
-  getDefaultPacks() {
-    return [
-      {
-        "id": 1,
-        "name": "Pepe's Experience Tome",
-        "category": "addons",
-        "description": "Experience a new way to save your progress. This add-on introduces Crystallized Lapis and the XP Tome, a mystical item capable of storing up to 64 levels. Discover them hidden within ancient structures with varying amounts of stored knowledge.",
-        "thumbnail": "packs/addons/pepes-experience-tome/icon.png",
-        "tags": ["addons"],
-        "version": "1",
-        "downloads": 0,
-        "size": "36.9 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/addons/pepes-experience-tome/Pepe's Experience Tome V1.mcaddon",
-        "previewUrl": "packs/addons/pepes-experience-tome/",
-        "fileName": "Pepe's Experience Tome V1.mcaddon"
-      },
-      {
-        "id": 2,
-        "name": "Pepe's Hotbar Refiller",
-        "category": "addons",
-        "description": "Automatically restores broken tools and fully consumed hotbar block stacks from the main inventory.",
-        "thumbnail": "packs/addons/pepes-hotbar-refiller/icon.png",
-        "tags": ["addons"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "18.0 KB",
-        "author": "PepeOnMCBE",
-        "downloadUrl": "packs/addons/pepes-hotbar-refiller/Pepe's_Hotbar_Refiller.mcaddon",
-        "previewUrl": "packs/addons/pepes-hotbar-refiller/",
-        "fileName": "Pepe's_Hotbar_Refiller.mcaddon"
-      },
-      {
-        "id": 3,
-        "name": "Pepe's Item Magnet Addon",
-        "category": "addons",
-        "description": "Activate the Magnet to instantly collect all dropped items within 10 blocks.",
-        "thumbnail": "packs/addons/pepes-item-magnet-addon/icon.png",
-        "tags": ["addons"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "14.3 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/addons/pepes-item-magnet-addon/Pepe's Item Magnet [Addon].mcaddon",
-        "previewUrl": "packs/addons/pepes-item-magnet-addon/",
-        "fileName": "Pepe's Item Magnet [Addon].mcaddon"
-      },
-      {
-        "id": 4,
-        "name": "Pepe's Void Totem",
-        "category": "addons",
-        "description": "Hold a Void Totem in your main- or off-hand to be saved from the void.",
-        "thumbnail": "packs/addons/pepes-void-totem/icon.png",
-        "tags": ["addons"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "13.8 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/addons/pepes-void-totem/Pepe's_Void_Totem.mcaddon",
-        "previewUrl": "packs/addons/pepes-void-totem/",
-        "fileName": "Pepe's_Void_Totem.mcaddon"
-      },
-      {
-        "id": 5,
-        "name": "Pepe's Assets Pack",
-        "category": "other",
-        "description": "Provides the shared assets and compatibility layer required by every other Pepe's Pack. Place it above all other Pepe's Packs in your load order.",
-        "thumbnail": "packs/other/pepes-assets-pack/icon.png",
-        "tags": ["required", "dependency", "other"],
-        "version": "1.7.0",
-        "downloads": 0,
-        "size": "140.8 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.7.0.mcpack",
-        "previewUrl": "packs/other/pepes-assets-pack/",
-        "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
-        "versions": [
-          {
-            "version": "1.7.0",
-            "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
-            "size": "140.8 KB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.7.0.mcpack",
-            "date": "2026-08-29"
-          },
-          {
-            "version": "1.6.0",
-            "fileName": "Pepe's_Assets_Pack_V1.6.0.mcpack",
-            "size": "1.1 MB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.6.0.mcpack",
-            "date": "2026-08-29"
-          },
-          {
-            "version": "1.5.0",
-            "fileName": "Pepe's_Assets_Pack_V1.5.0.mcpack",
-            "size": "367.5 KB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.5.0.mcpack",
-            "date": "2026-08-29"
-          },
-          {
-            "version": "1.4.0",
-            "fileName": "Pepe's_Assets_Pack_V1.4.0.mcpack",
-            "size": "367.4 KB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_V1.4.0.mcpack",
-            "date": "2026-08-29"
-          },
-          {
-            "version": "1.3.0",
-            "fileName": "Pepe's_Assets_Pack_v1.3.0.mcpack",
-            "size": "328.6 KB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.3.0.mcpack",
-            "date": "2026-08-29"
-          },
-          {
-            "version": "1.2.1",
-            "fileName": "Pepe's_Assets_Pack_v1.2.1.mcpack",
-            "size": "328.6 KB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.2.1.mcpack",
-            "date": "2026-08-29"
-          },
-          {
-            "version": "1.2.0",
-            "fileName": "Pepe's_Assets_Pack_v1.2.0.mcpack",
-            "size": "328.6 KB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.2.0.mcpack",
-            "date": "2026-08-29"
-          },
-          {
-            "version": "1.1.1",
-            "fileName": "Pepe's_Assets_Pack_v1.1.1.mcpack",
-            "size": "241.6 KB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack_v1.1.1.mcpack",
-            "date": "2026-08-29"
-          },
-          {
-            "version": "1.0.0",
-            "fileName": "Pepe's_Assets_Pack.mcpack",
-            "size": "224.9 KB",
-            "downloadUrl": "packs/other/pepes-assets-pack/Pepe's_Assets_Pack.mcpack",
-            "date": "2026-08-29"
-          }
-        ],
-        "pinned": true,
-        "notice": {
-          "title": "A Must-Have for All Packs!",
-          "intro": "To ensure all your Pepe's Packs load and work perfectly, you must enable and place the Pepe's Pack Assets pack above all other packs in your load order.",
-          "instruction": "Download and Import it like a regular pack and make sure it's on top of the list.",
-          "featuresTitle": "What Does the Assets Pack Do?",
-          "featuresIntro": "This essential pack provides the core foundation for all other Pepe's Packs:",
-          "features": [
-            {
-              "title": "Seamless Compatibility",
-              "text": "It makes every pack compatible with each other, ensuring they work together without issues."
-            },
-            {
-              "title": "Shared Resources",
-              "text": "It contains crucial assets that multiple packs need, preventing duplication and keeping things tidy."
-            },
-            {
-              "title": "Full Customization",
-              "text": "It allows you to easily configure settings across all your packs from one central place."
-            }
-          ],
-          "critical": "Your game will crash if the Pepe's Pack Assets isn't enabled! Don't forget to activate it!"
-        }
-      },
-      {
-        "id": 6,
-        "name": "Pepe's Animated Crop Growth Highlighter",
-        "category": "packs",
-        "description": "Highlights fully grown crops with animated markers for better farming visibility. Made by Pepe",
-        "thumbnail": "packs/packs/pepes-animated-crop-growth-highlighter/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "34.2 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-animated-crop-growth-highlighter/Pepe's_Animated_Crop_Growth_Highlighter.mcpack",
-        "previewUrl": "packs/packs/pepes-animated-crop-growth-highlighter/",
-        "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack"
-      },
-      {
-        "id": 7,
-        "name": "Pepe's Anvil Damage Indicator",
-        "category": "packs",
-        "description": "Enhances anvil visuals with clear, color-coded damage indicators to track durability at a glance. No more guessing when your anvil is about to break.",
-        "thumbnail": "packs/packs/pepes-anvil-damage-indicator/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "44.2 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-anvil-damage-indicator/Pepe's Anvil Damage Indicator.mcpack",
-        "previewUrl": "packs/packs/pepes-anvil-damage-indicator/",
-        "fileName": "Pepe's Anvil Damage Indicator.mcpack"
-      },
-      {
-        "id": 8,
-        "name": "Pepe's Armor Hider",
-        "category": "packs",
-        "description": "Showcases your skin by hiding armor during normal play, while using multi-layer checks to ensure armor remains visible on mobs, armor stands, and other players. Simply sneak to reveal your own gear instantly.",
-        "thumbnail": "packs/packs/pepes-armor-hider/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "5.8 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-armor-hider/Pepe's Armor Hider.mcpack",
-        "previewUrl": "packs/packs/pepes-armor-hider/",
-        "fileName": "Pepe's Armor Hider.mcpack"
-      },
-      {
-        "id": 9,
-        "name": "Pepe's ArmorHUD",
-        "category": "packs",
-        "description": "Display the armor you're wearing in the HUD Note: Pepe's Assets Pack is required for this pack to work..",
-        "thumbnail": "packs/packs/pepes-armorhud/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "27.9 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-armorhud/Pepe's_ArmorHUD.mcpack",
-        "previewUrl": "packs/packs/pepes-armorhud/",
-        "fileName": "Pepe's_ArmorHUD.mcpack"
-      },
-      {
-        "id": 10,
-        "name": "Pepe's Better Armor Bar",
-        "category": "packs",
-        "description": "HUD armor bar coloured by armor material.",
-        "thumbnail": "packs/packs/pepes-better-armor-bar/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "8.2 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-better-armor-bar/Pepe's_Better_Armor_Bar_v1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-better-armor-bar/",
-        "fileName": "Pepe's_Better_Armor_Bar_v1.0.0.mcpack"
-      },
-      {
-        "id": 11,
-        "name": "Pepe's Better Coordinates",
-        "category": "packs",
-        "description": "Shows you Force Coords, Chunk Coords, Nether Coords and Nether Coords in Overlord on the HUD. Note: Pepe's Assets Pack is required for this pack to work.",
-        "thumbnail": "packs/packs/pepes-better-coordinates/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.1",
-        "downloads": 0,
-        "size": "20.4 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-better-coordinates/Pepe's_Better_Coordinates.mcpack",
-        "previewUrl": "packs/packs/pepes-better-coordinates/",
-        "fileName": "Pepe's_Better_Coordinates.mcpack"
-      },
-      {
-        "id": 12,
-        "name": "Pepe's Better Hover Text",
-        "category": "packs",
-        "description": "Enhances inventory tooltips with advanced data. - Item Durability (Current/Max) - Technical IDs (Aux/Item ID) - Suspicious Stew Identifier Note: Pepe's Assets Pack is required for this pack to work.",
-        "thumbnail": "packs/packs/pepes-better-hover-text/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "16.9 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-better-hover-text/Pepe's_Better_Hover_Text_v1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-better-hover-text/",
-        "fileName": "Pepe's_Better_Hover_Text_v1.0.0.mcpack"
-      },
-      {
-        "id": 13,
-        "name": "Pepe's Bundle Item Counter",
-        "category": "packs",
-        "description": "Counts the amount of items you have in a bundle instead of that bar.",
-        "thumbnail": "packs/packs/pepes-bundle-item-counter/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "7.7 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-bundle-item-counter/Pepe's_Bundle_Item_Count_v1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-bundle-item-counter/",
-        "fileName": "Pepe's_Bundle_Item_Count_v1.0.0.mcpack"
-      },
-      {
-        "id": 14,
-        "name": "Pepe's Clock & Compass HUD",
-        "category": "packs",
-        "description": "Displays Clock and Compass elements in the HUD Note: Pepe's Assets Pack is required for this pack to work.",
-        "thumbnail": "📦",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "1.2 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-clock-compass-hud/Pepe's_Compass_&_Clock_HUD.mcpack",
-        "previewUrl": "packs/packs/pepes-clock-compass-hud/",
-        "fileName": "Pepe's_Compass_&_Clock_HUD.mcpack"
-      },
-      {
-        "id": 15,
-        "name": "Pepe's Death Coords",
-        "category": "packs",
-        "description": "Displays precise coordinates upon death to help you recover your items quickly. Note: Pepe's Assets Pack is required for this pack to work.",
-        "thumbnail": "packs/packs/pepes-death-coords/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "41.1 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-death-coords/Pepe's_Death_Coords_v1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-death-coords/",
-        "fileName": "Pepe's_Death_Coords_v1.0.0.mcpack"
-      },
-      {
-        "id": 16,
-        "name": "Pepe's Debug HUD",
-        "category": "packs",
-        "description": "Note: Displays a clean debug HUD with useful in-game information. Press F8 to toggle with KBM.",
-        "thumbnail": "packs/packs/pepes-debug-hud/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "9.7 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-debug-hud/Pepe's DebugHUD.mcpack",
-        "previewUrl": "packs/packs/pepes-debug-hud/",
-        "fileName": "Pepe's DebugHUD.mcpack"
-      },
-      {
-        "id": 17,
-        "name": "Pepe's DirectionHUD",
-        "category": "packs",
-        "description": "Shows the Direction where you're looking at. Note: Pepe's Assets Pack is required for this pack to work.",
-        "thumbnail": "packs/packs/pepes-directionhud/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.1",
-        "downloads": 0,
-        "size": "5.0 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-directionhud/Pepe's_DirectionHUD.mcpack",
-        "previewUrl": "packs/packs/pepes-directionhud/",
-        "fileName": "Pepe's_DirectionHUD.mcpack"
-      },
-      {
-        "id": 18,
-        "name": "Pepe's Durability Viewer",
-        "category": "packs",
-        "description": "Displays item durability directly in-game with a clean and user-friendly interface, enhancing gameplay clarity.",
-        "thumbnail": "packs/packs/pepes-durability-viewer/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "5.6 KB",
-        "author": "PepeOnMinecraft",
-        "downloadUrl": "packs/packs/pepes-durability-viewer/Pepe's_Durability_Viewer.mcpack",
-        "previewUrl": "packs/packs/pepes-durability-viewer/",
-        "fileName": "Pepe's_Durability_Viewer.mcpack"
-      },
-      {
-        "id": 19,
-        "name": "Pepe's Dynamic 3rd Person Crosshair",
-        "category": "packs",
-        "description": "Displays your active crosshair in third person. Compatibility: Works with custom crosshairs and PvP packs. Note: Place this pack above other packs that modify the crosshair.",
-        "thumbnail": "packs/packs/pepes-dynamic-3rd-person-crosshair/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "21.3 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-dynamic-3rd-person-crosshair/Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-dynamic-3rd-person-crosshair/",
-        "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack"
-      },
-      {
-        "id": 20,
-        "name": "Pepe's FPS Counter",
-        "category": "packs",
-        "description": "Displays your FPS on the HUD. Note: Pepe's Assets Pack is required for this pack to work.",
-        "thumbnail": "packs/packs/pepes-fps-counter/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.1",
-        "downloads": 0,
-        "size": "15.1 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-fps-counter/Pepe's_FPS_Counter.mcpack",
-        "previewUrl": "packs/packs/pepes-fps-counter/",
-        "fileName": "Pepe's_FPS_Counter.mcpack"
-      },
-      {
-        "id": 21,
-        "name": "Pepe's InventoryHUD",
-        "category": "packs",
-        "description": "Displays your inventory on the HUD.",
-        "thumbnail": "packs/packs/pepes-inventoryhud/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "13.2 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-inventoryhud/Pepe's_InventoryHUD.mcpack",
-        "previewUrl": "packs/packs/pepes-inventoryhud/",
-        "fileName": "Pepe's_InventoryHUD.mcpack"
-      },
-      {
-        "id": 22,
-        "name": "Pepe's Level Calculator",
-        "category": "packs",
-        "description": "Calculates the amount of Experience you need to reach the next level.",
-        "thumbnail": "packs/packs/pepes-level-calculator/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "7.2 KB",
-        "author": "PepeOnMinecraft",
-        "downloadUrl": "packs/packs/pepes-level-calculator/Pepe's_Level_Calculator.mcpack",
-        "previewUrl": "packs/packs/pepes-level-calculator/",
-        "fileName": "Pepe's_Level_Calculator.mcpack"
-      },
-      {
-        "id": 23,
-        "name": "Pepe's OffhandHUD",
-        "category": "packs",
-        "description": "This pack displays the item your have held in your Offhand. Note: Pepe's Assets Pack is required for this pack to work.",
-        "thumbnail": "packs/packs/pepes-offhandhud/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.1",
-        "downloads": 0,
-        "size": "8.8 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-offhandhud/Pepe's_OffhandHUD.mcpack",
-        "previewUrl": "packs/packs/pepes-offhandhud/",
-        "fileName": "Pepe's_OffhandHUD.mcpack"
-      },
-      {
-        "id": 24,
-        "name": "Pepe's Shiny Pots",
-        "category": "packs",
-        "description": "Adds shiny pot textures to the Hotbar. Note:Requires Pepe's Assets Pack to work properly.",
-        "thumbnail": "packs/packs/pepes-shiny-pots/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "5.0 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-shiny-pots/Pepe's_Shiny_Pots_v1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-shiny-pots/",
-        "fileName": "Pepe's_Shiny_Pots_v1.0.0.mcpack"
-      },
-      {
-        "id": 25,
-        "name": "Pepe's Speedometer",
-        "category": "packs",
-        "description": "Displays your movement speed in the HUD Note: Pepe's Assets Pack is required for this pack to work.",
-        "thumbnail": "packs/packs/pepes-speedometer/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "5.5 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-speedometer/Pepe's_Speedometer.mcpack",
-        "previewUrl": "packs/packs/pepes-speedometer/",
-        "fileName": "Pepe's_Speedometer.mcpack"
-      },
-      {
-        "id": 26,
-        "name": "Pepe's Spinning Projectiles",
-        "category": "packs",
-        "description": "Feature: Ender pearls, snowballs, and eggs spin while in flight. Note: Visual change only, no gameplay impact.",
-        "thumbnail": "packs/packs/pepes-spinning-projectiles/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "13.7 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-spinning-projectiles/Pepe's_Spinning_Projectiles_v1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-spinning-projectiles/",
-        "fileName": "Pepe's_Spinning_Projectiles_v1.0.0.mcpack"
-      },
-      {
-        "id": 27,
-        "name": "Pepe's Time Changer",
-        "category": "packs",
-        "description": "Switch between day and night using subpacks.",
-        "thumbnail": "packs/packs/pepes-time-changer/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "57.6 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-time-changer/Pepe's_Time_Changer_v1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-time-changer/",
-        "fileName": "Pepe's_Time_Changer_v1.0.0.mcpack"
-      },
-      {
-        "id": 28,
-        "name": "Pepe's Waypoints+",
-        "category": "packs",
-        "description": "Note: Pepe's Assets Pack is required for this pack to work. Waypoints Enable: Look down, sneak for 3 seconds and click on the ground. Disable: Look up, sneak and jump. Greenscreen Enable: Sneak while holding a Slime Ball. Disable: Sneak while holding a Nautilus Shell. Deathpoint Enable: Spawns automatically upon death. Disable: Sneak while holding a Heart of the Sea.",
-        "thumbnail": "packs/packs/pepes-waypoints/icon.png",
-        "tags": ["packs"],
-        "version": "1.0.0",
-        "downloads": 0,
-        "size": "6.0 KB",
-        "author": "Pepe",
-        "downloadUrl": "packs/packs/pepes-waypoints/Pepe's_Waypoints+_Pack_V1.0.0.mcpack",
-        "previewUrl": "packs/packs/pepes-waypoints/",
-        "fileName": "Pepe's_Waypoints+_Pack_V1.0.0.mcpack"
-      }
-    ];
   }
 
   updateCategoryCounts() {
@@ -1864,6 +1402,19 @@ class PackLibrary {
     if (this.filteredPacks.length === 0) {
       grid.innerHTML = '';
       emptyState.style.display = 'block';
+      const clearBtn = document.getElementById('empty-state-clear-btn');
+      const hasActiveFilters = !!this.currentFilter.search || !!this.currentFilter.category;
+      if (this.packsLoadError) {
+        emptyState.querySelector('h2').textContent = "Couldn't load packs";
+        emptyState.querySelector('p').textContent = 'Please check your connection and refresh the page.';
+        if (clearBtn) clearBtn.classList.add('hidden');
+      } else {
+        emptyState.querySelector('h2').textContent = 'No packs found';
+        emptyState.querySelector('p').textContent = hasActiveFilters
+          ? 'Try adjusting your search or filters'
+          : 'Nothing in this category yet — check back soon';
+        if (clearBtn) clearBtn.classList.toggle('hidden', !hasActiveFilters);
+      }
       resultsText.textContent = '0 projects';
       return;
     }
@@ -2100,6 +1651,39 @@ class PackLibrary {
     return `<span class="assets-tag assets-tag-coming-soon"><i class="fas fa-clock"></i> Coming Soon</span>`;
   }
 
+  // Tracks, per favorited pack, the updatedAt value the user last saw its
+  // detail page with - so we can badge "Updated" on cards for favorites
+  // that changed since the user last looked.
+  loadSeenPackUpdates() {
+    try {
+      const raw = localStorage.getItem('seenPackUpdates');
+      const parsed = raw ? JSON.parse(raw) : {};
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  markPackUpdateSeen(pack) {
+    if (!pack.updatedAt) return;
+    const seen = this.loadSeenPackUpdates();
+    seen[pack.id] = pack.updatedAt;
+    localStorage.setItem('seenPackUpdates', JSON.stringify(seen));
+  }
+
+  hasUnseenUpdate(pack) {
+    if (!this.isFavorite(pack.id) || !pack.updatedAt) return false;
+    const seen = this.loadSeenPackUpdates();
+    const lastSeen = seen[pack.id];
+    if (!lastSeen) return true;
+    return new Date(pack.updatedAt) > new Date(lastSeen);
+  }
+
+  updatedBadge(pack) {
+    if (!this.hasUnseenUpdate(pack)) return '';
+    return `<span class="updated-badge" title="This favorite has been updated since you last viewed it"><i class="fas fa-star"></i> Updated</span>`;
+  }
+
   createPackCard(pack) {
     const hasImage = this.isImagePath(pack.thumbnail);
     const requiredBadge = pack.pinned
@@ -2109,10 +1693,11 @@ class PackLibrary {
     const mcVersionTag = this.mcVersionTag(pack);
     const comingSoonTag = this.comingSoonTag(pack);
     const favoriteBtn = this.favoriteButton(pack);
+    const updatedBadge = this.updatedBadge(pack);
 
     if (this.viewMode === 'list') {
       const iconBadge = hasImage
-        ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt=""></span>`
+        ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt="" loading="lazy" decoding="async"></span>`
         : `<span class="pack-icon-badge">${this.fallbackIconContent(pack)}</span>`;
 
       return `
@@ -2128,6 +1713,7 @@ class PackLibrary {
               ${assetsTag}
               ${comingSoonTag}
               ${requiredBadge}
+              ${updatedBadge}
             </div>
             <p class="pack-description">${this.escapeHtml(pack.description)}</p>
             <div class="pack-footer">
@@ -2144,14 +1730,14 @@ class PackLibrary {
     const bannerSrc = hasBanner ? pack.bannerUrl : DEFAULT_BANNER_URL;
 
     const iconBadge = hasImage
-      ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt=""></span>`
+      ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt="" loading="lazy" decoding="async"></span>`
       : (pack.faIcon ? `<span class="pack-icon-badge">${this.fallbackIconContent(pack)}</span>` : '');
 
     return `
       <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}" data-pack-id="${pack.id}">
         ${requiredBadge}
         <div class="pack-thumbnail">
-          <img class="pack-thumbnail-bg" src="${bannerSrc}" alt="" onerror="this.style.display='none'">
+          <img class="pack-thumbnail-bg" src="${bannerSrc}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">
           <span class="pack-splash-name"><span>${this.escapeHtml(pack.name)}</span></span>
           ${iconBadge}
           ${favoriteBtn}
@@ -2163,6 +1749,7 @@ class PackLibrary {
             ${mcVersionTag}
             ${assetsTag}
             ${comingSoonTag}
+            ${updatedBadge}
           </div>
           <p class="pack-description">${this.escapeHtml(pack.description)}</p>
           <div class="pack-footer">
@@ -2191,6 +1778,7 @@ class PackLibrary {
 
   showDetail(pack, { push = true } = {}) {
     this.trackRecentlyViewed(pack);
+    this.markPackUpdateSeen(pack);
     const hasImage = this.isImagePath(pack.thumbnail);
     const hasBanner = this.isImagePath(pack.bannerUrl);
     const bannerSrc = hasBanner ? pack.bannerUrl : DEFAULT_BANNER_URL;
@@ -2226,6 +1814,9 @@ class PackLibrary {
 
     this.renderNotice(pack);
     this.renderShowcase(pack);
+    this.renderRelatedPacks(pack);
+    this.loadPackRating(pack);
+    this.loadComments(pack);
 
     const hasOlderVersions = !!(pack.versions && pack.versions.length > 1);
     document.getElementById('versions-sub').textContent = hasOlderVersions
@@ -2304,6 +1895,543 @@ class PackLibrary {
       history.pushState({ page: 'library' }, '', '/library');
     }
     document.title = 'Pepe';
+  }
+
+  copyPackLink() {
+    const url = `${location.origin}/pack/${this.packSlug(this.currentPack)}`;
+    const btn = document.getElementById('detail-share-btn');
+    const revert = () => { btn.innerHTML = `<i class="fas fa-link"></i> Share`; };
+    const showCopied = () => {
+      btn.innerHTML = `<i class="fas fa-check"></i> Copied!`;
+      setTimeout(revert, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(showCopied, () => alert(url));
+    } else {
+      alert(url);
+    }
+  }
+
+  copyPackInfo() {
+    const pack = this.currentPack;
+    if (!pack) return;
+    const version = (pack.versions && pack.versions[this.selectedVersionIndex]) || pack;
+    const lines = [
+      `Pack: ${pack.name}`,
+      `Version: ${version.version || pack.version || '1.0.0'}`,
+      `MC Version: ${pack.mcVersion || 'N/A'}`,
+      `Category: ${this.capitalizeFirst(pack.category)}`,
+      `Link: ${location.origin}/pack/${this.packSlug(pack)}`
+    ];
+    const text = lines.join('\n');
+    const btn = document.getElementById('detail-copy-info-btn');
+    const revert = () => { btn.innerHTML = `<i class="fas fa-copy"></i> Copy Info`; };
+    const showCopied = () => {
+      btn.innerHTML = `<i class="fas fa-check"></i> Copied!`;
+      setTimeout(revert, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(showCopied, () => alert(text));
+    } else {
+      alert(text);
+    }
+  }
+
+  renderRelatedPacks(pack) {
+    const block = document.getElementById('related-packs-block');
+    const grid = document.getElementById('related-packs-grid');
+    const related = this.packs
+      .filter(p => p.id !== pack.id && p.category === pack.category && !p.comingSoon)
+      .slice(0, 4);
+
+    if (related.length === 0) {
+      block.classList.add('hidden');
+      grid.innerHTML = '';
+      return;
+    }
+
+    block.classList.remove('hidden');
+    grid.innerHTML = related.map(p => {
+      const hasImage = this.isImagePath(p.thumbnail);
+      const iconContent = hasImage
+        ? `<img src="${p.thumbnail}" alt="" loading="lazy" decoding="async">`
+        : this.fallbackIconContent(p);
+      return `
+        <button type="button" class="related-pack-card" data-pack-id="${p.id}">
+          <span class="related-pack-icon">${iconContent}</span>
+          <span class="related-pack-name">${this.escapeHtml(p.name)}</span>
+        </button>
+      `;
+    }).join('');
+
+    grid.querySelectorAll('.related-pack-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = parseInt(card.dataset.packId, 10);
+        const target = this.packs.find(p => p.id === id);
+        if (target) this.showDetail(target);
+      });
+    });
+  }
+
+  getVoterId() {
+    let id = localStorage.getItem('voterId');
+    if (!id) {
+      id = 'v-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      localStorage.setItem('voterId', id);
+    }
+    return id;
+  }
+
+  renderStarsDisplay(average) {
+    const rounded = Math.round(average);
+    return Array.from({ length: 5 }, (_, i) =>
+      `<i class="fas fa-star${i < rounded ? ' rating-star-filled' : ''}"></i>`
+    ).join('');
+  }
+
+  async loadPackRating(pack) {
+    const starsDisplay = document.getElementById('rating-average-stars');
+    const averageText = document.getElementById('rating-average-text');
+    const starButtons = document.querySelectorAll('#rating-stars-input .rating-star');
+    const voterId = this.getVoterId();
+
+    starsDisplay.innerHTML = this.renderStarsDisplay(0);
+    averageText.textContent = '…';
+    starButtons.forEach(btn => btn.classList.remove('rating-star-active'));
+
+    try {
+      const res = await fetch(`${API_BASE}/api/ratings/${this.packSlug(pack)}`);
+      const data = await res.json();
+      if (this.currentPack !== pack) return;
+      starsDisplay.innerHTML = this.renderStarsDisplay(data.average || 0);
+      averageText.textContent = data.count > 0
+        ? `${data.average.toFixed(1)} (${data.count} rating${data.count !== 1 ? 's' : ''})`
+        : 'No ratings yet';
+
+      const myRating = parseInt(localStorage.getItem(`myRating:${this.packSlug(pack)}`) || '0', 10);
+      starButtons.forEach(btn => {
+        btn.classList.toggle('rating-star-active', parseInt(btn.dataset.value, 10) <= myRating);
+      });
+    } catch (e) {
+      averageText.textContent = 'No ratings yet';
+    }
+  }
+
+  async submitPackRating(pack, rating) {
+    const voterId = this.getVoterId();
+    const slug = this.packSlug(pack);
+    localStorage.setItem(`myRating:${slug}`, String(rating));
+    try {
+      const res = await fetch(`${API_BASE}/api/ratings/${slug}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voterId, rating }),
+      });
+      const data = await res.json();
+      if (this.currentPack !== pack) return;
+      document.getElementById('rating-average-stars').innerHTML = this.renderStarsDisplay(data.average || 0);
+      document.getElementById('rating-average-text').textContent =
+        `${data.average.toFixed(1)} (${data.count} rating${data.count !== 1 ? 's' : ''})`;
+    } catch (e) { /* rating submission is best-effort */ }
+  }
+
+  // ===== Auth (Google / GitHub login via Cloudflare Worker) =====
+
+  captureSessionFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const session = params.get('session');
+    if (!session) return;
+    localStorage.setItem('sessionToken', session);
+    this.pendingNewAccount = true;
+    params.delete('session');
+    const newSearch = params.toString();
+    const newUrl = location.pathname + (newSearch ? `?${newSearch}` : '') + location.hash;
+    history.replaceState(history.state, '', newUrl);
+  }
+
+  getSessionToken() {
+    return localStorage.getItem('sessionToken');
+  }
+
+  // ===== Multi-account support =====
+  // Every signed-in provider/email account the visitor has added on this
+  // browser is kept as {token, user} in localStorage so they can switch
+  // between them without re-authenticating each time - similar to Google's
+  // or GitHub's "post as" account switcher.
+
+  getAccounts() {
+    try {
+      const raw = localStorage.getItem('accounts');
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  saveAccounts(accounts) {
+    localStorage.setItem('accounts', JSON.stringify(accounts));
+  }
+
+  addAccount(token, user) {
+    const accounts = this.getAccounts().filter((a) => a.user.id !== user.id);
+    accounts.push({ token, user });
+    this.saveAccounts(accounts);
+    localStorage.setItem('sessionToken', token);
+  }
+
+  removeAccount(token) {
+    const accounts = this.getAccounts().filter((a) => a.token !== token);
+    this.saveAccounts(accounts);
+    return accounts;
+  }
+
+  async switchAccount(token) {
+    localStorage.setItem('sessionToken', token);
+    document.getElementById('auth-account-menu').classList.add('hidden');
+    await this.refreshAuthState();
+  }
+
+  async authFetch(path, options = {}) {
+    const token = this.getSessionToken();
+    const headers = { ...(options.headers || {}) };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return fetch(`${API_BASE}${path}`, { ...options, headers });
+  }
+
+  async setupAuth() {
+    document.getElementById('auth-login-btn').addEventListener('click', () => {
+      document.getElementById('auth-login-menu').classList.toggle('hidden');
+      document.getElementById('auth-account-menu').classList.add('hidden');
+    });
+    document.getElementById('auth-user-btn').addEventListener('click', () => {
+      document.getElementById('auth-account-menu').classList.toggle('hidden');
+      document.getElementById('auth-login-menu').classList.add('hidden');
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#auth-control')) {
+        document.getElementById('auth-login-menu').classList.add('hidden');
+        document.getElementById('auth-account-menu').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('auth-login-google').addEventListener('click', () => this.startLogin('google'));
+    document.getElementById('auth-login-github').addEventListener('click', () => this.startLogin('github'));
+    document.getElementById('auth-login-email-btn').addEventListener('click', () => this.openEmailAuthModal());
+    document.getElementById('auth-logout-btn').addEventListener('click', () => this.logout());
+    document.getElementById('auth-edit-profile-btn').addEventListener('click', () => this.openProfileModal());
+    document.getElementById('auth-add-account-btn').addEventListener('click', () => {
+      document.getElementById('auth-account-menu').classList.add('hidden');
+      document.getElementById('auth-login-menu').classList.remove('hidden');
+    });
+
+    this.authFormMode = 'login';
+    document.getElementById('auth-form-toggle-btn').addEventListener('click', () => {
+      this.setAuthFormMode(this.authFormMode === 'login' ? 'signup' : 'login');
+    });
+
+    document.getElementById('auth-password-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.submitAuthForm();
+    });
+
+    document.getElementById('email-auth-modal-close').addEventListener('click', () => this.closeEmailAuthModal());
+
+    document.getElementById('profile-modal-close').addEventListener('click', () => this.closeProfileModal());
+    document.getElementById('profile-save-btn').addEventListener('click', () => this.saveProfile());
+
+    document.getElementById('comment-submit-btn').addEventListener('click', () => this.submitComment());
+
+    await this.refreshAuthState();
+  }
+
+  startLogin(provider) {
+    const redirect = encodeURIComponent(location.href);
+    location.href = `${API_BASE}/auth/${provider}/start?redirect=${redirect}`;
+  }
+
+  openEmailAuthModal() {
+    document.getElementById('auth-login-menu').classList.add('hidden');
+    document.getElementById('auth-password-form').reset();
+    document.getElementById('auth-form-error').classList.add('hidden');
+    this.setAuthFormMode('login');
+    document.getElementById('email-auth-modal-overlay').classList.remove('hidden');
+  }
+
+  closeEmailAuthModal() {
+    document.getElementById('email-auth-modal-overlay').classList.add('hidden');
+  }
+
+  setAuthFormMode(mode) {
+    this.authFormMode = mode;
+    const isSignup = mode === 'signup';
+    document.getElementById('auth-username-input').classList.toggle('hidden', !isSignup);
+    document.getElementById('auth-password-input').autocomplete = isSignup ? 'new-password' : 'current-password';
+    document.getElementById('auth-form-submit-btn').textContent = isSignup ? 'Sign up' : 'Login';
+    document.getElementById('email-auth-modal-title').textContent = isSignup ? 'Sign Up' : 'Login';
+    document.getElementById('email-auth-modal-sub').textContent = isSignup
+      ? 'Create a new account with your email and password.'
+      : 'Sign in with your email and password.';
+    document.getElementById('auth-form-toggle-btn').textContent = isSignup
+      ? 'Already have an account? Login'
+      : "Don't have an account? Sign up";
+    document.getElementById('auth-form-error').classList.add('hidden');
+  }
+
+  async submitAuthForm() {
+    const errorEl = document.getElementById('auth-form-error');
+    errorEl.classList.add('hidden');
+
+    const email = document.getElementById('auth-email-input').value.trim();
+    const password = document.getElementById('auth-password-input').value;
+    const isSignup = this.authFormMode === 'signup';
+    const path = isSignup ? '/auth/signup' : '/auth/login';
+    const body = isSignup
+      ? { email, password, displayName: document.getElementById('auth-username-input').value.trim() }
+      : { email, password };
+
+    const btn = document.getElementById('auth-form-submit-btn');
+    btn.disabled = true;
+    try {
+      const res = await fetch(`${API_BASE}${path}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        errorEl.textContent = data.error || 'Something went wrong.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      this.addAccount(data.session, data.user);
+      this.currentUser = data.user;
+      this.renderAuthUI();
+      this.closeEmailAuthModal();
+      document.getElementById('auth-password-form').reset();
+    } catch (e) {
+      errorEl.textContent = 'Network error. Please try again.';
+      errorEl.classList.remove('hidden');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async logout() {
+    const token = this.getSessionToken();
+    if (token) {
+      this.authFetch('/auth/logout', { method: 'POST' }).catch(() => {});
+    }
+    const remaining = this.removeAccount(token);
+    document.getElementById('auth-account-menu').classList.add('hidden');
+
+    if (remaining.length > 0) {
+      // Signing out of one account drops back to another already-added
+      // account, rather than a fully signed-out state, to match how
+      // multi-account switchers on other sites behave.
+      localStorage.setItem('sessionToken', remaining[0].token);
+      await this.refreshAuthState();
+    } else {
+      localStorage.removeItem('sessionToken');
+      this.currentUser = null;
+      this.renderAuthUI();
+    }
+  }
+
+  async refreshAuthState() {
+    const token = this.getSessionToken();
+    if (!token) {
+      this.currentUser = null;
+      this.renderAuthUI();
+      return;
+    }
+    try {
+      const res = await this.authFetch('/api/session');
+      const data = await res.json();
+      this.currentUser = data.user || null;
+      if (this.currentUser) {
+        if (this.pendingNewAccount) {
+          this.addAccount(token, this.currentUser);
+          this.pendingNewAccount = false;
+        } else {
+          // Keep the cached copy (avatar/username shown in the switcher
+          // before a network round-trip) in sync with the server.
+          const accounts = this.getAccounts();
+          const idx = accounts.findIndex((a) => a.token === token);
+          if (idx !== -1) {
+            accounts[idx].user = this.currentUser;
+            this.saveAccounts(accounts);
+          }
+        }
+      }
+    } catch (e) {
+      this.currentUser = null;
+    }
+    this.renderAuthUI();
+  }
+
+  renderAuthUI() {
+    const loggedIn = !!this.currentUser;
+    document.getElementById('auth-login-btn').classList.toggle('hidden', loggedIn);
+    document.getElementById('auth-user-btn').classList.toggle('hidden', !loggedIn);
+    if (!loggedIn) return;
+
+    const avatar = this.currentUser.avatarUrl || 'assets/pepe-profile.png';
+    document.getElementById('auth-user-avatar').src = avatar;
+    document.getElementById('auth-pill-username').textContent = this.currentUser.username || this.currentUser.name || 'Account';
+
+    const activeToken = this.getSessionToken();
+    const listEl = document.getElementById('auth-account-list');
+    const accounts = this.getAccounts();
+    listEl.innerHTML = accounts.map((a) => {
+      const isActive = a.token === activeToken;
+      const accAvatar = a.user.avatarUrl || 'assets/pepe-profile.png';
+      const name = this.escapeHtml(a.user.name || 'Unnamed');
+      const username = a.user.username ? `@${this.escapeHtml(a.user.username)}` : 'No username set';
+      return `
+        <button type="button" class="auth-account-item${isActive ? ' active' : ''}" data-token="${a.token}">
+          <img class="auth-account-avatar" src="${accAvatar}" alt="" loading="lazy" decoding="async">
+          <span class="auth-account-info">
+            <span class="auth-account-name">${name}</span>
+            <span class="auth-account-username">${username}</span>
+          </span>
+          ${isActive ? '<i class="fas fa-check auth-account-check"></i>' : ''}
+        </button>
+      `;
+    }).join('');
+
+    listEl.querySelectorAll('.auth-account-item').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.token === activeToken) return;
+        this.switchAccount(btn.dataset.token);
+      });
+    });
+  }
+
+  openProfileModal() {
+    if (!this.currentUser) return;
+    document.getElementById('auth-account-menu').classList.add('hidden');
+    document.getElementById('profile-username').value = this.currentUser.username || '';
+    document.getElementById('profile-display-name').value = this.currentUser.name || '';
+    document.getElementById('profile-avatar-url').value = '';
+    document.getElementById('profile-banner-url').value = '';
+    document.getElementById('profile-form-error').classList.add('hidden');
+    document.getElementById('profile-modal-overlay').classList.remove('hidden');
+  }
+
+  closeProfileModal() {
+    document.getElementById('profile-modal-overlay').classList.add('hidden');
+  }
+
+  async saveProfile() {
+    const errorEl = document.getElementById('profile-form-error');
+    errorEl.classList.add('hidden');
+
+    const username = document.getElementById('profile-username').value.trim();
+    const displayName = document.getElementById('profile-display-name').value.trim();
+    const avatarUrl = document.getElementById('profile-avatar-url').value.trim();
+    const bannerUrl = document.getElementById('profile-banner-url').value.trim();
+
+    try {
+      const res = await this.authFetch('/api/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: username || null,
+          displayName: displayName || null,
+          avatarUrl: avatarUrl || null,
+          bannerUrl: bannerUrl || null,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        errorEl.textContent = data.error || 'Could not save profile.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      this.currentUser = data.user;
+      this.renderAuthUI();
+      this.closeProfileModal();
+    } catch (e) {
+      errorEl.textContent = 'Network error. Please try again.';
+      errorEl.classList.remove('hidden');
+    }
+  }
+
+  // ===== Comments =====
+
+  async loadComments(pack) {
+    const listEl = document.getElementById('comments-list');
+    listEl.innerHTML = '<p class="comments-empty">Loading comments...</p>';
+    document.getElementById('comments-signed-out-note').classList.toggle('hidden', !!this.currentUser);
+    document.getElementById('comment-form').classList.toggle('hidden', !this.currentUser);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/comments/${this.packSlug(pack)}`);
+      const data = await res.json();
+      if (this.currentPack !== pack) return;
+      this.renderComments(data.comments || []);
+    } catch (e) {
+      listEl.innerHTML = '<p class="comments-empty">Could not load comments.</p>';
+    }
+  }
+
+  renderComments(comments) {
+    const listEl = document.getElementById('comments-list');
+    if (comments.length === 0) {
+      listEl.innerHTML = '<p class="comments-empty">No comments yet. Be the first!</p>';
+      return;
+    }
+    listEl.innerHTML = comments.map((c) => {
+      const isOwn = this.currentUser && this.currentUser.id === c.user.id;
+      const avatar = c.user.avatarUrl || 'assets/pepe-profile.png';
+      return `
+        <div class="comment-item" data-comment-id="${c.id}">
+          <img class="comment-avatar" src="${avatar}" alt="" loading="lazy" decoding="async">
+          <div class="comment-body">
+            <div class="comment-header">
+              <span class="comment-author">${this.escapeHtml(c.user.name || 'Unknown')}</span>
+              <span class="comment-time">${this.formatDate(c.createdAt)}</span>
+              ${isOwn ? `<button type="button" class="comment-delete-btn" data-comment-id="${c.id}" title="Delete"><i class="fas fa-trash"></i></button>` : ''}
+            </div>
+            <p class="comment-text">${this.escapeHtml(c.text)}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    listEl.querySelectorAll('.comment-delete-btn').forEach((btn) => {
+      btn.addEventListener('click', () => this.deleteComment(btn.dataset.commentId));
+    });
+  }
+
+  async submitComment() {
+    if (!this.currentUser || !this.currentPack) return;
+    const input = document.getElementById('comment-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const btn = document.getElementById('comment-submit-btn');
+    btn.disabled = true;
+    try {
+      const res = await this.authFetch(`/api/comments/${this.packSlug(this.currentPack)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
+      if (res.ok) {
+        input.value = '';
+        this.loadComments(this.currentPack);
+      }
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async deleteComment(commentId) {
+    if (!confirm('Delete this comment?')) return;
+    const res = await this.authFetch(`/api/comment/${commentId}`, { method: 'DELETE' });
+    if (res.ok && this.currentPack) this.loadComments(this.currentPack);
   }
 
   formatDate(dateStr) {
@@ -2650,10 +2778,10 @@ class PackLibrary {
   async rawFetchLiveDownloads(pack, version, key) {
     const fallback = version ? 0 : pack.downloads;
     try {
-      const res = await fetch(`https://abacus.jasoncameron.dev/get/${COUNTER_NAMESPACE}/${key}`);
+      const res = await fetch(`${API_BASE}/api/downloads/${key}`);
       if (!res.ok) return fallback;
       const data = await res.json();
-      return typeof data.value === 'number' ? data.value : fallback;
+      return typeof data.count === 'number' ? data.count : fallback;
     } catch (error) {
       return fallback;
     }
@@ -2667,12 +2795,10 @@ class PackLibrary {
   }
 
   pumpDownloadFetchQueue() {
-    // The counter API rate-limits (429s) well before a handful of concurrent
-    // requests - one at a time with a short stagger between dispatches stays
-    // under that, at the cost of the grid's counts filling in progressively
-    // rather than all at once.
-    const MAX_CONCURRENT = 1;
-    const STAGGER_MS = 300;
+    // Our own Worker API easily handles this traffic, but a small stagger
+    // still keeps the grid's counts filling in smoothly rather than all at once.
+    const MAX_CONCURRENT = 4;
+    const STAGGER_MS = 60;
     if (this.pumpScheduled || this.activeDownloadFetches >= MAX_CONCURRENT || !this.downloadFetchQueue.length) return;
 
     this.pumpScheduled = true;
@@ -2692,10 +2818,14 @@ class PackLibrary {
     const fallback = (version ? 0 : pack.downloads) + 1;
     try {
       const key = this.counterKey(pack, version);
-      const res = await fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NAMESPACE}/${key}`);
+      const res = await fetch(`${API_BASE}/api/downloads/${key}`, { method: 'POST' });
       if (!res.ok) return fallback;
       const data = await res.json();
-      return typeof data.value === 'number' ? data.value : fallback;
+      if (typeof data.count === 'number') {
+        this.writeCachedDownloadCount(key, data.count);
+        return data.count;
+      }
+      return fallback;
     } catch (error) {
       return fallback;
     }

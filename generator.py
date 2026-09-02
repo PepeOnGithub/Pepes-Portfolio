@@ -359,6 +359,7 @@ def generate_packs_json(packs_dir, output_file):
     lootlabs_top_level_copies = []      # (pack_entry, versions) - copy versions[0]'s lootUrl up
 
     # Scan each category directory
+    seen_pack_dirs = {}  # pack folder name (lowercased) -> category it was first seen in
     for category_path in sorted(packs_dir.iterdir()):
         if not category_path.is_dir() or category_path.name.startswith('.'):
             continue
@@ -370,6 +371,14 @@ def generate_packs_json(packs_dir, output_file):
         for pack_path in sorted(category_path.iterdir()):
             if not pack_path.is_dir() or pack_path.name.startswith('.'):
                 continue
+
+            dir_key = pack_path.name.lower()
+            if dir_key in seen_pack_dirs:
+                print(f"WARNING: pack folder '{pack_path.name}' appears in both "
+                      f"'{seen_pack_dirs[dir_key]}' and '{category}' - it will be listed twice. "
+                      f"Move or remove the duplicate.")
+            else:
+                seen_pack_dirs[dir_key] = category
 
             # Get metadata
             metadata = get_pack_metadata(pack_path)

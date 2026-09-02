@@ -48,6 +48,34 @@
       </nav>
     </div>
     <div class="topnav-right">
+      <div class="auth-control" id="auth-control">
+        <button class="auth-pill auth-signed-out" id="auth-login-btn" title="Sign in" aria-label="Sign in">
+          <i class="fas fa-user"></i>
+          <span>Sign in</span>
+          <i class="fas fa-chevron-down auth-pill-chevron"></i>
+        </button>
+        <button class="auth-pill auth-signed-in hidden" id="auth-user-btn" title="Your account">
+          <img src="" alt="" id="auth-user-avatar" class="auth-user-avatar">
+          <span id="auth-pill-username">Account</span>
+          <i class="fas fa-chevron-down auth-pill-chevron"></i>
+        </button>
+
+        <div class="auth-menu hidden" id="auth-login-menu">
+          <p class="auth-menu-label">Sign in with</p>
+          <button type="button" class="auth-provider-btn" id="auth-login-google"><i class="fab fa-google"></i> Continue with Google</button>
+          <button type="button" class="auth-provider-btn" id="auth-login-github"><i class="fab fa-github"></i> Continue with GitHub</button>
+          <button type="button" class="auth-provider-btn" id="auth-login-email-btn"><i class="fas fa-envelope"></i> Continue with Email</button>
+        </div>
+
+        <div class="auth-menu hidden" id="auth-account-menu">
+          <p class="auth-menu-label">Post as</p>
+          <div class="auth-account-list" id="auth-account-list"></div>
+          <button type="button" class="auth-menu-item" id="auth-add-account-btn"><i class="fas fa-plus"></i> Add account</button>
+          <div class="auth-menu-sep"></div>
+          <button type="button" class="auth-menu-item" id="auth-edit-profile-btn"><i class="fas fa-user-pen"></i> Edit profile</button>
+          <button type="button" class="auth-menu-item" id="auth-logout-btn"><i class="fas fa-right-from-bracket"></i> Sign out</button>
+        </div>
+      </div>
       <button class="icon-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
         <i class="fas fa-sun"></i>
       </button>
@@ -167,24 +195,24 @@
 
       <div class="project-grid">
         <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="project-card">
-          <img src="assets/glacier-icon.png" alt="" class="project-icon">
+          <img src="assets/glacier-icon.png" alt="" class="project-icon" loading="lazy" decoding="async">
           <h4>Glacier Productions</h4>
           <p>Owner &middot; managing Glacier Client and this HUB ecosystem.</p>
           <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
         </a>
         <div class="project-card featured">
-          <img src="assets/nyxora-icon.png" alt="" class="project-icon">
+          <img src="assets/nyxora-icon.png" alt="" class="project-icon" loading="lazy" decoding="async">
           <h4>Nyxora Produtions</h4>
           <p>Studio behind original MCBE experiences and tools.</p>
         </div>
         <a href="https://discord.gg/Va4fG6J2Rw" target="_blank" rel="noopener" class="project-card">
-          <img src="assets/azelux-icon.png" alt="" class="project-icon">
+          <img src="assets/azelux-icon.png" alt="" class="project-icon" loading="lazy" decoding="async">
           <h4>Azelux Client</h4>
           <p>Ex Developer of Azelux Client MCBE.</p>
           <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://discord.gg/flarial" target="_blank" rel="noopener" class="project-card">
-          <img src="assets/flarial.svg" alt="" class="project-icon">
+          <img src="assets/flarial.svg" alt="" class="project-icon" loading="lazy" decoding="async">
           <h4>Flarial Proxy</h4>
           <p>Developer on the Flarial Proxy team.</p>
           <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
@@ -275,12 +303,12 @@
           <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://mcpedl.com/user/pepeonmcpedl/" target="_blank" rel="noopener" class="social-card social-card--mcpedl">
-          <img src="assets/mcpedl.png" class="social-icon">
+          <img src="assets/mcpedl.png" class="social-icon" loading="lazy" decoding="async">
           <div class="social-card-body"><h4>MCPEDL</h4><p>Browse my packs</p></div>
           <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
         <a href="https://www.curseforge.com/members/pepeoncf/projects" target="_blank" rel="noopener" class="social-card social-card--curseforge">
-          <img src="assets/curseforge.png" class="social-icon">
+          <img src="assets/curseforge.png" class="social-icon" loading="lazy" decoding="async">
           <div class="social-card-body"><h4>CurseForge</h4><p>Projects &amp; downloads</p></div>
           <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>
@@ -429,6 +457,9 @@
           <i class="fas fa-box-open"></i>
           <h2>No packs found</h2>
           <p>Try adjusting your search or filters</p>
+          <button type="button" class="btn-secondary-small hidden" id="empty-state-clear-btn">
+            <i class="fas fa-rotate-left"></i> Clear search &amp; filters
+          </button>
         </div>
       </main>
     </div>
@@ -489,6 +520,22 @@
               <p class="versions-sub">Optional add-ons for this pack to customize your experience.</p>
               <div class="extensions-list" id="extensions-list"></div>
             </div>
+
+            <div class="versions-block hidden" id="related-packs-block">
+              <h3>More Like This</h3>
+              <p class="versions-sub">Other packs from the same category.</p>
+              <div class="related-packs-grid" id="related-packs-grid"></div>
+            </div>
+
+            <div class="versions-block" id="comments-block">
+              <h3>Comments</h3>
+              <p class="versions-sub" id="comments-signed-out-note">Sign in to leave a comment.</p>
+              <div class="comment-form hidden" id="comment-form">
+                <textarea id="comment-input" placeholder="Share your thoughts..." maxlength="1000" rows="2"></textarea>
+                <button type="button" class="btn-secondary-small" id="comment-submit-btn">Post</button>
+              </div>
+              <div class="comments-list" id="comments-list"></div>
+            </div>
           </div>
 
           <aside class="detail-side">
@@ -504,6 +551,33 @@
             <a href="#" class="btn-download btn-download-full" id="detail-download">
               <i class="fas fa-download"></i> Download
             </a>
+            <div class="detail-action-row">
+              <button type="button" class="btn-secondary-small" id="detail-share-btn" title="Copy a direct link to this pack">
+                <i class="fas fa-link"></i> Share
+              </button>
+              <button type="button" class="btn-secondary-small" id="detail-copy-info-btn" title="Copy pack name, version, and MC version for a bug report">
+                <i class="fas fa-copy"></i> Copy Info
+              </button>
+              <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" class="btn-secondary-small" id="detail-report-btn" title="Report a problem with this pack">
+                <i class="fas fa-flag"></i> Report
+              </a>
+            </div>
+            <div class="rating-widget" id="rating-widget">
+              <div class="rating-summary">
+                <span class="rating-stars-display" id="rating-average-stars"></span>
+                <span class="rating-average-text" id="rating-average-text">No ratings yet</span>
+              </div>
+              <div class="rating-input">
+                <span class="rating-input-label">Your rating:</span>
+                <span class="rating-stars-input" id="rating-stars-input">
+                  <button type="button" class="rating-star" data-value="1"><i class="fas fa-star"></i></button>
+                  <button type="button" class="rating-star" data-value="2"><i class="fas fa-star"></i></button>
+                  <button type="button" class="rating-star" data-value="3"><i class="fas fa-star"></i></button>
+                  <button type="button" class="rating-star" data-value="4"><i class="fas fa-star"></i></button>
+                  <button type="button" class="rating-star" data-value="5"><i class="fas fa-star"></i></button>
+                </span>
+              </div>
+            </div>
             <div class="side-divider"></div>
             <div class="side-row">
               <img src="assets/pepe-profile.png" class="side-avatar" id="detail-avatar">
@@ -546,6 +620,57 @@
       </div>
     </div>
   </section>
+
+  <!-- ============ EMAIL SIGN IN / SIGN UP MODAL ============ -->
+  <div class="assets-modal-overlay hidden" id="email-auth-modal-overlay">
+    <div class="assets-modal" role="dialog" aria-modal="true" aria-labelledby="email-auth-modal-title">
+      <button class="assets-modal-close" id="email-auth-modal-close" aria-label="Close">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <h3 id="email-auth-modal-title">Login</h3>
+      <p class="versions-sub" id="email-auth-modal-sub">Sign in with your email and password.</p>
+      <form class="auth-password-form" id="auth-password-form">
+        <input type="text" id="auth-username-input" placeholder="Username" autocomplete="username" class="hidden">
+        <input type="email" id="auth-email-input" placeholder="Email" autocomplete="email" required>
+        <input type="password" id="auth-password-input" placeholder="Password" autocomplete="current-password" required>
+        <p class="auth-form-error hidden" id="auth-form-error"></p>
+        <button type="submit" class="btn-download btn-download-full" id="auth-form-submit-btn">Login</button>
+      </form>
+      <button type="button" class="auth-form-toggle" id="auth-form-toggle-btn">Don't have an account? Sign up</button>
+    </div>
+  </div>
+
+  <!-- ============ EDIT PROFILE MODAL ============ -->
+  <div class="assets-modal-overlay hidden" id="profile-modal-overlay">
+    <div class="assets-modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+      <button class="assets-modal-close" id="profile-modal-close" aria-label="Close">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <h3 id="profile-modal-title">Edit Profile</h3>
+      <div class="profile-form">
+        <label class="profile-field">
+          <span>Username</span>
+          <input type="text" id="profile-username" placeholder="letters, numbers, underscore" autocomplete="off" maxlength="32">
+        </label>
+        <label class="profile-field">
+          <span>Display Name</span>
+          <input type="text" id="profile-display-name" placeholder="Shown instead of your account name" autocomplete="off" maxlength="60">
+        </label>
+        <label class="profile-field">
+          <span>Avatar URL</span>
+          <input type="text" id="profile-avatar-url" placeholder="https://... (leave blank to keep current)" autocomplete="off" maxlength="500">
+        </label>
+        <label class="profile-field">
+          <span>Banner URL</span>
+          <input type="text" id="profile-banner-url" placeholder="https://... (shown on your account menu)" autocomplete="off" maxlength="500">
+        </label>
+        <p class="profile-form-error hidden" id="profile-form-error"></p>
+      </div>
+      <div class="assets-modal-actions">
+        <button type="button" class="btn-download" id="profile-save-btn">Save Profile</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ ASSETS PACK REQUIRED MODAL ============ -->
   <div class="assets-modal-overlay hidden" id="assets-modal-overlay">
