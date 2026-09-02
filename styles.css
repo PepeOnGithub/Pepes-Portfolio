@@ -3997,6 +3997,74 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   border-left: 2px solid var(--color-border);
 }
 
+.comment-author-link { cursor: pointer; }
+.comment-author-link:hover { color: var(--color-accent); text-decoration: underline; }
+img.comment-author-link:hover { opacity: 0.85; text-decoration: none; }
+
+.author-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  flex-shrink: 0;
+  background: rgba(72, 156, 73, 0.14);
+  border: 1px solid rgba(72, 156, 73, 0.45);
+  color: var(--color-accent);
+}
+
+.comment-report-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.comment-report-btn:hover { color: #ff8c1a; background: rgba(255, 140, 26, 0.1); }
+.comment-report-btn:disabled { cursor: default; color: var(--color-text-secondary); background: none; opacity: 0.7; }
+
+/* ===== User Profile Page ===== */
+.user-profile-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.user-profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-border);
+}
+
+.user-profile-name {
+  margin: 0;
+  font-size: var(--font-size-xl);
+}
+
+.user-profile-joined, .user-profile-stats {
+  margin: var(--spacing-xs) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
 .comment-replies .comment-item {
   background: var(--color-bg-tertiary);
   padding: var(--spacing-sm);

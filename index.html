@@ -72,6 +72,7 @@
           <div class="auth-account-list" id="auth-account-list"></div>
           <button type="button" class="auth-menu-item" id="auth-add-account-btn"><i class="fas fa-plus"></i> Add account</button>
           <div class="auth-menu-sep"></div>
+          <button type="button" class="auth-menu-item" id="auth-view-profile-btn"><i class="fas fa-id-card"></i> View profile</button>
           <button type="button" class="auth-menu-item" id="auth-edit-profile-btn"><i class="fas fa-user-pen"></i> Edit profile</button>
           <button type="button" class="auth-menu-item" id="auth-logout-btn"><i class="fas fa-right-from-bracket"></i> Sign out</button>
         </div>
@@ -1345,6 +1346,32 @@
       </div>
 
       <div class="stats-spotlight-grid" id="stats-spotlight-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ USER PROFILE PAGE ============ -->
+  <section class="page" id="page-user">
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <a href="#" class="back-link" id="user-profile-back-link"><i class="fas fa-arrow-left"></i> Back</a>
+      </div>
+    </div>
+
+    <div class="user-profile-content">
+      <div class="user-profile-header">
+        <img src="assets/pepe-profile.png" alt="" class="user-profile-avatar" id="user-profile-avatar" loading="lazy" decoding="async">
+        <div>
+          <h2 class="user-profile-name" id="user-profile-name"></h2>
+          <span class="author-badge hidden" id="user-profile-author-badge">Author</span>
+          <p class="user-profile-joined" id="user-profile-joined"></p>
+          <p class="user-profile-stats" id="user-profile-stats"></p>
+        </div>
+      </div>
+
+      <div class="versions-block">
+        <h3>Recent Comments</h3>
+        <div class="comments-list" id="user-profile-comments"></div>
+      </div>
     </div>
   </section>
 

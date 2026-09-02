@@ -245,7 +245,7 @@ function getMonetizedUrl(targetUrl, lootUrl, forcedProvider) {
 
 class Router {
   constructor() {
-    this.pages = ['home', 'projects', 'socials', 'library', 'settings', 'stats'];
+    this.pages = ['home', 'projects', 'socials', 'library', 'settings', 'stats', 'user'];
     this.setupNav();
     this.setupMobileNav();
   }
@@ -1685,6 +1685,11 @@ class PackLibrary {
     `;
   }
 
+  pictureTag(src, webpSrc, alt = '', attrs = '') {
+    if (!webpSrc) return `<img src="${src}" alt="${alt}" loading="lazy" decoding="async" ${attrs}>`;
+    return `<picture><source type="image/webp" srcset="${webpSrc}"><img src="${src}" alt="${alt}" loading="lazy" decoding="async" ${attrs}></picture>`;
+  }
+
   fallbackIconContent(pack) {
     if (pack.faIcon) return `<i class="fas ${pack.faIcon} pack-letter"></i>`;
     return `<span class="pack-letter">${this.escapeHtml(pack.name.charAt(0).toUpperCase())}</span>`;
@@ -1774,7 +1779,7 @@ class PackLibrary {
 
     if (this.viewMode === 'list') {
       const iconBadge = hasImage
-        ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt="" loading="lazy" decoding="async"></span>`
+        ? `<span class="pack-icon-badge">${this.pictureTag(pack.thumbnail, pack.thumbnailWebp)}</span>`
         : `<span class="pack-icon-badge">${this.fallbackIconContent(pack)}</span>`;
 
       return `
@@ -1809,14 +1814,14 @@ class PackLibrary {
     const bannerSrc = hasBanner ? pack.bannerUrl : DEFAULT_BANNER_URL;
 
     const iconBadge = hasImage
-      ? `<span class="pack-icon-badge"><img src="${pack.thumbnail}" alt="" loading="lazy" decoding="async"></span>`
+      ? `<span class="pack-icon-badge">${this.pictureTag(pack.thumbnail, pack.thumbnailWebp)}</span>`
       : (pack.faIcon ? `<span class="pack-icon-badge">${this.fallbackIconContent(pack)}</span>` : '');
 
     return `
       <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}" data-pack-id="${pack.id}">
         ${requiredBadge}
         <div class="pack-thumbnail">
-          <img class="pack-thumbnail-bg" src="${bannerSrc}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          ${this.pictureTag(bannerSrc, hasBanner ? pack.bannerUrlWebp : null, '', `class="pack-thumbnail-bg" onerror="this.style.display='none'"`)}
           <span class="pack-splash-name"><span>${this.escapeHtml(pack.name)}</span></span>
           ${iconBadge}
           ${favoriteBtn}
@@ -1865,11 +1870,11 @@ class PackLibrary {
     const bannerSrc = hasBanner ? pack.bannerUrl : DEFAULT_BANNER_URL;
 
     document.getElementById('detail-banner').innerHTML = `
-      <img class="detail-banner-bg" src="${bannerSrc}" alt="" onerror="this.style.display='none'">
+      ${this.pictureTag(bannerSrc, hasBanner ? pack.bannerUrlWebp : null, '', `class="detail-banner-bg" onerror="this.style.display='none'"`)}
       <span class="detail-splash-name">${this.escapeHtml(pack.name)}</span>
     `;
     document.getElementById('detail-thumb').innerHTML = hasImage
-      ? `<img src="${pack.thumbnail}" alt="${this.escapeHtml(pack.name)}">`
+      ? this.pictureTag(pack.thumbnail, pack.thumbnailWebp, this.escapeHtml(pack.name))
       : this.fallbackIconContent(pack);
 
     document.getElementById('detail-name').textContent = pack.name;
@@ -1966,6 +1971,65 @@ class PackLibrary {
     document.title = `${pack.name} · Pepe`;
   }
 
+  async showUserProfile(userId, { push = true } = {}) {
+    window.router.show('user', { push: false });
+    if (push) {
+      history.pushState({ page: 'user', id: userId }, '', `/user/${userId}`);
+    }
+    document.title = 'Profile · Pepe';
+
+    const nameEl = document.getElementById('user-profile-name');
+    const avatarEl = document.getElementById('user-profile-avatar');
+    const joinedEl = document.getElementById('user-profile-joined');
+    const statsEl = document.getElementById('user-profile-stats');
+    const commentsEl = document.getElementById('user-profile-comments');
+    const authorBadgeEl = document.getElementById('user-profile-author-badge');
+
+    nameEl.textContent = 'Loading…';
+    avatarEl.src = 'assets/pepe-profile.png';
+    joinedEl.textContent = '';
+    statsEl.textContent = '';
+    commentsEl.innerHTML = '';
+    authorBadgeEl.classList.add('hidden');
+
+    try {
+      const res = await this.authFetch(`/api/users/${userId}`);
+      if (!res.ok) {
+        nameEl.textContent = 'User not found';
+        return;
+      }
+      const data = await res.json();
+      nameEl.textContent = data.user.name || data.user.username || 'Unknown';
+      avatarEl.src = data.user.avatarUrl || 'assets/pepe-profile.png';
+      joinedEl.textContent = data.user.joinedAt ? `Joined ${this.formatDate(data.user.joinedAt)}` : '';
+      statsEl.textContent = `${data.commentCount} comment${data.commentCount === 1 ? '' : 's'} · ${data.ratingCount} rating${data.ratingCount === 1 ? '' : 's'}`;
+      authorBadgeEl.classList.toggle('hidden', !data.user.isAuthor);
+
+      const commentsRes = await this.authFetch(`/api/users/${userId}/comments`);
+      if (commentsRes.ok) {
+        const commentsData = await commentsRes.json();
+        commentsEl.innerHTML = commentsData.comments.length
+          ? commentsData.comments.map((c) => `
+              <div class="comment-item">
+                <div class="comment-body">
+                  <div class="comment-header">
+                    <span class="comment-time">${this.formatDate(c.createdAt)}</span>
+                  </div>
+                  <p class="comment-text">${this.escapeHtml(c.text)}</p>
+                </div>
+              </div>
+            `).join('')
+          : '<p class="comments-empty">No comments yet.</p>';
+      }
+    } catch (e) {
+      nameEl.textContent = 'Could not load profile';
+    }
+  }
+
+  closeUserProfile() {
+    history.back();
+  }
+
   showBrowse({ push = true } = {}) {
     document.getElementById('detail-view').classList.add('hidden');
     document.getElementById('browse-view').classList.remove('hidden');
@@ -2035,7 +2099,7 @@ class PackLibrary {
     grid.innerHTML = related.map(p => {
       const hasImage = this.isImagePath(p.thumbnail);
       const iconContent = hasImage
-        ? `<img src="${p.thumbnail}" alt="" loading="lazy" decoding="async">`
+        ? this.pictureTag(p.thumbnail, p.thumbnailWebp)
         : this.fallbackIconContent(p);
       return `
         <button type="button" class="related-pack-card" data-pack-id="${p.id}">
@@ -2201,6 +2265,13 @@ class PackLibrary {
     document.getElementById('auth-login-email-btn').addEventListener('click', () => this.openEmailAuthModal());
     document.getElementById('auth-logout-btn').addEventListener('click', () => this.logout());
     document.getElementById('auth-edit-profile-btn').addEventListener('click', () => this.openProfileModal());
+    document.getElementById('auth-view-profile-btn').addEventListener('click', () => {
+      if (this.currentUser) this.showUserProfile(this.currentUser.id);
+    });
+    document.getElementById('user-profile-back-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.closeUserProfile();
+    });
     document.getElementById('auth-add-account-btn').addEventListener('click', () => {
       document.getElementById('auth-account-menu').classList.add('hidden');
       document.getElementById('auth-login-menu').classList.remove('hidden');
@@ -2478,10 +2549,11 @@ class PackLibrary {
       const canReply = depth === 0; // one level of nesting keeps threads readable
       return `
         <div class="comment-item" data-comment-id="${c.id}">
-          <img class="comment-avatar" src="${avatar}" alt="" loading="lazy" decoding="async">
+          <img class="comment-avatar comment-author-link" data-user-id="${c.user.id}" src="${avatar}" alt="" loading="lazy" decoding="async">
           <div class="comment-body">
             <div class="comment-header">
-              <span class="comment-author">${this.escapeHtml(c.user.name || 'Unknown')}</span>
+              <span class="comment-author comment-author-link" data-user-id="${c.user.id}">${this.escapeHtml(c.user.name || 'Unknown')}</span>
+              ${c.isAuthor ? `<span class="author-badge" title="This is the site owner">Author</span>` : ''}
               <span class="comment-time">${this.formatDate(c.createdAt)}</span>
               ${isOwn ? `<button type="button" class="comment-delete-btn" data-comment-id="${c.id}" title="Delete"><i class="fas fa-trash"></i></button>` : ''}
             </div>
@@ -2491,6 +2563,7 @@ class PackLibrary {
                 <i class="${c.likedByMe ? 'fas' : 'far'} fa-heart"></i> ${c.likeCount > 0 ? c.likeCount : ''}
               </button>
               ${canReply ? `<button type="button" class="comment-reply-btn" data-comment-id="${c.id}">Reply</button>` : ''}
+              ${!isOwn ? `<button type="button" class="comment-report-btn" data-comment-id="${c.id}" title="Report this comment"><i class="fas fa-flag"></i></button>` : ''}
             </div>
             <div class="comment-reply-form hidden" id="reply-form-${c.id}">
               <textarea placeholder="Write a reply..." maxlength="1000" rows="1" data-parent-id="${c.id}"></textarea>
@@ -2521,6 +2594,33 @@ class PackLibrary {
     listEl.querySelectorAll('.comment-reply-submit-btn').forEach((btn) => {
       btn.addEventListener('click', () => this.submitComment(btn.dataset.parentId));
     });
+    listEl.querySelectorAll('.comment-report-btn').forEach((btn) => {
+      btn.addEventListener('click', () => this.reportComment(btn.dataset.commentId));
+    });
+    listEl.querySelectorAll('.comment-author-link').forEach((el) => {
+      el.addEventListener('click', () => this.showUserProfile(el.dataset.userId));
+    });
+  }
+
+  async reportComment(commentId) {
+    if (!this.currentUser) return;
+    const btn = document.querySelector(`.comment-report-btn[data-comment-id="${commentId}"]`);
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    try {
+      const res = await this.authFetch(`/api/comment/${commentId}/report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+      if (res.ok) {
+        btn.innerHTML = '<i class="fas fa-check"></i> Reported';
+      } else {
+        btn.disabled = false;
+      }
+    } catch (e) {
+      btn.disabled = false;
+    }
   }
 
   async submitComment(parentId = null) {
@@ -3519,6 +3619,13 @@ function resolveInitialRoute() {
     return;
   }
 
+  const userMatch = path.match(/^\/user\/(.+)$/);
+  if (userMatch) {
+    window.packLibrary.showUserProfile(decodeURIComponent(userMatch[1]), { push: false });
+    history.replaceState({ page: 'user', id: decodeURIComponent(userMatch[1]) }, '', path);
+    return;
+  }
+
   const packMatch = path.match(/^\/pack\/(.+)$/);
   if (packMatch) {
     const identifier = decodeURIComponent(packMatch[1]);
@@ -3571,6 +3678,11 @@ window.addEventListener('popstate', (e) => {
     window.router.show('library', { push: false });
     const pack = window.packLibrary.packs.find(p => p.id === state.id);
     if (pack) window.packLibrary.showDetail(pack, { push: false });
+    return;
+  }
+
+  if (state.page === 'user') {
+    window.packLibrary.showUserProfile(state.id, { push: false });
     return;
   }
 

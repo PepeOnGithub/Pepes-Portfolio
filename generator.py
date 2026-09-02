@@ -17,6 +17,12 @@ from pathlib import Path
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+try:
+    from PIL import Image
+    HAS_PILLOW = True
+except ImportError:
+    HAS_PILLOW = False
+
 # Fix emoji encoding on Windows
 if sys.platform == 'win32':
     import io
@@ -300,7 +306,8 @@ def count_downloads(pack_path):
 # Files that are never treated as the "link file" for a website pack
 KNOWN_FILES = {
     'pack.json', 'icon.png', 'bg.png', 'pack_banner.png', '.metadata.json',
-    'readme.md', 'license', 'license.txt'
+    'readme.md', 'license', 'license.txt',
+    'icon.webp', 'bg.webp', 'pack_banner.webp'
 }
 
 ASSET_EXTENSIONS = ('.zip', '.mcpack', '.mcaddon', '.mcworld', '.mctemplate')
@@ -422,6 +429,31 @@ def extract_icon_from_mcpack(mcpack_path, output_path):
         pass
     return False
 
+MAX_DIMENSIONS = {'icon': 128, 'banner': 960}
+
+def optimize_image(src_path):
+    """Produce a resized/compressed .webp alongside src_path (icon capped at
+    128px, banner capped at 960px wide, never upscaled). Returns the new
+    file's Path on success, or None if Pillow is unavailable or it fails."""
+    if not HAS_PILLOW:
+        return None
+    kind = 'icon' if src_path.stem == 'icon' else 'banner'
+    max_dim = MAX_DIMENSIONS[kind]
+    webp_path = src_path.with_suffix('.webp')
+    try:
+        with Image.open(src_path) as img:
+            img = img.convert('RGBA') if img.mode in ('P', 'LA') else img.convert('RGB') if img.mode not in ('RGB', 'RGBA') else img
+            width, height = img.size
+            longest = max(width, height) if kind == 'icon' else width
+            if longest > max_dim:
+                scale = max_dim / longest
+                img = img.resize((max(1, round(width * scale)), max(1, round(height * scale))), Image.LANCZOS)
+            img.save(webp_path, 'WEBP', quality=80, method=6)
+        return webp_path
+    except Exception as e:
+        print(f"WARNING: could not optimize image '{src_path}': {e}")
+        return None
+
 def find_link_file(pack_path):
     """
     For website packs: find a file whose name IS the link, e.g. a file
@@ -489,6 +521,7 @@ def generate_packs_json(packs_dir, output_file):
 
             # icon.png / pack_banner.png (or bg.png) override the thumbnail/banner if present
             thumbnail = metadata.get('thumbnail', '📦')
+            thumbnail_webp = None
             icon_path = pack_path / 'icon.png'
             if icon_path.exists():
                 thumbnail = f'packs/{category}/{pack_path.name}/icon.png'
@@ -499,11 +532,20 @@ def generate_packs_json(packs_dir, output_file):
                     if extract_icon_from_mcpack(asset_files_for_icon[0], icon_path):
                         thumbnail = f'packs/{category}/{pack_path.name}/icon.png'
 
+            if icon_path.exists():
+                webp_path = optimize_image(icon_path)
+                if webp_path:
+                    thumbnail_webp = f'packs/{category}/{pack_path.name}/{webp_path.name}'
+
             banner_url = None
+            banner_url_webp = None
             for banner_name in ('pack_banner.png', 'bg.png'):
                 banner_path = pack_path / banner_name
                 if banner_path.exists():
                     banner_url = f'packs/{category}/{pack_path.name}/{banner_name}'
+                    webp_path = optimize_image(banner_path)
+                    if webp_path:
+                        banner_url_webp = f'packs/{category}/{pack_path.name}/{webp_path.name}'
                     break
 
             # Prefer real pack file(s) (.mcpack/.mcaddon/etc) if present, so
@@ -558,6 +600,9 @@ def generate_packs_json(packs_dir, output_file):
                 'previewUrl': f'packs/{category}/{pack_path.name}/'
             }
 
+            if thumbnail_webp:
+                pack_entry['thumbnailWebp'] = thumbnail_webp
+
             pack_entry['tags'] = derive_tags(
                 pack_entry['name'], pack_entry['description'], metadata.get('tags', [category])
             )
@@ -603,6 +648,8 @@ def generate_packs_json(packs_dir, output_file):
 
             if banner_url:
                 pack_entry['bannerUrl'] = banner_url
+            if banner_url_webp:
+                pack_entry['bannerUrlWebp'] = banner_url_webp
 
             if metadata.get('pinned'):
                 pack_entry['pinned'] = True

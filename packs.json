@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-02T07:13:52.508664",
+  "generated": "2026-09-02T07:37:54.802828",
   "total_packs": 44,
   "categories": {
     "addons": [
@@ -78,8 +78,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/addons/pepes-experience-tome/Pepe%27s%20Experience%20Tome%20V1.mcaddon",
       "previewUrl": "packs/addons/pepes-experience-tome/",
+      "thumbnailWebp": "packs/addons/pepes-experience-tome/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's Experience Tome V1.mcaddon",
       "showcaseUrl": "https://youtu.be/7M_cfmBuq90"
     },
@@ -100,8 +101,9 @@
       "author": "PepeOnMCBE",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/addons/pepes-hotbar-refiller/Pepe%27s_Hotbar_Refiller.mcaddon",
       "previewUrl": "packs/addons/pepes-hotbar-refiller/",
+      "thumbnailWebp": "packs/addons/pepes-hotbar-refiller/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Hotbar_Refiller.mcaddon",
       "showcaseUrl": "https://youtu.be/tvstyl5fjII"
     },
@@ -125,8 +127,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/addons/pepes-item-magnet-addon/Pepe%27s%20Item%20Magnet%20%5BAddon%5D.mcaddon",
       "previewUrl": "packs/addons/pepes-item-magnet-addon/",
+      "thumbnailWebp": "packs/addons/pepes-item-magnet-addon/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's Item Magnet [Addon].mcaddon",
       "showcaseUrl": "https://youtu.be/ChjxGuHtt48"
     },
@@ -145,8 +148,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/addons/pepes-void-totem/Pepe%27s_Void_Totem.mcaddon",
       "previewUrl": "packs/addons/pepes-void-totem/",
+      "thumbnailWebp": "packs/addons/pepes-void-totem/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Void_Totem.mcaddon",
       "showcaseUrl": "https://youtu.be/g2g7eUF0Auo"
     },
@@ -167,8 +171,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/allay-client/AllayMc%20Client%20v1.mcpack",
       "previewUrl": "packs/clients/allay-client/",
+      "thumbnailWebp": "packs/clients/allay-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:48:25+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "AllayMc Client v1.mcpack",
       "mcVersion": "TBD",
       "timelineOrder": 8,
@@ -191,8 +196,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/glacier-client/Glacier%20Client%20V6.2.mcpack",
       "previewUrl": "packs/clients/glacier-client/",
+      "thumbnailWebp": "packs/clients/glacier-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:28:33+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Glacier Client V6.2.mcpack",
       "versions": [
         {
@@ -514,6 +520,7 @@
         }
       ],
       "bannerUrl": "packs/clients/glacier-client/pack_banner.png",
+      "bannerUrlWebp": "packs/clients/glacier-client/pack_banner.webp",
       "mcVersion": "1.26",
       "timelineOrder": 11,
       "faIcon": "fa-snowflake"
@@ -534,8 +541,9 @@
       "author": "Zephyx",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/optifine-zephyx/Optifine_by_Zephyx-v3%5BUnofficial%20Port%5D.mcpack",
       "previewUrl": "packs/clients/optifine-zephyx/",
+      "thumbnailWebp": "packs/clients/optifine-zephyx/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Optifine_by_Zephyx-v3[Unofficial Port].mcpack",
       "versions": [
         {
@@ -582,6 +590,7 @@
         }
       ],
       "bannerUrl": "packs/clients/optifine-zephyx/pack_banner.png",
+      "bannerUrlWebp": "packs/clients/optifine-zephyx/pack_banner.webp",
       "mcVersion": "1.19",
       "timelineOrder": 9,
       "faIcon": "fa-bolt",
@@ -603,8 +612,9 @@
       "author": "Pepe",
       "downloadUrl": "packs/clients/pepe-client/PepeClientBetav2.0.zip",
       "previewUrl": "packs/clients/pepe-client/",
+      "thumbnailWebp": "packs/clients/pepe-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:48:25+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "PepeClientBetav2.0.zip",
       "versions": [
         {
@@ -644,8 +654,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-future/Future%20Ui%20pack%20v1.4.mcpack",
       "previewUrl": "packs/clients/project-future/",
+      "thumbnailWebp": "packs/clients/project-future/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:23:23+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Future Ui pack v1.4.mcpack",
       "versions": [
         {
@@ -678,6 +689,7 @@
         }
       ],
       "bannerUrl": "packs/clients/project-future/pack_banner.png",
+      "bannerUrlWebp": "packs/clients/project-future/pack_banner.webp",
       "mcVersion": "1.17",
       "timelineOrder": 5,
       "faIcon": "fa-rocket",
@@ -700,8 +712,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/project-light/Project%20Light%20V4%20%5BMain%5D.mcpack",
       "previewUrl": "packs/clients/project-light/",
+      "thumbnailWebp": "packs/clients/project-light/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Project Light V4 [Main].mcpack",
       "versions": [
         {
@@ -799,6 +812,7 @@
         }
       ],
       "bannerUrl": "packs/clients/project-light/pack_banner.png",
+      "bannerUrlWebp": "packs/clients/project-light/pack_banner.webp",
       "mcVersion": "1.20",
       "timelineOrder": 10,
       "faIcon": "fa-lightbulb",
@@ -820,8 +834,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/clients/solar-client/Solar%20Client%20v2.mcpack",
       "previewUrl": "packs/clients/solar-client/",
+      "thumbnailWebp": "packs/clients/solar-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Solar Client v2.mcpack",
       "versions": [
         {
@@ -847,6 +862,7 @@
         }
       ],
       "bannerUrl": "packs/clients/solar-client/pack_banner.png",
+      "bannerUrlWebp": "packs/clients/solar-client/pack_banner.webp",
       "mcVersion": "1.19",
       "timelineOrder": 4,
       "faIcon": "fa-sun",
@@ -869,7 +885,7 @@
       "downloadUrl": "packs/clients/sulphur-client.zip",
       "previewUrl": "packs/clients/sulphur-client/",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "mcVersion": "TBD",
       "timelineOrder": 7,
       "faIcon": "fa-fire",
@@ -892,7 +908,7 @@
       "downloadUrl": "packs/clients/void-client.zip",
       "previewUrl": "packs/clients/void-client/",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "mcVersion": "TBD",
       "timelineOrder": 2,
       "faIcon": "fa-circle-notch",
@@ -915,8 +931,9 @@
       "author": "Pepe",
       "downloadUrl": "packs/clients/wind-client/WindClientV2.zip",
       "previewUrl": "packs/clients/wind-client/",
+      "thumbnailWebp": "packs/clients/wind-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "WindClientV2.zip",
       "versions": [
         {
@@ -942,6 +959,7 @@
         }
       ],
       "bannerUrl": "packs/clients/wind-client/pack_banner.png",
+      "bannerUrlWebp": "packs/clients/wind-client/pack_banner.webp",
       "mcVersion": "1.18",
       "timelineOrder": 3,
       "faIcon": "fa-wind",
@@ -964,8 +982,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/cosmetics/pepes-charged-overlay-pack/Pepe%27s%20Charged%20Overlay%20Pack.mcpack",
       "previewUrl": "packs/cosmetics/pepes-charged-overlay-pack/",
+      "thumbnailWebp": "packs/cosmetics/pepes-charged-overlay-pack/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:48:25+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's Charged Overlay Pack.mcpack"
     },
     {
@@ -984,8 +1003,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/cosmetics/pepes-halo-pack/Pepe%27s%20Halo%20Pack.mcpack",
       "previewUrl": "packs/cosmetics/pepes-halo-pack/",
+      "thumbnailWebp": "packs/cosmetics/pepes-halo-pack/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:48:25+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's Halo Pack.mcpack"
     },
     {
@@ -1006,8 +1026,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.7.0.mcpack",
       "previewUrl": "packs/other/pepes-assets-pack/",
+      "thumbnailWebp": "packs/other/pepes-assets-pack/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T22:24:00+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
       "versions": [
         {
@@ -1125,8 +1146,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-armorhud/Pepe%27s_ArmorHUD.mcpack",
       "previewUrl": "packs/packs/pepes-armorhud/",
+      "thumbnailWebp": "packs/packs/pepes-armorhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_ArmorHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
@@ -1148,8 +1170,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-armor-bar/Pepe%27s_Better_Armor_Bar_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-better-armor-bar/",
+      "thumbnailWebp": "packs/packs/pepes-better-armor-bar/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Better_Armor_Bar_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/G-t17mm3ivc"
@@ -1170,8 +1193,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-coordinates/Pepe%27s_Better_Coordinates.mcpack",
       "previewUrl": "packs/packs/pepes-better-coordinates/",
+      "thumbnailWebp": "packs/packs/pepes-better-coordinates/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Better_Coordinates.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/riGidGD8V3o"
@@ -1193,8 +1217,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-hover-text/Pepe%27s_Better_Hover_Text_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-better-hover-text/",
+      "thumbnailWebp": "packs/packs/pepes-better-hover-text/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Better_Hover_Text_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/h2akqm3tPb0"
@@ -1217,7 +1242,7 @@
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-clock-compass-hud/Pepe%27s_Compass_%26_Clock_HUD.mcpack",
       "previewUrl": "packs/packs/pepes-clock-compass-hud/",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Compass_&_Clock_HUD.mcpack",
       "requiresAssets": true
     },
@@ -1236,8 +1261,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-death-coords/Pepe%27s_Death_Coords_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-death-coords/",
+      "thumbnailWebp": "packs/packs/pepes-death-coords/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Death_Coords_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/H2HtakIRtpA"
@@ -1259,8 +1285,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-debug-hud/Pepe%27s%20DebugHUD.mcpack",
       "previewUrl": "packs/packs/pepes-debug-hud/",
+      "thumbnailWebp": "packs/packs/pepes-debug-hud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's DebugHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/dfUXea5s1N4"
@@ -1281,8 +1308,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-directionhud/Pepe%27s_DirectionHUD.mcpack",
       "previewUrl": "packs/packs/pepes-directionhud/",
+      "thumbnailWebp": "packs/packs/pepes-directionhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_DirectionHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/n3TZGPGPjW8"
@@ -1303,8 +1331,9 @@
       "author": "PepeOnMinecraft",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-durability-viewer/Pepe%27s_Durability_Viewer.mcpack",
       "previewUrl": "packs/packs/pepes-durability-viewer/",
+      "thumbnailWebp": "packs/packs/pepes-durability-viewer/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Durability_Viewer.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/73duhxBtYt8"
@@ -1325,7 +1354,7 @@
       "downloadUrl": "packs/packs/pepes-force-spectator.zip",
       "previewUrl": "packs/packs/pepes-force-spectator/",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "showcaseUrl": "https://youtu.be/6pS0mutbWic",
       "discontinued": true
     },
@@ -1345,8 +1374,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-fps-counter/Pepe%27s_FPS_Counter.mcpack",
       "previewUrl": "packs/packs/pepes-fps-counter/",
+      "thumbnailWebp": "packs/packs/pepes-fps-counter/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_FPS_Counter.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/iL6kHJGobFU"
@@ -1368,8 +1398,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-inventoryhud/Pepe%27s_InventoryHUD.mcpack",
       "previewUrl": "packs/packs/pepes-inventoryhud/",
+      "thumbnailWebp": "packs/packs/pepes-inventoryhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_InventoryHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/C12DFIh2cto"
@@ -1391,8 +1422,9 @@
       "author": "PepeOnMinecraft",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-level-calculator/Pepe%27s_Level_Calculator.mcpack",
       "previewUrl": "packs/packs/pepes-level-calculator/",
+      "thumbnailWebp": "packs/packs/pepes-level-calculator/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Level_Calculator.mcpack",
       "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
     },
@@ -1412,8 +1444,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-offhandhud/Pepe%27s_OffhandHUD.mcpack",
       "previewUrl": "packs/packs/pepes-offhandhud/",
+      "thumbnailWebp": "packs/packs/pepes-offhandhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_OffhandHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/ezj1oGz8nrY"
@@ -1434,8 +1467,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-speedometer/Pepe%27s_Speedometer.mcpack",
       "previewUrl": "packs/packs/pepes-speedometer/",
+      "thumbnailWebp": "packs/packs/pepes-speedometer/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Speedometer.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/4AmjVyMh2cI"
@@ -1458,7 +1492,7 @@
       "downloadUrl": "packs/packs/pepes-status-effect-hud.zip",
       "previewUrl": "packs/packs/pepes-status-effect-hud/",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "showcaseUrl": "https://youtu.be/xL4tqxtJ6Vo",
       "discontinued": true
     },
@@ -1477,8 +1511,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-waypoints/Pepe%27s_Waypoints%2B_Pack_V1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-waypoints/",
+      "thumbnailWebp": "packs/packs/pepes-waypoints/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Waypoints+_Pack_V1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
@@ -1501,8 +1536,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-animated-crop-growth-highlighter/Pepe%27s_Animated_Crop_Growth_Highlighter.mcpack",
       "previewUrl": "packs/utility/pepes-animated-crop-growth-highlighter/",
+      "thumbnailWebp": "packs/utility/pepes-animated-crop-growth-highlighter/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack"
     },
     {
@@ -1521,8 +1557,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-anvil-damage-indicator/Pepe%27s%20Anvil%20Damage%20Indicator.mcpack",
       "previewUrl": "packs/utility/pepes-anvil-damage-indicator/",
+      "thumbnailWebp": "packs/utility/pepes-anvil-damage-indicator/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's Anvil Damage Indicator.mcpack"
     },
     {
@@ -1541,8 +1578,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-armor-hider/Pepe%27s%20Armor%20Hider.mcpack",
       "previewUrl": "packs/utility/pepes-armor-hider/",
+      "thumbnailWebp": "packs/utility/pepes-armor-hider/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's Armor Hider.mcpack"
     },
     {
@@ -1561,8 +1599,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-bundle-item-counter/Pepe%27s_Bundle_Item_Count_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-bundle-item-counter/",
+      "thumbnailWebp": "packs/utility/pepes-bundle-item-counter/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Bundle_Item_Count_v1.0.0.mcpack"
     },
     {
@@ -1581,8 +1620,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-dynamic-3rd-person-crosshair/Pepe%27s_Dynamic_3rd_Person%20Crosshair_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-dynamic-3rd-person-crosshair/",
+      "thumbnailWebp": "packs/utility/pepes-dynamic-3rd-person-crosshair/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack"
     },
     {
@@ -1602,8 +1642,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-shiny-pots/Pepe%27s_Shiny_Pots_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-shiny-pots/",
+      "thumbnailWebp": "packs/utility/pepes-shiny-pots/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Shiny_Pots_v1.0.0.mcpack"
     },
     {
@@ -1621,8 +1662,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-spinning-projectiles/Pepe%27s_Spinning_Projectiles_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-spinning-projectiles/",
+      "thumbnailWebp": "packs/utility/pepes-spinning-projectiles/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Spinning_Projectiles_v1.0.0.mcpack"
     },
     {
@@ -1640,8 +1682,9 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-time-changer/Pepe%27s_Time_Changer_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-time-changer/",
+      "thumbnailWebp": "packs/utility/pepes-time-changer/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-08-31T08:22:54+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "fileName": "Pepe's_Time_Changer_v1.0.0.mcpack"
     },
     {
@@ -1661,7 +1704,7 @@
       "downloadUrl": "packs/website/glacierclient-xyz.zip",
       "previewUrl": "packs/website/glacierclient-xyz/",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "externalUrl": "https://glacierclient.xyz",
       "fileName": "glacierclient.xyz"
     },
@@ -1682,7 +1725,7 @@
       "downloadUrl": "packs/website/mca-glacierclient-xyz.zip",
       "previewUrl": "packs/website/mca-glacierclient-xyz/",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-08-30T18:33:32+02:00",
+      "updatedAt": "2026-09-02T07:18:28+02:00",
       "externalUrl": "https://mca.glacierclient.xyz",
       "fileName": "mca.glacierclient.xyz"
     }
