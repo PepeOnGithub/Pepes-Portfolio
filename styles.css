@@ -3157,19 +3157,6 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
   .pack-favorite-btn { width: 38px; height: 38px; }
   #sort-dropdown .custom-dropdown-trigger { min-height: 40px; }
 
-  /* The dropdown is normally anchored to the auth pill's right edge, but on
-     narrow screens the pill sits well left of the viewport's right edge
-     (icon buttons + hamburger take up the rest of the row), so a right:0
-     anchor pushes a 260px-wide menu off the left edge of the screen. Pin it
-     to the viewport instead so it can never overflow. */
-  .auth-menu {
-    position: fixed;
-    top: 68px;
-    left: var(--spacing-md);
-    right: var(--spacing-md);
-    min-width: 0;
-    width: auto;
-  }
 }
 
 /* ===== Footer ===== */
@@ -3715,6 +3702,25 @@ body.hide-download-counts #detail-downloads-stat { display: none; }
 }
 
 .auth-menu.hidden { display: none; }
+
+/* The dropdown is normally anchored to the auth pill's right edge, but on
+   narrow screens the pill isn't flush with either edge (icon buttons +
+   hamburger share the row), so anchoring to it pushes the menu off one
+   side of the screen. Center it in the viewport instead so it never
+   overflows regardless of where the pill sits. Placed after the base
+   .auth-menu rule above so it wins the cascade (equal specificity, same
+   selector - the later declaration wins regardless of media query nesting). */
+@media (max-width: 768px) {
+  .auth-menu {
+    position: fixed;
+    top: 68px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    min-width: 0;
+    width: min(300px, calc(100vw - 2 * var(--spacing-md)));
+  }
+}
 
 .auth-provider-btn, .auth-menu-item {
   display: flex;
