@@ -1519,7 +1519,7 @@ class PackLibrary {
         emptyState.querySelector('h2').textContent = 'No packs found';
         emptyState.querySelector('p').textContent = hasActiveFilters
           ? 'Try adjusting your search or filters'
-          : 'Nothing in this category yet — check back soon';
+          : 'Nothing in this category yet, check back soon';
         if (clearBtn) clearBtn.classList.toggle('hidden', !hasActiveFilters);
       }
       resultsText.textContent = '0 projects';
@@ -3606,7 +3606,7 @@ class PackLibrary {
     const L = 0.2126 * luminance[0] + 0.7152 * luminance[1] + 0.0722 * luminance[2];
     const ratio = (1 + 0.05) / (L + 0.05);
     const passesAA = ratio >= 4.5;
-    el.innerHTML = `White text on this accent: <strong>${ratio.toFixed(2)}:1</strong> — <span class="${passesAA ? 'contrast-pass' : 'contrast-fail'}">${passesAA ? 'AA Pass' : 'AA Fail'}</span>`;
+    el.innerHTML = `White text on this accent: <strong>${ratio.toFixed(2)}:1</strong> · <span class="${passesAA ? 'contrast-pass' : 'contrast-fail'}">${passesAA ? 'AA Pass' : 'AA Fail'}</span>`;
   }
 
   applyThemeLook(look) {
