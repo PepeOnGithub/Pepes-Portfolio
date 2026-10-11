@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-11T14:39:55.444981",
+  "generated": "2026-10-11T15:43:20.186954",
   "total_packs": 51,
   "categories": {
     "addons": [
@@ -176,10 +176,12 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "42.9 MB",
+      "size": "43.1 MB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-calculator/Pepes_Calculator_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-calculator/",
+      "addedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T14:40:15+02:00",
       "fileName": "Pepes_Calculator_V1.0.0.apk",
       "faIcon": "fa-calculator"
     },
@@ -200,6 +202,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-calendar/Pepes_Calendar_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-calendar/",
+      "addedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T14:40:15+02:00",
       "fileName": "Pepes_Calendar_V1.0.0.apk",
       "faIcon": "fa-calendar-days"
     },
@@ -220,6 +224,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-clock/Pepes_Clock_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-clock/",
+      "addedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T14:40:15+02:00",
       "fileName": "Pepes_Clock_V1.0.0.apk",
       "faIcon": "fa-clock"
     },
@@ -241,6 +247,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-music/Pepes_Music_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-music/",
+      "addedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T14:40:15+02:00",
       "fileName": "Pepes_Music_V1.0.0.apk",
       "faIcon": "fa-music"
     },
@@ -261,6 +269,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-notes/Pepes_Notes_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-notes/",
+      "addedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T14:40:15+02:00",
       "fileName": "Pepes_Notes_V1.0.0.apk",
       "faIcon": "fa-note-sticky"
     },
@@ -277,10 +287,12 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "103.4 MB",
+      "size": "103.5 MB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-translator/Pepes_Translator_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-translator/",
+      "addedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T14:40:15+02:00",
       "fileName": "Pepes_Translator_V1.0.0.apk",
       "faIcon": "fa-language"
     },
@@ -301,6 +313,8 @@
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-weather/Pepes_Weather_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-weather/",
+      "addedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T14:40:15+02:00",
       "fileName": "Pepes_Weather_V1.0.0.apk",
       "faIcon": "fa-cloud-sun"
     },
