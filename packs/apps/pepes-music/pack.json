@@ -1,0 +1,15 @@
+{
+    "name": "Pepe's Music",
+    "description": "A music player with Home, Search, Library and Radio, a full Now Playing screen with queue, lyrics, sleep timer and offline downloads. Android app (APK) - enable installs from your browser to sideload.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udcf1",
+    "tags": [
+        "apps",
+        "android",
+        "app"
+    ],
+    "category": "apps",
+    "license": "MIT",
+    "faIcon": "fa-music"
+}

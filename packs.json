@@ -1,12 +1,21 @@
 {
-  "generated": "2026-09-02T07:37:54.802828",
-  "total_packs": 44,
+  "generated": "2026-10-11T14:39:55.444981",
+  "total_packs": 51,
   "categories": {
     "addons": [
       "Pepe's Experience Tome",
       "Pepe's Hotbar Refiller",
       "Pepe's Item Magnet Addon",
       "Pepe's Void Totem"
+    ],
+    "apps": [
+      "Pepe's Calculator",
+      "Pepe's Calendar",
+      "Pepe's Clock",
+      "Pepe's Music",
+      "Pepe's Notes",
+      "Pepe's Translator",
+      "Pepe's Weather"
     ],
     "clients": [
       "Allay Client",
@@ -58,7 +67,7 @@
     ],
     "website": [
       "Glacier Client Website",
-      "MCA Glacier Client"
+      "Minecraft Client Archive"
     ]
   },
   "packs": [
@@ -80,7 +89,7 @@
       "previewUrl": "packs/addons/pepes-experience-tome/",
       "thumbnailWebp": "packs/addons/pepes-experience-tome/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's Experience Tome V1.mcaddon",
       "showcaseUrl": "https://youtu.be/7M_cfmBuq90"
     },
@@ -103,7 +112,7 @@
       "previewUrl": "packs/addons/pepes-hotbar-refiller/",
       "thumbnailWebp": "packs/addons/pepes-hotbar-refiller/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Hotbar_Refiller.mcaddon",
       "showcaseUrl": "https://youtu.be/tvstyl5fjII"
     },
@@ -129,7 +138,7 @@
       "previewUrl": "packs/addons/pepes-item-magnet-addon/",
       "thumbnailWebp": "packs/addons/pepes-item-magnet-addon/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's Item Magnet [Addon].mcaddon",
       "showcaseUrl": "https://youtu.be/ChjxGuHtt48"
     },
@@ -150,12 +159,153 @@
       "previewUrl": "packs/addons/pepes-void-totem/",
       "thumbnailWebp": "packs/addons/pepes-void-totem/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Void_Totem.mcaddon",
       "showcaseUrl": "https://youtu.be/g2g7eUF0Auo"
     },
     {
       "id": 5,
+      "name": "Pepe's Calculator",
+      "category": "apps",
+      "description": "A fast scientific calculator with unit tools, history, a customizable Tools grid, and a home-screen keypad widget. Android app (APK) - enable installs from your browser to sideload.",
+      "thumbnail": "📱",
+      "tags": [
+        "apps",
+        "android",
+        "app"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "42.9 MB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-calculator/Pepes_Calculator_V1.0.0.apk",
+      "previewUrl": "packs/apps/pepes-calculator/",
+      "fileName": "Pepes_Calculator_V1.0.0.apk",
+      "faIcon": "fa-calculator"
+    },
+    {
+      "id": 6,
+      "name": "Pepe's Calendar",
+      "category": "apps",
+      "description": "A calendar with agenda and month views, categorized settings, event alarms that ring in Pepe's Clock (or on their own), and home-screen widgets. Android app (APK) - enable installs from your browser to sideload.",
+      "thumbnail": "📱",
+      "tags": [
+        "apps",
+        "android",
+        "app"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "2.8 MB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-calendar/Pepes_Calendar_V1.0.0.apk",
+      "previewUrl": "packs/apps/pepes-calendar/",
+      "fileName": "Pepes_Calendar_V1.0.0.apk",
+      "faIcon": "fa-calendar-days"
+    },
+    {
+      "id": 7,
+      "name": "Pepe's Clock",
+      "category": "apps",
+      "description": "Alarms, timers, stopwatch, world clock and bedtime in one glass-styled app, with a widget and calendar-event alarm support. Android app (APK) - enable installs from your browser to sideload.",
+      "thumbnail": "📱",
+      "tags": [
+        "apps",
+        "android",
+        "app"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "3.3 MB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-clock/Pepes_Clock_V1.0.0.apk",
+      "previewUrl": "packs/apps/pepes-clock/",
+      "fileName": "Pepes_Clock_V1.0.0.apk",
+      "faIcon": "fa-clock"
+    },
+    {
+      "id": 8,
+      "name": "Pepe's Music",
+      "category": "apps",
+      "description": "A music player with Home, Search, Library and Radio, a full Now Playing screen with queue, lyrics, sleep timer and offline downloads. Android app (APK) - enable installs from your browser to sideload.",
+      "thumbnail": "📱",
+      "tags": [
+        "apps",
+        "android",
+        "app",
+        "Audio"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "65.0 MB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-music/Pepes_Music_V1.0.0.apk",
+      "previewUrl": "packs/apps/pepes-music/",
+      "fileName": "Pepes_Music_V1.0.0.apk",
+      "faIcon": "fa-music"
+    },
+    {
+      "id": 9,
+      "name": "Pepe's Notes",
+      "category": "apps",
+      "description": "Fast notes with folders, a private vault, backup and restore, and a home-screen widget. Android app (APK) - enable installs from your browser to sideload.",
+      "thumbnail": "📱",
+      "tags": [
+        "apps",
+        "android",
+        "app"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "4.1 MB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-notes/Pepes_Notes_V1.0.0.apk",
+      "previewUrl": "packs/apps/pepes-notes/",
+      "fileName": "Pepes_Notes_V1.0.0.apk",
+      "faIcon": "fa-note-sticky"
+    },
+    {
+      "id": 10,
+      "name": "Pepe's Translator",
+      "category": "apps",
+      "description": "On-device and online translation with conversation mode, camera translation, phrasebook, offline languages and a home-screen widget. Android app (APK) - enable installs from your browser to sideload.",
+      "thumbnail": "📱",
+      "tags": [
+        "apps",
+        "android",
+        "app"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "103.4 MB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-translator/Pepes_Translator_V1.0.0.apk",
+      "previewUrl": "packs/apps/pepes-translator/",
+      "fileName": "Pepes_Translator_V1.0.0.apk",
+      "faIcon": "fa-language"
+    },
+    {
+      "id": 11,
+      "name": "Pepe's Weather",
+      "category": "apps",
+      "description": "A detailed weather app with an editable dashboard, hourly and daily forecasts, radar, air quality and rain alerts. Android app (APK) - enable installs from your browser to sideload.",
+      "thumbnail": "📱",
+      "tags": [
+        "apps",
+        "android",
+        "app"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "3.1 MB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-weather/Pepes_Weather_V1.0.0.apk",
+      "previewUrl": "packs/apps/pepes-weather/",
+      "fileName": "Pepes_Weather_V1.0.0.apk",
+      "faIcon": "fa-cloud-sun"
+    },
+    {
+      "id": 12,
       "name": "Allay Client",
       "category": "clients",
       "description": "Named after the Allay, this release of the client brought a further round of polish and refinement to the experience, tightening up the feature set and interface established by earlier versions.",
@@ -173,7 +323,7 @@
       "previewUrl": "packs/clients/allay-client/",
       "thumbnailWebp": "packs/clients/allay-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "AllayMc Client v1.mcpack",
       "mcVersion": "TBD",
       "timelineOrder": 8,
@@ -181,7 +331,7 @@
       "discontinued": true
     },
     {
-      "id": 6,
+      "id": 13,
       "name": "Glacier Client",
       "category": "clients",
       "description": "The current flagship client and home base of Glacier Productions, built to bring together the full range of performance, visual, and quality-of-life improvements the team has developed across its history.",
@@ -198,7 +348,7 @@
       "previewUrl": "packs/clients/glacier-client/",
       "thumbnailWebp": "packs/clients/glacier-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Glacier Client V6.2.mcpack",
       "versions": [
         {
@@ -526,7 +676,7 @@
       "faIcon": "fa-snowflake"
     },
     {
-      "id": 7,
+      "id": 14,
       "name": "Optifine by Zephyx",
       "category": "clients",
       "description": "An early Optifine-branded release built during the client's original run under the name Zephyx, before the project rebranded to Pepe and later evolved into the Glacier Client lineage.",
@@ -543,7 +693,7 @@
       "previewUrl": "packs/clients/optifine-zephyx/",
       "thumbnailWebp": "packs/clients/optifine-zephyx/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Optifine_by_Zephyx-v3[Unofficial Port].mcpack",
       "versions": [
         {
@@ -597,7 +747,7 @@
       "discontinued": true
     },
     {
-      "id": 8,
+      "id": 15,
       "name": "Pepe Client",
       "category": "clients",
       "description": "Where it all started: the very first Minecraft Bedrock client released under the Pepe name, laying the groundwork for every client that followed in this collection.",
@@ -614,7 +764,7 @@
       "previewUrl": "packs/clients/pepe-client/",
       "thumbnailWebp": "packs/clients/pepe-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "PepeClientBetav2.0.zip",
       "versions": [
         {
@@ -638,7 +788,7 @@
       "discontinued": true
     },
     {
-      "id": 9,
+      "id": 16,
       "name": "Project Future",
       "category": "clients",
       "description": "An experimental rebrand built to explore new features and a new creative direction for the client line, testing ideas that would go on to shape later releases.",
@@ -656,7 +806,7 @@
       "previewUrl": "packs/clients/project-future/",
       "thumbnailWebp": "packs/clients/project-future/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Future Ui pack v1.4.mcpack",
       "versions": [
         {
@@ -696,7 +846,7 @@
       "discontinued": true
     },
     {
-      "id": 10,
+      "id": 17,
       "name": "Project Light",
       "category": "clients",
       "description": "A bridge release positioned between major versions, exploring a lighter-weight client experience with a leaner feature set and reduced overhead.",
@@ -714,7 +864,7 @@
       "previewUrl": "packs/clients/project-light/",
       "thumbnailWebp": "packs/clients/project-light/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Project Light V4 [Main].mcpack",
       "versions": [
         {
@@ -819,7 +969,7 @@
       "discontinued": true
     },
     {
-      "id": 11,
+      "id": 18,
       "name": "Solar Client",
       "category": "clients",
       "description": "Focused squarely on visuals and performance, this release continues the client's ongoing evolution with refined rendering and a smoother overall feel.",
@@ -836,7 +986,7 @@
       "previewUrl": "packs/clients/solar-client/",
       "thumbnailWebp": "packs/clients/solar-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Solar Client v2.mcpack",
       "versions": [
         {
@@ -869,7 +1019,7 @@
       "discontinued": true
     },
     {
-      "id": 12,
+      "id": 19,
       "name": "Sulphur Client",
       "category": "clients",
       "description": "Another step in the client's ongoing rebrand and feature journey, building on the foundation of previous releases while introducing its own set of refinements.",
@@ -892,7 +1042,7 @@
       "discontinued": true
     },
     {
-      "id": 13,
+      "id": 20,
       "name": "Void Client",
       "category": "clients",
       "description": "The client that directly followed Pepe Client, marking an early and important step in refining the formula that later releases would build upon.",
@@ -915,7 +1065,7 @@
       "discontinued": true
     },
     {
-      "id": 14,
+      "id": 21,
       "name": "Wind Client",
       "category": "clients",
       "description": "A lighter, faster iteration built on the lessons learned from Void Client, trimming excess and sharpening performance for a snappier experience.",
@@ -933,7 +1083,7 @@
       "previewUrl": "packs/clients/wind-client/",
       "thumbnailWebp": "packs/clients/wind-client/icon.webp",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "WindClientV2.zip",
       "versions": [
         {
@@ -966,7 +1116,7 @@
       "discontinued": true
     },
     {
-      "id": 15,
+      "id": 22,
       "name": "Pepe's Charged Overlay Pack",
       "category": "cosmetics",
       "description": "Adds a charged particle-style overlay effect to your character, giving combat and movement a bit of extra visual flair without altering gameplay.",
@@ -984,11 +1134,11 @@
       "previewUrl": "packs/cosmetics/pepes-charged-overlay-pack/",
       "thumbnailWebp": "packs/cosmetics/pepes-charged-overlay-pack/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's Charged Overlay Pack.mcpack"
     },
     {
-      "id": 16,
+      "id": 23,
       "name": "Pepe's Halo Pack",
       "category": "cosmetics",
       "description": "Adds a customizable halo effect that hovers above your character, a simple cosmetic touch for players who want to stand out in a crowd.",
@@ -1005,11 +1155,11 @@
       "previewUrl": "packs/cosmetics/pepes-halo-pack/",
       "thumbnailWebp": "packs/cosmetics/pepes-halo-pack/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's Halo Pack.mcpack"
     },
     {
-      "id": 17,
+      "id": 24,
       "name": "Pepe's Assets Pack",
       "category": "other",
       "description": "The shared foundation every other Pepe's Pack builds on: common textures, UI variables, and compatibility patches consolidated in one place. Must be enabled and sorted above every other Pepe's Pack to work correctly.",
@@ -1028,7 +1178,7 @@
       "previewUrl": "packs/other/pepes-assets-pack/",
       "thumbnailWebp": "packs/other/pepes-assets-pack/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
       "versions": [
         {
@@ -1129,7 +1279,7 @@
       }
     },
     {
-      "id": 18,
+      "id": 25,
       "name": "Pepe's ArmorHUD",
       "category": "packs",
       "description": "Displays the armor you're currently wearing as compact icons directly on the HUD, so you can check your protection at a glance without opening your inventory.",
@@ -1148,13 +1298,13 @@
       "previewUrl": "packs/packs/pepes-armorhud/",
       "thumbnailWebp": "packs/packs/pepes-armorhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_ArmorHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
     },
     {
-      "id": 19,
+      "id": 26,
       "name": "Pepe's Better Armor Bar",
       "category": "packs",
       "description": "Recolors the HUD armor bar to reflect your equipped armor's material, letting you read your protection level at a glance instead of counting icons.",
@@ -1172,13 +1322,13 @@
       "previewUrl": "packs/packs/pepes-better-armor-bar/",
       "thumbnailWebp": "packs/packs/pepes-better-armor-bar/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Better_Armor_Bar_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/G-t17mm3ivc"
     },
     {
-      "id": 20,
+      "id": 27,
       "name": "Pepe's Better Coordinates",
       "category": "packs",
       "description": "Adds a complete coordinate readout to the HUD, covering overworld, chunk, and Nether coordinates together so you always know exactly where you stand.",
@@ -1195,13 +1345,13 @@
       "previewUrl": "packs/packs/pepes-better-coordinates/",
       "thumbnailWebp": "packs/packs/pepes-better-coordinates/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Better_Coordinates.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/riGidGD8V3o"
     },
     {
-      "id": 21,
+      "id": 28,
       "name": "Pepe's Better Hover Text",
       "category": "packs",
       "description": "Enriches inventory tooltips with the detail serious players actually want: exact durability values, technical item and aux IDs, and identification of Suspicious Stew effects.",
@@ -1219,13 +1369,13 @@
       "previewUrl": "packs/packs/pepes-better-hover-text/",
       "thumbnailWebp": "packs/packs/pepes-better-hover-text/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Better_Hover_Text_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/h2akqm3tPb0"
     },
     {
-      "id": 22,
+      "id": 29,
       "name": "Pepe's Clock & Compass HUD",
       "category": "packs",
       "description": "Displays a compact clock and compass readout directly on the HUD, so you always know the time of day and the direction you're facing without checking your inventory.",
@@ -1247,7 +1397,7 @@
       "requiresAssets": true
     },
     {
-      "id": 23,
+      "id": 30,
       "name": "Pepe's Death Coords",
       "category": "packs",
       "description": "Captures and displays your exact coordinates the moment you die, so you never lose track of where your items dropped and can recover them with confidence.",
@@ -1263,13 +1413,13 @@
       "previewUrl": "packs/packs/pepes-death-coords/",
       "thumbnailWebp": "packs/packs/pepes-death-coords/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Death_Coords_v1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/H2HtakIRtpA"
     },
     {
-      "id": 24,
+      "id": 31,
       "name": "Pepe's Debug HUD",
       "category": "packs",
       "description": "A clean, minimal debug overlay showing only the information you actually want. Press F8 to toggle it instantly with keyboard and mouse.",
@@ -1287,13 +1437,13 @@
       "previewUrl": "packs/packs/pepes-debug-hud/",
       "thumbnailWebp": "packs/packs/pepes-debug-hud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's DebugHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/dfUXea5s1N4"
     },
     {
-      "id": 25,
+      "id": 32,
       "name": "Pepe's DirectionHUD",
       "category": "packs",
       "description": "Adds a compact heading indicator to the HUD, showing the exact cardinal direction you're facing at all times.",
@@ -1310,13 +1460,13 @@
       "previewUrl": "packs/packs/pepes-directionhud/",
       "thumbnailWebp": "packs/packs/pepes-directionhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_DirectionHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/n3TZGPGPjW8"
     },
     {
-      "id": 26,
+      "id": 33,
       "name": "Pepe's Durability Viewer",
       "category": "packs",
       "description": "Displays item durability directly on-screen in a clean, easy-to-read readout, so you always know how much life your tools and armor have left.",
@@ -1333,13 +1483,13 @@
       "previewUrl": "packs/packs/pepes-durability-viewer/",
       "thumbnailWebp": "packs/packs/pepes-durability-viewer/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Durability_Viewer.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/73duhxBtYt8"
     },
     {
-      "id": 27,
+      "id": 34,
       "name": "Pepe's Force Spectator",
       "category": "packs",
       "description": "Forced a first-person spectator camera on death, letting you watch the action unfold before respawning. This pack has since been discontinued and is no longer maintained.",
@@ -1359,7 +1509,7 @@
       "discontinued": true
     },
     {
-      "id": 28,
+      "id": 35,
       "name": "Pepe's FPS Counter",
       "category": "packs",
       "description": "A lightweight, accurate FPS counter for your HUD, letting you keep a constant eye on performance while you play without any added overhead.",
@@ -1376,13 +1526,13 @@
       "previewUrl": "packs/packs/pepes-fps-counter/",
       "thumbnailWebp": "packs/packs/pepes-fps-counter/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_FPS_Counter.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/iL6kHJGobFU"
     },
     {
-      "id": 29,
+      "id": 36,
       "name": "Pepe's InventoryHUD",
       "category": "packs",
       "description": "Mirrors the contents of your inventory onto the HUD in real time, so you can check what you're carrying without ever opening a menu.",
@@ -1400,13 +1550,13 @@
       "previewUrl": "packs/packs/pepes-inventoryhud/",
       "thumbnailWebp": "packs/packs/pepes-inventoryhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_InventoryHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/C12DFIh2cto"
     },
     {
-      "id": 30,
+      "id": 37,
       "name": "Pepe's Level Calculator",
       "category": "packs",
       "description": "Calculates exactly how much experience you need to reach your next level and displays it directly on the HUD, taking the guesswork out of grinding XP.",
@@ -1424,12 +1574,12 @@
       "previewUrl": "packs/packs/pepes-level-calculator/",
       "thumbnailWebp": "packs/packs/pepes-level-calculator/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Level_Calculator.mcpack",
       "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
     },
     {
-      "id": 31,
+      "id": 38,
       "name": "Pepe's OffhandHUD",
       "category": "packs",
       "description": "Shows the item currently held in your offhand right on the HUD, displayed alongside your main hand for a complete picture of your loadout.",
@@ -1446,13 +1596,13 @@
       "previewUrl": "packs/packs/pepes-offhandhud/",
       "thumbnailWebp": "packs/packs/pepes-offhandhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_OffhandHUD.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/ezj1oGz8nrY"
     },
     {
-      "id": 32,
+      "id": 39,
       "name": "Pepe's Speedometer",
       "category": "packs",
       "description": "Tracks and displays your current movement speed on the HUD in real time, handy for elytra flight, sprinting, and speedrun-style play.",
@@ -1469,13 +1619,13 @@
       "previewUrl": "packs/packs/pepes-speedometer/",
       "thumbnailWebp": "packs/packs/pepes-speedometer/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Speedometer.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/4AmjVyMh2cI"
     },
     {
-      "id": 33,
+      "id": 40,
       "name": "Pepe's Status Effect HUD",
       "category": "packs",
       "description": "Displayed your active potion effects and their remaining duration directly on the HUD. This pack has since been discontinued and is no longer maintained.",
@@ -1497,7 +1647,7 @@
       "discontinued": true
     },
     {
-      "id": 34,
+      "id": 41,
       "name": "Pepe's Waypoints+",
       "category": "packs",
       "description": "A full waypoint system built for practical navigation: set markers by sneaking and clicking, automatically drop a marker at your death location, and toggle a chroma-key greenscreen mode, all through simple sneak gestures.",
@@ -1513,13 +1663,13 @@
       "previewUrl": "packs/packs/pepes-waypoints/",
       "thumbnailWebp": "packs/packs/pepes-waypoints/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Waypoints+_Pack_V1.0.0.mcpack",
       "requiresAssets": true,
       "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
     },
     {
-      "id": 35,
+      "id": 42,
       "name": "Pepe's Animated Crop Growth Highlighter",
       "category": "utility",
       "description": "Highlights nearby crops with an animated overlay that reflects their current growth stage, making it easy to spot exactly which crops are ready to harvest at a glance.",
@@ -1538,11 +1688,11 @@
       "previewUrl": "packs/utility/pepes-animated-crop-growth-highlighter/",
       "thumbnailWebp": "packs/utility/pepes-animated-crop-growth-highlighter/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack"
     },
     {
-      "id": 36,
+      "id": 43,
       "name": "Pepe's Anvil Damage Indicator",
       "category": "utility",
       "description": "Adds a clear visual indicator to the anvil interface showing exactly how much durability damage an enchant or repair will cost before you commit to it.",
@@ -1559,11 +1709,11 @@
       "previewUrl": "packs/utility/pepes-anvil-damage-indicator/",
       "thumbnailWebp": "packs/utility/pepes-anvil-damage-indicator/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's Anvil Damage Indicator.mcpack"
     },
     {
-      "id": 37,
+      "id": 44,
       "name": "Pepe's Armor Hider",
       "category": "utility",
       "description": "Lets you hide individual pieces of equipped armor from view while keeping their full protective stats and enchantments active, so your character's look stays exactly how you want it.",
@@ -1580,11 +1730,11 @@
       "previewUrl": "packs/utility/pepes-armor-hider/",
       "thumbnailWebp": "packs/utility/pepes-armor-hider/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's Armor Hider.mcpack"
     },
     {
-      "id": 38,
+      "id": 45,
       "name": "Pepe's Bundle Item Counter",
       "category": "utility",
       "description": "Adds a live item count directly onto bundle icons, so you can see how full each bundle is without needing to open it and inspect its contents.",
@@ -1601,11 +1751,11 @@
       "previewUrl": "packs/utility/pepes-bundle-item-counter/",
       "thumbnailWebp": "packs/utility/pepes-bundle-item-counter/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Bundle_Item_Count_v1.0.0.mcpack"
     },
     {
-      "id": 39,
+      "id": 46,
       "name": "Pepe's Dynamic 3rd Person Crosshair",
       "category": "utility",
       "description": "Adds a proper crosshair to third-person camera mode that tracks your aim accurately, making third-person play far more precise for building, combat, and interaction.",
@@ -1622,11 +1772,11 @@
       "previewUrl": "packs/utility/pepes-dynamic-3rd-person-crosshair/",
       "thumbnailWebp": "packs/utility/pepes-dynamic-3rd-person-crosshair/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack"
     },
     {
-      "id": 40,
+      "id": 47,
       "name": "Pepe's Shiny Pots",
       "category": "utility",
       "description": "Gives decorated pots a subtle shine effect, making them easier to spot amid clutter and adding a small extra bit of visual polish to your builds.",
@@ -1644,11 +1794,11 @@
       "previewUrl": "packs/utility/pepes-shiny-pots/",
       "thumbnailWebp": "packs/utility/pepes-shiny-pots/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Shiny_Pots_v1.0.0.mcpack"
     },
     {
-      "id": 41,
+      "id": 48,
       "name": "Pepe's Spinning Projectiles",
       "category": "utility",
       "description": "Adds a smooth spinning animation to thrown and shot projectiles in flight, giving arrows, tridents, and other thrown items a bit more visual flair.",
@@ -1664,11 +1814,11 @@
       "previewUrl": "packs/utility/pepes-spinning-projectiles/",
       "thumbnailWebp": "packs/utility/pepes-spinning-projectiles/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Spinning_Projectiles_v1.0.0.mcpack"
     },
     {
-      "id": 42,
+      "id": 49,
       "name": "Pepe's Time Changer",
       "category": "utility",
       "description": "Adds simple in-game controls to set the world time instantly, saving you from typing out commands whenever you want to skip to day, night, or a specific time.",
@@ -1684,11 +1834,11 @@
       "previewUrl": "packs/utility/pepes-time-changer/",
       "thumbnailWebp": "packs/utility/pepes-time-changer/icon.webp",
       "addedAt": "2026-08-31T08:22:54+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-02T07:38:38+02:00",
       "fileName": "Pepe's_Time_Changer_v1.0.0.mcpack"
     },
     {
-      "id": 43,
+      "id": 50,
       "name": "Glacier Client Website",
       "category": "website",
       "description": "The official Glacier Client website, serving as the central home for the client's downloads, changelogs, and the latest news from the Glacier Productions team.",
@@ -1709,23 +1859,24 @@
       "fileName": "glacierclient.xyz"
     },
     {
-      "id": 44,
-      "name": "MCA Glacier Client",
+      "id": 51,
+      "name": "Minecraft Client Archive",
       "category": "website",
-      "description": "The MCA subdomain supporting Glacier Client, part of the wider Glacier Productions web ecosystem that powers the project's online presence.",
+      "description": "Minecraft Client Archive, Clients from 1.16 MCPE to Newest MCPE Clients, Mainly focused on texture pack clients..",
       "thumbnail": "🌐",
       "tags": [
         "website",
+        "Textures",
         "Client"
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "0.4 KB",
+      "size": "0.3 KB",
       "author": "Pepe",
       "downloadUrl": "packs/website/mca-glacierclient-xyz.zip",
       "previewUrl": "packs/website/mca-glacierclient-xyz/",
       "addedAt": "2026-08-30T18:33:32+02:00",
-      "updatedAt": "2026-09-02T07:18:28+02:00",
+      "updatedAt": "2026-09-06T20:53:36+02:00",
       "externalUrl": "https://mca.glacierclient.xyz",
       "fileName": "mca.glacierclient.xyz"
     }

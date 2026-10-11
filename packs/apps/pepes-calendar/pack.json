@@ -1,0 +1,15 @@
+{
+    "name": "Pepe's Calendar",
+    "description": "A calendar with agenda and month views, categorized settings, event alarms that ring in Pepe's Clock (or on their own), and home-screen widgets. Android app (APK) - enable installs from your browser to sideload.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "\ud83d\udcf1",
+    "tags": [
+        "apps",
+        "android",
+        "app"
+    ],
+    "category": "apps",
+    "license": "MIT",
+    "faIcon": "fa-calendar-days"
+}

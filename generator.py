@@ -50,7 +50,7 @@ LOOTLABS_CACHE_FILE = 'lootlabs_cache.json'
 # GitHub's LFS media endpoint instead of a relative site path.
 GITHUB_REPOSITORY = os.environ.get('GITHUB_REPOSITORY', 'PepeOnGithub/Pepes-Portfolio')
 GITHUB_REF_NAME = os.environ.get('GITHUB_REF_NAME', 'main')
-LFS_TRACKED_EXTENSIONS = {'.mcpack', '.mcaddon'}
+LFS_TRACKED_EXTENSIONS = {'.mcpack', '.mcaddon', '.apk'}
 
 
 def to_download_url(relative_path):
@@ -310,7 +310,7 @@ KNOWN_FILES = {
     'icon.webp', 'bg.webp', 'pack_banner.webp'
 }
 
-ASSET_EXTENSIONS = ('.zip', '.mcpack', '.mcaddon', '.mcworld', '.mctemplate')
+ASSET_EXTENSIONS = ('.zip', '.mcpack', '.mcaddon', '.mcworld', '.mctemplate', '.apk')
 VERSION_IN_FILENAME = re.compile(r'[Vv](\d+(?:\.\d+)*)')
 
 def version_key(filename):

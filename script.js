@@ -1,4 +1,4 @@
-const CATEGORY_ORDER = ['packs', 'cosmetics', 'utility', 'clients', 'addons', 'website', 'other'];
+const CATEGORY_ORDER = ['packs', 'cosmetics', 'utility', 'clients', 'addons', 'apps', 'website', 'other'];
 
 const DEFAULT_BANNER_URL = 'assets/default-banner.png';
 const API_BASE = 'https://pepes-portfolio-api.pepeoncloudeflare.workers.dev';
