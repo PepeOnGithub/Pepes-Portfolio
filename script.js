@@ -1001,7 +1001,7 @@ class PackLibrary {
 
   async loadPacks() {
     try {
-      const response = await fetch('packs.json');
+      const response = await fetch('packs.json', { cache: 'no-cache' });
       if (!response.ok) throw new Error(`packs.json request failed: ${response.status}`);
       const data = await response.json();
       this.packs = data.packs || [];
