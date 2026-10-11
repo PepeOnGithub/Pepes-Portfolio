@@ -2000,8 +2000,8 @@ class PackLibrary {
 
     document.getElementById('detail-avatar').textContent = (pack.author || 'U').charAt(0).toUpperCase();
     document.getElementById('detail-author-name').textContent = pack.author || 'Unknown';
-    document.getElementById('detail-made').textContent = this.formatDate(pack.createdAt);
-    document.getElementById('detail-updated').textContent = this.formatDate(pack.updatedAt || pack.createdAt);
+    document.getElementById('detail-made').textContent = this.formatDate(pack.addedAt || pack.createdAt);
+    document.getElementById('detail-updated').textContent = this.formatDate(pack.updatedAt || pack.addedAt || pack.createdAt);
 
     this.currentPack = pack;
     if (hasMultipleVersions) {
@@ -2996,7 +2996,7 @@ class PackLibrary {
       fileName: pack.fileName,
       size: pack.size,
       downloadUrl: pack.downloadUrl,
-      date: pack.createdAt
+      date: pack.updatedAt || pack.addedAt || pack.createdAt
     }]);
     const multi = versions.length > 1;
     const collapseOld = multi && localStorage.getItem('collapseOldVersions') !== 'false';
