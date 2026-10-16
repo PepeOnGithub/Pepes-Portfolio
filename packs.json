@@ -1,6 +1,6 @@
 {
-  "generated": "2026-10-11T15:43:20.186954",
-  "total_packs": 51,
+  "generated": "2026-10-16T17:15:32.763653",
+  "total_packs": 52,
   "categories": {
     "addons": [
       "Pepe's Experience Tome",
@@ -46,6 +46,7 @@
       "Pepe's Debug HUD",
       "Pepe's DirectionHUD",
       "Pepe's Durability Viewer",
+      "Pepe's Elytra Pitch",
       "Pepe's Force Spectator",
       "Pepe's FPS Counter",
       "Pepe's InventoryHUD",
@@ -181,7 +182,7 @@
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-calculator/Pepes_Calculator_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-calculator/",
       "addedAt": "2026-10-11T14:40:15+02:00",
-      "updatedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T15:43:23+02:00",
       "fileName": "Pepes_Calculator_V1.0.0.apk",
       "faIcon": "fa-calculator"
     },
@@ -292,7 +293,7 @@
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/apps/pepes-translator/Pepes_Translator_V1.0.0.apk",
       "previewUrl": "packs/apps/pepes-translator/",
       "addedAt": "2026-10-11T14:40:15+02:00",
-      "updatedAt": "2026-10-11T14:40:15+02:00",
+      "updatedAt": "2026-10-11T15:43:23+02:00",
       "fileName": "Pepes_Translator_V1.0.0.apk",
       "faIcon": "fa-language"
     },
@@ -1142,7 +1143,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "77.9 KB",
+      "size": "64.4 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/cosmetics/pepes-charged-overlay-pack/Pepe%27s%20Charged%20Overlay%20Pack.mcpack",
       "previewUrl": "packs/cosmetics/pepes-charged-overlay-pack/",
@@ -1163,7 +1164,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "48.8 KB",
+      "size": "35.4 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/cosmetics/pepes-halo-pack/Pepe%27s%20Halo%20Pack.mcpack",
       "previewUrl": "packs/cosmetics/pepes-halo-pack/",
@@ -1184,17 +1185,25 @@
         "other",
         "Textures"
       ],
-      "version": "1.7.0",
+      "version": "1.8.0",
       "downloads": 0,
-      "size": "140.8 KB",
+      "size": "397.9 KB",
       "author": "Pepe",
-      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.7.0.mcpack",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.8.0.mcpack",
       "previewUrl": "packs/other/pepes-assets-pack/",
       "thumbnailWebp": "packs/other/pepes-assets-pack/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
       "updatedAt": "2026-09-02T07:38:38+02:00",
-      "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
+      "fileName": "Pepe's_Assets_Pack_v1.8.0.mcpack",
       "versions": [
+        {
+          "version": "1.8.0",
+          "fileName": "Pepe's_Assets_Pack_v1.8.0.mcpack",
+          "size": "397.9 KB",
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.8.0.mcpack",
+          "date": "2026-10-16",
+          "changelog": "Added support for the Elytra Pitch pack."
+        },
         {
           "version": "1.7.0",
           "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
@@ -1306,7 +1315,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "27.9 KB",
+      "size": "23.6 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-armorhud/Pepe%27s_ArmorHUD.mcpack",
       "previewUrl": "packs/packs/pepes-armorhud/",
@@ -1330,7 +1339,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "8.2 KB",
+      "size": "6.0 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-armor-bar/Pepe%27s_Better_Armor_Bar_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-better-armor-bar/",
@@ -1353,7 +1362,7 @@
       ],
       "version": "1.0.1",
       "downloads": 0,
-      "size": "20.4 KB",
+      "size": "15.6 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-coordinates/Pepe%27s_Better_Coordinates.mcpack",
       "previewUrl": "packs/packs/pepes-better-coordinates/",
@@ -1377,7 +1386,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "16.9 KB",
+      "size": "8.5 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-better-hover-text/Pepe%27s_Better_Hover_Text_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-better-hover-text/",
@@ -1401,7 +1410,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "1.2 KB",
+      "size": "1.1 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-clock-compass-hud/Pepe%27s_Compass_%26_Clock_HUD.mcpack",
       "previewUrl": "packs/packs/pepes-clock-compass-hud/",
@@ -1421,7 +1430,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "41.1 KB",
+      "size": "35.7 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-death-coords/Pepe%27s_Death_Coords_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-death-coords/",
@@ -1468,7 +1477,7 @@
       ],
       "version": "1.0.1",
       "downloads": 0,
-      "size": "5.0 KB",
+      "size": "3.6 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-directionhud/Pepe%27s_DirectionHUD.mcpack",
       "previewUrl": "packs/packs/pepes-directionhud/",
@@ -1491,7 +1500,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "5.6 KB",
+      "size": "4.0 KB",
       "author": "PepeOnMinecraft",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-durability-viewer/Pepe%27s_Durability_Viewer.mcpack",
       "previewUrl": "packs/packs/pepes-durability-viewer/",
@@ -1504,6 +1513,27 @@
     },
     {
       "id": 34,
+      "name": "Pepe's Elytra Pitch",
+      "category": "packs",
+      "description": "Shows your look angle as a Java-style readout under the crosshair, paired with an elytra icon that glows green while you glide and red when you don't, making it easy to hold the perfect climb or dive angle mid-flight.",
+      "thumbnail": "packs/packs/pepes-elytra-pitch/icon.png",
+      "tags": [
+        "packs",
+        "HUD",
+        "Visual"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "2.6 KB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-elytra-pitch/Pepe%27s_Elytra_Pitch_v1.0.0.mcpack",
+      "previewUrl": "packs/packs/pepes-elytra-pitch/",
+      "thumbnailWebp": "packs/packs/pepes-elytra-pitch/icon.webp",
+      "fileName": "Pepe's_Elytra_Pitch_v1.0.0.mcpack",
+      "requiresAssets": true
+    },
+    {
+      "id": 35,
       "name": "Pepe's Force Spectator",
       "category": "packs",
       "description": "Forced a first-person spectator camera on death, letting you watch the action unfold before respawning. This pack has since been discontinued and is no longer maintained.",
@@ -1523,7 +1553,7 @@
       "discontinued": true
     },
     {
-      "id": 35,
+      "id": 36,
       "name": "Pepe's FPS Counter",
       "category": "packs",
       "description": "A lightweight, accurate FPS counter for your HUD, letting you keep a constant eye on performance while you play without any added overhead.",
@@ -1534,7 +1564,7 @@
       ],
       "version": "1.0.1",
       "downloads": 0,
-      "size": "15.1 KB",
+      "size": "12.6 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-fps-counter/Pepe%27s_FPS_Counter.mcpack",
       "previewUrl": "packs/packs/pepes-fps-counter/",
@@ -1546,7 +1576,7 @@
       "showcaseUrl": "https://youtu.be/iL6kHJGobFU"
     },
     {
-      "id": 36,
+      "id": 37,
       "name": "Pepe's InventoryHUD",
       "category": "packs",
       "description": "Mirrors the contents of your inventory onto the HUD in real time, so you can check what you're carrying without ever opening a menu.",
@@ -1558,7 +1588,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "13.2 KB",
+      "size": "6.4 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-inventoryhud/Pepe%27s_InventoryHUD.mcpack",
       "previewUrl": "packs/packs/pepes-inventoryhud/",
@@ -1570,7 +1600,7 @@
       "showcaseUrl": "https://youtu.be/C12DFIh2cto"
     },
     {
-      "id": 37,
+      "id": 38,
       "name": "Pepe's Level Calculator",
       "category": "packs",
       "description": "Calculates exactly how much experience you need to reach your next level and displays it directly on the HUD, taking the guesswork out of grinding XP.",
@@ -1582,7 +1612,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "7.2 KB",
+      "size": "5.5 KB",
       "author": "PepeOnMinecraft",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-level-calculator/Pepe%27s_Level_Calculator.mcpack",
       "previewUrl": "packs/packs/pepes-level-calculator/",
@@ -1593,7 +1623,7 @@
       "showcaseUrl": "https://youtu.be/KxpeS_AW0vU"
     },
     {
-      "id": 38,
+      "id": 39,
       "name": "Pepe's OffhandHUD",
       "category": "packs",
       "description": "Shows the item currently held in your offhand right on the HUD, displayed alongside your main hand for a complete picture of your loadout.",
@@ -1604,7 +1634,7 @@
       ],
       "version": "1.0.1",
       "downloads": 0,
-      "size": "8.8 KB",
+      "size": "6.3 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-offhandhud/Pepe%27s_OffhandHUD.mcpack",
       "previewUrl": "packs/packs/pepes-offhandhud/",
@@ -1616,7 +1646,7 @@
       "showcaseUrl": "https://youtu.be/ezj1oGz8nrY"
     },
     {
-      "id": 39,
+      "id": 40,
       "name": "Pepe's Speedometer",
       "category": "packs",
       "description": "Tracks and displays your current movement speed on the HUD in real time, handy for elytra flight, sprinting, and speedrun-style play.",
@@ -1627,7 +1657,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "5.5 KB",
+      "size": "3.9 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-speedometer/Pepe%27s_Speedometer.mcpack",
       "previewUrl": "packs/packs/pepes-speedometer/",
@@ -1639,7 +1669,7 @@
       "showcaseUrl": "https://youtu.be/4AmjVyMh2cI"
     },
     {
-      "id": 40,
+      "id": 41,
       "name": "Pepe's Status Effect HUD",
       "category": "packs",
       "description": "Displayed your active potion effects and their remaining duration directly on the HUD. This pack has since been discontinued and is no longer maintained.",
@@ -1661,7 +1691,7 @@
       "discontinued": true
     },
     {
-      "id": 41,
+      "id": 42,
       "name": "Pepe's Waypoints+",
       "category": "packs",
       "description": "A full waypoint system built for practical navigation: set markers by sneaking and clicking, automatically drop a marker at your death location, and toggle a chroma-key greenscreen mode, all through simple sneak gestures.",
@@ -1671,7 +1701,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "6.0 KB",
+      "size": "3.5 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-waypoints/Pepe%27s_Waypoints%2B_Pack_V1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-waypoints/",
@@ -1683,7 +1713,7 @@
       "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
     },
     {
-      "id": 42,
+      "id": 43,
       "name": "Pepe's Animated Crop Growth Highlighter",
       "category": "utility",
       "description": "Highlights nearby crops with an animated overlay that reflects their current growth stage, making it easy to spot exactly which crops are ready to harvest at a glance.",
@@ -1696,7 +1726,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "34.2 KB",
+      "size": "26.9 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-animated-crop-growth-highlighter/Pepe%27s_Animated_Crop_Growth_Highlighter.mcpack",
       "previewUrl": "packs/utility/pepes-animated-crop-growth-highlighter/",
@@ -1706,7 +1736,7 @@
       "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack"
     },
     {
-      "id": 43,
+      "id": 44,
       "name": "Pepe's Anvil Damage Indicator",
       "category": "utility",
       "description": "Adds a clear visual indicator to the anvil interface showing exactly how much durability damage an enchant or repair will cost before you commit to it.",
@@ -1717,7 +1747,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "44.2 KB",
+      "size": "33.6 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-anvil-damage-indicator/Pepe%27s%20Anvil%20Damage%20Indicator.mcpack",
       "previewUrl": "packs/utility/pepes-anvil-damage-indicator/",
@@ -1727,7 +1757,7 @@
       "fileName": "Pepe's Anvil Damage Indicator.mcpack"
     },
     {
-      "id": 44,
+      "id": 45,
       "name": "Pepe's Armor Hider",
       "category": "utility",
       "description": "Lets you hide individual pieces of equipped armor from view while keeping their full protective stats and enchantments active, so your character's look stays exactly how you want it.",
@@ -1738,7 +1768,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "5.8 KB",
+      "size": "3.8 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-armor-hider/Pepe%27s%20Armor%20Hider.mcpack",
       "previewUrl": "packs/utility/pepes-armor-hider/",
@@ -1748,7 +1778,7 @@
       "fileName": "Pepe's Armor Hider.mcpack"
     },
     {
-      "id": 45,
+      "id": 46,
       "name": "Pepe's Bundle Item Counter",
       "category": "utility",
       "description": "Adds a live item count directly onto bundle icons, so you can see how full each bundle is without needing to open it and inspect its contents.",
@@ -1759,7 +1789,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "7.7 KB",
+      "size": "4.0 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-bundle-item-counter/Pepe%27s_Bundle_Item_Count_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-bundle-item-counter/",
@@ -1769,7 +1799,7 @@
       "fileName": "Pepe's_Bundle_Item_Count_v1.0.0.mcpack"
     },
     {
-      "id": 46,
+      "id": 47,
       "name": "Pepe's Dynamic 3rd Person Crosshair",
       "category": "utility",
       "description": "Adds a proper crosshair to third-person camera mode that tracks your aim accurately, making third-person play far more precise for building, combat, and interaction.",
@@ -1780,7 +1810,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "21.3 KB",
+      "size": "9.3 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-dynamic-3rd-person-crosshair/Pepe%27s_Dynamic_3rd_Person%20Crosshair_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-dynamic-3rd-person-crosshair/",
@@ -1790,7 +1820,7 @@
       "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack"
     },
     {
-      "id": 47,
+      "id": 48,
       "name": "Pepe's Shiny Pots",
       "category": "utility",
       "description": "Gives decorated pots a subtle shine effect, making them easier to spot amid clutter and adding a small extra bit of visual polish to your builds.",
@@ -1802,7 +1832,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "5.0 KB",
+      "size": "3.7 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-shiny-pots/Pepe%27s_Shiny_Pots_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-shiny-pots/",
@@ -1812,7 +1842,7 @@
       "fileName": "Pepe's_Shiny_Pots_v1.0.0.mcpack"
     },
     {
-      "id": 48,
+      "id": 49,
       "name": "Pepe's Spinning Projectiles",
       "category": "utility",
       "description": "Adds a smooth spinning animation to thrown and shot projectiles in flight, giving arrows, tridents, and other thrown items a bit more visual flair.",
@@ -1822,7 +1852,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "13.7 KB",
+      "size": "10.3 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-spinning-projectiles/Pepe%27s_Spinning_Projectiles_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-spinning-projectiles/",
@@ -1832,7 +1862,7 @@
       "fileName": "Pepe's_Spinning_Projectiles_v1.0.0.mcpack"
     },
     {
-      "id": 49,
+      "id": 50,
       "name": "Pepe's Time Changer",
       "category": "utility",
       "description": "Adds simple in-game controls to set the world time instantly, saving you from typing out commands whenever you want to skip to day, night, or a specific time.",
@@ -1842,7 +1872,7 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "57.6 KB",
+      "size": "36.5 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/utility/pepes-time-changer/Pepe%27s_Time_Changer_v1.0.0.mcpack",
       "previewUrl": "packs/utility/pepes-time-changer/",
@@ -1852,7 +1882,7 @@
       "fileName": "Pepe's_Time_Changer_v1.0.0.mcpack"
     },
     {
-      "id": 50,
+      "id": 51,
       "name": "Glacier Client Website",
       "category": "website",
       "description": "The official Glacier Client website, serving as the central home for the client's downloads, changelogs, and the latest news from the Glacier Productions team.",
@@ -1873,7 +1903,7 @@
       "fileName": "glacierclient.xyz"
     },
     {
-      "id": 51,
+      "id": 52,
       "name": "Minecraft Client Archive",
       "category": "website",
       "description": "Minecraft Client Archive, Clients from 1.16 MCPE to Newest MCPE Clients, Mainly focused on texture pack clients..",
