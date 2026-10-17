@@ -53,6 +53,15 @@ function isKnownBypassReferrer() {
   }
 })();
 
+// The Assets Pack warning is on by default. Older "Don't show again" choices are cleared
+// once so everyone sees it again and gets the current Assets Pack.
+try {
+  if (!localStorage.getItem('assetsWarnMigrated')) {
+    localStorage.removeItem('hideAssetsModal');
+    localStorage.setItem('assetsWarnMigrated', '1');
+  }
+} catch (e) { /* storage unavailable */ }
+
 // Every setting key persisted in localStorage. Single source of truth for
 // "Reset All Settings" and for Export/Import Settings.
 const SETTINGS_KEYS = [
@@ -840,7 +849,7 @@ class PackLibrary {
 
       const askEveryTime = localStorage.getItem('askProviderEveryTime') !== 'false';
       const needsAssets = this.currentPack.requiresAssets && !this.currentPack.pinned
-        && localStorage.getItem('hideAssetsModal') !== 'true';
+        && !this.assetsWarningHidden();
 
       if (!askEveryTime && !needsAssets) return; // let the plain <a href> navigate normally
 
@@ -971,9 +980,26 @@ class PackLibrary {
     return this.packs.find(p => p.pinned) || this.packs.find(p => /assets pack/i.test(p.name));
   }
 
+  latestAssetsVersion() {
+    const a = this.getAssetsPack();
+    const v = a && ((a.versions && a.versions[0]) || a);
+    return (v && v.version) || (a && a.version) || '';
+  }
+
+  // 'true' = turned off in Settings. 'v:<version>' = "Don't show again" for that Assets Pack
+  // version only, so the warning returns when a newer Assets Pack is released.
+  assetsWarningHidden() {
+    const v = localStorage.getItem('hideAssetsModal');
+    if (v === 'true') return true;
+    return !!v && v === 'v:' + this.latestAssetsVersion();
+  }
+
   showAssetsModal(pack, link) {
     const assetsPack = this.getAssetsPack();
     if (!assetsPack) return;
+    const verEl = document.getElementById('assets-modal-version');
+    const ver = this.latestAssetsVersion();
+    if (verEl) verEl.textContent = ver ? ` v${ver.replace(/^v/i, '')}` : '';
 
     this.pendingDownloadLink = link;
     document.getElementById('assets-modal-pack-name').textContent = pack.name;
@@ -993,7 +1019,7 @@ class PackLibrary {
 
   hideAssetsModal() {
     if (document.getElementById('assets-modal-dont-show').checked) {
-      localStorage.setItem('hideAssetsModal', 'true');
+      localStorage.setItem('hideAssetsModal', 'v:' + this.latestAssetsVersion());
     }
     document.getElementById('assets-modal-overlay').classList.add('hidden');
     this.pendingDownloadLink = null;
