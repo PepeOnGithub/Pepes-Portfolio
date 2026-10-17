@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-17T12:09:07.459167",
+  "generated": "2026-10-17T18:37:49.746624",
   "total_packs": 53,
   "categories": {
     "addons": [
@@ -1188,19 +1188,19 @@
       ],
       "version": "1.9.0",
       "downloads": 0,
-      "size": "401.4 KB",
+      "size": "401.6 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.9.0.mcpack",
       "previewUrl": "packs/other/pepes-assets-pack/",
       "thumbnailWebp": "packs/other/pepes-assets-pack/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-10-17T11:28:28+02:00",
+      "updatedAt": "2026-10-17T18:31:53+02:00",
       "fileName": "Pepe's_Assets_Pack_v1.9.0.mcpack",
       "versions": [
         {
           "version": "1.9.0",
           "fileName": "Pepe's_Assets_Pack_v1.9.0.mcpack",
-          "size": "401.4 KB",
+          "size": "401.6 KB",
           "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.9.0.mcpack",
           "date": "2026-10-17",
           "changelog": "Added support for the Totem Pop Counter pack."
@@ -1351,7 +1351,7 @@
         }
       ],
       "requiresAssets": true,
-      "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
+      "showcaseUrl": "https://youtu.be/JNl4OGurMlc"
     },
     {
       "id": 26,
@@ -1559,7 +1559,8 @@
       "addedAt": "2026-10-16T17:27:12+02:00",
       "updatedAt": "2026-10-16T17:27:12+02:00",
       "fileName": "Pepe's_Elytra_Pitch_v1.0.0.mcpack",
-      "requiresAssets": true
+      "requiresAssets": true,
+      "showcaseUrl": "https://youtu.be/XmfpEDO08fY"
     },
     {
       "id": 35,
@@ -1730,13 +1731,16 @@
       ],
       "version": "1.0.0",
       "downloads": 0,
-      "size": "2.3 KB",
+      "size": "2.7 KB",
       "author": "Pepe",
       "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-totem-pop-counter/Pepe%27s_Totem_Pop_Counter_v1.0.0.mcpack",
       "previewUrl": "packs/packs/pepes-totem-pop-counter/",
       "thumbnailWebp": "packs/packs/pepes-totem-pop-counter/icon.webp",
+      "addedAt": "2026-10-17T18:31:53+02:00",
+      "updatedAt": "2026-10-17T18:31:53+02:00",
       "fileName": "Pepe's_Totem_Pop_Counter_v1.0.0.mcpack",
-      "requiresAssets": true
+      "requiresAssets": true,
+      "showcaseUrl": "https://youtu.be/prIvOrW8Q1s"
     },
     {
       "id": 43,

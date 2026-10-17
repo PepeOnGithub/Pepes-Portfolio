@@ -3,11 +3,12 @@
     "description": "Shows your look angle as a Java-style readout under the crosshair, paired with an elytra icon that glows green while you glide and red when you don't, making it easy to hold the perfect climb or dive angle mid-flight.",
     "author": "Pepe",
     "version": "1.0.0",
-    "thumbnail": "📦",
+    "thumbnail": "\ud83d\udce6",
     "tags": [
         "packs"
     ],
     "category": "packs",
     "license": "MIT",
-    "requiresAssets": true
+    "requiresAssets": true,
+    "showcaseUrl": "https://youtu.be/XmfpEDO08fY"
 }

@@ -10,7 +10,7 @@
     "category": "packs",
     "license": "MIT",
     "requiresAssets": true,
-    "showcaseUrl": "https://youtu.be/D1iwxA9b1SM",
+    "showcaseUrl": "https://youtu.be/JNl4OGurMlc",
     "changelogs": {
         "1.0.0": "Initial release.",
         "2.0.0": "Added a full settings menu: screen edge, X/Y offset and size, vertical or row layout, alignment, reverse order, dynamic layout, spacing, empty slots, smooth slide, per-piece toggles and slot styles. Added a durability bar with a green-to-red gradient, durability text (percentage, remaining or remaining/max) with shadow and positioning, and a low-durability warning. Requires Pepe's Assets Pack 1.8.0 or later."
