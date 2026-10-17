@@ -1,0 +1,16 @@
+{
+    "name": "Pepe's Totem Pop Counter",
+    "description": "Shows how many Totems of Undying every player has popped, as a totem icon and count floating right above their nametag, so you always know who is out of totems in a fight.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "thumbnail": "📦",
+    "tags": [
+        "packs"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "changelogs": {
+        "1.0.0": "Initial release."
+    }
+}

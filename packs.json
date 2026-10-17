@@ -1,6 +1,6 @@
 {
-  "generated": "2026-10-17T11:09:37.769384",
-  "total_packs": 52,
+  "generated": "2026-10-17T12:09:07.459167",
+  "total_packs": 53,
   "categories": {
     "addons": [
       "Pepe's Experience Tome",
@@ -54,6 +54,7 @@
       "Pepe's OffhandHUD",
       "Pepe's Speedometer",
       "Pepe's Status Effect HUD",
+      "Pepe's Totem Pop Counter",
       "Pepe's Waypoints+"
     ],
     "utility": [
@@ -1185,17 +1186,25 @@
         "other",
         "Textures"
       ],
-      "version": "1.8.0",
+      "version": "1.9.0",
       "downloads": 0,
-      "size": "397.9 KB",
+      "size": "401.4 KB",
       "author": "Pepe",
-      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.8.0.mcpack",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.9.0.mcpack",
       "previewUrl": "packs/other/pepes-assets-pack/",
       "thumbnailWebp": "packs/other/pepes-assets-pack/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-10-16T17:27:12+02:00",
-      "fileName": "Pepe's_Assets_Pack_v1.8.0.mcpack",
+      "updatedAt": "2026-10-17T11:28:28+02:00",
+      "fileName": "Pepe's_Assets_Pack_v1.9.0.mcpack",
       "versions": [
+        {
+          "version": "1.9.0",
+          "fileName": "Pepe's_Assets_Pack_v1.9.0.mcpack",
+          "size": "401.4 KB",
+          "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.9.0.mcpack",
+          "date": "2026-10-17",
+          "changelog": "Added support for the Totem Pop Counter pack."
+        },
         {
           "version": "1.8.0",
           "fileName": "Pepe's_Assets_Pack_v1.8.0.mcpack",
@@ -1321,7 +1330,7 @@
       "previewUrl": "packs/packs/pepes-armorhud/",
       "thumbnailWebp": "packs/packs/pepes-armorhud/icon.webp",
       "addedAt": "2026-08-29T20:47:45+02:00",
-      "updatedAt": "2026-10-16T17:27:12+02:00",
+      "updatedAt": "2026-10-17T11:28:28+02:00",
       "fileName": "Pepe's_ArmorHUD_v2.0.0.mcpack",
       "versions": [
         {
@@ -1712,6 +1721,25 @@
     },
     {
       "id": 42,
+      "name": "Pepe's Totem Pop Counter",
+      "category": "packs",
+      "description": "Shows how many Totems of Undying every player has popped, as a totem icon and count floating right above their nametag, so you always know who is out of totems in a fight.",
+      "thumbnail": "packs/packs/pepes-totem-pop-counter/icon.png",
+      "tags": [
+        "packs"
+      ],
+      "version": "1.0.0",
+      "downloads": 0,
+      "size": "2.3 KB",
+      "author": "Pepe",
+      "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-totem-pop-counter/Pepe%27s_Totem_Pop_Counter_v1.0.0.mcpack",
+      "previewUrl": "packs/packs/pepes-totem-pop-counter/",
+      "thumbnailWebp": "packs/packs/pepes-totem-pop-counter/icon.webp",
+      "fileName": "Pepe's_Totem_Pop_Counter_v1.0.0.mcpack",
+      "requiresAssets": true
+    },
+    {
+      "id": 43,
       "name": "Pepe's Waypoints+",
       "category": "packs",
       "description": "A full waypoint system built for practical navigation: set markers by sneaking and clicking, automatically drop a marker at your death location, and toggle a chroma-key greenscreen mode, all through simple sneak gestures.",
@@ -1733,7 +1761,7 @@
       "showcaseUrl": "https://youtu.be/xwKXiH-RoPc"
     },
     {
-      "id": 43,
+      "id": 44,
       "name": "Pepe's Animated Crop Growth Highlighter",
       "category": "utility",
       "description": "Highlights nearby crops with an animated overlay that reflects their current growth stage, making it easy to spot exactly which crops are ready to harvest at a glance.",
@@ -1756,7 +1784,7 @@
       "fileName": "Pepe's_Animated_Crop_Growth_Highlighter.mcpack"
     },
     {
-      "id": 44,
+      "id": 45,
       "name": "Pepe's Anvil Damage Indicator",
       "category": "utility",
       "description": "Adds a clear visual indicator to the anvil interface showing exactly how much durability damage an enchant or repair will cost before you commit to it.",
@@ -1777,7 +1805,7 @@
       "fileName": "Pepe's Anvil Damage Indicator.mcpack"
     },
     {
-      "id": 45,
+      "id": 46,
       "name": "Pepe's Armor Hider",
       "category": "utility",
       "description": "Lets you hide individual pieces of equipped armor from view while keeping their full protective stats and enchantments active, so your character's look stays exactly how you want it.",
@@ -1798,7 +1826,7 @@
       "fileName": "Pepe's Armor Hider.mcpack"
     },
     {
-      "id": 46,
+      "id": 47,
       "name": "Pepe's Bundle Item Counter",
       "category": "utility",
       "description": "Adds a live item count directly onto bundle icons, so you can see how full each bundle is without needing to open it and inspect its contents.",
@@ -1819,7 +1847,7 @@
       "fileName": "Pepe's_Bundle_Item_Count_v1.0.0.mcpack"
     },
     {
-      "id": 47,
+      "id": 48,
       "name": "Pepe's Dynamic 3rd Person Crosshair",
       "category": "utility",
       "description": "Adds a proper crosshair to third-person camera mode that tracks your aim accurately, making third-person play far more precise for building, combat, and interaction.",
@@ -1840,7 +1868,7 @@
       "fileName": "Pepe's_Dynamic_3rd_Person Crosshair_v1.0.0.mcpack"
     },
     {
-      "id": 48,
+      "id": 49,
       "name": "Pepe's Shiny Pots",
       "category": "utility",
       "description": "Gives decorated pots a subtle shine effect, making them easier to spot amid clutter and adding a small extra bit of visual polish to your builds.",
@@ -1862,7 +1890,7 @@
       "fileName": "Pepe's_Shiny_Pots_v1.0.0.mcpack"
     },
     {
-      "id": 49,
+      "id": 50,
       "name": "Pepe's Spinning Projectiles",
       "category": "utility",
       "description": "Adds a smooth spinning animation to thrown and shot projectiles in flight, giving arrows, tridents, and other thrown items a bit more visual flair.",
@@ -1882,7 +1910,7 @@
       "fileName": "Pepe's_Spinning_Projectiles_v1.0.0.mcpack"
     },
     {
-      "id": 50,
+      "id": 51,
       "name": "Pepe's Time Changer",
       "category": "utility",
       "description": "Adds simple in-game controls to set the world time instantly, saving you from typing out commands whenever you want to skip to day, night, or a specific time.",
@@ -1902,7 +1930,7 @@
       "fileName": "Pepe's_Time_Changer_v1.0.0.mcpack"
     },
     {
-      "id": 51,
+      "id": 52,
       "name": "Glacier Client Website",
       "category": "website",
       "description": "The official Glacier Client website, serving as the central home for the client's downloads, changelogs, and the latest news from the Glacier Productions team.",
@@ -1923,7 +1951,7 @@
       "fileName": "glacierclient.xyz"
     },
     {
-      "id": 52,
+      "id": 53,
       "name": "Minecraft Client Archive",
       "category": "website",
       "description": "Minecraft Client Archive, Clients from 1.16 MCPE to Newest MCPE Clients, Mainly focused on texture pack clients..",

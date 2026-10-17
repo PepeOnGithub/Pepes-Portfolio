@@ -2,7 +2,7 @@
     "name": "Pepe's Assets Pack",
     "description": "The shared foundation every other Pepe's Pack builds on: common textures, UI variables, and compatibility patches consolidated in one place. Must be enabled and sorted above every other Pepe's Pack to work correctly.",
     "author": "Pepe",
-    "version": "1.8.0",
+    "version": "1.9.0",
     "thumbnail": "\ud83d\udce6",
     "tags": [
         "required",
@@ -22,7 +22,8 @@
         "1.5.0": "Added support for the Shiny Pots pack, including configurable item IDs.",
         "1.6.0": "Added support for the Debug HUD pack, and fixed a paperdoll rendering issue.",
         "1.7.0": "Added support for the Better Armor Bar pack, and fixed a hand model issue on cross-platform servers.",
-        "1.8.0": "Added support for the Elytra Pitch pack and the ArmorHUD v2.0.0 update."
+        "1.8.0": "Added support for the Elytra Pitch pack and the ArmorHUD v2.0.0 update.",
+        "1.9.0": "Added support for the Totem Pop Counter pack."
     },
     "notice": {
         "title": "A Must-Have for All Packs!",
