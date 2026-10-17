@@ -2,7 +2,7 @@
     "name": "Pepe's ArmorHUD",
     "description": "Displays the armor you're currently wearing as compact icons directly on the HUD, so you can check your protection at a glance without opening your inventory.",
     "author": "Pepe",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "thumbnail": "\ud83d\udce6",
     "tags": [
         "packs"
@@ -10,5 +10,9 @@
     "category": "packs",
     "license": "MIT",
     "requiresAssets": true,
-    "showcaseUrl": "https://youtu.be/D1iwxA9b1SM"
+    "showcaseUrl": "https://youtu.be/D1iwxA9b1SM",
+    "changelogs": {
+        "1.0.0": "Initial release.",
+        "2.0.0": "Added a full settings menu: screen edge, X/Y offset and size, vertical or row layout, alignment, reverse order, dynamic layout, spacing, empty slots, smooth slide, per-piece toggles and slot styles. Added a durability bar with a green-to-red gradient, durability text (percentage, remaining or remaining/max) with shadow and positioning, and a low-durability warning. Requires Pepe's Assets Pack 1.8.0 or later."
+    }
 }

@@ -22,7 +22,7 @@
         "1.5.0": "Added support for the Shiny Pots pack, including configurable item IDs.",
         "1.6.0": "Added support for the Debug HUD pack, and fixed a paperdoll rendering issue.",
         "1.7.0": "Added support for the Better Armor Bar pack, and fixed a hand model issue on cross-platform servers.",
-        "1.8.0": "Added support for the Elytra Pitch pack."
+        "1.8.0": "Added support for the Elytra Pitch pack and the ArmorHUD v2.0.0 update."
     },
     "notice": {
         "title": "A Must-Have for All Packs!",
