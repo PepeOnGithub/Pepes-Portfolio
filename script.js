@@ -766,6 +766,14 @@ class PackLibrary {
         return;
       }
 
+      if (e.key === 'Escape') {
+        const openModal = [...document.querySelectorAll('.assets-modal-overlay:not(.hidden)')].pop();
+        if (openModal) {
+          const closeBtn = openModal.querySelector('.assets-modal-close');
+          if (closeBtn) { closeBtn.click(); return; }
+        }
+      }
+
       if (e.key === 'Escape' && !typing) {
         const detailView = document.getElementById('detail-view');
         if (detailView && !detailView.classList.contains('hidden')) {
@@ -857,6 +865,7 @@ class PackLibrary {
       e.stopImmediatePropagation();
 
       this.pendingDownloadLink = link;
+      this.chosenProvider = null;
 
       if (askEveryTime) {
         this.showProviderModal(needsAssets);
@@ -871,6 +880,9 @@ class PackLibrary {
       const link = e.target.closest('#detail-download, .version-download-btn');
       if (!link || link.classList.contains('btn-download-disabled') || !link.dataset.rawUrl) return;
       if (!this.currentPack) return;
+      link.classList.add('is-busy');
+      setTimeout(() => link.classList.remove('is-busy'), 1500);
+      this.showToast(`${this.currentPack.name} is on its way. Enjoy!`);
       const pack = this.currentPack;
       const versions = pack.versions;
       const multi = versions && versions.length > 1;
@@ -942,6 +954,8 @@ class PackLibrary {
       ? `Next <i class="fas fa-arrow-right"></i>`
       : `<i class="fas fa-download"></i> Download`;
 
+    this.setModalStep('download-provider-modal-overlay', chainToAssets ? 'Step 1 of 2' : '');
+
     this.selectedProvider = getMonetizationProvider();
     document.querySelectorAll('#provider-choice-tabs .provider-tab').forEach(tab => {
       const selected = tab.dataset.value === this.selectedProvider;
@@ -952,12 +966,46 @@ class PackLibrary {
     document.getElementById('download-provider-modal-overlay').classList.remove('hidden');
   }
 
+  // Shows "Step n of m" above a modal's title so people can see how far along a multi-step flow is.
+  setModalStep(overlayId, text) {
+    const modal = document.querySelector(`#${overlayId} .assets-modal`);
+    if (!modal) return;
+    let el = modal.querySelector('.modal-step');
+    if (!text) { if (el) el.remove(); return; }
+    if (!el) {
+      el = document.createElement('p');
+      el.className = 'modal-step';
+      modal.insertBefore(el, modal.querySelector('h3'));
+    }
+    el.textContent = text;
+  }
+
+  // Peak-end rule: finish the download flow on a clear, friendly confirmation.
+  showToast(message) {
+    let host = document.getElementById('toast-host');
+    if (!host) {
+      host = document.createElement('div');
+      host.id = 'toast-host';
+      host.setAttribute('role', 'status');
+      host.setAttribute('aria-live', 'polite');
+      document.body.appendChild(host);
+    }
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = '<i class="fas fa-circle-check"></i><span></span>';
+    toast.querySelector('span').textContent = message;
+    host.appendChild(toast);
+    setTimeout(() => toast.classList.add('leaving'), 2600);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
   hideProviderModal() {
     document.getElementById('download-provider-modal-overlay').classList.add('hidden');
   }
 
   confirmProviderModal() {
     const provider = this.selectedProvider || 'linkvertise';
+    this.chosenProvider = provider; // the Assets Pack button must use this choice, not the saved default
     this.hideProviderModal();
 
     const link = this.pendingDownloadLink;
@@ -1002,11 +1050,12 @@ class PackLibrary {
     if (verEl) verEl.textContent = ver ? ` v${ver.replace(/^v/i, '')}` : '';
 
     this.pendingDownloadLink = link;
+    this.setModalStep('assets-modal-overlay', this.chosenProvider ? 'Step 2 of 2' : '');
     document.getElementById('assets-modal-pack-name').textContent = pack.name;
 
     const getBtn = document.getElementById('assets-modal-get');
     const latestVersion = (assetsPack.versions && assetsPack.versions[0]) || assetsPack;
-    getBtn.href = getMonetizedUrl(latestVersion.downloadUrl || assetsPack.downloadUrl, latestVersion.lootUrl || assetsPack.lootUrl);
+    getBtn.href = getMonetizedUrl(latestVersion.downloadUrl || assetsPack.downloadUrl, latestVersion.lootUrl || assetsPack.lootUrl, this.chosenProvider);
     getBtn.setAttribute('target', '_blank');
     getBtn.setAttribute('rel', 'noopener');
     getBtn.onclick = () => {
@@ -1063,11 +1112,29 @@ class PackLibrary {
       return;
     }
 
-    listEl.innerHTML = tags.map(tag => `
+    // Hick's / Miller's law: only the 8 most common tags (plus any active ones) are shown up front.
+    const TAG_LIMIT = 8;
+    const visibleTags = this.tagsExpanded
+      ? tags
+      : tags.filter((tag, i) => i < TAG_LIMIT || this.currentFilter.tags.has(tag));
+    const hiddenCount = tags.length - visibleTags.length;
+
+    listEl.innerHTML = visibleTags.map(tag => `
       <button type="button" class="tag-chip${this.currentFilter.tags.has(tag) ? ' active' : ''}" data-tag="${this.escapeHtml(tag)}">
         ${this.escapeHtml(tag)} <span class="tag-chip-count">${counts.get(tag)}</span>
       </button>
-    `).join('');
+    `).join('') + (tags.length > TAG_LIMIT ? `
+      <button type="button" class="tag-more-btn" aria-expanded="${this.tagsExpanded ? 'true' : 'false'}">
+        ${this.tagsExpanded ? 'Show fewer' : `Show ${hiddenCount} more`}
+      </button>` : '');
+
+    const moreBtn = listEl.querySelector('.tag-more-btn');
+    if (moreBtn) {
+      moreBtn.addEventListener('click', () => {
+        this.tagsExpanded = !this.tagsExpanded;
+        this.renderTagChips();
+      });
+    }
 
     listEl.querySelectorAll('.tag-chip').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1436,6 +1503,18 @@ class PackLibrary {
     this.applyFilters();
   }
 
+  // Postel's law: be liberal in what the search accepts. Case, accents, apostrophes and
+  // hyphens/underscores don't matter, and every word only has to appear somewhere.
+  normalizeSearch(text) {
+    return String(text || '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/['\u2019`]/g, '')
+      .replace(/[-_.+]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   applyFilters() {
     let filtered = [...this.packs];
 
@@ -1444,12 +1523,11 @@ class PackLibrary {
     }
 
     if (this.currentFilter.search) {
-      const search = this.currentFilter.search;
-      filtered = filtered.filter(pack =>
-        pack.name.toLowerCase().includes(search) ||
-        pack.description.toLowerCase().includes(search) ||
-        (pack.tags || []).some(tag => tag.toLowerCase().includes(search))
-      );
+      const words = this.normalizeSearch(this.currentFilter.search).split(' ').filter(Boolean);
+      filtered = filtered.filter(pack => {
+        const haystack = this.normalizeSearch([pack.name, pack.description, ...(pack.tags || [])].join(' '));
+        return words.every(word => haystack.includes(word));
+      });
     }
 
     if (this.currentFilter.tags.size > 0) {
