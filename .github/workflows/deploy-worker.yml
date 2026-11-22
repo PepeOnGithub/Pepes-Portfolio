@@ -28,6 +28,7 @@ jobs:
         working-directory: worker
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: 813b5cffc96f7f5095968d2a00e3eb28
     steps:
       - uses: actions/checkout@v4
 
@@ -38,6 +39,27 @@ jobs:
           cache-dependency-path: worker/package-lock.json
 
       - run: npm ci
+
+      # Creates the D1 database and R2 bucket if they don't exist yet, then
+      # writes the database ID into wrangler.toml for this run only (the file
+      # in git keeps the placeholder). Safe to re-run.
+      - name: Provision D1 database and R2 bucket
+        run: |
+          set -euo pipefail
+          DB=pepes-portfolio-uploads
+          ID=$(npx wrangler d1 list --json | jq -r --arg n "$DB" '.[] | select(.name == $n) | .uuid')
+          if [ -z "$ID" ]; then
+            npx wrangler d1 create "$DB"
+            ID=$(npx wrangler d1 list --json | jq -r --arg n "$DB" '.[] | select(.name == $n) | .uuid')
+          fi
+          if [ -z "$ID" ]; then
+            echo "Could not find or create D1 database $DB" >&2
+            exit 1
+          fi
+          echo "D1 database $DB id: $ID"
+          sed -i "s/^database_id = .*/database_id = \"$ID\"/" wrangler.toml
+          # Errors if the bucket already exists; that is fine on re-runs.
+          npx wrangler r2 bucket create "$DB" || echo "R2 bucket $DB not created (probably already exists)"
 
       # CREATE TABLE IF NOT EXISTS, so re-running it is safe.
       - name: Apply database schema
