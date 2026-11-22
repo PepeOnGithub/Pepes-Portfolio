@@ -32,6 +32,8 @@
   const DEATH = [-37, 70, 10];                                  // sample death position for Death coordinates
 
   let api, root, stage, screen, ttEl, platform = 'pc', held = 'apple', yaw = 0, gui = 3;
+  // the Mobile view shows the PC variant of the HUD (desktop flags, mouse offsets, no touch controls); only the stage shape differs
+  const PC_VARIANT = true;
   const saved = (() => { try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { return {}; } })();
   if (saved.platform in ASPECT) platform = saved.platform;
   if (ITEMS.some((i) => i.id === saved.held)) held = saved.held;
@@ -470,8 +472,8 @@
       const touch = '$' + stem + '_touch_offset', mouse = '$' + stem + '_mouse_controller_offset', plain = '$' + stem + '_offset';
       const def = (PLACEMENT[stem] || {}).offset || [0, 0];
       let off = def;
-      if (platform === 'mobile' && api.has(touch)) off = get(touch, def);
-      else if (platform === 'pc' && api.has(mouse)) off = get(mouse, def);
+      if (!PC_VARIANT && platform === 'mobile' && api.has(touch)) off = get(touch, def);
+      else if (api.has(mouse)) off = get(mouse, def);
       else if (api.has(plain)) off = get(plain, def);
       else if (api.has(touch)) off = get(touch, def);
       let anchor = get(anchorVar, (PLACEMENT[stem] || {}).anchor || 'top_left');
@@ -549,7 +551,7 @@
   }
 
   function drawPlatformChrome() {
-    if (platform !== 'mobile') return;
+    if (PC_VARIANT || platform !== 'mobile') return;
     // Bedrock touch layout on a landscape phone: d-pad bottom-left, jump and sneak bottom-right with emote above them,
     // chat top-right, pause top-middle, and the ... inventory button just right of the hotbar. Arrow / jump / sneak icons
     // are the vanilla 22px textures drawn 1:1; chat, emote and ... have no texture in assets/mc, so they are small inline SVG.
@@ -639,7 +641,7 @@
 
   // customizer settings become the packs' global $variables; platform flags pick the desktop or pocket layouts
   function uiVars() {
-    const pc = platform === 'pc';
+    const pc = PC_VARIANT || platform === 'pc';
     // the game shows the item-name background (hud_tip_text_background) for the held item name
     const v = { '$desktop_screen': pc, '$pocket_screen': !pc, '$education_edition': false, '$mouse': pc, '$touch': !pc, '$gamepad': false, '$show_text_background': true };
     for (const n of api.names()) v[n.replace(/\|default$/, '')] = api.get(n);
@@ -647,7 +649,7 @@
   }
 
   function uiData() {
-    const mobile = platform === 'mobile', it = heldItem();
+    const mobile = !PC_VARIANT && platform === 'mobile', it = heldItem();
     const G = {
       '#hud_visible': true, '#hud_alpha': 1, '#hud_propagate_alpha': false, '#hud_visible_centered': !mobile, '#hud_visible_centered_touch': mobile,
       '#hud_visible_not_centered': false, '#hud_visible_centered_gui_elements': true, '#hotbar_visible': true, '#hotbar_with_xp_bar': true,
