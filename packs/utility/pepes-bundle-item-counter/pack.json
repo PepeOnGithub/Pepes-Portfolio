@@ -4,6 +4,7 @@
     "license": "MIT",
     "description": "Adds a live item count directly onto bundle icons, so you can see how full each bundle is without needing to open it and inspect its contents.",
     "category": "utility",
-    "thumbnail": "\ud83d\udd27",
-    "version": "1.0.0"
+    "thumbnail": "🔧",
+    "version": "1.0.0",
+    "showcaseUrl": "https://youtu.be/JsgE-BDViPg"
 }

@@ -1,0 +1,162 @@
+{
+  "apple": [
+    4,
+    2.4
+  ],
+  "baked_potato": [
+    5,
+    6
+  ],
+  "beef": [
+    3,
+    1.8
+  ],
+  "beetroot": [
+    1,
+    1.2
+  ],
+  "beetroot_soup": [
+    6,
+    7.2
+  ],
+  "bread": [
+    5,
+    6
+  ],
+  "carrot": [
+    3,
+    3.6
+  ],
+  "chicken": [
+    2,
+    1.2
+  ],
+  "chorus_fruit": [
+    4,
+    2.4
+  ],
+  "cod": [
+    2,
+    0.4
+  ],
+  "cooked_beef": [
+    8,
+    12.8
+  ],
+  "cooked_chicken": [
+    6,
+    7.2
+  ],
+  "cooked_cod": [
+    5,
+    6
+  ],
+  "cooked_mutton": [
+    6,
+    9.6
+  ],
+  "cooked_porkchop": [
+    8,
+    12.8
+  ],
+  "cooked_rabbit": [
+    5,
+    6
+  ],
+  "cooked_salmon": [
+    6,
+    9.6
+  ],
+  "cookie": [
+    2,
+    0.4
+  ],
+  "dried_kelp": [
+    1,
+    0.6
+  ],
+  "enchanted_golden_apple": [
+    4,
+    9.6
+  ],
+  "golden_apple": [
+    4,
+    9.6
+  ],
+  "golden_carrot": [
+    6,
+    14.4
+  ],
+  "honey_bottle": [
+    6,
+    1.2
+  ],
+  "melon_slice": [
+    2,
+    1.2
+  ],
+  "mushroom_stew": [
+    6,
+    7.2
+  ],
+  "mutton": [
+    2,
+    1.2
+  ],
+  "poisonous_potato": [
+    2,
+    1.2
+  ],
+  "porkchop": [
+    3,
+    1.8
+  ],
+  "potato": [
+    1,
+    0.6
+  ],
+  "pufferfish": [
+    1,
+    0.2
+  ],
+  "pumpkin_pie": [
+    8,
+    4.8
+  ],
+  "rabbit": [
+    3,
+    1.8
+  ],
+  "rabbit_stew": [
+    10,
+    12
+  ],
+  "rotten_flesh": [
+    4,
+    0.8
+  ],
+  "salmon": [
+    2,
+    0.4
+  ],
+  "spider_eye": [
+    2,
+    3.2
+  ],
+  "suspicious_stew": [
+    6,
+    7.2
+  ],
+  "sweet_berries": [
+    2,
+    0.4
+  ],
+  "glow_berries": [
+    2,
+    0.4
+  ],
+  "tropical_fish": [
+    1,
+    0.2
+  ]
+}

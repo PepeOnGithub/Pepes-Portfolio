@@ -1,0 +1,273 @@
+{
+  "_help": "Optional labels for the Assets Pack customizer. Anything not listed here still shows up (the form is built from the Assets Pack's _global_variables.json) with an automatic label and group. 'groups' is keyed by the variable stem (name without the hide_ prefix and the _anchor / _offset / _opacity suffix). 'vars' overrides single variables: label, desc, min, max, step, options.",
+  "anchors": [
+    "top_left",
+    "top_middle",
+    "top_right",
+    "left_middle",
+    "center",
+    "right_middle",
+    "bottom_left",
+    "bottom_middle",
+    "bottom_right"
+  ],
+  "advanced_patterns": [
+    "^\\$packversion$",
+    "_aux$",
+    "_item_id$"
+  ],
+  "hidden_patterns": [
+    "chat",
+    "^\\$packversion$"
+  ],
+  "moved": [
+    {
+      "pattern": "armorhud|^\\$ah_",
+      "pack": "pepes-armorhud",
+      "since": "2.0.0"
+    }
+  ],
+  "groups": {
+    "food_stats_box": {
+      "title": "Food Stats+ : item box",
+      "icon": "fa-drumstick-bite",
+      "desc": "Hunger and saturation under the item name."
+    },
+    "food_stats_effects": {
+      "title": "Food Stats+ : effect box",
+      "icon": "fa-flask",
+      "desc": "Stew and potion effects under the crosshair."
+    },
+    "food_stats_corner_icons": {
+      "title": "Food Stats+ : slot icons",
+      "icon": "fa-icons",
+      "desc": "Effect icon on stew and potion slots."
+    },
+    "food_stats_corner_icon": {
+      "title": "Food Stats+ : slot icons",
+      "icon": "fa-icons",
+      "desc": "Effect icon on stew and potion slots."
+    },
+    "food_stats_hover": {
+      "title": "Food Stats+ : tooltips",
+      "icon": "fa-message",
+      "desc": "Hunger and saturation row in item tooltips."
+    },
+    "food_stats_hover_effects": {
+      "title": "Food Stats+ : tooltips",
+      "icon": "fa-message",
+      "desc": "Hunger and saturation row in item tooltips."
+    },
+    "hover_item_id": {
+      "title": "Item tooltips",
+      "icon": "fa-message",
+      "desc": "Extra lines added to item tooltips."
+    },
+    "hover_item_aux_id": {
+      "title": "Item tooltips",
+      "icon": "fa-message",
+      "desc": "Extra lines added to item tooltips."
+    },
+    "suspicious_stew_info": {
+      "title": "Item tooltips",
+      "icon": "fa-message",
+      "desc": "Extra lines added to item tooltips."
+    },
+    "container_durability": {
+      "title": "Item tooltips",
+      "icon": "fa-message",
+      "desc": "Extra lines added to item tooltips."
+    },
+    "directionhud": {
+      "title": "Direction HUD",
+      "icon": "fa-compass"
+    },
+    "armorhud": {
+      "title": "Armor HUD",
+      "icon": "fa-shield-halved"
+    },
+    "forcecoords": {
+      "title": "Force coordinates",
+      "icon": "fa-location-dot"
+    },
+    "deathcoords": {
+      "title": "Death coordinates",
+      "icon": "fa-skull"
+    },
+    "fpscounter": {
+      "title": "FPS counter",
+      "icon": "fa-gauge-high"
+    },
+    "offhandslot": {
+      "title": "Offhand slot",
+      "icon": "fa-hand"
+    },
+    "inventoryhud": {
+      "title": "Inventory HUD",
+      "icon": "fa-boxes-stacked"
+    },
+    "level_calculator": {
+      "title": "Level calculator",
+      "icon": "fa-calculator"
+    },
+    "clockcompass": {
+      "title": "Clock and compass",
+      "icon": "fa-clock"
+    },
+    "speedometer": {
+      "title": "Speedometer",
+      "icon": "fa-gauge"
+    },
+    "vanilla_coordinates": {
+      "title": "Coordinates",
+      "icon": "fa-map-location-dot"
+    },
+    "chunk_coordinatea": {
+      "title": "Coordinates",
+      "icon": "fa-map-location-dot"
+    },
+    "nether_coordinates": {
+      "title": "Coordinates",
+      "icon": "fa-map-location-dot"
+    },
+    "nether_to_overworld_coordinates": {
+      "title": "Coordinates",
+      "icon": "fa-map-location-dot"
+    },
+    "debughud": {
+      "title": "Debug HUD",
+      "icon": "fa-bug"
+    },
+    "version": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "os_type": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "graphics": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "platform": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "ui_type": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "world_type": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "world_name": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "day_counter": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "moon_phase": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "gamemode": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "xp_level": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "item_id": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "item_aux_id": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    },
+    "food_stats_corner_icon_size": {
+      "title": "Food Stats+ : slot icons",
+      "icon": "fa-icons",
+      "desc": "Effect icon on stew and potion slots."
+    },
+    "inventoryhud_durability": {
+      "title": "Inventory HUD",
+      "icon": "fa-boxes-stacked"
+    },
+    "inventoryhud_stack": {
+      "title": "Inventory HUD",
+      "icon": "fa-boxes-stacked"
+    },
+    "assetspack_version": {
+      "title": "Debug HUD lines",
+      "icon": "fa-list"
+    }
+  },
+  "vars": {
+    "$food_stats_box_opacity": {
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    },
+    "$food_stats_effects_opacity": {
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    },
+    "$food_stats_corner_icon_size": {
+      "label": "Slot icon size (px)",
+      "min": 4,
+      "max": 18
+    },
+    "$hide_food_stats_hover": {
+      "label": "Tooltip hunger and saturation row"
+    },
+    "$hide_food_stats_hover_effects": {
+      "label": "Tooltip eat time and effects"
+    },
+    "$hide_hover_item_id": {
+      "label": "Tooltip item id line"
+    },
+    "$hide_hover_item_aux_id": {
+      "label": "Tooltip aux id line"
+    },
+    "$hide_suspicious_stew_info": {
+      "label": "Tooltip suspicious stew flower info"
+    },
+    "$hide_container_durability": {
+      "label": "Tooltip container durability"
+    },
+    "$debughud": {
+      "label": "Enable debug HUD"
+    },
+    "$hide_clockcompass": {
+      "label": "Show clock and compass"
+    },
+    "$hide_level_calculator": {
+      "label": "Show level calculator"
+    },
+    "$hide_inventoryhud_durability": {
+      "label": "Show durability bars"
+    },
+    "$hide_inventoryhud_stack": {
+      "label": "Show stack counts"
+    },
+    "$hide_chunk_coordinatea": {
+      "label": "Show chunk coordinates"
+    },
+    "$hide_forcecoords": {
+      "label": "Show forced coordinates"
+    },
+    "$hide_deathcoords": {
+      "label": "Show death coordinates"
+    },
+    "$hide_assetspack_version": {
+      "label": "Show Assets Pack version"
+    }
+  }
+}

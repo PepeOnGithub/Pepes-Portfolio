@@ -4,6 +4,7 @@
     "license": "MIT",
     "description": "Adds a charged particle-style overlay effect to your character, giving combat and movement a bit of extra visual flair without altering gameplay.",
     "category": "cosmetics",
-    "thumbnail": "\u2728",
-    "version": "1.0.0"
+    "thumbnail": "✨",
+    "version": "1.0.0",
+    "showcaseUrl": "https://youtu.be/lHqailkUEkM"
 }

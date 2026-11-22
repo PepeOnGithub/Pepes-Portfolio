@@ -1,0 +1,43 @@
+# Community uploads API for pepe.glacierclient.xyz.
+# Separate from the accounts worker (pepes-portfolio-api): it checks who is
+# signed in by forwarding the visitor's session token to that worker's
+# /api/session, so accounts, profiles, comments and ratings stay where they are.
+name = "pepes-portfolio-uploads"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+AUTH_API = "https://pepes-portfolio-api.pepeoncloudeflare.workers.dev"
+# Comma-separated account ids that can review uploads. Your id is shown on
+# the site's Upload page once you're signed in.
+ADMIN_IDS = ""
+ALLOWED_ORIGINS = "https://pepe.glacierclient.xyz,http://localhost:6767,http://localhost:8000"
+# ===== AI reviewer (Gemini) =====
+# GEMINI_API_KEY is a secret: npx wrangler secret put GEMINI_API_KEY
+# First pass (fast) and security audit (stronger). Both must approve.
+GEMINI_MODEL = "gemini-flash-lite-latest"
+GEMINI_MODEL_STRICT = "gemini-flash-latest"
+# The AI decides on its own. Set to "0" to make it only advise (decisions then
+# wait for you in the Review tab).
+AI_AUTO_APPROVE = "1"
+AI_AUTO_REJECT = "1"
+
+# ===== Creator earnings =====
+# TOKEN_KEY is a secret that encrypts creators' LootLabs API tokens:
+#   npx wrangler secret put TOKEN_KEY   (any long random string; never change it later)
+SITE_URL = "https://pepe.glacierclient.xyz"
+PUBLIC_ORIGIN = "https://pepes-portfolio-uploads.pepeoncloudeflare.workers.dev"
+
+# Retry unfinished reviews and missing LootLabs links every 10 minutes.
+[triggers]
+crons = ["*/10 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pepes-portfolio-uploads"
+# Replace with the id printed by: npx wrangler d1 create pepes-portfolio-uploads
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "pepes-portfolio-uploads"

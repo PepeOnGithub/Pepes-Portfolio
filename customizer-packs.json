@@ -1,0 +1,1964 @@
+{
+ "packs": [
+  {
+   "id": "pepes-assets-pack",
+   "name": "Pepe's Assets Pack",
+   "kind": "variables",
+   "latest": "1.10.0",
+   "versions": [
+    {
+     "version": "1.10.0",
+     "fileName": "Pepe's_Assets_Pack_v1.10.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.10.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       69,
+       -320
+      ],
+      "$assetspack_version_opacity|default": 0.7,
+      "$clock_aux": 396,
+      "$clockcompass_anchor": "bottom_left",
+      "$clockcompass_offset": [
+       1,
+       -1
+      ],
+      "$compass_aux": 394,
+      "$day_counter_opacity|default": 0.7,
+      "$deathcoords_anchor": "top_right",
+      "$deathcoords_offset": [
+       -1,
+       38
+      ],
+      "$deathcoords_opacity": 0.65,
+      "$debughud": false,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$food_stats_box_offset": [
+       0,
+       0
+      ],
+      "$food_stats_box_opacity": 0.6,
+      "$food_stats_corner_icon_offset": [
+       -1,
+       1
+      ],
+      "$food_stats_corner_icon_size": [
+       9,
+       9
+      ],
+      "$food_stats_effects_offset": [
+       0,
+       16
+      ],
+      "$food_stats_effects_opacity": 0.6,
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$gamemode_opacity|default": 0.7,
+      "$graphics_opacity|default": 0.7,
+      "$hide_assetspack_version": false,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_container_durability": false,
+      "$hide_day_counter": false,
+      "$hide_deathcoords": false,
+      "$hide_food_stats_box": false,
+      "$hide_food_stats_corner_icons": false,
+      "$hide_food_stats_effects": false,
+      "$hide_food_stats_hover": false,
+      "$hide_food_stats_hover_effects": false,
+      "$hide_forcecoords": false,
+      "$hide_gamemode": false,
+      "$hide_graphics": false,
+      "$hide_hover_item_aux_id": false,
+      "$hide_hover_item_id": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_item_aux_id": false,
+      "$hide_item_id": false,
+      "$hide_level_calculator": false,
+      "$hide_moon_phase": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_os_type": false,
+      "$hide_platform": false,
+      "$hide_suspicious_stew_info": false,
+      "$hide_ui_type": false,
+      "$hide_vanilla_coordinates": false,
+      "$hide_version": false,
+      "$hide_world_name": false,
+      "$hide_world_type": false,
+      "$hide_xp_level": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$item_aux_id_opacity|default": 0.7,
+      "$item_id_opacity|default": 0.7,
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$lingering_potion_counter_item_id": 572,
+      "$moon_phase_opacity|default": 0.7,
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$os_type_opacity|default": 0.7,
+      "$packversion": "1.11.0",
+      "$platform_opacity|default": 0.7,
+      "$potion_counter_item_id": 430,
+      "$recovery_compass_aux": 661,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ],
+      "$splash_potion_counter_item_id": 571,
+      "$ui_type_opacity|default": 0.7,
+      "$version_opacity|default": 0.7,
+      "$world_name_opacity|default": 0.7,
+      "$world_type_opacity|default": 0.7,
+      "$xp_level_opacity|default": 0.7
+     }
+    },
+    {
+     "version": "1.9.0",
+     "fileName": "Pepe's_Assets_Pack_v1.9.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.9.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       69,
+       -320
+      ],
+      "$assetspack_version_opacity|default": 0.7,
+      "$clock_aux": 423,
+      "$clockcompass_anchor": "bottom_left",
+      "$clockcompass_offset": [
+       1,
+       -1
+      ],
+      "$compass_aux": 425,
+      "$day_counter_opacity|default": 0.7,
+      "$deathcoords_anchor": "top_right",
+      "$deathcoords_offset": [
+       -1,
+       38
+      ],
+      "$deathcoords_opacity": 0.65,
+      "$debughud": false,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$gamemode_opacity|default": 0.7,
+      "$graphics_opacity|default": 0.7,
+      "$hide_assetspack_version": false,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_container_durability": false,
+      "$hide_day_counter": false,
+      "$hide_deathcoords": false,
+      "$hide_forcecoords": false,
+      "$hide_gamemode": false,
+      "$hide_graphics": false,
+      "$hide_hover_item_aux_id": false,
+      "$hide_hover_item_id": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_item_aux_id": false,
+      "$hide_item_id": false,
+      "$hide_level_calculator": false,
+      "$hide_moon_phase": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_os_type": false,
+      "$hide_platform": false,
+      "$hide_suspicious_stew_info": false,
+      "$hide_ui_type": false,
+      "$hide_vanilla_coordinates": false,
+      "$hide_version": false,
+      "$hide_world_name": false,
+      "$hide_world_type": false,
+      "$hide_xp_level": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$item_aux_id_opacity|default": 0.7,
+      "$item_id_opacity|default": 0.7,
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$lingering_potion_counter_item_id": 601,
+      "$moon_phase_opacity|default": 0.7,
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$os_type_opacity|default": 0.7,
+      "$packversion": "1.6.0",
+      "$platform_opacity|default": 0.7,
+      "$potion_counter_item_id": 459,
+      "$recovery_compass_aux": 688,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ],
+      "$splash_potion_counter_item_id": 600,
+      "$ui_type_opacity|default": 0.7,
+      "$version_opacity|default": 0.7,
+      "$world_name_opacity|default": 0.7,
+      "$world_type_opacity|default": 0.7,
+      "$xp_level_opacity|default": 0.7
+     }
+    },
+    {
+     "version": "1.8.0",
+     "fileName": "Pepe's_Assets_Pack_v1.8.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.8.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       69,
+       -320
+      ],
+      "$assetspack_version_opacity|default": 0.7,
+      "$clock_aux": 423,
+      "$clockcompass_anchor": "bottom_left",
+      "$clockcompass_offset": [
+       1,
+       -1
+      ],
+      "$compass_aux": 425,
+      "$day_counter_opacity|default": 0.7,
+      "$deathcoords_anchor": "top_right",
+      "$deathcoords_offset": [
+       -1,
+       38
+      ],
+      "$deathcoords_opacity": 0.65,
+      "$debughud": false,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$gamemode_opacity|default": 0.7,
+      "$graphics_opacity|default": 0.7,
+      "$hide_assetspack_version": false,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_container_durability": false,
+      "$hide_day_counter": false,
+      "$hide_deathcoords": false,
+      "$hide_forcecoords": false,
+      "$hide_gamemode": false,
+      "$hide_graphics": false,
+      "$hide_hover_item_aux_id": false,
+      "$hide_hover_item_id": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_item_aux_id": false,
+      "$hide_item_id": false,
+      "$hide_level_calculator": false,
+      "$hide_moon_phase": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_os_type": false,
+      "$hide_platform": false,
+      "$hide_suspicious_stew_info": false,
+      "$hide_ui_type": false,
+      "$hide_vanilla_coordinates": false,
+      "$hide_version": false,
+      "$hide_world_name": false,
+      "$hide_world_type": false,
+      "$hide_xp_level": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$item_aux_id_opacity|default": 0.7,
+      "$item_id_opacity|default": 0.7,
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$lingering_potion_counter_item_id": 601,
+      "$moon_phase_opacity|default": 0.7,
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$os_type_opacity|default": 0.7,
+      "$packversion": "1.6.0",
+      "$platform_opacity|default": 0.7,
+      "$potion_counter_item_id": 459,
+      "$recovery_compass_aux": 688,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ],
+      "$splash_potion_counter_item_id": 600,
+      "$ui_type_opacity|default": 0.7,
+      "$version_opacity|default": 0.7,
+      "$world_name_opacity|default": 0.7,
+      "$world_type_opacity|default": 0.7,
+      "$xp_level_opacity|default": 0.7
+     }
+    },
+    {
+     "version": "1.7.0",
+     "fileName": "Pepe's_Assets_Pack_v1.7.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.7.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       -8,
+       1150
+      ],
+      "$assetspack_version_opacity|default": 0.7,
+      "$clock_aux": 423,
+      "$clockcompass_anchor": "bottom_left",
+      "$clockcompass_offset": [
+       1,
+       -1
+      ],
+      "$compass_aux": 425,
+      "$day_counter_opacity|default": 0.7,
+      "$deathcoords_anchor": "top_right",
+      "$deathcoords_offset": [
+       -1,
+       38
+      ],
+      "$deathcoords_opacity": 0.65,
+      "$debughud": false,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$gamemode_opacity|default": 0.7,
+      "$graphics_opacity|default": 0.7,
+      "$hide_assetspack_version": false,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_container_durability": false,
+      "$hide_day_counter": false,
+      "$hide_deathcoords": false,
+      "$hide_forcecoords": false,
+      "$hide_gamemode": false,
+      "$hide_graphics": false,
+      "$hide_hover_item_aux_id": false,
+      "$hide_hover_item_id": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_item_aux_id": false,
+      "$hide_item_id": false,
+      "$hide_level_calculator": false,
+      "$hide_moon_phase": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_os_type": false,
+      "$hide_platform": false,
+      "$hide_suspicious_stew_info": false,
+      "$hide_ui_type": false,
+      "$hide_vanilla_coordinates": false,
+      "$hide_version": false,
+      "$hide_world_name": false,
+      "$hide_world_type": false,
+      "$hide_xp_level": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$item_aux_id_opacity|default": 0.7,
+      "$item_id_opacity|default": 0.7,
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$lingering_potion_counter_item_id": 601,
+      "$moon_phase_opacity|default": 0.7,
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$os_type_opacity|default": 0.7,
+      "$packversion": "1.6.0",
+      "$platform_opacity|default": 0.7,
+      "$potion_counter_item_id": 459,
+      "$recovery_compass_aux": 688,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ],
+      "$splash_potion_counter_item_id": 600,
+      "$ui_type_opacity|default": 0.7,
+      "$version_opacity|default": 0.7,
+      "$world_name_opacity|default": 0.7,
+      "$world_type_opacity|default": 0.7,
+      "$xp_level_opacity|default": 0.7
+     }
+    },
+    {
+     "version": "1.6.0",
+     "fileName": "Pepe's_Assets_Pack_V1.6.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_V1.6.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       -8,
+       1150
+      ],
+      "$assetspack_version_opacity|default": 0.7,
+      "$clock_aux": 423,
+      "$clockcompass_anchor": "bottom_left",
+      "$clockcompass_offset": [
+       1,
+       -1
+      ],
+      "$compass_aux": 425,
+      "$day_counter_opacity|default": 0.7,
+      "$deathcoords_anchor": "top_right",
+      "$deathcoords_offset": [
+       -1,
+       38
+      ],
+      "$deathcoords_opacity": 0.65,
+      "$debughud": false,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$gamemode_opacity|default": 0.7,
+      "$graphics_opacity|default": 0.7,
+      "$hide_assetspack_version": false,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_container_durability": false,
+      "$hide_day_counter": false,
+      "$hide_deathcoords": false,
+      "$hide_forcecoords": false,
+      "$hide_gamemode": false,
+      "$hide_graphics": false,
+      "$hide_hover_item_aux_id": false,
+      "$hide_hover_item_id": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_item_aux_id": false,
+      "$hide_item_id": false,
+      "$hide_level_calculator": false,
+      "$hide_moon_phase": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_os_type": false,
+      "$hide_platform": false,
+      "$hide_suspicious_stew_info": false,
+      "$hide_ui_type": false,
+      "$hide_vanilla_coordinates": false,
+      "$hide_version": false,
+      "$hide_world_name": false,
+      "$hide_world_type": false,
+      "$hide_xp_level": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$item_aux_id_opacity|default": 0.7,
+      "$item_id_opacity|default": 0.7,
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$lingering_potion_counter_item_id": 601,
+      "$moon_phase_opacity|default": 0.7,
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$os_type_opacity|default": 0.7,
+      "$packversion": "1.6.0",
+      "$platform_opacity|default": 0.7,
+      "$potion_counter_item_id": 459,
+      "$recovery_compass_aux": 688,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ],
+      "$splash_potion_counter_item_id": 600,
+      "$ui_type_opacity|default": 0.7,
+      "$version_opacity|default": 0.7,
+      "$world_name_opacity|default": 0.7,
+      "$world_type_opacity|default": 0.7,
+      "$xp_level_opacity|default": 0.7
+     }
+    },
+    {
+     "version": "1.5.0",
+     "fileName": "Pepe's_Assets_Pack_V1.5.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_V1.5.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       -8,
+       1150
+      ],
+      "$clock_aux": 423,
+      "$clockcompass_anchor": "bottom_left",
+      "$clockcompass_offset": [
+       1,
+       -1
+      ],
+      "$compass_aux": 425,
+      "$deathcoords_anchor": "top_right",
+      "$deathcoords_offset": [
+       -1,
+       38
+      ],
+      "$deathcoords_opacity": 0.65,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_container_durability": false,
+      "$hide_deathcoords": false,
+      "$hide_forcecoords": false,
+      "$hide_hover_item_aux_id": false,
+      "$hide_hover_item_id": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_level_calculator": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_suspicious_stew_info": false,
+      "$hide_vanilla_coordinates": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$lingering_potion_counter_item_id": 601,
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$potion_counter_item_id": 459,
+      "$recovery_compass_aux": 688,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ],
+      "$splash_potion_counter_item_id": 600
+     }
+    },
+    {
+     "version": "1.4.0",
+     "fileName": "Pepe's_Assets_Pack_V1.4.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_V1.4.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       -8,
+       1150
+      ],
+      "$clock_aux": 423,
+      "$clockcompass_anchor": "bottom_left",
+      "$clockcompass_offset": [
+       1,
+       -1
+      ],
+      "$compass_aux": 425,
+      "$deathcoords_anchor": "top_right",
+      "$deathcoords_offset": [
+       -1,
+       38
+      ],
+      "$deathcoords_opacity": 0.65,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_container_durability": false,
+      "$hide_deathcoords": false,
+      "$hide_forcecoords": false,
+      "$hide_hover_item_aux_id": false,
+      "$hide_hover_item_id": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_level_calculator": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_suspicious_stew_info": false,
+      "$hide_vanilla_coordinates": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$recovery_compass_aux": 688,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ]
+     }
+    },
+    {
+     "version": "1.2.1",
+     "fileName": "Pepe's_Assets_Pack_v1.3.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.3.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       -8,
+       1150
+      ],
+      "$clock_aux": 423,
+      "$clockcompass_anchor": "bottom_left",
+      "$clockcompass_offset": [
+       1,
+       -1
+      ],
+      "$compass_aux": 425,
+      "$deathcoords_anchor": "top_right",
+      "$deathcoords_offset": [
+       -1,
+       38
+      ],
+      "$deathcoords_opacity": 0.65,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_container_durability": false,
+      "$hide_deathcoords": false,
+      "$hide_forcecoords": false,
+      "$hide_hover_item_aux_id": false,
+      "$hide_hover_item_id": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_level_calculator": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_suspicious_stew_info": false,
+      "$hide_vanilla_coordinates": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$recovery_compass_aux": 688,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ]
+     }
+    },
+    {
+     "version": "1.2.0",
+     "fileName": "Pepe's_Assets_Pack_v1.2.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.2.0.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       -8,
+       1150
+      ],
+      "$clock_aux": 423,
+      "$clockcompass_anchor|default": "bottom_left",
+      "$clockcompass_offset|default": [
+       62,
+       -76
+      ],
+      "$compass_aux": 425,
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$hide_chunk_coordinatea": false,
+      "$hide_clockcompass": false,
+      "$hide_forcecoords": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_level_calculator": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_vanilla_coordinates": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$recovery_compass_aux": 688,
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ]
+     }
+    },
+    {
+     "version": "1.0.1",
+     "fileName": "Pepe's_Assets_Pack_v1.1.1.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack_v1.1.1.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       -8,
+       1150
+      ],
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$hide_chunk_coordinatea": false,
+      "$hide_forcecoords": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_vanilla_coordinates": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ],
+      "$speedometer_anchor": "top_middle",
+      "$speedometer_offset": [
+       0,
+       25
+      ]
+     }
+    },
+    {
+     "version": "1.0.0",
+     "fileName": "Pepe's_Assets_Pack.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/other/pepes-assets-pack/Pepe%27s_Assets_Pack.mcpack",
+     "variables": {
+      "$armorhud_anchor": "bottom_right",
+      "$armorhud_offset": [
+       -8,
+       1150
+      ],
+      "$directionhud_anchor": "top_middle",
+      "$directionhud_mouse_controller_offset": [
+       0,
+       4
+      ],
+      "$directionhud_opacity": 0.65,
+      "$directionhud_touch_offset": [
+       9,
+       20
+      ],
+      "$forcecoords_anchor": "top_right",
+      "$forcecoords_offset": [
+       -1,
+       1
+      ],
+      "$forcecoords_opacity": 0.65,
+      "$fpscounter_anchor": "top_right",
+      "$fpscounter_offset": [
+       -1,
+       1
+      ],
+      "$fpscounter_opacity": 0.65,
+      "$hide_chunk_coordinatea": false,
+      "$hide_forcecoords": false,
+      "$hide_inventoryhud_durability": false,
+      "$hide_inventoryhud_stack": false,
+      "$hide_nether_coordinates": false,
+      "$hide_nether_to_overworld_coordinates": false,
+      "$hide_vanilla_coordinates": false,
+      "$inventoryhud_anchor|default": "bottom_right",
+      "$level_calculator_anchor": "bottom_right",
+      "$level_calculator_offset": [
+       -1,
+       -1
+      ],
+      "$offhandslot_anchor": "bottom_middle",
+      "$offhandslot_mouse_controller_offset": [
+       -113,
+       1000
+      ],
+      "$offhandslot_touch_offset": [
+       -120,
+       1000
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pepes-armorhud",
+   "name": "Pepe's ArmorHUD",
+   "kind": "settings",
+   "latest": "2.0.0",
+   "versions": [
+    {
+     "version": "2.0.0",
+     "fileName": "Pepe's_ArmorHUD_v2.0.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-armorhud/Pepe%27s_ArmorHUD_v2.0.0.mcpack",
+     "settings": [
+      {
+       "type": "label",
+       "text": "§l§bPepe's ArmorHUD §r§7(needs Pepe's Assets Pack 1.15.0+)§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bArmor HUD §r| §7Show the armor you wear on the HUD.§r",
+       "name": "pepe:ah_enabled",
+       "default": true
+      },
+      {
+       "type": "label",
+       "text": "§l§bPosition§r"
+      },
+      {
+       "type": "dropdown",
+       "text": "§bScreen Edge §r| §7Which side of the screen the HUD sits on.§r",
+       "name": "pepe:ah_screen_side",
+       "options": [
+        {
+         "name": "right",
+         "text": "§fRight§r"
+        },
+        {
+         "name": "left",
+         "text": "§fLeft§r"
+        }
+       ],
+       "default": "right"
+      },
+      {
+       "type": "slider",
+       "text": "§fX Offset §r| §7-=Left  0=Default  +=Right§r",
+       "name": "pepe:ah_x",
+       "min": -1000,
+       "max": 1000,
+       "step": 1,
+       "default": 0
+      },
+      {
+       "type": "slider",
+       "text": "§fY Offset §r| §7-=Down  0=Default  +=Up§r",
+       "name": "pepe:ah_y",
+       "min": -600,
+       "max": 600,
+       "step": 1,
+       "default": 0
+      },
+      {
+       "type": "slider",
+       "text": "§fArmor HUD Size §r| §750=Tiny  100=Default  300=Huge §r(percent)",
+       "name": "pepe:ah_size",
+       "min": 50,
+       "max": 300,
+       "step": 5,
+       "default": 100
+      },
+      {
+       "type": "label",
+       "text": "§l§bLayout§r"
+      },
+      {
+       "type": "dropdown",
+       "text": "§bLayout §r| §7Stack the pieces vertically or in a row.§r",
+       "name": "pepe:ah_layout",
+       "options": [
+        {
+         "name": "vertical",
+         "text": "§fVertical§r"
+        },
+        {
+         "name": "horizontal",
+         "text": "§fHorizontal§r"
+        }
+       ],
+       "default": "vertical"
+      },
+      {
+       "type": "dropdown",
+       "text": "§bAlignment §r| §7Where the stack sits when fewer pieces are shown (Dynamic Layout / hidden pieces).§r",
+       "name": "pepe:ah_align",
+       "options": [
+        {
+         "name": "center",
+         "text": "§fCentered§r"
+        },
+        {
+         "name": "start",
+         "text": "§fTop §7(vertical) §f/ Left §7(horizontal)§r"
+        },
+        {
+         "name": "end",
+         "text": "§fBottom §7(vertical) §f/ Right §7(horizontal)§r"
+        }
+       ],
+       "default": "center"
+      },
+      {
+       "type": "toggle",
+       "text": "§bReverse Order §r| §7Boots first instead of helmet first.§r",
+       "name": "pepe:ah_reverse",
+       "default": false
+      },
+      {
+       "type": "toggle",
+       "text": "§bDynamic Layout §r| §7Only worn pieces take space and the stack re-centres. Off keeps every slot in place.§r",
+       "name": "pepe:ah_dynamic",
+       "default": true
+      },
+      {
+       "type": "slider",
+       "text": "§fSpacing §r| §7Gap between the slots.§r",
+       "name": "pepe:ah_spacing",
+       "min": 0,
+       "max": 30,
+       "step": 1,
+       "default": 2
+      },
+      {
+       "type": "toggle",
+       "text": "§bEmpty Slots §r| §7Show the empty-slot icon for pieces you don't wear (all four when nothing is worn).§r",
+       "name": "pepe:ah_empty",
+       "default": true
+      },
+      {
+       "type": "toggle",
+       "text": "§bSmooth Slide §r| §7Pieces glide to their new spot instead of snapping.§r",
+       "name": "pepe:ah_slide",
+       "default": true
+      },
+      {
+       "type": "slider",
+       "text": "§8  ↳ §r§fSlide Speed §r| §74=Slow  14=Default  30=Fast §8(needs Smooth Slide)§r",
+       "name": "pepe:ah_slide_speed",
+       "min": 4,
+       "max": 30,
+       "step": 1,
+       "default": 14
+      },
+      {
+       "type": "label",
+       "text": "§l§bPieces§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bHelmet §r| §7Show the helmet slot.§r",
+       "name": "pepe:ah_show_helmet",
+       "default": true
+      },
+      {
+       "type": "toggle",
+       "text": "§bChestplate / Elytra §r| §7Show the chestplate slot.§r",
+       "name": "pepe:ah_show_chest",
+       "default": true
+      },
+      {
+       "type": "toggle",
+       "text": "§bLeggings §r| §7Show the leggings slot.§r",
+       "name": "pepe:ah_show_legs",
+       "default": true
+      },
+      {
+       "type": "toggle",
+       "text": "§bBoots §r| §7Show the boots slot.§r",
+       "name": "pepe:ah_show_boots",
+       "default": true
+      },
+      {
+       "type": "label",
+       "text": "§l§bSlot Style§r"
+      },
+      {
+       "type": "dropdown",
+       "text": "§bSlot Style §r| §7Hotbar Slot is the framed look, Box is a flat dark tile, None is just the icon.§r",
+       "name": "pepe:ah_frame",
+       "options": [
+        {
+         "name": "hotbar",
+         "text": "§fHotbar Slot§r"
+        },
+        {
+         "name": "box",
+         "text": "§fBox§r"
+        },
+        {
+         "name": "none",
+         "text": "§fNone§r"
+        }
+       ],
+       "default": "hotbar"
+      },
+      {
+       "type": "label",
+       "text": "§l§bDurability Bar§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bDurability Bar §r| §7Show a bar at the bottom of each slot.§r",
+       "name": "pepe:ah_bar",
+       "default": true
+      },
+      {
+       "type": "dropdown",
+       "text": "§8  ↳ §r§bBar Color §r| §7Gradient goes green, yellow, red as the piece wears down. §8(needs Durability Bar)§r",
+       "name": "pepe:ah_bar_color",
+       "options": [
+        {
+         "name": "gradient",
+         "text": "§aGradient§r"
+        },
+        {
+         "name": "green",
+         "text": "§aGreen§r"
+        },
+        {
+         "name": "yellow",
+         "text": "§eYellow§r"
+        },
+        {
+         "name": "red",
+         "text": "§cRed§r"
+        },
+        {
+         "name": "aqua",
+         "text": "§bAqua§r"
+        },
+        {
+         "name": "white",
+         "text": "§fWhite§r"
+        }
+       ],
+       "default": "gradient"
+      },
+      {
+       "type": "toggle",
+       "text": "§bHide When Undamaged §r| §7Hide the bar and numbers for pieces at full durability.§r",
+       "name": "pepe:ah_hide_full",
+       "default": false
+      },
+      {
+       "type": "label",
+       "text": "§l§bDurability Text§r"
+      },
+      {
+       "type": "dropdown",
+       "text": "§bText §r| §7Percentage (85%), remaining (312) or remaining/max (312/363), same digits Glacier uses.§r",
+       "name": "pepe:ah_text",
+       "options": [
+        {
+         "name": "off",
+         "text": "§7Off§r"
+        },
+        {
+         "name": "percent",
+         "text": "§fPercentage§r"
+        },
+        {
+         "name": "remaining",
+         "text": "§fRemaining§r"
+        },
+        {
+         "name": "absolute",
+         "text": "§fRemaining / Max§r"
+        }
+       ],
+       "default": "percent"
+      },
+      {
+       "type": "dropdown",
+       "text": "§8  ↳ §r§bText Color §r| §7Durability colours the remaining number and the % from green to red; the max number stays white.§r",
+       "name": "pepe:ah_text_color",
+       "options": [
+        {
+         "name": "white",
+         "text": "§fWhite§r"
+        },
+        {
+         "name": "durability",
+         "text": "§aDurability§r"
+        }
+       ],
+       "default": "durability"
+      },
+      {
+       "type": "dropdown",
+       "text": "§8  ↳ §r§bPosition (Vertical) §r| §7Auto = the side facing the middle of the screen.§r",
+       "name": "pepe:ah_text_side_v",
+       "options": [
+        {
+         "name": "auto",
+         "text": "§fAuto§r"
+        },
+        {
+         "name": "left",
+         "text": "§fLeft§r"
+        },
+        {
+         "name": "right",
+         "text": "§fRight§r"
+        }
+       ],
+       "default": "auto"
+      },
+      {
+       "type": "dropdown",
+       "text": "§8  ↳ §r§bPosition (Horizontal) §r| §7Numbers above or below each slot.§r",
+       "name": "pepe:ah_text_side_h",
+       "options": [
+        {
+         "name": "below",
+         "text": "§fBelow§r"
+        },
+        {
+         "name": "above",
+         "text": "§fAbove§r"
+        }
+       ],
+       "default": "below"
+      },
+      {
+       "type": "slider",
+       "text": "§8  ↳ §r§fText Size §r| §750=Tiny  100=Default  200=Huge §r(percent)",
+       "name": "pepe:ah_text_size",
+       "min": 50,
+       "max": 200,
+       "step": 5,
+       "default": 100
+      },
+      {
+       "type": "toggle",
+       "text": "§8  ↳ §r§bText Shadow §r| §7Black shadow behind the numbers.§r",
+       "name": "pepe:ah_text_shadow",
+       "default": true
+      },
+      {
+       "type": "label",
+       "text": "§l§bWarning§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bLow Durability Warning §r| §7Warn when a piece is about to break.§r",
+       "name": "pepe:ah_warn",
+       "default": true
+      },
+      {
+       "type": "slider",
+       "text": "§8  ↳ §r§fWarn Below §r| §7Percent durability at which the warning starts.§r",
+       "name": "pepe:ah_warn_pct",
+       "min": 5,
+       "max": 60,
+       "step": 5,
+       "default": 20
+      },
+      {
+       "type": "dropdown",
+       "text": "§8  ↳ §r§bWarning Style §r| §7A red !! badge, a flashing red icon, or both.§r",
+       "name": "pepe:ah_warn_style",
+       "options": [
+        {
+         "name": "icon",
+         "text": "§fBadge§r"
+        },
+        {
+         "name": "blink",
+         "text": "§fFlash§r"
+        },
+        {
+         "name": "both",
+         "text": "§fBadge + Flash§r"
+        }
+       ],
+       "default": "both"
+      }
+     ]
+    },
+    {
+     "version": "1.0.0",
+     "fileName": "Pepe's_ArmorHUD.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-armorhud/Pepe%27s_ArmorHUD.mcpack"
+    }
+   ]
+  },
+  {
+   "id": "pepes-elytra-pitch",
+   "name": "Pepe's Elytra Pitch",
+   "kind": "settings",
+   "latest": "1.0.0",
+   "versions": [
+    {
+     "version": "1.0.0",
+     "fileName": "Pepe's_Elytra_Pitch_v1.0.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-elytra-pitch/Pepe%27s_Elytra_Pitch_v1.0.0.mcpack",
+     "settings": [
+      {
+       "type": "label",
+       "text": "§l§bElytra Pitch HUD §r§7(needs Pepe's Assets Pack)§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bElytra Pitch §r| §7Shows your look angle, e.g. [ 40° ], below the crosshair.§r",
+       "name": "pepe:elytra_pitch",
+       "default": true
+      },
+      {
+       "type": "dropdown",
+       "text": "§bShow When §r| §7Choose when the HUD appears.§r",
+       "name": "pepe:elytra_pitch_mode",
+       "options": [
+        {
+         "name": "gliding",
+         "text": "§aOnly while gliding§r"
+        },
+        {
+         "name": "equipped",
+         "text": "§eWhenever an Elytra is worn§r"
+        }
+       ],
+       "default": "gliding"
+      },
+      {
+       "type": "slider",
+       "text": "§fElytra Pitch X §r| §7-=Left  0=Default  +=Right §r(moves the whole HUD sideways)",
+       "name": "pepe:elytra_pitch_x",
+       "min": -500,
+       "max": 500,
+       "step": 1,
+       "default": 0
+      },
+      {
+       "type": "slider",
+       "text": "§fElytra Pitch Y §r| §7-=Down  0=Default  +=Up §r(raise or lower the HUD)",
+       "name": "pepe:elytra_pitch_y",
+       "min": -250,
+       "max": 250,
+       "step": 1,
+       "default": 0
+      },
+      {
+       "type": "slider",
+       "text": "§fElytra Pitch Size §r| §750=Tiny  100=Default  300=Huge §r(percent)",
+       "name": "pepe:elytra_pitch_size",
+       "min": 50,
+       "max": 300,
+       "step": 5,
+       "default": 100
+      },
+      {
+       "type": "label",
+       "text": "§l§bText§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bBrackets §r| §7Show the [ ] around the angle.§r",
+       "name": "pepe:ep_brackets",
+       "default": true
+      },
+      {
+       "type": "toggle",
+       "text": "§bDegree Sign §r| §7Show the ° after the number.§r",
+       "name": "pepe:ep_degree",
+       "default": true
+      },
+      {
+       "type": "toggle",
+       "text": "§bMinus Sign §r| §7Show a - in front of the angle while looking up.§r",
+       "name": "pepe:ep_sign",
+       "default": true
+      },
+      {
+       "type": "toggle",
+       "text": "§bInvert Angle §r| §7Flip the angle: looking up becomes positive, looking down negative.§r",
+       "name": "pepe:ep_invert",
+       "default": false
+      },
+      {
+       "type": "dropdown",
+       "text": "§bText Color §r| §7White keeps the original look. Black swaps the shadow to white so it stays readable. Indicator uses the icon's green/red. Auto turns green while climbing and red while diving.§r",
+       "name": "pepe:elytra_pitch_color",
+       "options": [
+        {
+         "name": "white",
+         "text": "§fWhite§r"
+        },
+        {
+         "name": "green",
+         "text": "§aGreen§r"
+        },
+        {
+         "name": "red",
+         "text": "§cRed§r"
+        },
+        {
+         "name": "yellow",
+         "text": "§eYellow§r"
+        },
+        {
+         "name": "aqua",
+         "text": "§bAqua§r"
+        },
+        {
+         "name": "gold",
+         "text": "§6Gold§r"
+        },
+        {
+         "name": "orange",
+         "text": "§6Orange§r"
+        },
+        {
+         "name": "purple",
+         "text": "§dPurple§r"
+        },
+        {
+         "name": "blue",
+         "text": "§9Blue§r"
+        },
+        {
+         "name": "gray",
+         "text": "§7Gray§r"
+        },
+        {
+         "name": "black",
+         "text": "§8Black§r"
+        },
+        {
+         "name": "indicator",
+         "text": "§aIndicator §7(green/red)§r"
+        },
+        {
+         "name": "auto",
+         "text": "§bAuto §7(climb/dive)§r"
+        }
+       ],
+       "default": "white"
+      },
+      {
+       "type": "label",
+       "text": "§l§bIcon§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bElytra Icon §r| §7Show the elytra icon next to the angle.§r",
+       "name": "pepe:ep_icon",
+       "default": true
+      },
+      {
+       "type": "dropdown",
+       "text": "§bIcon Side §r| §7Which side of the angle the icon sits on.§r",
+       "name": "pepe:elytra_pitch_icon_pos",
+       "options": [
+        {
+         "name": "right",
+         "text": "§fRight§r"
+        },
+        {
+         "name": "left",
+         "text": "§fLeft§r"
+        }
+       ],
+       "default": "right"
+      },
+      {
+       "type": "toggle",
+       "text": "§aElytra §cIndicator §r| §7Tints the icon while an Elytra is worn: one color while gliding, another when not. Also shows the icon on its own when the angle is hidden.§r",
+       "name": "pepe:elytra_indicator",
+       "default": true
+      },
+      {
+       "type": "dropdown",
+       "text": "§aIndicator Gliding Color §r| §7Icon color while you are gliding.§r",
+       "name": "pepe:elytra_ind_glide",
+       "options": [
+        {
+         "name": "white",
+         "text": "§fWhite§r"
+        },
+        {
+         "name": "green",
+         "text": "§aGreen§r"
+        },
+        {
+         "name": "red",
+         "text": "§cRed§r"
+        },
+        {
+         "name": "yellow",
+         "text": "§eYellow§r"
+        },
+        {
+         "name": "aqua",
+         "text": "§bAqua§r"
+        },
+        {
+         "name": "gold",
+         "text": "§6Gold§r"
+        },
+        {
+         "name": "orange",
+         "text": "§6Orange§r"
+        },
+        {
+         "name": "purple",
+         "text": "§dPurple§r"
+        },
+        {
+         "name": "blue",
+         "text": "§9Blue§r"
+        },
+        {
+         "name": "gray",
+         "text": "§7Gray§r"
+        },
+        {
+         "name": "black",
+         "text": "§8Black§r"
+        }
+       ],
+       "default": "green"
+      },
+      {
+       "type": "dropdown",
+       "text": "§cIndicator Idle Color §r| §7Icon color while you are not gliding.§r",
+       "name": "pepe:elytra_ind_idle",
+       "options": [
+        {
+         "name": "white",
+         "text": "§fWhite§r"
+        },
+        {
+         "name": "green",
+         "text": "§aGreen§r"
+        },
+        {
+         "name": "red",
+         "text": "§cRed§r"
+        },
+        {
+         "name": "yellow",
+         "text": "§eYellow§r"
+        },
+        {
+         "name": "aqua",
+         "text": "§bAqua§r"
+        },
+        {
+         "name": "gold",
+         "text": "§6Gold§r"
+        },
+        {
+         "name": "orange",
+         "text": "§6Orange§r"
+        },
+        {
+         "name": "purple",
+         "text": "§dPurple§r"
+        },
+        {
+         "name": "blue",
+         "text": "§9Blue§r"
+        },
+        {
+         "name": "gray",
+         "text": "§7Gray§r"
+        },
+        {
+         "name": "black",
+         "text": "§8Black§r"
+        }
+       ],
+       "default": "red"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pepes-totem-pop-counter",
+   "name": "Pepe's Totem Pop Counter",
+   "kind": "settings",
+   "latest": "1.0.0",
+   "versions": [
+    {
+     "version": "1.0.0",
+     "fileName": "Pepe's_Totem_Pop_Counter_v1.0.0.mcpack",
+     "manifest": "manifest.json",
+     "downloadUrl": "https://media.githubusercontent.com/media/PepeOnGithub/Pepes-Portfolio/main/packs/packs/pepes-totem-pop-counter/Pepe%27s_Totem_Pop_Counter_v1.0.0.mcpack",
+     "settings": [
+      {
+       "type": "label",
+       "text": "§l§bTotem Pop Counter §r§7(needs Pepe's Assets Pack 1.9.0+)§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bTotem Pop Counter §r| §7Shows a totem icon and pop count above every player's nametag.§r",
+       "name": "pepe:tp_enabled",
+       "default": true
+      },
+      {
+       "type": "toggle",
+       "text": "§bShow On Me §r| §7Also show your own counter (visible in third person).§r",
+       "name": "pepe:tp_self",
+       "default": false
+      },
+      {
+       "type": "toggle",
+       "text": "§bHide At Zero §r| §7Only show a player's counter after their first pop.§r",
+       "name": "pepe:tp_hide_zero",
+       "default": false
+      },
+      {
+       "type": "toggle",
+       "text": "§bFlash On Pop §r| §7Turns the count red for a moment right after a pop.§r",
+       "name": "pepe:tp_flash",
+       "default": true
+      },
+      {
+       "type": "slider",
+       "text": "§fMax Distance §r| §78=Very close  64=Default  128=Far §r(blocks)",
+       "name": "pepe:tp_dist",
+       "min": 8,
+       "max": 128,
+       "step": 4,
+       "default": 64
+      },
+      {
+       "type": "label",
+       "text": "§l§bPosition§r"
+      },
+      {
+       "type": "slider",
+       "text": "§fCounter X §r| §7-=Left  0=Default  +=Right §r(moves the counter sideways)",
+       "name": "pepe:tp_x",
+       "min": -50,
+       "max": 50,
+       "step": 1,
+       "default": 0
+      },
+      {
+       "type": "slider",
+       "text": "§fCounter Height §r| §7-=Lower  5=Default  +=Higher §r(moves the counter up or down)",
+       "name": "pepe:tp_height",
+       "min": -30,
+       "max": 30,
+       "step": 1,
+       "default": 5
+      },
+      {
+       "type": "slider",
+       "text": "§fCounter Size §r| §750=Default  100=Double  250=Huge §r(percent)",
+       "name": "pepe:tp_size",
+       "min": 25,
+       "max": 250,
+       "step": 5,
+       "default": 50
+      },
+      {
+       "type": "label",
+       "text": "§l§bText§r"
+      },
+      {
+       "type": "dropdown",
+       "text": "§bCount Color §r| §7White keeps the original look. Auto goes from green to red as a player pops more totems.§r",
+       "name": "pepe:tp_color",
+       "options": [
+        {
+         "name": "white",
+         "text": "§fWhite§r"
+        },
+        {
+         "name": "green",
+         "text": "§aGreen§r"
+        },
+        {
+         "name": "red",
+         "text": "§cRed§r"
+        },
+        {
+         "name": "yellow",
+         "text": "§eYellow§r"
+        },
+        {
+         "name": "aqua",
+         "text": "§bAqua§r"
+        },
+        {
+         "name": "gold",
+         "text": "§6Gold§r"
+        },
+        {
+         "name": "orange",
+         "text": "§6Orange§r"
+        },
+        {
+         "name": "purple",
+         "text": "§dPurple§r"
+        },
+        {
+         "name": "blue",
+         "text": "§9Blue§r"
+        },
+        {
+         "name": "gray",
+         "text": "§7Gray§r"
+        },
+        {
+         "name": "black",
+         "text": "§8Black§r"
+        },
+        {
+         "name": "auto",
+         "text": "§bAuto §7(green to red as pops rise)§r"
+        }
+       ],
+       "default": "white"
+      },
+      {
+       "type": "toggle",
+       "text": "§bBrackets §r| §7Show [ ] around the count only.§r",
+       "name": "pepe:tp_brackets",
+       "default": false
+      },
+      {
+       "type": "label",
+       "text": "§l§bIcon§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bTotem Icon §r| §7Show the totem icon next to the count.§r",
+       "name": "pepe:tp_icon",
+       "default": true
+      },
+      {
+       "type": "dropdown",
+       "text": "§bIcon Side §r| §7Put the totem icon on the left or the right of the count.§r",
+       "name": "pepe:tp_iconside",
+       "options": [
+        {
+         "name": "left",
+         "text": "§fLeft§r"
+        },
+        {
+         "name": "right",
+         "text": "§fRight§r"
+        }
+       ],
+       "default": "left"
+      },
+      {
+       "type": "label",
+       "text": "§l§bBackground§r"
+      },
+      {
+       "type": "toggle",
+       "text": "§bBackground §r| §7Draws a see-through box behind the counter so it is easier to read.§r",
+       "name": "pepe:tp_bg",
+       "default": true
+      },
+      {
+       "type": "dropdown",
+       "text": "§bBackground Color §r| §7Color of the box behind the counter.§r",
+       "name": "pepe:tp_bgcolor",
+       "options": [
+        {
+         "name": "black",
+         "text": "§8Black§r"
+        },
+        {
+         "name": "gray",
+         "text": "§7Gray§r"
+        },
+        {
+         "name": "red",
+         "text": "§cRed§r"
+        },
+        {
+         "name": "blue",
+         "text": "§9Blue§r"
+        },
+        {
+         "name": "green",
+         "text": "§aGreen§r"
+        },
+        {
+         "name": "purple",
+         "text": "§dPurple§r"
+        }
+       ],
+       "default": "black"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

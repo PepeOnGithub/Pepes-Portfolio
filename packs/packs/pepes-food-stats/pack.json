@@ -1,0 +1,17 @@
+{
+    "name": "Pepe's Food Stats+",
+    "description": "Shows what a food restores: hunger and saturation shanks under the item name and in item tooltips, plus effect icons for suspicious stews and potions.",
+    "author": "Pepe",
+    "version": "1.0.0",
+    "tags": [
+        "packs",
+        "HUD",
+        "UI"
+    ],
+    "category": "packs",
+    "license": "MIT",
+    "requiresAssets": true,
+    "changelogs": {
+        "1.0.0": "Initial release. Requires Pepe's Assets Pack 1.10.0 or later."
+    }
+}

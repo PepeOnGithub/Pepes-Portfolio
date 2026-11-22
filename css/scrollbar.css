@@ -1,0 +1,73 @@
+/* ===== Site-wide custom scrollbar =====
+   Chromium (Chrome, Edge, Opera) and Safari: ::-webkit-scrollbar styling.
+   Firefox: scrollbar-width / scrollbar-color. Chromium 121+ ignores the
+   ::-webkit-scrollbar rules whenever scrollbar-color is set, so the two
+   sets are kept apart with @supports selector(). */
+
+:root {
+  --sb-size: 12px;
+  --sb-track: var(--color-bg-secondary, #282b30);
+  --sb-thumb: linear-gradient(180deg, var(--color-accent, #86d177) 0%, var(--color-accent-dark, #348b25) 100%);
+  --sb-thumb-hover: var(--color-accent-light, #a3de97);
+  --sb-thumb-active: var(--color-accent, #86d177);
+}
+
+body.light-mode {
+  --sb-track: #e4e6e8;
+}
+
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar {
+    width: var(--sb-size);
+    height: var(--sb-size);
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--sb-track);
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb);
+    border-radius: 999px;
+    /* Inset border reads as a slim pill inside the track. */
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    min-height: 40px;
+    min-width: 40px;
+    transition: background-color 0.18s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--sb-thumb-hover);
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--sb-thumb-active);
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-accent, #86d177) var(--sb-track);
+  }
+}
+
+/* Keep the page from jumping sideways when a scroll area appears or
+   disappears, e.g. when a filter panel or dropdown opens. */
+html {
+  scrollbar-gutter: stable;
+}

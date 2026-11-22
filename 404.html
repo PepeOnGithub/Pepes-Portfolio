@@ -2,7 +2,33 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Pepe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Page not found - head back to Pepe's portfolio, Pack Library or Customizer">
+<meta name="theme-color" content="#489c49">
+<title>Page Not Found | Pepe</title>
+<link rel="icon" type="image/png" href="assets/pepe-profile.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="css/scrollbar.css">
+<style>
+  .notfound {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 32px 16px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .notfound-code { font-family: 'MinecraftSplash', var(--font-display); font-size: 5rem; font-weight: 400; line-height: 1; color: var(--color-text-primary); margin: 0; }
+  .notfound-title { font-family: var(--font-display); font-size: 2rem; font-weight: 500; letter-spacing: -0.02em; margin: 0; }
+  .notfound-text { margin: 0; color: var(--color-text-secondary); max-width: 420px; }
+  .notfound-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 8px; }
+  .notfound-links a { text-decoration: none; }
+</style>
 <script>
   // Single Page Apps for GitHub Pages: redirects a 404 (any real path like
   // /library or /pack/foo, which don't exist as files) back to index.html
@@ -19,5 +45,16 @@
   );
 </script>
 </head>
-<body></body>
+<body>
+<main class="notfound">
+  <p class="notfound-code">404</p>
+  <h1 class="notfound-title">Lost in the void</h1>
+  <p class="notfound-text">This page doesn't exist or has moved. Pick one of the links below to keep going.</p>
+  <nav class="notfound-links" aria-label="Fallback navigation">
+    <a class="cta-btn cta-secondary" href="/"><i class="fas fa-home"></i> Home</a>
+    <a class="cta-btn cta-secondary" href="/library"><i class="fas fa-box-open"></i> Library</a>
+    <a class="cta-btn cta-secondary" href="/customizer"><i class="fas fa-sliders"></i> Customizer</a>
+  </nav>
+</main>
+</body>
 </html>

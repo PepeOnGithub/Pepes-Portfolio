@@ -4,6 +4,7 @@
     "license": "MIT",
     "description": "Adds a customizable halo effect that hovers above your character, a simple cosmetic touch for players who want to stand out in a crowd.",
     "category": "cosmetics",
-    "thumbnail": "\u2728",
-    "version": "1.0.0"
+    "thumbnail": "✨",
+    "version": "1.0.0",
+    "showcaseUrl": "https://youtu.be/F472mjXUgV4"
 }

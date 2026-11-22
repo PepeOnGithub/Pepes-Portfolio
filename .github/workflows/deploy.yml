@@ -58,6 +58,15 @@ jobs:
           SITE_BASE_URL: ${{ secrets.SITE_BASE_URL }}
         run: python generator.py
 
+      - name: Update Assets Pack customizer data
+        # customizer.html builds its settings form from the latest Assets Pack's variables
+        run: python tools/update_customizer.py
+
+      - name: Build JSON UI bundles for the customizer preview
+        # customizer-ui.js runs the packs' own UI files; vanilla.json is committed (built once from Mojang's
+        # bedrock-samples with --samples), the pack bundles and textures are rebuilt from packs/ every deploy
+        run: python tools/build_ui_bundle.py
+
       - name: Prepare site output
         run: |
           mkdir -p _site
@@ -68,7 +77,7 @@ jobs:
           rsync -a --exclude='.git' --exclude='.github' --exclude='.claude' \
             --exclude='_site' --exclude='node_modules' --exclude='*.py' \
             --exclude='lootlabs_cache.json' --exclude='.gitignore' \
-            --exclude='.gitattributes' --exclude='README.md' \
+            --exclude='.gitattributes' --exclude='README.md' --exclude='worker' \
             --exclude='*.mcpack' --exclude='*.mcaddon' ./ _site/
 
       - name: Upload Pages artifact

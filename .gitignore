@@ -11,3 +11,10 @@ lootlabs_cache.json
 .claude/
 *.py
 !generator.py
+!tools/**/*.py
+!tools/update_item_ids.py
+
+# Community uploads worker
+worker/node_modules/
+worker/.wrangler/
+worker/.dev.vars

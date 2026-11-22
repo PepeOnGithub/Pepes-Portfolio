@@ -1,0 +1,16 @@
+{
+  "name": "pepes-portfolio-uploads",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --port 8787",
+    "db:local": "wrangler d1 execute pepes-portfolio-uploads --local --file=schema.sql",
+    "db:remote": "wrangler d1 execute pepes-portfolio-uploads --remote --file=schema.sql",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.166.0"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2"
+  }
+}

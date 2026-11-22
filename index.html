@@ -8,11 +8,50 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Pepe's portfolio - about, projects, socials, and a personal pack library">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Pepe">
   <meta property="og:title" content="Pepe" />
+  <meta property="og:site_name" content="Pepe's Portfolio" />
   <meta property="og:description" content="MCBE Texture Pack Creator, Glacier Client Owner, Website & Discord Bot Maker" />
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#489c49">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Pepe">
+  <meta name="twitter:description" content="MCBE Texture Pack Creator, Glacier Client Owner, Website & Discord Bot Maker">
+  <meta name="theme-color" content="#1a1c1f">
   <title>Pepe's Portfolio</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Pepe",
+    "description": "MCBE texture pack creator and Glacier Client owner, building websites, Discord bots, and tooling.",
+    "sameAs": [
+      "https://youtube.com/@PepeOnYoutube",
+      "https://x.com/_pepeyt_",
+      "https://www.instagram.com/pepeonmeta/",
+      "https://www.tiktok.com/@pepeontt",
+      "https://github.com/PepeOnGithub",
+      "https://mcpedl.com/user/pepeonmcpedl/",
+      "https://www.curseforge.com/members/pepeoncf/projects"
+    ]
+  }
+  </script>
+  <style>
+    .skip-link {
+      position: absolute;
+      left: 12px;
+      top: -48px;
+      z-index: 10000;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background: #489c49;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 12px; }
+  </style>
   <script>
     // Companion to 404.html's SPA-for-GitHub-Pages redirect: restores the
     // real path (e.g. /library, /pack/foo) that got encoded into the query
@@ -28,10 +67,20 @@
   </script>
   <link rel="icon" type="image/png" href="assets/pepe-profile.png">
   <link rel="apple-touch-icon" href="assets/pepe-profile.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="customizer.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/library.css">
+  <link rel="stylesheet" href="css/settings.css">
+  <link rel="stylesheet" href="css/upload.css">
+  <link rel="stylesheet" href="css/scrollbar.css">
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
   <!-- Top Navigation -->
   <header class="topnav">
     <div class="topnav-left">
@@ -40,11 +89,13 @@
         <span class="brand-name">Pepe</span>
       </a>
       <nav class="topnav-links">
-        <a href="#" class="topnav-link active" data-page="home">Home</a>
-        <a href="#" class="topnav-link" data-page="projects">Projects</a>
-        <a href="#" class="topnav-link" data-page="socials">Socials</a>
-        <a href="#" class="topnav-link" data-page="library">Library</a>
-        <a href="#" class="topnav-link" data-page="stats">Stats</a>
+        <a href="#" class="topnav-link active" data-page="home"><i class="fas fa-house" aria-hidden="true"></i><span>Home</span></a>
+        <a href="#" class="topnav-link" data-page="projects"><i class="fas fa-diagram-project" aria-hidden="true"></i><span>Projects</span></a>
+        <a href="#" class="topnav-link" data-page="socials"><i class="fas fa-share-nodes" aria-hidden="true"></i><span>Socials</span></a>
+        <a href="#" class="topnav-link" data-page="library"><i class="fas fa-box-open" aria-hidden="true"></i><span>Library</span></a>
+        <a href="#" class="topnav-link" data-page="customizer"><i class="fas fa-sliders" aria-hidden="true"></i><span>Customizer</span></a>
+        <a href="#" class="topnav-link" data-page="stats"><i class="fas fa-chart-simple" aria-hidden="true"></i><span>Stats</span></a>
+        <a href="#" class="topnav-link" data-page="upload"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i><span>Upload</span></a>
       </nav>
     </div>
     <div class="topnav-right">
@@ -72,6 +123,7 @@
           <div class="auth-account-list" id="auth-account-list"></div>
           <button type="button" class="auth-menu-item" id="auth-add-account-btn"><i class="fas fa-plus"></i> Add account</button>
           <div class="auth-menu-sep"></div>
+          <button type="button" class="auth-menu-item" id="auth-upload-btn" data-page="upload"><i class="fas fa-cloud-arrow-up"></i> Upload a pack</button>
           <button type="button" class="auth-menu-item" id="auth-view-profile-btn"><i class="fas fa-id-card"></i> View profile</button>
           <button type="button" class="auth-menu-item" id="auth-edit-profile-btn"><i class="fas fa-user-pen"></i> Edit profile</button>
           <button type="button" class="auth-menu-item" id="auth-logout-btn"><i class="fas fa-right-from-bracket"></i> Sign out</button>
@@ -94,6 +146,7 @@
     <a href="#" class="mobile-nav-link" data-page="projects"><i class="fas fa-diagram-project"></i> Projects</a>
     <a href="#" class="mobile-nav-link" data-page="socials"><i class="fas fa-share-nodes"></i> Socials</a>
     <a href="#" class="mobile-nav-link" data-page="library"><i class="fas fa-box-open"></i> Library</a>
+    <a href="#" class="mobile-nav-link" data-page="customizer"><i class="fas fa-sliders"></i> Customizer</a>
     <a href="#" class="mobile-nav-link" data-page="stats"><i class="fas fa-chart-simple"></i> Stats</a>
     <a href="#" class="mobile-nav-link" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
   </nav>
@@ -102,219 +155,191 @@
 
   <!-- ============ HOME PAGE ============ -->
   <section class="page active" id="page-home">
-    <div class="home-hero">
-      <div class="home-hero-inner">
-        <div class="home-hero-media">
-          <img src="assets/pepe-profile.png" alt="Pepe" class="home-avatar">
-        </div>
-        <div class="home-hero-content">
-          <p class="home-eyebrow">Hi, I'm</p>
-          <h1 class="home-name">Pepe</h1>
-          <p class="home-lede">
-            MCBE texture pack creator and Glacier Client owner, building websites, Discord bots,
-            and tooling under <strong>Glacier Productions</strong> &amp; <strong>Pepe's Projects HUB</strong>.
-          </p>
-          <div class="home-cta-row">
-            <button type="button" class="cta-btn cta-primary" data-page="projects">
-              View Projects <i class="fas fa-arrow-right"></i>
-            </button>
-            <button type="button" class="cta-btn cta-secondary" data-page="library">
-              Browse Library <i class="fas fa-box-open"></i>
-            </button>
+    <div class="hm-hero">
+      <img class="hm-scene" src="assets/default-banner.png" alt="" fetchpriority="high" decoding="async">
+      <div class="hm-scrim"></div>
+      <div class="hm-hero-in">
+        <div class="hm-copy">
+          <h1>Minecraft Bedrock packs, clients and the tools around them</h1>
+          <p class="hm-lead">I'm Pepe. I run Glacier Productions, build the Glacier Client and make HUD packs, websites and Discord bots. Every release lives in the library.</p>
+          <p class="hm-lead hm-lead-short">I'm Pepe. I run Glacier Productions and build the Glacier Client, HUD packs and apps.</p>
+          <div class="hm-cta">
+            <button type="button" class="hm-btn" data-page="library">Browse the library <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="hm-btn hm-btn-sec" data-page="projects">See projects</button>
           </div>
         </div>
+      </div>
+      <div class="hm-panel" aria-label="Latest releases">
+        <div class="hm-panel-h"><span class="hm-live"><span class="hm-dot" aria-hidden="true"></span>Latest releases</span></div>
+        <div id="home-latest"><p class="hm-empty">Loading releases...</p></div>
       </div>
     </div>
 
-    <div class="section-divider-full"></div>
-
-    <div class="home-skills">
-      <h3 class="skills-title">Languages</h3>
-      <div class="lang-table-wrap">
-        <table class="lang-table">
-          <thead>
-            <tr>
-              <th>Language</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><i class="fab fa-html5"></i> HTML</td>
-              <td><span class="status-pill known">Known</span></td>
-            </tr>
-            <tr>
-              <td><i class="fab fa-css3-alt"></i> CSS3</td>
-              <td><span class="status-pill known">Known</span></td>
-            </tr>
-            <tr>
-              <td><i class="fab fa-js"></i> JavaScript</td>
-              <td><span class="status-pill known">Known</span></td>
-            </tr>
-            <tr>
-              <td><i class="fab fa-python"></i> Python</td>
-              <td><span class="status-pill known">Known</span></td>
-            </tr>
-            <tr>
-              <td><i class="fas fa-hashtag"></i> C#</td>
-              <td><span class="status-pill known">Known</span></td>
-            </tr>
-            <tr>
-              <td><i class="fab fa-java"></i> Java</td>
-              <td><span class="status-pill known">Known</span></td>
-            </tr>
-            <tr>
-              <td><i class="fas fa-gear"></i> Rust</td>
-              <td><span class="status-pill learning">Learning</span></td>
-            </tr>
-            <tr>
-              <td><i class="fas fa-plus"></i> C++</td>
-              <td><span class="status-pill learning">Learning</span></td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="hm-wrap">
+      <div class="hm-stats">
+        <div class="hm-stat"><b id="home-stat-releases">--</b><span>Releases in the library</span></div>
+        <div class="hm-stat"><b id="home-stat-hud">--</b><span>HUD packs</span></div>
+        <div class="hm-stat"><b id="home-stat-clients">--</b><span>Client generations</span></div>
+        <div class="hm-stat"><b id="home-stat-apps">--</b><span>Apps</span></div>
       </div>
 
-      <div class="home-extras">
-        <div class="extra-card">
-          <div class="extra-icon"><i class="fas fa-cake-candles"></i></div>
-          <div class="extra-body">
-            <p class="extra-label">Countdown to my birthday</p>
-            <p class="extra-value" id="birthday-countdown">--</p>
+      <section class="hm-sec hm-latest-m" aria-labelledby="hm-latest-h">
+        <div class="hm-sh"><h2 id="hm-latest-h">Latest releases</h2><button type="button" class="hm-link" data-page="library">See all</button></div>
+        <div class="hm-row" id="home-latest-row"></div>
+      </section>
+
+      <section class="hm-sec" aria-labelledby="hm-lib-h">
+        <div class="hm-sh"><h2 id="hm-lib-h">From the library</h2><p>HUD packs, clients, addons and apps, with every past version kept</p></div>
+        <div class="hm-strip" id="home-featured"></div>
+      </section>
+
+      <section class="hm-sec" aria-labelledby="hm-proj-h">
+        <div class="hm-sh"><h2 id="hm-proj-h">Projects</h2><p>Every brand, client and studio I'm part of</p></div>
+        <div class="hm-pj">
+          <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="hm-pc hm-pc-big">
+            <img src="assets/glacier-icon.png" alt="" loading="lazy" decoding="async">
+            <div><h3>Glacier Productions</h3><p>Owner, managing Glacier Client and this hub</p><span class="hm-more">Visit Discord <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></span></div>
+          </a>
+          <div class="hm-pc">
+            <img src="assets/nyxora-icon.png" alt="" loading="lazy" decoding="async">
+            <div><h3>Nyxora Productions</h3><p>Studio behind original MCBE experiences and tools</p></div>
           </div>
+          <a href="https://discord.gg/Va4fG6J2Rw" target="_blank" rel="noopener" class="hm-pc">
+            <img src="assets/azelux-icon.png" alt="" loading="lazy" decoding="async">
+            <div><h3>Azelux Client</h3><p>Former developer of Azelux Client for MCBE</p><span class="hm-more">Visit Discord <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></span></div>
+          </a>
         </div>
-      </div>
+      </section>
+
+      <section class="hm-sec home-skills" aria-labelledby="hm-lang-h">
+        <div class="hm-sh"><h2 id="hm-lang-h">Languages</h2></div>
+        <div class="hm-two">
+          <div class="hm-two-side">
+            <p>The languages I write and where I am with each</p>
+            <div class="hm-birthday">
+              <i class="fas fa-cake-candles" aria-hidden="true"></i>
+              <div><span class="hm-birthday-label">Countdown to my birthday</span><b id="birthday-countdown">--</b></div>
+            </div>
+          </div>
+          <ul class="hm-langs" aria-label="Programming languages and my current status with each">
+            <li><span><i class="fab fa-html5" aria-hidden="true"></i>HTML</span><span class="hm-st">Known</span></li>
+            <li><span><i class="fab fa-css3-alt" aria-hidden="true"></i>CSS</span><span class="hm-st">Known</span></li>
+            <li><span><i class="fab fa-js" aria-hidden="true"></i>JavaScript</span><span class="hm-st">Known</span></li>
+            <li><span><i class="fab fa-python" aria-hidden="true"></i>Python</span><span class="hm-st">Known</span></li>
+            <li><span><i class="fas fa-hashtag" aria-hidden="true"></i>C#</span><span class="hm-st">Known</span></li>
+            <li><span><i class="fab fa-java" aria-hidden="true"></i>Java</span><span class="hm-st">Known</span></li>
+            <li><span><i class="fas fa-gear" aria-hidden="true"></i>Rust</span><span class="hm-st hm-st-learning"><span class="hm-dot" aria-hidden="true"></span>Learning</span></li>
+            <li><span><i class="fas fa-plus" aria-hidden="true"></i>C++</span><span class="hm-st hm-st-learning"><span class="hm-dot" aria-hidden="true"></span>Learning</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="hm-sec" aria-labelledby="hm-soc-h">
+        <div class="hm-sh"><h2 id="hm-soc-h">Socials</h2><p>Where I post videos, code and releases</p></div>
+        <div class="hm-socs">
+          <a class="hm-soc" href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener"><i class="fab fa-youtube hm-soc-ic" aria-hidden="true"></i><b>YouTube</b><span>@PepeOnYoutube</span><i class="fas fa-arrow-up-right-from-square hm-soc-out" aria-hidden="true"></i></a>
+          <a class="hm-soc" href="https://x.com/_pepeyt_" target="_blank" rel="noopener"><i class="fab fa-x-twitter hm-soc-ic" aria-hidden="true"></i><b>X</b><span>@_pepeyt_</span><i class="fas fa-arrow-up-right-from-square hm-soc-out" aria-hidden="true"></i></a>
+          <a class="hm-soc" href="https://www.instagram.com/pepeonmeta/" target="_blank" rel="noopener"><i class="fab fa-instagram hm-soc-ic" aria-hidden="true"></i><b>Instagram</b><span>@pepeonmeta</span><i class="fas fa-arrow-up-right-from-square hm-soc-out" aria-hidden="true"></i></a>
+          <a class="hm-soc" href="https://www.tiktok.com/@pepeontt" target="_blank" rel="noopener"><i class="fab fa-tiktok hm-soc-ic" aria-hidden="true"></i><b>TikTok</b><span>@pepeontt</span><i class="fas fa-arrow-up-right-from-square hm-soc-out" aria-hidden="true"></i></a>
+          <a class="hm-soc" href="https://github.com/PepeOnGithub" target="_blank" rel="noopener"><i class="fab fa-github hm-soc-ic" aria-hidden="true"></i><b>GitHub</b><span>@PepeOnGithub</span><i class="fas fa-arrow-up-right-from-square hm-soc-out" aria-hidden="true"></i></a>
+          <a class="hm-soc" href="https://mcpedl.com/user/pepeonmcpedl/" target="_blank" rel="noopener"><img class="hm-soc-ic" src="assets/mcpedl.png" alt="" loading="lazy" decoding="async"><b>MCPEDL</b><span>pepeonmcpedl</span><i class="fas fa-arrow-up-right-from-square hm-soc-out" aria-hidden="true"></i></a>
+          <a class="hm-soc" href="https://www.curseforge.com/members/pepeoncf/projects" target="_blank" rel="noopener"><img class="hm-soc-ic" src="assets/curseforge.png" alt="" loading="lazy" decoding="async"><b>CurseForge</b><span>pepeoncf</span><i class="fas fa-arrow-up-right-from-square hm-soc-out" aria-hidden="true"></i></a>
+          <a class="hm-soc" href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener"><i class="fab fa-paypal hm-soc-ic" aria-hidden="true"></i><b>PayPal</b><span>Support my work</span><i class="fas fa-arrow-up-right-from-square hm-soc-out" aria-hidden="true"></i></a>
+        </div>
+      </section>
+
+      <section class="hm-band" aria-labelledby="hm-dc-h">
+        <div>
+          <h2 id="hm-dc-h">Join the community</h2>
+          <p>Sneak peeks, votes on what gets built next and a ping the moment a pack drops.</p>
+          <a class="hm-btn" href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener">Join the Discord</a>
+        </div>
+        <ul>
+          <li><i class="fas fa-circle-check" aria-hidden="true"></i>See releases before anyone else</li>
+          <li><i class="fas fa-circle-check" aria-hidden="true"></i>Vote on what gets built next</li>
+          <li><i class="fas fa-circle-check" aria-hidden="true"></i>Get pinged on new versions</li>
+          <li><i class="fas fa-circle-check" aria-hidden="true"></i>Talk to me and other players</li>
+        </ul>
+      </section>
     </div>
   </section>
 
   <!-- ============ PROJECTS PAGE ============ -->
   <section class="page" id="page-projects">
-    <div class="page-inner">
-      <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
-      <h2 class="page-title">Projects</h2>
-      <p class="page-subtitle">Every brand, client, and studio I'm part of, in one place.</p>
+    <div class="pg-main">
+      <div class="pg-head"><h1>Projects</h1><p>Every brand, client, and studio I'm part of, in one place.</p></div>
 
-      <div class="project-grid">
-        <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="project-card">
-          <img src="assets/glacier-icon.png" alt="" class="project-icon" loading="lazy" decoding="async">
-          <h4>Glacier Productions</h4>
-          <p>Owner &middot; managing Glacier Client and this HUB ecosystem.</p>
-          <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
+      <div class="hm-pj">
+        <a href="https://discord.glacierclient.xyz/" target="_blank" rel="noopener" class="hm-pc hm-pc-big">
+          <img src="assets/glacier-icon.png" alt="" loading="lazy" decoding="async">
+          <div><h3>Glacier Productions</h3><p>Owner, managing Glacier Client and this hub ecosystem.</p><span class="hm-more">Visit Discord <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></span></div>
         </a>
-        <div class="project-card featured">
-          <img src="assets/nyxora-icon.png" alt="" class="project-icon" loading="lazy" decoding="async">
-          <h4>Nyxora Produtions</h4>
-          <p>Studio behind original MCBE experiences and tools.</p>
+        <div class="hm-pc">
+          <img src="assets/nyxora-icon.png" alt="" loading="lazy" decoding="async">
+          <div><h3>Nyxora Productions</h3><p>Studio behind original MCBE experiences and tools.</p></div>
         </div>
-        <a href="https://discord.gg/Va4fG6J2Rw" target="_blank" rel="noopener" class="project-card">
-          <img src="assets/azelux-icon.png" alt="" class="project-icon" loading="lazy" decoding="async">
-          <h4>Azelux Client</h4>
-          <p>Ex Developer of Azelux Client MCBE.</p>
-          <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
+        <a href="https://discord.gg/Va4fG6J2Rw" target="_blank" rel="noopener" class="hm-pc">
+          <img src="assets/azelux-icon.png" alt="" loading="lazy" decoding="async">
+          <div><h3>Azelux Client</h3><p>Ex developer of Azelux Client MCBE.</p><span class="hm-more">Visit Discord <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></span></div>
         </a>
-        <!-- 
-        <a href="https://discord.gg/flarial" target="_blank" rel="noopener" class="project-card">
-          <img src="assets/flarial.svg" alt="" class="project-icon" loading="lazy" decoding="async">
-          <h4>Flarial Proxy</h4>
-          <p>Developer on the Flarial Proxy team.</p>
-          <span class="project-link">Visit Discord <i class="fas fa-arrow-right"></i></span>
-        </a>
-        -->
       </div>
+
+      <section class="pr-tlsec" id="projects-timeline" aria-labelledby="pr-tl-h">
+        <h2 id="pr-tl-h">The client timeline</h2>
+        <p>Every client I've built or rebranded along the way, from the very first to what's live today.</p>
+        <div class="pr-tl" id="projects-timeline-track" role="group" aria-label="Client generations"></div>
+        <div class="pr-det" id="projects-timeline-detail" aria-live="polite"></div>
+      </section>
     </div>
   </section>
 
   <!-- ============ SOCIALS PAGE ============ -->
   <section class="page" id="page-socials">
-    <div class="socials-hero">
-      <div class="socials-hero-inner">
-        <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
-        <h2 class="page-title">Let's Connect</h2>
-        <p class="page-subtitle">Find and follow me across every platform I'm active on.</p>
-        <div class="socials-stats">
-          <div class="socials-stat"><span class="socials-stat-value" id="socials-age">--</span><span class="socials-stat-label">Age</span></div>
-          <div class="socials-stat"><span class="socials-stat-value">9</span><span class="socials-stat-label">Platforms</span></div>
-          <div class="socials-stat"><span class="socials-stat-value" id="socials-packs">--</span><span class="socials-stat-label">Packs Shipped</span></div>
-          <div class="socials-stat"><span class="socials-stat-value">2020</span><span class="socials-stat-label">Creating Since</span></div>
-        </div>
-      </div>
-    </div>
+    <div class="pg-main">
+      <div class="pg-head"><h1>Let's connect</h1><p>Find and follow me across every platform I'm active on.</p></div>
 
-    <div class="page-inner">
-      <div class="discord-promo">
-        <div class="discord-promo-text">
-          <div>
-            <h3 class="discord-widget-title"><i class="fab fa-discord"></i> Join the Community</h3>
-            <p class="discord-promo-desc">
-              Get early sneak peeks, vote on what I build next, grab pack releases the moment they drop,
-              and hang out with everyone else who's into this stuff.
-            </p>
-          </div>
-          <ul class="discord-feature-list">
-            <li><i class="fas fa-eye"></i> Sneak peeks before anyone else</li>
-            <li><i class="fas fa-square-poll-vertical"></i> Vote on what gets built next</li>
-            <li><i class="fas fa-bell"></i> Instant pings on new releases</li>
-            <li><i class="fas fa-comments"></i> Chat directly with me and the community</li>
+      <div class="hm-stats hm-stats-3 socials-stats">
+        <div class="hm-stat"><b>9</b><span>Platforms</span></div>
+        <div class="hm-stat"><b id="socials-packs">--</b><span>Releases in the library</span></div>
+        <div class="hm-stat"><b>2020</b><span>Creating since</span></div>
+      </div>
+      <span id="socials-age" hidden>--</span>
+
+      <section class="hm-band so-band" aria-labelledby="so-dc-h">
+        <div>
+          <h2 id="so-dc-h"><i class="fab fa-discord" aria-hidden="true"></i>Join the community</h2>
+          <p class="so-d">Get early sneak peeks, vote on what I build next, grab pack releases the moment they drop, and hang out with everyone else who's into this stuff.</p>
+          <ul>
+            <li><i class="fas fa-circle-check" aria-hidden="true"></i>Sneak peeks before anyone else</li>
+            <li><i class="fas fa-circle-check" aria-hidden="true"></i>Vote on what gets built next</li>
+            <li><i class="fas fa-circle-check" aria-hidden="true"></i>Instant pings on new releases</li>
+            <li><i class="fas fa-circle-check" aria-hidden="true"></i>Chat directly with me and the community</li>
           </ul>
-          <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" class="discord-join-btn">
-            <i class="fab fa-discord"></i> Join Discord
-          </a>
+          <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" class="hm-btn"><i class="fab fa-discord" aria-hidden="true"></i> Join Discord</a>
         </div>
         <iframe
           src="https://discord.com/widget?id=1229043844113502299&theme=dark"
           width="350"
-          height="500"
-          class="discord-widget-embed"
+          height="420"
+          class="so-widget"
           allowtransparency="true"
           frameborder="0"
+          title="Pepe's Discord server widget"
+          loading="lazy"
           sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
         ></iframe>
-      </div>
+      </section>
 
-      <div class="content-divider"></div>
-
-      <h3 class="other-socials-title">Find Me Elsewhere Too</h3>
-      <div class="social-grid">
-        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" class="social-card social-card--youtube">
-          <span class="social-icon"><i class="fab fa-youtube"></i></span>
-          <div class="social-card-body"><h4>YouTube</h4><p>@PepeOnYoutube</p></div>
-          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="https://x.com/_pepeyt_" target="_blank" rel="noopener" class="social-card social-card--x">
-          <span class="social-icon"><i class="fab fa-x-twitter"></i></span>
-          <div class="social-card-body"><h4>X</h4><p>@_pepeyt_</p></div>
-          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="https://www.instagram.com/pepeonmeta/" target="_blank" rel="noopener" class="social-card social-card--instagram">
-          <span class="social-icon"><i class="fab fa-instagram"></i></span>
-          <div class="social-card-body"><h4>Instagram</h4><p>@pepeonmeta</p></div>
-          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="https://www.tiktok.com/@pepeontt" target="_blank" rel="noopener" class="social-card social-card--tiktok">
-          <span class="social-icon"><i class="fab fa-tiktok"></i></span>
-          <div class="social-card-body"><h4>TikTok</h4><p>@pepeontt</p></div>
-          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" class="social-card social-card--github">
-          <span class="social-icon"><i class="fab fa-github"></i></span>
-          <div class="social-card-body"><h4>GitHub</h4><p>@PepeOnGithub</p></div>
-          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" class="social-card social-card--paypal">
-          <span class="social-icon"><i class="fab fa-paypal"></i></span>
-          <div class="social-card-body"><h4>PayPal</h4><p>Support my work</p></div>
-          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="https://mcpedl.com/user/pepeonmcpedl/" target="_blank" rel="noopener" class="social-card social-card--mcpedl">
-          <img src="assets/mcpedl.png" class="social-icon" loading="lazy" decoding="async">
-          <div class="social-card-body"><h4>MCPEDL</h4><p>Browse my packs</p></div>
-          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </a>
-        <a href="https://www.curseforge.com/members/pepeoncf/projects" target="_blank" rel="noopener" class="social-card social-card--curseforge">
-          <img src="assets/curseforge.png" class="social-icon" loading="lazy" decoding="async">
-          <div class="social-card-body"><h4>CurseForge</h4><p>Projects &amp; downloads</p></div>
-          <span class="social-card-arrow"><i class="fas fa-arrow-right"></i></span>
-        </a>
+      <div class="so-sh"><h2>Find me elsewhere too</h2></div>
+      <div class="so-grid">
+        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" class="so-card"><span class="so-tile"><i class="fab fa-youtube" aria-hidden="true"></i></span><span><b>YouTube</b><span class="so-h">@PepeOnYoutube</span></span><i class="fas fa-arrow-up-right-from-square so-out" aria-hidden="true"></i></a>
+        <a href="https://x.com/_pepeyt_" target="_blank" rel="noopener" class="so-card"><span class="so-tile"><i class="fab fa-x-twitter" aria-hidden="true"></i></span><span><b>X</b><span class="so-h">@_pepeyt_</span></span><i class="fas fa-arrow-up-right-from-square so-out" aria-hidden="true"></i></a>
+        <a href="https://www.instagram.com/pepeonmeta/" target="_blank" rel="noopener" class="so-card"><span class="so-tile"><i class="fab fa-instagram" aria-hidden="true"></i></span><span><b>Instagram</b><span class="so-h">@pepeonmeta</span></span><i class="fas fa-arrow-up-right-from-square so-out" aria-hidden="true"></i></a>
+        <a href="https://www.tiktok.com/@pepeontt" target="_blank" rel="noopener" class="so-card"><span class="so-tile"><i class="fab fa-tiktok" aria-hidden="true"></i></span><span><b>TikTok</b><span class="so-h">@pepeontt</span></span><i class="fas fa-arrow-up-right-from-square so-out" aria-hidden="true"></i></a>
+        <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" class="so-card"><span class="so-tile"><i class="fab fa-github" aria-hidden="true"></i></span><span><b>GitHub</b><span class="so-h">@PepeOnGithub</span></span><i class="fas fa-arrow-up-right-from-square so-out" aria-hidden="true"></i></a>
+        <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" class="so-card so-pay"><span class="so-tile"><i class="fab fa-paypal" aria-hidden="true"></i></span><span><b>PayPal</b><span class="so-h">Support my work</span></span><i class="fas fa-arrow-up-right-from-square so-out" aria-hidden="true"></i></a>
+        <a href="https://mcpedl.com/user/pepeonmcpedl/" target="_blank" rel="noopener" class="so-card"><span class="so-tile"><img src="assets/mcpedl.png" alt="" loading="lazy" decoding="async"></span><span><b>MCPEDL</b><span class="so-h">Browse my packs</span></span><i class="fas fa-arrow-up-right-from-square so-out" aria-hidden="true"></i></a>
+        <a href="https://www.curseforge.com/members/pepeoncf/projects" target="_blank" rel="noopener" class="so-card"><span class="so-tile"><img src="assets/curseforge.png" alt="" loading="lazy" decoding="async"></span><span><b>CurseForge</b><span class="so-h">Projects &amp; downloads</span></span><i class="fas fa-arrow-up-right-from-square so-out" aria-hidden="true"></i></a>
       </div>
     </div>
   </section>
@@ -324,12 +349,17 @@
     <div class="page-hero">
       <div class="page-hero-inner">
         <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
-        <h2 class="page-title">Pack Library</h2>
-        <p class="page-subtitle">Browse and download packs, clients, addons, and more.</p>
+        <div class="page-head-row">
+          <div>
+            <h2 class="page-title">Library</h2>
+            <p class="page-subtitle">Every pack, client, addon and app I've released, plus packs from the community, with past versions kept.</p>
+          </div>
+          <a href="#" class="up-lib-cta" data-page="upload"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i><span>Upload a pack</span></a>
+        </div>
       </div>
     </div>
 
-    <!-- Search Bar -->
+    <!-- Sticky toolbar: search, sort, view toggle, filters -->
     <div class="search-bar-wrap">
       <div class="search-wrapper">
         <i class="fas fa-search search-icon"></i>
@@ -346,118 +376,96 @@
         </button>
         <ul class="search-suggestions hidden" id="search-suggestions" role="listbox"></ul>
       </div>
+      <div class="sort-wrap">
+        <label id="sort-label">Sort</label>
+        <div class="custom-dropdown" id="sort-dropdown">
+          <button type="button" class="custom-dropdown-trigger" id="sort-trigger" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="sort-label">
+            <span id="sort-trigger-label">Relevance</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <ul class="custom-dropdown-menu" id="sort-menu" role="listbox" tabindex="-1">
+            <li role="option" data-value="relevance" class="selected">Relevance</li>
+            <li role="option" data-value="name">Name (A-Z)</li>
+            <li role="option" data-value="name-desc">Name (Z-A)</li>
+            <li role="option" data-value="recent">Recently Added</li>
+            <li role="option" data-value="oldest">Oldest First</li>
+            <li role="option" data-value="popular">Most Downloads</li>
+            <li role="option" data-value="least-popular">Least Downloads</li>
+          </ul>
+        </div>
+      </div>
+      <div class="view-toggle" id="view-toggle" role="group" aria-label="Toggle view layout">
+        <button type="button" class="view-toggle-btn active" id="view-grid-btn" data-view="grid" aria-label="Grid view" aria-pressed="true">
+          <i class="fas fa-th-large"></i>
+        </button>
+        <button type="button" class="view-toggle-btn" id="view-list-btn" data-view="list" aria-label="List view" aria-pressed="false">
+          <i class="fas fa-list"></i>
+        </button>
+      </div>
+      <div class="lib-filters" id="lib-filters">
+        <button type="button" class="lib-filters-btn" id="lib-filters-btn" aria-expanded="false" aria-controls="lib-filters-pop">
+          <i class="fas fa-filter"></i><span>Filters</span>
+        </button>
+        <div class="lib-filters-pop hidden" id="lib-filters-pop" role="dialog" aria-label="Filters">
+          <h3 class="lib-filters-title">Filters</h3>
+          <button type="button" class="category-row lib-fav-row" data-category="favorites" role="switch" aria-checked="false">
+            <span><i class="fas fa-heart"></i> Favorites only</span>
+            <span class="count" id="count-favorites">0</span>
+          </button>
+          <div class="lib-filters-group">
+            <h4 class="sidebar-subtitle">Tags <span class="filter-dropdown-current" id="library-tags-current">Any</span></h4>
+            <div class="tag-chip-list" id="tag-chip-list"></div>
+          </div>
+          <button type="button" class="btn-secondary-small" id="lib-filters-reset">Reset filters</button>
+        </div>
+      </div>
     </div>
 
     <!-- Browse View -->
     <div class="layout-container" id="browse-view">
-      <!-- Sidebar -->
-      <aside class="sidebar">
-        <div class="sidebar-section">
-          <h3 class="sidebar-title"><i class="fas fa-sliders-h"></i> Filters</h3>
-        </div>
-
-        <div class="sidebar-section">
-          <details class="filter-dropdown" id="library-category-dropdown" open>
-            <summary class="filter-dropdown-summary">
-              <span class="sidebar-subtitle">Categories</span>
-              <span class="filter-dropdown-current" id="library-category-current">All</span>
-              <i class="fas fa-chevron-down filter-dropdown-chevron"></i>
-            </summary>
-            <div class="category-list">
-              <button class="category-row active" data-category="">
-                <span><i class="fas fa-border-all"></i> All</span>
-                <span class="count" id="count-all">0</span>
-              </button>
-              <button class="category-row" data-category="packs">
-                <span><i class="fas fa-box-open"></i> Packs</span>
-                <span class="count" id="count-packs">0</span>
-              </button>
-              <button class="category-row" data-category="cosmetics">
-                <span><i class="fas fa-star"></i> Cosmetics</span>
-                <span class="count" id="count-cosmetics">0</span>
-              </button>
-              <button class="category-row" data-category="utility">
-                <span><i class="fas fa-wrench"></i> Utility</span>
-                <span class="count" id="count-utility">0</span>
-              </button>
-              <button class="category-row" data-category="clients">
-                <span><i class="fas fa-desktop"></i> Clients</span>
-                <span class="count" id="count-clients">0</span>
-              </button>
-              <button class="category-row" data-category="addons">
-                <span><i class="fas fa-puzzle-piece"></i> Addons</span>
-                <span class="count" id="count-addons">0</span>
-              </button>
-              <button class="category-row" data-category="apps">
-                <span><i class="fas fa-mobile-screen"></i> Apps</span>
-                <span class="count" id="count-apps">0</span>
-              </button>
-              <button class="category-row" data-category="website">
-                <span><i class="fas fa-globe"></i> Website</span>
-                <span class="count" id="count-website">0</span>
-              </button>
-              <button class="category-row" data-category="other">
-                <span><i class="fas fa-ellipsis"></i> Other</span>
-                <span class="count" id="count-other">0</span>
-              </button>
-            </div>
-          </details>
-        </div>
-
-        <div class="sidebar-section">
-          <details class="filter-dropdown" id="library-tags-dropdown" open>
-            <summary class="filter-dropdown-summary">
-              <span class="sidebar-subtitle">Tags</span>
-              <span class="filter-dropdown-current" id="library-tags-current">Any</span>
-              <i class="fas fa-chevron-down filter-dropdown-chevron"></i>
-            </summary>
-            <div class="tag-chip-list" id="tag-chip-list"></div>
-          </details>
-        </div>
-
-        <div class="sidebar-section">
-          <h4 class="sidebar-subtitle">Library</h4>
-          <div class="category-list">
-            <button class="category-row" data-category="favorites">
-              <span><i class="fas fa-heart"></i> Favorites</span>
-              <span class="count" id="count-favorites">0</span>
-            </button>
-          </div>
-        </div>
-      </aside>
+      <div class="lib-chips" role="group" aria-label="Category">
+          <button type="button" class="category-row active" data-category="">
+            <span><i class="fas fa-border-all"></i> All</span>
+            <span class="count" id="count-all">0</span>
+          </button>
+          <button type="button" class="category-row" data-category="packs">
+            <span><i class="fas fa-box-open"></i> Packs</span>
+            <span class="count" id="count-packs">0</span>
+          </button>
+          <button type="button" class="category-row" data-category="cosmetics">
+            <span><i class="fas fa-star"></i> Cosmetics</span>
+            <span class="count" id="count-cosmetics">0</span>
+          </button>
+          <button type="button" class="category-row" data-category="utility">
+            <span><i class="fas fa-wrench"></i> Utility</span>
+            <span class="count" id="count-utility">0</span>
+          </button>
+          <button type="button" class="category-row" data-category="clients">
+            <span><i class="fas fa-desktop"></i> Clients</span>
+            <span class="count" id="count-clients">0</span>
+          </button>
+          <button type="button" class="category-row" data-category="addons">
+            <span><i class="fas fa-puzzle-piece"></i> Addons</span>
+            <span class="count" id="count-addons">0</span>
+          </button>
+          <button type="button" class="category-row" data-category="apps">
+            <span><i class="fas fa-mobile-screen"></i> Apps</span>
+            <span class="count" id="count-apps">0</span>
+          </button>
+          <button type="button" class="category-row" data-category="website">
+            <span><i class="fas fa-globe"></i> Website</span>
+            <span class="count" id="count-website">0</span>
+          </button>
+          <button type="button" class="category-row" data-category="other">
+            <span><i class="fas fa-ellipsis"></i> Other</span>
+            <span class="count" id="count-other">0</span>
+          </button>
+      </div>
 
       <!-- Main Content -->
       <main class="main-content">
         <div class="results-header">
           <p id="results-text">0 projects</p>
-          <div class="results-header-right">
-            <div class="view-toggle" id="view-toggle" role="group" aria-label="Toggle view layout">
-              <button type="button" class="view-toggle-btn active" id="view-grid-btn" data-view="grid" aria-label="Grid view" aria-pressed="true">
-                <i class="fas fa-th-large"></i>
-              </button>
-              <button type="button" class="view-toggle-btn" id="view-list-btn" data-view="list" aria-label="List view" aria-pressed="false">
-                <i class="fas fa-list"></i>
-              </button>
-            </div>
-            <div class="sort-wrap">
-              <label id="sort-label">Sort</label>
-              <div class="custom-dropdown" id="sort-dropdown">
-                <button type="button" class="custom-dropdown-trigger" id="sort-trigger" aria-haspopup="listbox" aria-expanded="false">
-                  <span id="sort-trigger-label">Relevance</span>
-                  <i class="fas fa-chevron-down"></i>
-                </button>
-                <ul class="custom-dropdown-menu" id="sort-menu" role="listbox" tabindex="-1">
-                  <li role="option" data-value="relevance" class="selected">Relevance</li>
-                  <li role="option" data-value="name">Name (A-Z)</li>
-                  <li role="option" data-value="name-desc">Name (Z-A)</li>
-                  <li role="option" data-value="recent">Recently Added</li>
-                  <li role="option" data-value="oldest">Oldest First</li>
-                  <li role="option" data-value="popular">Most Downloads</li>
-                  <li role="option" data-value="least-popular">Least Downloads</li>
-                </ul>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div class="clients-timeline hidden" id="clients-timeline">
@@ -491,13 +499,14 @@
     <!-- Detail View -->
     <div class="detail-view hidden" id="detail-view">
       <div class="detail-container">
-        <button class="back-link" id="back-to-browse"><i class="fas fa-arrow-left"></i> Back to browse</button>
+        <nav class="detail-crumb" aria-label="Breadcrumb">
+          <button class="back-link" id="back-to-browse"><i class="fas fa-arrow-left"></i> Back to library</button>
+        </nav>
 
-        <div class="detail-grid">
-          <div class="detail-main">
-            <div class="detail-banner" id="detail-banner"></div>
-            <div class="detail-thumb" id="detail-thumb"></div>
-
+        <div class="detail-banner" id="detail-banner"></div>
+        <div class="detail-titlebar">
+          <div class="detail-thumb" id="detail-thumb"></div>
+          <div class="detail-title-text">
             <div class="detail-heading">
               <h1 id="detail-name"></h1>
               <span class="pack-badge" id="detail-badge"></span>
@@ -515,7 +524,15 @@
               </span>
             </div>
             <p class="detail-author" id="detail-author"></p>
-            <p class="detail-description" id="detail-description"></p>
+          </div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-main">
+            <section class="detail-about">
+              <h3>About</h3>
+              <p class="detail-description" id="detail-description"></p>
+            </section>
 
             <div class="detail-discontinued-notice hidden" id="detail-discontinued-notice">
               <i class="fas fa-ban"></i> This pack is discontinued and no longer maintained, but its old files are still available below for archival purposes.
@@ -533,29 +550,23 @@
               <div class="detail-showcase-embed" id="detail-showcase-embed"></div>
             </div>
 
-            <div class="versions-block">
-              <h3>Versions</h3>
-              <p class="versions-sub" id="versions-sub"></p>
-              <div class="versions-list" id="versions-list"></div>
-            </div>
-
             <div class="versions-block hidden" id="extensions-block">
               <h3>Extensions</h3>
               <p class="versions-sub">Optional add-ons for this pack to customize your experience.</p>
               <div class="extensions-list" id="extensions-list"></div>
             </div>
 
-            <div class="versions-block hidden" id="related-packs-block">
-              <h3>More Like This</h3>
-              <p class="versions-sub">Other packs from the same category.</p>
-              <div class="related-packs-grid" id="related-packs-grid"></div>
+            <div class="versions-block">
+              <h3>Version history</h3>
+              <p class="versions-sub" id="versions-sub"></p>
+              <div class="versions-list" id="versions-list"></div>
             </div>
 
             <div class="versions-block" id="comments-block">
               <h3>Comments</h3>
               <p class="versions-sub" id="comments-signed-out-note">Sign in to leave a comment.</p>
               <div class="comment-form hidden" id="comment-form">
-                <textarea id="comment-input" placeholder="Share your thoughts..." maxlength="1000" rows="2"></textarea>
+                <textarea id="comment-input" placeholder="Share your thoughts..." aria-label="Your comment" maxlength="1000" rows="2"></textarea>
                 <button type="button" class="btn-secondary-small" id="comment-submit-btn">Post</button>
               </div>
               <div class="comments-list" id="comments-list"></div>
@@ -564,6 +575,7 @@
 
           <aside class="detail-side">
             <div class="version-select-wrap hidden" id="version-select-wrap">
+              <span class="detail-side-label" id="version-select-caption">Version</span>
               <div class="custom-dropdown" id="version-select-dropdown">
                 <button type="button" class="custom-dropdown-trigger" id="version-select-trigger" aria-haspopup="listbox" aria-expanded="false">
                   <span id="version-select-label">Latest</span>
@@ -572,8 +584,16 @@
                 <ul class="custom-dropdown-menu" id="version-select-menu" role="listbox" tabindex="-1"></ul>
               </div>
             </div>
-            <a href="#" class="btn-download btn-download-full" id="detail-download">
-              <i class="fas fa-download"></i> Download
+            <div class="detail-download-row">
+              <a href="#" class="btn-download btn-download-full" id="detail-download">
+                <i class="fas fa-download"></i> Download
+              </a>
+              <button type="button" class="detail-fav-btn" id="detail-fav-btn" aria-pressed="false" aria-label="Add to favorites" title="Add to favorites">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+            <a href="#" class="btn-secondary-small detail-customizer-btn hidden" id="detail-customizer-btn" data-page="customizer">
+              <i class="fas fa-sliders-h"></i> Open in Customizer
             </a>
             <div class="detail-action-row">
               <button type="button" class="btn-secondary-small" id="detail-share-btn" title="Copy a direct link to this pack">
@@ -594,11 +614,11 @@
               <div class="rating-input">
                 <span class="rating-input-label">Your rating:</span>
                 <span class="rating-stars-input" id="rating-stars-input">
-                  <button type="button" class="rating-star" data-value="1"><i class="fas fa-star"></i></button>
-                  <button type="button" class="rating-star" data-value="2"><i class="fas fa-star"></i></button>
-                  <button type="button" class="rating-star" data-value="3"><i class="fas fa-star"></i></button>
-                  <button type="button" class="rating-star" data-value="4"><i class="fas fa-star"></i></button>
-                  <button type="button" class="rating-star" data-value="5"><i class="fas fa-star"></i></button>
+                  <button type="button" class="rating-star" data-value="1" aria-label="Rate 1 star"><i class="fas fa-star" aria-hidden="true"></i></button>
+                  <button type="button" class="rating-star" data-value="2" aria-label="Rate 2 stars"><i class="fas fa-star" aria-hidden="true"></i></button>
+                  <button type="button" class="rating-star" data-value="3" aria-label="Rate 3 stars"><i class="fas fa-star" aria-hidden="true"></i></button>
+                  <button type="button" class="rating-star" data-value="4" aria-label="Rate 4 stars"><i class="fas fa-star" aria-hidden="true"></i></button>
+                  <button type="button" class="rating-star" data-value="5" aria-label="Rate 5 stars"><i class="fas fa-star" aria-hidden="true"></i></button>
                 </span>
               </div>
             </div>
@@ -609,6 +629,7 @@
                 <p class="side-label">Author</p>
                 <p class="side-value" id="detail-author-name"></p>
                 <p class="side-desc">Who built and maintains this pack</p>
+                <div class="up-detail-socials hidden" id="detail-creator-links"></div>
               </div>
             </div>
             <div class="side-stat hidden" id="detail-mcversion-stat">
@@ -641,6 +662,11 @@
             </div>
           </aside>
         </div>
+
+        <div class="versions-block detail-related hidden" id="related-packs-block">
+          <h3>More like this</h3>
+          <div class="related-packs-grid" id="related-packs-grid"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -651,12 +677,13 @@
       <button class="assets-modal-close" id="email-auth-modal-close" aria-label="Close">
         <i class="fas fa-xmark"></i>
       </button>
+      <div class="assets-modal-icon"><i class="fas fa-envelope"></i></div>
       <h3 id="email-auth-modal-title">Login</h3>
-      <p class="versions-sub" id="email-auth-modal-sub">Sign in with your email and password.</p>
+      <p class="auth-modal-sub" id="email-auth-modal-sub">Sign in with your email and password.</p>
       <form class="auth-password-form" id="auth-password-form">
-        <input type="text" id="auth-username-input" placeholder="Username" autocomplete="username" class="hidden">
-        <input type="email" id="auth-email-input" placeholder="Email" autocomplete="email" required>
-        <input type="password" id="auth-password-input" placeholder="Password" autocomplete="current-password" required>
+        <input type="text" id="auth-username-input" placeholder="Username" aria-label="Username" autocomplete="username" class="hidden">
+        <input type="email" id="auth-email-input" placeholder="Email" aria-label="Email" autocomplete="email" required>
+        <input type="password" id="auth-password-input" placeholder="Password" aria-label="Password" autocomplete="current-password" required>
         <p class="auth-form-error hidden" id="auth-form-error"></p>
         <button type="submit" class="btn-download btn-download-full" id="auth-form-submit-btn">Login</button>
       </form>
@@ -670,24 +697,24 @@
       <button class="assets-modal-close" id="profile-modal-close" aria-label="Close">
         <i class="fas fa-xmark"></i>
       </button>
-      <h3 id="profile-modal-title">Edit Profile</h3>
+      <h3 id="profile-modal-title">Edit profile</h3>
       <div class="profile-form">
         <label class="profile-field">
           <span>Username</span>
           <input type="text" id="profile-username" placeholder="letters, numbers, underscore" autocomplete="off" maxlength="32">
         </label>
         <label class="profile-field">
-          <span>Display Name</span>
+          <span>Display name</span>
           <input type="text" id="profile-display-name" placeholder="Shown instead of your account name" autocomplete="off" maxlength="60">
         </label>
         <label class="profile-field">
-          <span>Profile Picture</span>
+          <span>Profile picture</span>
           <div class="profile-avatar-upload">
             <img src="assets/pepe-profile.png" alt="" class="profile-avatar-preview" id="profile-avatar-preview" loading="lazy" decoding="async">
             <div class="profile-avatar-upload-actions">
-              <button type="button" class="btn-secondary-small" id="profile-avatar-pick-btn">Choose Image</button>
+              <button type="button" class="btn-secondary-small" id="profile-avatar-pick-btn">Choose image</button>
               <button type="button" class="btn-secondary-small profile-avatar-remove-btn hidden" id="profile-avatar-remove-btn">Remove</button>
-              <input type="file" id="profile-avatar-file" accept="image/png,image/jpeg,image/webp" class="hidden">
+              <input type="file" id="profile-avatar-file" accept="image/png,image/jpeg,image/webp" class="hidden" aria-label="Choose profile picture">
             </div>
           </div>
           <p class="profile-avatar-error hidden" id="profile-avatar-error"></p>
@@ -697,9 +724,9 @@
           <div class="profile-banner-upload">
             <img src="" alt="" class="profile-banner-preview hidden" id="profile-banner-preview" loading="lazy" decoding="async">
             <div class="profile-banner-upload-actions">
-              <button type="button" class="btn-secondary-small" id="profile-banner-pick-btn">Choose Image</button>
+              <button type="button" class="btn-secondary-small" id="profile-banner-pick-btn">Choose image</button>
               <button type="button" class="btn-secondary-small profile-banner-remove-btn hidden" id="profile-banner-remove-btn">Remove</button>
-              <input type="file" id="profile-banner-file" accept="image/png,image/jpeg,image/webp" class="hidden">
+              <input type="file" id="profile-banner-file" accept="image/png,image/jpeg,image/webp" class="hidden" aria-label="Choose banner image">
             </div>
           </div>
           <p class="profile-banner-error hidden" id="profile-banner-error"></p>
@@ -707,7 +734,7 @@
         <p class="profile-form-error hidden" id="profile-form-error"></p>
       </div>
       <div class="assets-modal-actions">
-        <button type="button" class="btn-download" id="profile-save-btn">Save Profile</button>
+        <button type="button" class="btn-download" id="profile-save-btn">Save profile</button>
       </div>
     </div>
   </div>
@@ -719,7 +746,7 @@
         <i class="fas fa-xmark"></i>
       </button>
       <div class="assets-modal-icon"><i class="fas fa-triangle-exclamation"></i></div>
-      <h3 id="assets-modal-title">Pepe's Assets Pack Required</h3>
+      <h3 id="assets-modal-title">Pepe's Assets Pack required</h3>
       <p id="assets-modal-text">
         <strong id="assets-modal-pack-name"></strong> needs the latest <strong>Pepe's Assets Pack<span id="assets-modal-version"></span></strong> to work.
         Download and import it, then enable it together with this pack. An older Assets Pack will not work.
@@ -729,7 +756,7 @@
       </div>
       <div class="assets-modal-actions">
         <a href="#" class="btn-download" id="assets-modal-get">
-          <i class="fas fa-download"></i> Download Assets Pack &amp; Continue
+          <i class="fas fa-download"></i> Download Assets Pack &amp; continue
         </a>
       </div>
       <label class="assets-modal-remember">
@@ -749,7 +776,7 @@
         <i class="fas fa-xmark"></i>
       </button>
       <div class="assets-modal-icon"><i class="fas fa-link"></i></div>
-      <h3 id="provider-modal-title">Choose Download Method</h3>
+      <h3 id="provider-modal-title">Choose download method</h3>
       <p id="provider-modal-text">Pick which link shortener to use for this download.</p>
       <div class="provider-modal-dropdown-wrap">
         <div class="provider-tabs" id="provider-choice-tabs" role="tablist">
@@ -765,13 +792,87 @@
     </div>
   </div>
 
+  <!-- ============ CUSTOMIZER PAGE ============ -->
+  <section class="page" id="page-customizer">
+    <div class="cz-app" id="cz-main">
+      <div class="cz-stage-host" id="cz-preview" aria-label="HUD preview: click a module to edit it"></div>
+
+      <header class="cz-bar" id="cz-toolbar" hidden>
+        <a href="/" class="cz-chip cz-exit" data-page="home" aria-label="Exit the customizer"><i class="fas fa-arrow-left" aria-hidden="true"></i><span>Exit</span></a>
+        <div class="cz-picker" id="cz-picker"></div>
+        <div class="cz-bar-preview" id="cz-bar-preview"></div>
+        <div class="cz-bar-gap"></div>
+        <button type="button" class="cz-chip" id="cz-modules-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="cz-palette">
+          <i class="fas fa-layer-group" aria-hidden="true"></i><span>Modules</span><kbd>/</kbd></button>
+        <button type="button" class="cz-chip" id="cz-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="cz-more">
+          <i class="fas fa-ellipsis" aria-hidden="true"></i><span class="cz-sr">More</span></button>
+        <button type="button" class="cz-chip cz-primary" id="cz-download"><i class="fas fa-download" aria-hidden="true"></i>
+          <span>Download</span><span class="cz-changed" id="cz-changed" aria-live="polite">No changes</span></button>
+      </header>
+
+      <div class="cz-menu" id="cz-more" role="menu" hidden>
+          <div class="cz-pack cz-menu-pack" id="cz-pack" role="status" aria-live="polite">Loading the latest Assets Pack...</div>
+        <button type="button" role="menuitem" id="cz-reset"><i class="fas fa-rotate-left" aria-hidden="true"></i> Reset all</button>
+        <label role="menuitem" for="cz-import" tabindex="0"><i class="fas fa-file-import" aria-hidden="true"></i> Import .json or .mcpack
+          <input type="file" id="cz-import" accept=".json,.mcpack,.zip" hidden></label>
+        <button type="button" role="menuitem" id="cz-export"><i class="fas fa-file-export" aria-hidden="true"></i> Export JSON</button>
+        <button type="button" role="menuitem" id="cz-tooltip-btn"><i class="fas fa-message" aria-hidden="true"></i> Hover tooltip preview</button>
+        <p class="cz-menu-note">Your build keeps the original pack id, so it replaces the pack when imported. Keep it above every other Pepe pack. Settings are saved in this browser.</p>
+      </div>
+
+      <div class="cz-status">
+        <div class="cz-notice" id="cz-notice" hidden></div>
+        <div class="cz-tip" id="cz-tip" hidden>Click a module on the HUD to edit it. Drag across the world to turn.</div>
+      </div>
+
+      <div class="cz-rotate" id="cz-rotate" role="dialog" aria-labelledby="cz-rotate-title">
+        <svg class="cz-rotate-ico" viewBox="0 0 64 64" aria-hidden="true"><rect x="20" y="8" width="24" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10 40a22 22 0 0 0 16 16M54 24A22 22 0 0 0 38 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M38 3l1 6-6 1M26 61l-1-6 6-1" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2 id="cz-rotate-title">Turn your phone sideways</h2>
+        <p>The customizer works in landscape, like the game.</p>
+        <button type="button" class="cz-chip cz-primary" id="cz-rotate-btn" hidden>Go fullscreen in landscape</button>
+        <a href="/" class="cz-rotate-exit" data-page="home">Back to the site</a>
+      </div>
+      <div class="cz-tt-card" id="cz-tt-card" hidden><div class="cz-tt-head">Hover tooltip</div></div>
+
+      <section class="cz-pop" id="cz-pop" role="dialog" aria-modal="false" aria-labelledby="cz-pop-title" hidden>
+        <div class="cz-pop-head">
+          <div class="cz-pop-tx"><h2 id="cz-pop-title"></h2><p id="cz-pop-desc"></p></div>
+          <button type="button" class="cz-icon-btn cz-pop-reset" id="cz-pop-reset">Reset</button>
+          <button type="button" class="cz-icon-btn" id="cz-pop-close" aria-label="Close settings"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="cz-pop-body" id="cz-pop-body"></div>
+      </section>
+
+      <section class="cz-palette" id="cz-palette" role="dialog" aria-label="Modules" hidden>
+        <label class="cz-search"><i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="search" id="cz-search" placeholder="Find a module or setting" autocomplete="off" aria-label="Find a module or setting">
+        </label>
+        <span id="cz-only-wrap"></span>
+        <ul class="cz-mod-list" id="cz-mod-list"></ul>
+        <div class="cz-groups" id="cz-groups" hidden></div>
+        <details class="cz-advanced" id="cz-advanced" hidden>
+          <summary>Advanced (ids and internal values)</summary>
+          <p class="cz-hint">These are game ids and internal values other packs rely on. Change them only if you know why.</p>
+          <div class="cz-grid" id="cz-advanced-grid"></div>
+        </details>
+      </section>
+    </div>
+
+    <div class="cz-toast" id="cz-toast" role="status" aria-live="polite" hidden></div>
+  </section>
+
   <!-- ============ SETTINGS PAGE ============ -->
   <section class="page" id="page-settings">
     <div class="page-hero">
       <div class="page-hero-inner">
         <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
-        <h2 class="page-title">Settings</h2>
-        <p class="page-subtitle">Customize how the site looks and behaves.</p>
+        <div class="page-head-row">
+          <div>
+            <h2 class="page-title">Settings</h2>
+            <p class="page-subtitle">Customize how the site looks and behaves.</p>
+          </div>
+          <span class="page-meta">Saved in this browser</span>
+        </div>
       </div>
     </div>
 
@@ -779,11 +880,11 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar-section">
-          <h3 class="sidebar-title"><i class="fas fa-sliders-h"></i> Categories</h3>
-        </div>
-
-        <div class="sidebar-section">
-          <input type="search" id="settings-search-input" class="settings-search-input" placeholder="Search settings…" autocomplete="off">
+          <div class="settings-search">
+            <i class="fas fa-magnifying-glass settings-search-icon" aria-hidden="true"></i>
+            <input type="search" id="settings-search-input" class="settings-search-input" placeholder="Search settings" aria-label="Search settings" autocomplete="off">
+            <button type="button" class="settings-search-clear" id="settings-search-clear" aria-label="Clear search" hidden><i class="fas fa-xmark" aria-hidden="true"></i></button>
+          </div>
         </div>
 
         <div class="sidebar-section">
@@ -819,6 +920,7 @@
 
       <!-- Main Content -->
       <main class="main-content">
+        <p class="settings-empty" id="settings-empty" hidden>No settings match that search</p>
         <div class="settings-panel active" data-settings-panel="appearance">
           <div class="settings-panel-header">
             <span class="settings-panel-header-icon"><i class="fas fa-palette"></i></span>
@@ -826,12 +928,14 @@
               <h3 class="settings-panel-title">Appearance</h3>
               <p class="settings-panel-desc">Customize how the site looks and feels.</p>
             </div>
+            <button type="button" class="settings-reset-section" data-reset-section="appearance"><i class="fas fa-rotate-left" aria-hidden="true"></i> Reset section</button>
           </div>
+          <h4 class="settings-group-title">Display</h4>
           <div class="settings-list">
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-moon"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Dark Mode</p>
+                <p class="setting-name">Dark mode</p>
                 <p class="setting-desc">Use the dark palette across the site</p>
               </div>
               <span class="custom-checkbox">
@@ -839,11 +943,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-compress"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Compact View</p>
+                <p class="setting-name">Compact view</p>
                 <p class="setting-desc">Reduce spacing for denser layouts</p>
               </div>
               <span class="custom-checkbox">
@@ -851,41 +954,28 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
-            <label class="setting-row">
-              <span class="setting-row-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Reduce Motion</p>
-                <p class="setting-desc">Turn off animations and transitions</p>
-              </div>
-              <span class="custom-checkbox">
-                <input type="checkbox" id="reduce-motion-toggle" class="setting-input" autocomplete="off">
-                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-              </span>
-            </label>
-
             <label class="setting-row setting-row-slider">
               <span class="setting-row-icon"><i class="fas fa-image"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Hero Background Visibility</p>
+                <p class="setting-name">Hero background visibility</p>
                 <p class="setting-desc">How visible the home banner image is behind the intro text</p>
               </div>
               <input type="range" id="hero-visibility-slider" class="setting-slider" min="10" max="100" step="5" value="65">
+              <span class="setting-slider-value" aria-hidden="true"></span>
             </label>
-
             <label class="setting-row setting-row-slider">
               <span class="setting-row-icon"><i class="fas fa-text-height"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Font Size</p>
+                <p class="setting-name">Font size</p>
                 <p class="setting-desc">Scale text size across the site</p>
               </div>
               <input type="range" id="font-size-slider" class="setting-slider" min="90" max="130" step="5" value="100">
+              <span class="setting-slider-value" aria-hidden="true"></span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-hashtag"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Show Download Counts</p>
+                <p class="setting-name">Show download counts</p>
                 <p class="setting-desc">Display download numbers on pack cards and detail pages</p>
               </div>
               <span class="custom-checkbox">
@@ -893,11 +983,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-circle-half-stroke"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">High Contrast Mode</p>
+                <p class="setting-name">High contrast mode</p>
                 <p class="setting-desc">Boost borders and contrast for better readability</p>
               </div>
               <span class="custom-checkbox">
@@ -905,11 +994,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-square"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Sharp Corners</p>
+                <p class="setting-name">Sharp corners</p>
                 <p class="setting-desc">Use square corners instead of rounded ones</p>
               </div>
               <span class="custom-checkbox">
@@ -917,11 +1005,25 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
+          </div>
 
+          <h4 class="settings-group-title">Motion and effects</h4>
+          <div class="settings-list">
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Reduce motion</p>
+                <p class="setting-desc">Turn off animations and transitions</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="reduce-motion-toggle" class="setting-input" autocomplete="off">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-droplet-slash"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Reduce Transparency</p>
+                <p class="setting-name">Reduce transparency</p>
                 <p class="setting-desc">Turn off background blur effects</p>
               </div>
               <span class="custom-checkbox">
@@ -929,12 +1031,11 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-hand-pointer"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Disable Card Hover Effects</p>
-                <p class="setting-desc">Turn off the lift/scale animation when hovering pack cards</p>
+                <p class="setting-name">Disable card hover effects</p>
+                <p class="setting-desc">Turn off the lift and scale animation when hovering pack cards</p>
               </div>
               <span class="custom-checkbox">
                 <input type="checkbox" id="disable-card-hover-toggle" class="setting-input" autocomplete="off">
@@ -942,6 +1043,7 @@
               </span>
             </label>
           </div>
+
         </div>
 
         <div class="settings-panel" data-settings-panel="theme">
@@ -955,6 +1057,8 @@
           <div class="theme-studio">
             <p class="theme-studio-intro">Pick any accent color for the site: drag in the color field, dial in a hue, or type exact hex/RGB values. Changes apply instantly and everywhere the accent color is used (buttons, links, highlights).</p>
 
+            <div class="ts-cols">
+            <div class="ts-col">
             <div class="theme-studio-picker">
               <div class="theme-sv-square" id="theme-sv-square" style="--sv-hue: 122;">
                 <div class="theme-sv-handle" id="theme-sv-handle"></div>
@@ -997,6 +1101,8 @@
               </div>
             </div>
 
+            </div>
+            <div class="ts-col">
             <p class="theme-studio-label">Live preview</p>
             <div class="theme-preview-card" id="theme-preview-card">
               <div class="theme-preview-top">
@@ -1032,6 +1138,9 @@
                 </span>
                 <span>Gradient accent</span>
               </label>
+            </div>
+
+            </div>
             </div>
 
             <p class="theme-studio-label">Full looks</p>
@@ -1094,12 +1203,14 @@
               <h3 class="settings-panel-title">Browsing</h3>
               <p class="settings-panel-desc">Control how you browse and navigate the library.</p>
             </div>
+            <button type="button" class="settings-reset-section" data-reset-section="browsing"><i class="fas fa-rotate-left" aria-hidden="true"></i> Reset section</button>
           </div>
+          <h4 class="settings-group-title">Navigation</h4>
           <div class="settings-list">
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-up-right-from-square"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Open Links in New Tab</p>
+                <p class="setting-name">Open links in new tab</p>
                 <p class="setting-desc">External links open in a new browser tab</p>
               </div>
               <span class="custom-checkbox">
@@ -1107,23 +1218,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
-            <label class="setting-row">
-              <span class="setting-row-icon"><i class="fas fa-play"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Autoplay Showcase Videos</p>
-                <p class="setting-desc">Start playing a pack's showcase video automatically (muted)</p>
-              </div>
-              <span class="custom-checkbox">
-                <input type="checkbox" id="autoplay-showcase-toggle" class="setting-input" autocomplete="off">
-                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-              </span>
-            </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-map-pin"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Remember Last Visited Page</p>
+                <p class="setting-name">Remember last visited page</p>
                 <p class="setting-desc">Reopen the page you were last on instead of Home</p>
               </div>
               <span class="custom-checkbox">
@@ -1131,71 +1229,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
-            <label class="setting-row">
-              <span class="setting-row-icon"><i class="fas fa-clock-rotate-left"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Collapse Older Versions</p>
-                <p class="setting-desc">Keep older pack versions tucked away behind a "Show older versions" toggle</p>
-              </div>
-              <span class="custom-checkbox">
-                <input type="checkbox" id="collapse-old-versions-toggle" class="setting-input" autocomplete="off" checked>
-                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-              </span>
-            </label>
-
-            <label class="setting-row">
-              <span class="setting-row-icon"><i class="fas fa-thumbtack"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Sticky Search Bar</p>
-                <p class="setting-desc">Keep the Library search bar pinned to the top while scrolling</p>
-              </div>
-              <span class="custom-checkbox">
-                <input type="checkbox" id="sticky-search-toggle" class="setting-input" autocomplete="off">
-                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-              </span>
-            </label>
-
-            <label class="setting-row">
-              <span class="setting-row-icon"><i class="fas fa-icons"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Hide Category Icons</p>
-                <p class="setting-desc">Show a plain text list of categories without icons</p>
-              </div>
-              <span class="custom-checkbox">
-                <input type="checkbox" id="hide-category-icons-toggle" class="setting-input" autocomplete="off">
-                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-              </span>
-            </label>
-
-            <label class="setting-row">
-              <span class="setting-row-icon"><i class="fas fa-arrows-up-down"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Disable Smooth Scroll</p>
-                <p class="setting-desc">Jump instantly instead of animating page scrolling</p>
-              </div>
-              <span class="custom-checkbox">
-                <input type="checkbox" id="disable-smooth-scroll-toggle" class="setting-input" autocomplete="off">
-                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-              </span>
-            </label>
-
-            <label class="setting-row">
-              <span class="setting-row-icon"><i class="fas fa-shield-halved"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Confirm External Links</p>
-                <p class="setting-desc">Ask before opening links that leave the site</p>
-              </div>
-              <span class="custom-checkbox">
-                <input type="checkbox" id="confirm-external-links-toggle" class="setting-input" autocomplete="off">
-                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
-              </span>
-            </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-arrow-up"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Scroll to Top on Navigation</p>
+                <p class="setting-name">Scroll to top on navigation</p>
                 <p class="setting-desc">Jump to the top of the page whenever you switch pages</p>
               </div>
               <span class="custom-checkbox">
@@ -1203,7 +1240,78 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-arrows-up-down"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Disable smooth scroll</p>
+                <p class="setting-desc">Jump instantly instead of animating page scrolling</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="disable-smooth-scroll-toggle" class="setting-input" autocomplete="off">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-shield-halved"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Confirm external links</p>
+                <p class="setting-desc">Ask before opening links that leave the site</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="confirm-external-links-toggle" class="setting-input" autocomplete="off">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-thumbtack"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Sticky search bar</p>
+                <p class="setting-desc">Keep the Library search bar pinned to the top while scrolling</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="sticky-search-toggle" class="setting-input" autocomplete="off">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
           </div>
+
+          <h4 class="settings-group-title">Pack pages</h4>
+          <div class="settings-list">
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-play"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Autoplay showcase videos</p>
+                <p class="setting-desc">Start playing a pack's showcase video automatically (muted)</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="autoplay-showcase-toggle" class="setting-input" autocomplete="off">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-clock-rotate-left"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Collapse older versions</p>
+                <p class="setting-desc">Keep older pack versions tucked away behind a "Show older versions" toggle</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="collapse-old-versions-toggle" class="setting-input" autocomplete="off" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-icons"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Hide category icons</p>
+                <p class="setting-desc">Show a plain text list of categories without icons</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="hide-category-icons-toggle" class="setting-input" autocomplete="off">
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+          </div>
+
         </div>
 
         <div class="settings-panel" data-settings-panel="library">
@@ -1213,12 +1321,14 @@
               <h3 class="settings-panel-title">Library</h3>
               <p class="settings-panel-desc">Adjust how packs are displayed and organized.</p>
             </div>
+            <button type="button" class="settings-reset-section" data-reset-section="library"><i class="fas fa-rotate-left" aria-hidden="true"></i> Reset section</button>
           </div>
+          <h4 class="settings-group-title">Listing</h4>
           <div class="settings-list">
             <label class="setting-row setting-row-select">
               <span class="setting-row-icon"><i class="fas fa-arrow-down-a-z"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Default Sort Order</p>
+                <p class="setting-name">Default sort order</p>
                 <p class="setting-desc">How packs are sorted when you open the Library</p>
               </div>
               <div class="custom-dropdown" id="default-sort-dropdown">
@@ -1237,11 +1347,10 @@
                 </ul>
               </div>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-ban"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Show Discontinued Packs</p>
+                <p class="setting-name">Show discontinued packs</p>
                 <p class="setting-desc">Include discontinued packs in Library listings</p>
               </div>
               <span class="custom-checkbox">
@@ -1249,11 +1358,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-chevron-down"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Collapse Sections by Default</p>
+                <p class="setting-name">Collapse sections by default</p>
                 <p class="setting-desc">Start category and sub-category sections collapsed when you open the Library</p>
               </div>
               <span class="custom-checkbox">
@@ -1261,11 +1369,14 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
+          </div>
 
+          <h4 class="settings-group-title">Pack cards</h4>
+          <div class="settings-list">
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-tag"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Hide Category Badges</p>
+                <p class="setting-name">Hide category badges</p>
                 <p class="setting-desc">Hide the category badge shown on each pack card</p>
               </div>
               <span class="custom-checkbox">
@@ -1273,11 +1384,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-cube"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Hide Minecraft Version Tags</p>
+                <p class="setting-name">Hide Minecraft version tags</p>
                 <p class="setting-desc">Hide the Minecraft version badge shown on each pack card</p>
               </div>
               <span class="custom-checkbox">
@@ -1285,11 +1395,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-align-left"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Compact Descriptions</p>
+                <p class="setting-name">Compact descriptions</p>
                 <p class="setting-desc">Truncate pack descriptions on cards to two lines</p>
               </div>
               <span class="custom-checkbox">
@@ -1297,11 +1406,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-user-slash"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Hide Author Name</p>
+                <p class="setting-name">Hide author name</p>
                 <p class="setting-desc">Hide the "by author" line on pack cards</p>
               </div>
               <span class="custom-checkbox">
@@ -1310,6 +1418,7 @@
               </span>
             </label>
           </div>
+
         </div>
 
         <div class="settings-panel" data-settings-panel="downloads">
@@ -1319,12 +1428,14 @@
               <h3 class="settings-panel-title">Downloads</h3>
               <p class="settings-panel-desc">Manage download behavior and confirmations.</p>
             </div>
+            <button type="button" class="settings-reset-section" data-reset-section="downloads"><i class="fas fa-rotate-left" aria-hidden="true"></i> Reset section</button>
           </div>
+          <h4 class="settings-group-title">Link provider</h4>
           <div class="settings-list">
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-circle-question"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Ask Every Time</p>
+                <p class="setting-name">Ask every time</p>
                 <p class="setting-desc">Choose Linkvertise or LootLabs individually for each download</p>
               </div>
               <span class="custom-checkbox">
@@ -1332,12 +1443,11 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row setting-row-select">
               <span class="setting-row-icon"><i class="fas fa-link"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Download Link Provider</p>
-                <p class="setting-desc">Which link shortener wraps pack downloads when "Ask Every Time" is off</p>
+                <p class="setting-name">Download link provider</p>
+                <p class="setting-desc">Which link shortener wraps pack downloads when "Ask every time" is off</p>
               </div>
               <div class="custom-dropdown" id="monetization-provider-dropdown">
                 <button type="button" class="custom-dropdown-trigger" id="monetization-provider-trigger" aria-haspopup="listbox" aria-expanded="false">
@@ -1350,11 +1460,14 @@
                 </ul>
               </div>
             </label>
+          </div>
 
+          <h4 class="settings-group-title">Before you download</h4>
+          <div class="settings-list">
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-triangle-exclamation"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Assets Pack Warning</p>
+                <p class="setting-name">Assets Pack warning</p>
                 <p class="setting-desc">Show the "Requires Assets Pack" step before downloading a pack that needs it</p>
               </div>
               <span class="custom-checkbox">
@@ -1362,11 +1475,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-circle-question"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Confirm Before Download</p>
+                <p class="setting-name">Confirm before download</p>
                 <p class="setting-desc">Ask for confirmation before starting any pack download</p>
               </div>
               <span class="custom-checkbox">
@@ -1374,11 +1486,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-copy"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Copy Pack Name on Download</p>
+                <p class="setting-name">Copy pack name on download</p>
                 <p class="setting-desc">Copy the pack's name to your clipboard when you download it</p>
               </div>
               <span class="custom-checkbox">
@@ -1386,11 +1497,10 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-up-right-from-square"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Open Download Gate in New Tab</p>
+                <p class="setting-name">Open download gate in new tab</p>
                 <p class="setting-desc">Keep the current page open while your download prepares in a new tab</p>
               </div>
               <span class="custom-checkbox">
@@ -1398,11 +1508,14 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
+          </div>
 
+          <h4 class="settings-group-title">Counting</h4>
+          <div class="settings-list">
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-chart-line"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Track Download Counts</p>
+                <p class="setting-name">Track download counts</p>
                 <p class="setting-desc">Count your downloads toward each pack's public download total</p>
               </div>
               <span class="custom-checkbox">
@@ -1411,6 +1524,7 @@
               </span>
             </label>
           </div>
+
         </div>
 
         <div class="settings-panel" data-settings-panel="data">
@@ -1421,11 +1535,12 @@
               <p class="settings-panel-desc">Manage locally stored data and privacy.</p>
             </div>
           </div>
+          <h4 class="settings-group-title">Stored on this device</h4>
           <div class="settings-list">
             <label class="setting-row">
               <span class="setting-row-icon"><i class="fas fa-clock-rotate-left"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Track Recently Viewed Packs</p>
+                <p class="setting-name">Track recently viewed packs</p>
                 <p class="setting-desc">Remember the packs you've opened, stored only on this device</p>
               </div>
               <span class="custom-checkbox">
@@ -1433,62 +1548,65 @@
                 <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
               </span>
             </label>
-
             <button type="button" class="setting-row setting-row-action" id="clear-recently-viewed-btn">
               <span class="setting-row-icon"><i class="fas fa-eraser"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Clear Recently Viewed</p>
+                <p class="setting-name">Clear recently viewed</p>
                 <p class="setting-desc">Forget every pack you've viewed on this device</p>
               </div>
               <span class="setting-action-label">Clear</span>
             </button>
-
-            <button type="button" class="setting-row setting-row-action" id="copy-settings-summary-btn">
-              <span class="setting-row-icon"><i class="fas fa-clipboard-list"></i></span>
-              <div class="setting-row-text">
-                <p class="setting-name">Copy Settings Summary</p>
-                <p class="setting-desc">Copy a text summary of your current settings, handy for troubleshooting</p>
-              </div>
-              <span class="setting-action-label">Copy</span>
-            </button>
-
             <button type="button" class="setting-row setting-row-action" id="clear-favorites-btn">
               <span class="setting-row-icon"><i class="fas fa-heart-crack"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Clear Favorites</p>
+                <p class="setting-name">Clear favorites</p>
                 <p class="setting-desc">Remove every pack you've favorited</p>
               </div>
               <span class="setting-action-label">Clear</span>
             </button>
+          </div>
 
+          <h4 class="settings-group-title">Backup</h4>
+          <div class="settings-list">
+            <button type="button" class="setting-row setting-row-action" id="copy-settings-summary-btn">
+              <span class="setting-row-icon"><i class="fas fa-clipboard-list"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Copy settings summary</p>
+                <p class="setting-desc">Copy a text summary of your current settings, handy for troubleshooting</p>
+              </div>
+              <span class="setting-action-label">Copy</span>
+            </button>
             <button type="button" class="setting-row setting-row-action" id="export-settings-btn">
               <span class="setting-row-icon"><i class="fas fa-file-export"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Export Settings</p>
+                <p class="setting-name">Export settings</p>
                 <p class="setting-desc">Save your settings to a file you can restore later or on another device</p>
               </div>
               <span class="setting-action-label">Export</span>
             </button>
-
             <button type="button" class="setting-row setting-row-action" id="import-settings-btn">
               <span class="setting-row-icon"><i class="fas fa-file-import"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Import Settings</p>
+                <p class="setting-name">Import settings</p>
                 <p class="setting-desc">Restore settings from a previously exported file</p>
               </div>
               <span class="setting-action-label">Import</span>
             </button>
-            <input type="file" id="import-settings-input" accept="application/json" class="visually-hidden">
+            <input type="file" id="import-settings-input" accept="application/json" class="visually-hidden" aria-label="Import settings file">
+          </div>
 
+          <h4 class="settings-group-title">Reset</h4>
+          <div class="settings-list">
             <button type="button" class="setting-row setting-row-action setting-row-danger" id="reset-settings-btn">
               <span class="setting-row-icon"><i class="fas fa-arrow-rotate-left"></i></span>
               <div class="setting-row-text">
-                <p class="setting-name">Reset All Settings</p>
+                <p class="setting-name">Reset all settings</p>
                 <p class="setting-desc">Restore every setting on this page to its default value</p>
               </div>
               <span class="setting-action-label">Reset</span>
             </button>
           </div>
+
         </div>
       </main>
     </div>
@@ -1499,24 +1617,285 @@
     <div class="page-hero">
       <div class="page-hero-inner">
         <a href="#" class="back-link" data-page="home"><i class="fas fa-arrow-left"></i> Back to home</a>
-        <h2 class="page-title">Library Stats</h2>
-        <p class="page-subtitle">A live look at the numbers behind everything in the library.</p>
+        <div class="page-head-row">
+          <div>
+            <h2 class="page-title">Library stats</h2>
+            <p class="page-subtitle">The numbers behind everything in the library.</p>
+          </div>
+          <div class="st-switch" role="tablist" aria-label="Stats view">
+            <button type="button" class="st-switch-btn active" role="tab" aria-selected="true" data-stats-view="library">Library</button>
+            <button type="button" class="st-switch-btn" role="tab" aria-selected="false" data-stats-view="creator">My packs</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="stats-content">
+    <div class="stats-content" id="stats-library-view">
       <div class="stats-summary-grid" id="stats-summary-grid"></div>
 
-      <div class="stats-section">
-        <h3><i class="fas fa-layer-group"></i> By Category</h3>
-        <div class="stats-category-list" id="stats-category-list"></div>
-      </div>
+      <div class="stats-grid">
+        <section class="stats-card stats-top" aria-label="Top packs">
+          <div class="stats-card-head">
+            <div>
+              <h3>Top packs</h3>
+              <p>Ranked by total downloads</p>
+            </div>
+            <div class="stats-chips" id="stats-top-chips" role="group" aria-label="Category"></div>
+          </div>
+          <div class="stats-rank" id="stats-top-list"></div>
+        </section>
 
-      <div class="stats-spotlight-grid" id="stats-spotlight-grid"></div>
+        <div class="stats-side">
+          <section class="stats-card stats-section" aria-label="By category">
+            <div class="stats-card-head">
+              <h3>By category</h3>
+              <span class="stats-mono" id="stats-category-total"></span>
+            </div>
+            <div class="stats-category-list" id="stats-category-list"></div>
+          </section>
+          <div class="stats-spotlight-grid" id="stats-spotlight-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Creator tools: stats for the signed-in creator's own packs -->
+    <div class="stats-content cs-view hidden" id="stats-creator-view">
+      <div class="cs-state" id="cs-state"></div>
+      <div class="hidden" id="cs-main">
+        <div class="cs-toolbar">
+          <div class="cs-range" role="group" aria-label="Time range">
+            <button type="button" class="cs-range-btn" data-days="7">7 days</button>
+            <button type="button" class="cs-range-btn active" data-days="30">30 days</button>
+            <button type="button" class="cs-range-btn" data-days="90">90 days</button>
+          </div>
+          <div class="cs-actions">
+            <button type="button" class="up-btn" id="cs-export"><i class="fas fa-file-csv" aria-hidden="true"></i> Export CSV</button>
+            <a href="#" class="up-btn up-btn-primary" data-page="upload"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Upload</a>
+          </div>
+        </div>
+        <div class="cs-cards" id="cs-cards"></div>
+        <section class="stats-card cs-chart-card" aria-label="Daily activity">
+          <div class="stats-card-head">
+            <div>
+              <h3>Daily activity</h3>
+              <p id="cs-chart-sub"></p>
+            </div>
+            <div class="cs-legend" aria-hidden="true"><span class="cs-key cs-key-dl">Downloads</span><span class="cs-key cs-key-views">Views</span></div>
+          </div>
+          <div class="cs-chart" id="cs-chart"></div>
+        </section>
+        <section class="stats-card cs-table-card" aria-label="Your packs">
+          <div class="stats-card-head"><div><h3>Your packs</h3><p id="cs-table-sub"></p></div></div>
+          <div class="cs-table-wrap" id="cs-table"></div>
+        </section>
+        <section class="stats-card cs-earn" id="cs-earn" aria-label="Earnings"></section>
+      </div>
     </div>
   </section>
 
   <!-- ============ USER PROFILE PAGE ============ -->
+  <!-- ============ UPLOAD PAGE ============ -->
+  <section class="page" id="page-upload">
+    <div class="page-hero">
+      <div class="page-hero-inner">
+        <a href="#" class="back-link" data-page="library"><i class="fas fa-arrow-left"></i> Back to library</a>
+        <div class="page-head-row">
+          <div>
+            <h2 class="page-title">Upload a pack</h2>
+            <p class="page-subtitle">Share your packs in the library. Downloads go through your own Linkvertise or LootLabs account, so you keep 100% of what they earn.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="up-wrap">
+      <div class="up-state" id="up-loading">
+        <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+        <p>Loading your uploads…</p>
+      </div>
+
+      <div class="up-state hidden" id="up-signed-out">
+        <i class="fas fa-user-lock" aria-hidden="true"></i>
+        <h3>Sign in to upload</h3>
+        <p>Use the same account you comment with. Your packs show your name and link to your profile.</p>
+        <button type="button" class="up-btn up-btn-primary" id="up-signin-btn"><i class="fas fa-right-to-bracket" aria-hidden="true"></i> Sign in</button>
+      </div>
+
+      <div class="up-state hidden" id="up-offline">
+        <i class="fas fa-plug-circle-xmark" aria-hidden="true"></i>
+        <h3>Uploads aren't available right now</h3>
+        <p>The upload service didn't respond. Try again in a few minutes.</p>
+        <button type="button" class="up-btn" id="up-retry-btn"><i class="fas fa-rotate-right" aria-hidden="true"></i> Try again</button>
+      </div>
+
+      <div class="hidden" id="up-main">
+        <div class="up-tabs" role="tablist" aria-label="Uploads">
+          <button type="button" class="up-tab active" role="tab" aria-selected="true" data-up-tab="new"><i class="fas fa-plus" aria-hidden="true"></i> New upload</button>
+          <button type="button" class="up-tab" role="tab" aria-selected="false" data-up-tab="mine"><i class="fas fa-box" aria-hidden="true"></i> My uploads <span class="up-count" id="up-mine-count">0</span></button>
+          <button type="button" class="up-tab" role="tab" aria-selected="false" data-up-tab="profile"><i class="fas fa-id-badge" aria-hidden="true"></i> Profile &amp; earnings</button>
+          <button type="button" class="up-tab hidden" role="tab" aria-selected="false" data-up-tab="queue" id="up-queue-tab"><i class="fas fa-clipboard-check" aria-hidden="true"></i> Review <span class="up-count" id="up-queue-count">0</span></button>
+        </div>
+
+        <!-- New upload -->
+        <section class="up-panel" id="up-panel-new" role="tabpanel">
+          <form class="up-form" id="up-form" novalidate>
+            <div class="up-grid">
+              <div class="up-col">
+                <label class="up-drop" id="up-file-drop">
+                  <input type="file" id="up-file" name="file" accept=".mcpack,.mcaddon,.brarchive,.mcworld,.mctemplate,.zip">
+                  <i class="fas fa-file-zipper" aria-hidden="true"></i>
+                  <span class="up-drop-title" id="up-file-label">Choose your pack file</span>
+                  <span class="up-drop-sub">.mcpack, .mcaddon or .brarchive (also .mcworld, .mctemplate, .zip), up to 50 MB</span>
+                </label>
+
+                <div class="up-icon-row">
+                  <label class="up-icon-pick" aria-label="Choose an icon">
+                    <input type="file" id="up-icon" name="icon" accept="image/png,image/jpeg,image/webp">
+                    <span class="up-icon-preview" id="up-icon-preview"><i class="fas fa-image" aria-hidden="true"></i></span>
+                  </label>
+                  <div>
+                    <p class="up-label">Icon <span class="up-optional">optional</span></p>
+                    <p class="up-help">Square PNG, JPG or WebP, up to 1 MB. Your pack's pack_icon.png works.</p>
+                  </div>
+                </div>
+
+                <label class="up-field">
+                  <span class="up-label">Name</span>
+                  <input type="text" name="name" maxlength="60" placeholder="My HUD Pack">
+                </label>
+
+                <div class="up-row">
+                  <label class="up-field">
+                    <span class="up-label">Category</span>
+                    <select name="category">
+                      <option value="packs">Packs</option>
+                      <option value="cosmetics">Cosmetics</option>
+                      <option value="utility">Utility</option>
+                      <option value="addons">Addons</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </label>
+                  <label class="up-field">
+                    <span class="up-label">Version</span>
+                    <input type="text" name="version" maxlength="20" placeholder="1.0.0" value="1.0.0">
+                  </label>
+                </div>
+
+                <label class="up-field">
+                  <span class="up-label">Description</span>
+                  <textarea name="description" rows="4" maxlength="2000" placeholder="What does it do? What does it change?"></textarea>
+                </label>
+
+                <label class="up-field">
+                  <span class="up-label">Tags <span class="up-optional">up to 6, comma separated</span></span>
+                  <input type="text" name="tags" maxlength="140" placeholder="HUD, PvP, UI">
+                </label>
+
+                <label class="up-field">
+                  <span class="up-label">What's in this version <span class="up-optional">optional</span></span>
+                  <textarea name="changelog" rows="2" maxlength="2000" placeholder="First release"></textarea>
+                </label>
+              </div>
+
+              <div class="up-col">
+                <div class="up-card" id="up-earn-note">
+                  <p class="up-label"><i class="fas fa-sack-dollar" aria-hidden="true"></i> Your earnings</p>
+                  <p class="up-help" id="up-earn-text">Downloads of your packs go through your own Linkvertise and LootLabs accounts, and the site makes the links for you. You keep 100%.</p>
+                  <button type="button" class="up-btn" data-up-goto="profile"><i class="fas fa-gear" aria-hidden="true"></i> Set up earnings</button>
+                </div>
+
+                <label class="up-field">
+                  <span class="up-label">Showcase video <span class="up-optional">optional</span></span>
+                  <input type="url" name="showcaseUrl" maxlength="500" placeholder="https://youtu.be/…">
+                </label>
+
+                <div class="up-card up-rules">
+                  <p class="up-label"><i class="fas fa-shield-halved" aria-hidden="true"></i> Before it goes live</p>
+                  <p class="up-help">Every upload is checked before it shows up in the library. Changing the name, icon or links of a live pack sends it back for a check.</p>
+                  <label class="up-check">
+                    <input type="checkbox" name="rights">
+                    <span>I made this pack or have permission to share it, and it contains nothing harmful.</span>
+                  </label>
+                </div>
+
+                <p class="up-error hidden" id="up-form-error" role="alert"></p>
+                <div class="up-progress hidden" id="up-progress"><div class="up-progress-fill" id="up-progress-fill"></div></div>
+                <button type="submit" class="up-btn up-btn-primary up-submit" id="up-submit"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Upload for review</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <!-- Profile and earnings -->
+        <section class="up-panel hidden" id="up-panel-profile" role="tabpanel">
+          <div class="up-grid">
+            <div class="up-col">
+              <form class="up-card up-form" id="up-earn-form" novalidate>
+                <p class="up-label up-legend"><i class="fas fa-sack-dollar" aria-hidden="true"></i> Earnings</p>
+                <p class="up-help">Add your accounts once. The site creates your earning link for every download of every pack automatically, so you never paste links. You keep 100% of what they earn.</p>
+                <label class="up-field">
+                  <span class="up-label">Linkvertise user id</span>
+                  <input type="text" id="up-lv-id" inputmode="numeric" maxlength="12" placeholder="123456" autocomplete="off">
+                  <span class="up-help">The number in your Linkvertise links: link-to.net/<b>123456</b>/…</span>
+                </label>
+                <label class="up-field">
+                  <span class="up-label">LootLabs API token <span class="up-optional" id="up-loot-state"></span></span>
+                  <input type="password" id="up-loot-token" maxlength="300" placeholder="Paste your token" autocomplete="off" spellcheck="false">
+                  <span class="up-help">LootLabs → your account → Advanced → API token. It's stored encrypted, never shown again, and only used to make your links.</span>
+                </label>
+                <p class="up-note hidden" id="up-loot-status"></p>
+                <p class="up-error hidden" id="up-earn-error" role="alert"></p>
+                <div class="up-actions">
+                  <button type="submit" class="up-btn up-btn-primary" id="up-earn-save"><i class="fas fa-check" aria-hidden="true"></i> Save earnings</button>
+                  <button type="button" class="up-btn up-btn-danger hidden" id="up-loot-remove"><i class="fas fa-trash" aria-hidden="true"></i> Remove LootLabs token</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="up-col">
+              <form class="up-card up-form" id="up-profile-form" novalidate>
+                <p class="up-label up-legend"><i class="fas fa-address-card" aria-hidden="true"></i> Public creator profile</p>
+                <p class="up-help">Shown on your profile page. Promote your channel, Discord server and socials. Everything is checked automatically before it appears.</p>
+                <p class="up-note hidden" id="up-profile-status"></p>
+                <label class="up-field">
+                  <span class="up-label">About you <span class="up-optional" id="up-bio-count">0/500</span></span>
+                  <textarea id="up-bio" rows="3" maxlength="500" placeholder="Who you are and what you make. Links go in the section below."></textarea>
+                </label>
+                <div class="up-field">
+                  <span class="up-label">Links <span class="up-optional">Discord, YouTube, X, TikTok, Twitch, Instagram, GitHub, Patreon, Ko-fi, website</span></span>
+                  <div class="up-rows" id="up-social-rows"></div>
+                  <button type="button" class="up-link-btn" id="up-social-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a link</button>
+                </div>
+                <div class="up-field">
+                  <span class="up-label">Featured YouTube videos <span class="up-optional">up to 3</span></span>
+                  <div class="up-rows" id="up-video-rows"></div>
+                  <button type="button" class="up-link-btn" id="up-video-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a video</button>
+                </div>
+                <p class="up-error hidden" id="up-profile-error" role="alert"></p>
+                <div class="up-actions">
+                  <button type="submit" class="up-btn up-btn-primary" id="up-profile-save"><i class="fas fa-check" aria-hidden="true"></i> Save profile</button>
+                  <a href="#" class="up-btn" id="up-profile-view"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> View my profile</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- My uploads -->
+        <section class="up-panel hidden" id="up-panel-mine" role="tabpanel">
+          <div class="up-list" id="up-mine-list"></div>
+        </section>
+
+        <!-- Review queue (reviewers only) -->
+        <section class="up-panel hidden" id="up-panel-queue" role="tabpanel">
+          <div class="up-list" id="up-queue-list"></div>
+        </section>
+
+        <p class="up-foot">Signed in as <b id="up-account-name"></b> &middot; account id <code id="up-account-id"></code></p>
+      </div>
+    </div>
+  </section>
+
   <section class="page" id="page-user">
     <div class="page-hero">
       <div class="page-hero-inner">
@@ -1525,9 +1904,12 @@
     </div>
 
     <div class="user-profile-content">
+      <div class="user-profile-banner" id="user-profile-banner">
+        <img src="" alt="" id="user-profile-banner-img" class="hidden" decoding="async">
+      </div>
       <div class="user-profile-header">
         <img src="assets/pepe-profile.png" alt="" class="user-profile-avatar" id="user-profile-avatar" loading="lazy" decoding="async">
-        <div>
+        <div class="user-profile-info">
           <h2 class="user-profile-name">
             <span id="user-profile-name-text"></span>
             <span class="author-badge hidden" id="user-profile-author-badge" title="Verified: this is the site owner"><i class="fas fa-check"></i></span>
@@ -1535,10 +1917,24 @@
           <p class="user-profile-joined" id="user-profile-joined"></p>
           <p class="user-profile-stats" id="user-profile-stats"></p>
         </div>
+        <button type="button" class="btn-secondary-small user-profile-edit hidden" id="user-profile-edit-btn"><i class="fas fa-pen"></i> Edit profile</button>
+      </div>
+
+      <p class="up-bio hidden" id="user-profile-bio"></p>
+      <div class="up-socials hidden" id="user-profile-socials"></div>
+
+      <div class="versions-block hidden" id="user-profile-videos-block">
+        <h3>Featured videos</h3>
+        <div class="up-videos" id="user-profile-videos"></div>
+      </div>
+
+      <div class="versions-block hidden" id="user-profile-packs-block">
+        <h3>Packs</h3>
+        <div class="up-profile-packs" id="user-profile-packs"></div>
       </div>
 
       <div class="versions-block">
-        <h3>Recent Comments</h3>
+        <h3>Recent comments</h3>
         <div class="comments-list" id="user-profile-comments"></div>
       </div>
     </div>
@@ -1573,13 +1969,16 @@
 
   <!-- ============ 404 PAGE ============ -->
   <section class="page" id="page-404">
-    <div class="not-found-wrap">
-      <p class="not-found-code">404</p>
-      <h2 class="not-found-title">Lost in the void</h2>
-      <p class="not-found-desc">There's nothing here. The page or pack you're looking for doesn't exist or may have moved.</p>
-      <div class="not-found-actions">
-        <button type="button" class="cta-btn cta-primary" data-page="home"><i class="fas fa-house"></i> Back to Home</button>
-        <button type="button" class="cta-btn cta-secondary" data-page="library"><i class="fas fa-box-open"></i> Browse Library</button>
+    <div class="nf-wrap">
+      <img class="nf-scene" src="assets/default-banner.png" alt="" decoding="async">
+      <div class="nf-box">
+        <p class="nf-code">404</p>
+        <h1 class="nf-title">Lost in the void</h1>
+        <p class="nf-desc">There's nothing here. The page or pack you're looking for doesn't exist or may have moved.</p>
+        <div class="nf-actions">
+          <button type="button" class="hm-btn" data-page="home"><i class="fas fa-house" aria-hidden="true"></i> Back to home</button>
+          <button type="button" class="hm-btn hm-btn-sec" data-page="library"><i class="fas fa-box-open" aria-hidden="true"></i> Browse library</button>
+        </div>
       </div>
     </div>
   </section>
@@ -1588,62 +1987,39 @@
 
   <!-- Footer -->
   <footer class="site-footer">
-    <div class="footer-top">
-      <div class="footer-inner">
-        <div class="footer-col footer-col-brand">
-          <div class="footer-brand">
-            <span class="brand-mark"><img src="assets/pepe-profile.png" alt="" class="brand-avatar"></span>
-            <span class="brand-name">Pepe</span>
-          </div>
-          <p class="footer-tagline">
-            MCBE texture pack creator and Glacier Client owner, building websites, Discord bots,
-            and tooling under Glacier Productions &amp; Pepe's Projects HUB.
-          </p>
-          <div class="footer-socials">
-            <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord"></i></a>
-            <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          </div>
-        </div>
-
-        <div class="footer-col">
-          <h4 class="footer-col-title">Navigate</h4>
-          <nav class="footer-links">
-            <a href="#" data-page="home">Home</a>
-            <a href="#" data-page="projects">Projects</a>
-            <a href="#" data-page="socials">Socials</a>
-            <a href="#" data-page="library">Library</a>
-            <a href="#" data-page="settings">Settings</a>
-          </nav>
-        </div>
-
-        <div class="footer-col">
-          <h4 class="footer-col-title">Community</h4>
-          <nav class="footer-links">
-            <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener">Discord Server</a>
-            <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener">YouTube Channel</a>
-            <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener">GitHub</a>
-          </nav>
-        </div>
-
-        <div class="footer-col">
-          <h4 class="footer-col-title">Support</h4>
-          <p class="footer-desc">Every pack is free forever. If you'd like to help keep it that way:</p>
-          <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" class="footer-support-btn">
-            <i class="fab fa-paypal"></i> Donate
-          </a>
+    <div class="ft-inner">
+      <div class="ft-brand">
+        <span class="ft-mark"><img src="assets/pepe-profile.png" alt="" class="ft-avatar"></span>
+        <div>
+          <b>Pepe</b>
+          <p>Pepe's Portfolio &middot; Glacier Productions</p>
         </div>
       </div>
+      <nav class="ft-links" aria-label="Footer">
+        <a href="#" data-page="home">Home</a>
+        <a href="#" data-page="projects">Projects</a>
+        <a href="#" data-page="socials">Socials</a>
+        <a href="#" data-page="library">Library</a>
+        <a href="#" data-page="customizer">Customizer</a>
+        <a href="#" data-page="stats">Stats</a>
+        <a href="#" data-page="upload">Upload</a>
+        <a href="#" data-page="settings">Settings</a>
+      </nav>
+      <div class="ft-ext">
+        <a href="https://discord.com/invite/t9BgvskwJ2" target="_blank" rel="noopener" aria-label="Discord"><i class="fab fa-discord" aria-hidden="true"></i></a>
+        <a href="https://youtube.com/@PepeOnYoutube" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+        <a href="https://github.com/PepeOnGithub" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+        <a href="https://paypal.me/PepeOnPayPal" target="_blank" rel="noopener" aria-label="Donate on PayPal"><i class="fab fa-paypal" aria-hidden="true"></i></a>
+      </div>
     </div>
-
-    <div class="footer-bottom">
-      <p class="footer-copy">&copy; <span id="footer-year">2026</span> Pepe. All rights reserved.</p>
-      <button type="button" class="footer-top-btn" id="footer-top-btn">
-        Back to top <i class="fas fa-arrow-up"></i>
-      </button>
+    <div class="ft-bottom">
+      <p class="ft-copy">&copy; <span id="footer-year">2026</span> Pepe. Every pack is free forever.</p>
+      <button type="button" class="ft-top" id="footer-top-btn">Back to top <i class="fas fa-arrow-up" aria-hidden="true"></i></button>
     </div>
   </footer>
 
   <script src="script.js"></script>
+  <script src="upload.js"></script>
+  <script src="creator-tools.js"></script>
 </body>
 </html>

@@ -4,6 +4,7 @@
     "license": "MIT",
     "description": "Lets you hide individual pieces of equipped armor from view while keeping their full protective stats and enchantments active, so your character's look stays exactly how you want it.",
     "category": "utility",
-    "thumbnail": "\ud83d\udd27",
-    "version": "1.0.0"
+    "thumbnail": "🔧",
+    "version": "1.0.0",
+    "showcaseUrl": "https://youtu.be/CxLxCSeSkhM"
 }

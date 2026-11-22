@@ -3,6 +3,15 @@ const CATEGORY_ORDER = ['packs', 'cosmetics', 'utility', 'clients', 'addons', 'a
 const DEFAULT_BANNER_URL = 'assets/default-banner.png';
 const API_BASE = 'https://pepes-portfolio-api.pepeoncloudeflare.workers.dev';
 const LINKVERTISE_USER_ID = 499358;
+// Community uploads worker (worker/ in this repo). localStorage.uploadsApi
+// overrides it for local testing, e.g. http://127.0.0.1:8787.
+const UPLOADS_API = (() => {
+  try {
+    const override = localStorage.getItem('uploadsApi');
+    if (override && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(override)) return override;
+  } catch (e) { /* storage unavailable */ }
+  return 'https://pepes-portfolio-uploads.pepeoncloudeflare.workers.dev';
+})();
 const MONETIZATION_PROVIDER_KEY = 'monetizationProvider';
 
 // ===== Anti link-bypasser =====
@@ -126,7 +135,7 @@ function shadeHex(hex, percent) {
 }
 
 const ACCENT_PRESETS = {
-  green: '#489c49',
+  green: '#86d177',
   blue: '#3b82f6',
   purple: '#8b5cf6',
   pink: '#ec4899',
@@ -142,13 +151,20 @@ function updateSliderFill(el) {
   const value = parseFloat(el.value) || 0;
   const pct = max > min ? ((value - min) / (max - min)) * 100 : 0;
   el.style.setProperty('--slider-percent', `${pct}%`);
+  // Settings sliders show their value ("65%") in a readout next to the track.
+  const readout = el.parentElement && el.parentElement.querySelector('.setting-slider-value');
+  if (readout) readout.textContent = `${Math.round(value)}%`;
 }
 
 // A boolean setting read straight from localStorage, defaulting when unset.
 function getBoolSetting(key, defaultValue = false) {
-  const stored = localStorage.getItem(key);
-  if (stored === null) return defaultValue;
-  return stored === 'true';
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored === null) return defaultValue;
+    return stored === 'true';
+  } catch (e) {
+    return defaultValue;
+  }
 }
 
 // Settings that are nothing more than "toggle a body class, persist the flag".
@@ -181,7 +197,8 @@ const SIMPLE_FLAG_SETTINGS = [
 function isMonetizationOn() { return true; }
 
 function getMonetizationProvider() {
-  const stored = localStorage.getItem(MONETIZATION_PROVIDER_KEY);
+  let stored = null;
+  try { stored = localStorage.getItem(MONETIZATION_PROVIDER_KEY); } catch (e) { /* storage unavailable */ }
   return stored === 'lootlabs' ? 'lootlabs' : 'linkvertise';
 }
 
@@ -225,13 +242,15 @@ function getDownloadGateUrl(rawUrl, { expiring = true } = {}) {
   return `${location.origin}/download/${encodeDownloadToken(rawUrl, expiring)}`;
 }
 
-function getLinkvertiseUrl(targetUrl) {
-  if (!LINKVERTISE_USER_ID) return targetUrl;
+// userId is whose Linkvertise account earns from the click: Pepe's for his
+// own packs, the uploader's own id for community packs.
+function getLinkvertiseUrl(targetUrl, userId = LINKVERTISE_USER_ID) {
+  if (!userId) return targetUrl;
   try {
     const gateUrl = getDownloadGateUrl(targetUrl, { expiring: true });
     const encoded = encodeURIComponent(btoa(gateUrl));
     const random = Math.random() * 1000;
-    return `https://link-to.net/${LINKVERTISE_USER_ID}/${random}/dynamic/?r=${encoded}`;
+    return `https://link-to.net/${userId}/${random}/dynamic/?r=${encoded}`;
   } catch (e) {
     return targetUrl;
   }
@@ -243,18 +262,21 @@ function getLinkvertiseUrl(targetUrl) {
 // It can't be generated client-side without exposing a secret API token to
 // every visitor, so packs without a cached lootUrl fall back to Linkvertise
 // when LootLabs is selected.
-function getMonetizedUrl(targetUrl, lootUrl, forcedProvider) {
+// lvId: the Linkvertise account to credit. Community packs pass their
+// uploader's id (or null when the uploader only uses LootLabs or no ads).
+function getMonetizedUrl(targetUrl, lootUrl, forcedProvider, lvId = LINKVERTISE_USER_ID) {
   if (!targetUrl || targetUrl === '#' || !isMonetizationOn()) return targetUrl;
 
   const provider = forcedProvider || getMonetizationProvider();
   if (provider === 'lootlabs' && lootUrl) return lootUrl;
+  if (!lvId) return lootUrl || targetUrl;
 
-  return getLinkvertiseUrl(targetUrl);
+  return getLinkvertiseUrl(targetUrl, lvId);
 }
 
 class Router {
   constructor() {
-    this.pages = ['home', 'projects', 'socials', 'library', 'settings', 'stats', 'user'];
+    this.pages = ['home', 'projects', 'socials', 'library', 'customizer', 'settings', 'stats', 'user', 'upload'];
     this.setupNav();
     this.setupMobileNav();
   }
@@ -299,6 +321,8 @@ class Router {
 
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(`page-${pageId}`).classList.add('active');
+    // the customizer is a full-screen editor: it covers the site chrome and the page behind it stops scrolling
+    document.body.classList.toggle('cz-open', pageId === 'customizer');
 
     document.querySelectorAll('.topnav-link, .mobile-nav-link').forEach(link => {
       link.classList.toggle('active', link.dataset.page === pageId);
@@ -317,6 +341,14 @@ class Router {
       this.updateSocialsStats();
     }
 
+    if (pageId === 'customizer') {
+      this.loadCustomizer();
+    }
+
+    if (pageId === 'upload' && window.uploadsPage) {
+      window.uploadsPage.open();
+    }
+
     if (window.packLibrary) {
       window.packLibrary.showBrowse({ push: false });
       if (pageId === 'stats') window.packLibrary.renderStatsPage();
@@ -326,6 +358,32 @@ class Router {
       history.pushState({ page: pageId }, '', pageId === 'home' ? '/' : `/${pageId}`);
     }
     document.title = "Pepe's Portfolio";
+  }
+
+  // The customizer (index.html #page-customizer) loads its scripts the first time the tab opens,
+  // so visitors who never open it don't download JSZip or the settings code.
+  loadCustomizer() {
+    if (this.customizerLoading) return;
+    this.customizerLoading = true;
+    // resolveInitialRoute() strips the query (e.g. the download gate's ?unlock=1) right after this call, so the
+    // customizer reads the query captured here instead of location.search
+    window.czEntrySearch = location.search;
+    const load = (src) => new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      s.onerror = reject;
+      document.body.append(s);
+    });
+    load('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js')
+      .then(() => load('customizer-ui.js'))
+      .then(() => load('customizer-preview.js'))
+      .then(() => load('customizer.js'))
+      .then(() => window.CzBoot && window.CzBoot())
+      .catch(() => {
+        const info = document.getElementById('cz-pack');
+        if (info) { info.textContent = 'Could not load the customizer. Check your connection and reload.'; info.classList.add('cz-error'); }
+      });
   }
 
   updateSocialsStats() {
@@ -356,6 +414,7 @@ class CustomDropdown {
     if (!this.wrap) return;
     this.trigger = this.wrap.querySelector('.custom-dropdown-trigger');
     this.menu = this.wrap.querySelector('.custom-dropdown-menu');
+    if (!this.trigger || !this.menu) return;
     this.label = this.trigger.querySelector('span');
     this.onSelect = onSelect;
 
@@ -464,9 +523,11 @@ class PackLibrary {
   // rotating a device or resizing past the breakpoint doesn't leave a
   // dropdown stuck in the wrong state.
   setupFilterDropdowns() {
-    const ids = ['library-category-dropdown', 'library-tags-dropdown', 'settings-category-dropdown'];
+    // The Settings category list is always a visible strip on phones (css/settings.css), never a collapsed dropdown.
+    const ids = ['library-category-dropdown', 'library-tags-dropdown'];
+    const mq = window.matchMedia('(max-width: 768px)');
     const apply = () => {
-      const isMobile = window.innerWidth <= 768;
+      const isMobile = mq.matches;
       ids.forEach(id => {
         const details = document.getElementById(id);
         if (!details) return;
@@ -478,10 +539,123 @@ class PackLibrary {
       });
     };
     apply();
-    window.addEventListener('resize', apply);
+    // Only on breakpoint crossings: a plain resize listener also fired when a
+    // phone's URL bar hid while scrolling and snapped open dropdowns shut.
+    if (mq.addEventListener) mq.addEventListener('change', apply); else mq.addListener(apply);
+  }
+
+  // Home + Projects content that comes from packs.json. Called from
+  // renderClientsTimeline so it runs once the packs have loaded.
+  renderHomeAndProjects() {
+    const packs = this.packs || [];
+    const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    const count = (cat) => packs.filter(p => p.category === cat).length;
+    setText('home-stat-releases', packs.length);
+    setText('home-stat-hud', count('packs'));
+    setText('home-stat-clients', count('clients'));
+    setText('home-stat-apps', count('apps'));
+
+    // Apps/websites carry an emoji in `thumbnail` instead of an image path.
+    const hasImg = (p) => p.thumbnail && /\.(png|webp|jpe?g|gif|svg)$/i.test(p.thumbnail);
+    const icon = (p) => hasImg(p)
+      ? this.pictureTag(p.thumbnail, p.thumbnailWebp)
+      : p.faIcon ? `<span class="hm-slot-letter"><i class="fas ${p.faIcon}" aria-hidden="true"></i></span>`
+      : `<span class="hm-slot-letter">${this.escapeHtml(p.name.replace(/^Pepe's\s+/, '').charAt(0).toUpperCase())}</span>`;
+    const ver = (p) => `v${this.escapeHtml(String((p.versions && p.versions[0] && p.versions[0].version) || p.version || '1.0.0'))}`;
+    const catLabel = { packs: 'HUD pack', clients: 'Client', addons: 'Addon', apps: 'App', cosmetics: 'Cosmetic', utility: 'Utility', website: 'Website', other: 'Pack' };
+
+    const latestEl = document.getElementById('home-latest');
+    const latestRow = document.getElementById('home-latest-row');
+    const latest = [...packs]
+      .filter(p => p.category !== 'website')
+      .sort((a, b) => String(b.addedAt || '').localeCompare(String(a.addedAt || '')))
+      .slice(0, 3);
+    if (latestEl) {
+      latestEl.innerHTML = latest.length ? latest.map(p => `
+        <button type="button" class="hm-rel" data-open-pack="${p.id}">
+          <span class="hm-slot hm-slot-56">${icon(p)}</span>
+          <span class="hm-rel-body"><b>${this.escapeHtml(p.name)}</b><span class="hm-mono">${ver(p)}${p.size ? ' &middot; ' + this.escapeHtml(p.size) : ''}</span></span>
+          <span class="hm-rel-go" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+        </button>`).join('') : '<p class="hm-empty">Releases could not be loaded.</p>';
+    }
+    if (latestRow) {
+      latestRow.innerHTML = latest.map(p => `
+        <button type="button" class="hm-pk" data-open-pack="${p.id}">
+          <span class="hm-slot">${icon(p)}</span>
+          <span><b>${this.escapeHtml(p.name)}</b><span class="hm-mono">${ver(p)}</span></span>
+        </button>`).join('');
+    }
+
+    const featuredEl = document.getElementById('home-featured');
+    if (featuredEl) {
+      const names = ['Glacier Client', "Pepe's ArmorHUD", "Pepe's Elytra Pitch", "Pepe's Waypoints+"];
+      const featured = names.map(n => packs.find(p => p.name === n)).filter(Boolean);
+      featuredEl.innerHTML = featured.map(p => `
+        <button type="button" class="hm-pk hm-pk-lg" data-open-pack="${p.id}">
+          <span class="hm-slot">${icon(p)}</span>
+          <span><b>${this.escapeHtml(p.name)}</b><span class="hm-mono">${catLabel[p.category] || 'Pack'} &middot; ${ver(p)}</span></span>
+        </button>`).join('');
+    }
+
+    // One delegated handler for every "open this pack" button on Home and Projects.
+    if (!this._homeOpenBound) {
+      this._homeOpenBound = true;
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-open-pack]');
+        if (!btn) return;
+        const pack = this.packs.find(p => p.id === parseInt(btn.dataset.openPack, 10));
+        if (!pack) return;
+        if (window.router) window.router.show('library', { push: false });
+        this.showDetail(pack);
+      });
+    }
+
+    this.renderProjectsTimeline();
+  }
+
+  renderProjectsTimeline() {
+    const track = document.getElementById('projects-timeline-track');
+    const detail = document.getElementById('projects-timeline-detail');
+    const section = document.getElementById('projects-timeline');
+    if (!track || !detail) return;
+
+    const clients = (this.packs || [])
+      .filter(p => p.category === 'clients' && p.timelineOrder != null)
+      .sort((a, b) => (a.timelineOrder || 0) - (b.timelineOrder || 0));
+    if (!clients.length) { if (section) section.classList.add('hidden'); return; }
+
+    const initials = (p) => p.name.split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const ver = (p) => String((p.versions && p.versions[0] && p.versions[0].version) || p.version || '1.0.0');
+    const slot = (p) => (p.thumbnail && /\.(png|webp|jpe?g|gif|svg)$/i.test(p.thumbnail))
+      ? `<span class="pr-slot">${this.pictureTag(p.thumbnail, p.thumbnailWebp)}</span>`
+      : `<span class="pr-slot pr-slot-ini">${this.escapeHtml(initials(p))}</span>`;
+    const lastIdx = clients.length - 1;
+
+    const select = (i) => {
+      track.querySelectorAll('.pr-tn').forEach((b, k) => {
+        b.classList.toggle('on', k === i);
+        b.setAttribute('aria-pressed', k === i ? 'true' : 'false');
+      });
+      const p = clients[i];
+      detail.innerHTML = `
+        ${slot(p)}
+        <div>
+          <h3>${this.escapeHtml(p.name)}</h3>
+          <div class="pr-sub"><span class="pr-tag">${i === lastIdx ? 'Current' : 'Discontinued'}</span><span class="hm-mono">Generation ${i + 1} of ${clients.length}</span><span class="hm-mono">v${this.escapeHtml(ver(p))}</span></div>
+        </div>
+        <button type="button" class="hm-btn hm-btn-sec" data-open-pack="${p.id}">View in library <i class="fas fa-arrow-right" aria-hidden="true"></i></button>`;
+    };
+
+    track.innerHTML = clients.map((p, i) => `
+      <button type="button" class="pr-tn${i === lastIdx ? ' cur' : ''}" aria-pressed="false" data-idx="${i}">
+        <span class="pr-d"></span>${slot(p)}<b>${this.escapeHtml(p.name)}</b><span class="hm-mono">v${this.escapeHtml(ver(p))}</span>
+      </button>`).join('');
+    track.querySelectorAll('.pr-tn').forEach(b => b.addEventListener('click', () => select(parseInt(b.dataset.idx, 10))));
+    select(lastIdx);
   }
 
   renderClientsTimeline() {
+    this.renderHomeAndProjects();
     const track = document.getElementById('timeline-track');
     if (!track) return;
 
@@ -523,6 +697,26 @@ class PackLibrary {
   }
 
   setupEventListeners() {
+    // One delegated listener for the whole grid instead of re-binding a
+    // listener to every card/favorite/divider on each render.
+    const packsGrid = document.getElementById('packs-grid');
+    if (packsGrid) packsGrid.addEventListener('click', (e) => {
+      const fav = e.target.closest('.pack-favorite-btn');
+      if (fav) {
+        e.stopPropagation();
+        this.toggleFavorite(parseInt(fav.dataset.packId, 10));
+        return;
+      }
+      const divider = e.target.closest('.category-section-divider, .category-sub-divider');
+      if (divider) { this.toggleSectionCollapsed(divider); return; }
+      const card = e.target.closest('.pack-card');
+      if (!card) return;
+      const pack = this.packs.find(p => p.id === parseInt(card.dataset.packId, 10));
+      if (!pack) return;
+      if (pack.category === 'website' && pack.externalUrl) this.openExternal(pack.externalUrl);
+      else this.showDetail(pack);
+    });
+
     const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('input', (e) => this.handleSearch(e));
     searchInput.addEventListener('keydown', (e) => this.handleSearchKeydown(e));
@@ -656,7 +850,23 @@ class PackLibrary {
     const settingsSearchInput = document.getElementById('settings-search-input');
     if (settingsSearchInput) {
       settingsSearchInput.addEventListener('input', (e) => this.filterSettingsRows(e.target.value));
+      const clearBtn = document.getElementById('settings-search-clear');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          settingsSearchInput.value = '';
+          this.filterSettingsRows('');
+          settingsSearchInput.focus();
+        });
+      }
     }
+
+    document.querySelectorAll('#page-settings [data-reset-section]').forEach(btn => {
+      btn.addEventListener('click', () => this.resetSettingsSection(btn.dataset.resetSection));
+    });
+    // The toggles are native checkboxes dressed as switches; tell assistive tech.
+    document.querySelectorAll('#page-settings .custom-checkbox > input[type="checkbox"]').forEach(input => {
+      input.setAttribute('role', 'switch');
+    });
 
     SIMPLE_TOGGLE_SETTINGS.forEach(({ id, key, className }) => {
       const el = document.getElementById(id);
@@ -738,19 +948,49 @@ class PackLibrary {
       document.querySelectorAll('#rating-stars-input .rating-star').forEach(b => b.classList.remove('rating-star-hover'));
     });
 
-    const emptyClearBtn = document.getElementById('empty-state-clear-btn');
-    if (emptyClearBtn) {
-      emptyClearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        this.currentFilter.search = '';
-        this.currentFilter.category = '';
-        this.currentFilter.tags.clear();
-        this.syncCategorySidebar();
-        this.renderTagChips();
-        this.applyFilters();
-        document.getElementById('search-clear').classList.add('hidden');
+    const resetFilters = () => {
+      searchInput.value = '';
+      this.currentFilter.search = '';
+      this.currentFilter.category = '';
+      localStorage.setItem('selectedCategory', '');
+      this.currentFilter.tags.clear();
+      this.syncCategorySidebar();
+      this.renderTagChips();
+      this.applyFilters();
+      document.getElementById('search-clear').classList.add('hidden');
+    };
+    ['empty-state-clear-btn', 'lib-filters-reset'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.addEventListener('click', resetFilters);
+    });
+
+    // Filters popover (favorites + tags): toggle, outside click, Escape.
+    const filtersBtn = document.getElementById('lib-filters-btn');
+    const filtersPop = document.getElementById('lib-filters-pop');
+    if (filtersBtn && filtersPop) {
+      const setFiltersOpen = (open) => {
+        filtersPop.classList.toggle('hidden', !open);
+        filtersBtn.setAttribute('aria-expanded', String(open));
+      };
+      filtersBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setFiltersOpen(filtersPop.classList.contains('hidden'));
+      });
+      document.addEventListener('click', (e) => {
+        if (!filtersPop.classList.contains('hidden') && !filtersPop.contains(e.target)) setFiltersOpen(false);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !filtersPop.classList.contains('hidden')) {
+          setFiltersOpen(false);
+          filtersBtn.focus();
+        }
       });
     }
+
+    const detailFavBtn = document.getElementById('detail-fav-btn');
+    if (detailFavBtn) detailFavBtn.addEventListener('click', () => {
+      if (this.currentPack) this.toggleFavorite(this.currentPack.id);
+    });
 
     // ===== Global keyboard shortcuts (Library page) =====
     document.addEventListener('keydown', (e) => {
@@ -759,7 +999,7 @@ class PackLibrary {
 
       if (e.key === '/' && !typing) {
         const libraryPage = document.getElementById('page-library');
-        if (libraryPage && !libraryPage.classList.contains('hidden')) {
+        if (libraryPage && libraryPage.classList.contains('active')) {
           e.preventDefault();
           searchInput.focus();
         }
@@ -855,7 +1095,8 @@ class PackLibrary {
         }
       }
 
-      const askEveryTime = localStorage.getItem('askProviderEveryTime') !== 'false';
+      const askEveryTime = localStorage.getItem('askProviderEveryTime') !== 'false'
+        && this.hasProviderChoice(this.currentPack);
       const needsAssets = this.currentPack.requiresAssets && !this.currentPack.pinned
         && !this.assetsWarningHidden();
 
@@ -927,13 +1168,58 @@ class PackLibrary {
 
     const currentEl = document.getElementById('settings-category-current');
     if (currentEl) currentEl.textContent = btn.querySelector('span').textContent.trim();
-    this.closeFilterDropdownOnMobile('settings-category-dropdown');
+    const dd = document.getElementById('settings-category-dropdown');
+    if (dd) dd.setAttribute('open', '');
+    btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
 
   syncSettingsCategorySidebar() {
     const saved = localStorage.getItem('selectedSettingsCategory');
     const btn = saved && document.querySelector(`#page-settings .category-row[data-settings-category="${saved}"]`);
     if (btn) this.handleSettingsCategoryClick(btn);
+    this.updateSettingsCategoryCounts();
+  }
+
+  // Row count badge on each category (matching rows only while a search is active).
+  updateSettingsCategoryCounts() {
+    document.querySelectorAll('#page-settings .category-row').forEach(btn => {
+      const panel = document.querySelector(`#page-settings .settings-panel[data-settings-panel="${btn.dataset.settingsCategory}"]`);
+      if (!panel) return;
+      let badge = btn.querySelector('.category-count');
+      const rows = panel.querySelectorAll('.setting-row');
+      if (!rows.length) { if (badge) badge.remove(); return; }
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'category-count';
+        btn.appendChild(badge);
+      }
+      badge.textContent = panel.querySelectorAll('.setting-row:not(.setting-row-hidden)').length;
+    });
+  }
+
+  // Puts every control in a Settings panel back to the value written in the markup (the default).
+  resetSettingsSection(category) {
+    const panel = document.querySelector(`#page-settings .settings-panel[data-settings-panel="${category}"]`);
+    if (!panel) return;
+    if (category === 'theme') {
+      const classic = panel.querySelector('.theme-look-card');
+      if (classic) classic.click();
+      return;
+    }
+    panel.querySelectorAll('input[type="checkbox"].setting-input').forEach(input => {
+      if (input.checked !== input.defaultChecked) {
+        input.checked = input.defaultChecked;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+    panel.querySelectorAll('input[type="range"].setting-slider').forEach(input => {
+      if (input.value !== input.defaultValue) {
+        input.value = input.defaultValue;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+    if (category === 'library' && this.defaultSortDropdown) this.defaultSortDropdown.select('relevance', 'Relevance');
+    if (category === 'downloads' && this.monetizationDropdown) this.monetizationDropdown.select('linkvertise', 'Linkvertise');
   }
 
   // Toggle the "Download Link Provider" dropdown disabled state.
@@ -1013,7 +1299,7 @@ class PackLibrary {
 
     const rawUrl = link.dataset.rawUrl;
     const lootUrl = link.dataset.lootUrl || null;
-    link.href = getMonetizedUrl(rawUrl, lootUrl, provider);
+    link.href = getMonetizedUrl(rawUrl, lootUrl, provider, this.lvIdFor(this.currentPack));
 
     if (this.providerModalChainsToAssets) {
       this.showAssetsModal(this.currentPack, link);
@@ -1075,11 +1361,12 @@ class PackLibrary {
   }
 
   async loadPacks() {
+    const community = this.loadCommunityPacks();
     try {
       const response = await fetch('packs.json', { cache: 'no-cache' });
       if (!response.ok) throw new Error(`packs.json request failed: ${response.status}`);
       const data = await response.json();
-      this.packs = data.packs || [];
+      this.packs = [...(data.packs || []), ...(await community)];
       this.packsLoadError = false;
       this.filteredPacks = [...this.packs];
       return this.packs;
@@ -1201,31 +1488,66 @@ class PackLibrary {
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
     const summary = [
-      { icon: 'fa-box-open', label: 'Total Packs', value: this.packs.length },
-      { icon: 'fa-download', label: 'Total Downloads', value: this.formatCount(totalDownloads) },
-      { icon: 'fa-bolt', label: 'Active', value: active.length },
-      { icon: 'fa-ban', label: 'Discontinued', value: this.packs.length - active.length },
+      { label: 'Total packs', value: this.packs.length },
+      { label: 'Total downloads', value: this.formatCount(totalDownloads), hi: true },
+      { label: 'Active', value: active.length },
+      { label: 'Discontinued', value: this.packs.length - active.length },
     ];
     document.getElementById('stats-summary-grid').innerHTML = summary.map(s => `
-      <div class="stats-summary-card">
-        <i class="fas ${s.icon}"></i>
-        <p class="stats-summary-value">${s.value}</p>
-        <p class="stats-summary-label">${s.label}</p>
+      <div class="stats-summary-card${s.hi ? ' is-hi' : ''}">
+        <span class="stats-summary-label">${s.label}</span>
+        <span class="stats-summary-value">${s.value}</span>
       </div>
     `).join('');
 
-    const maxCatCount = Math.max(1, ...CATEGORY_ORDER.map(cat => this.packs.filter(p => p.category === cat).length));
-    document.getElementById('stats-category-list').innerHTML = CATEGORY_ORDER.map(cat => {
+    const presentCats = CATEGORY_ORDER.filter(cat => this.packs.some(p => p.category === cat));
+    const maxCatCount = Math.max(1, ...presentCats.map(cat => this.packs.filter(p => p.category === cat).length));
+    const topCatIdx = presentCats.findIndex(c => this.packs.filter(p => p.category === c).length === maxCatCount);
+    document.getElementById('stats-category-total').textContent = `${this.packs.length} packs`;
+    document.getElementById('stats-category-list').innerHTML = presentCats.map((cat, i) => {
       const count = this.packs.filter(p => p.category === cat).length;
       const pct = Math.round((count / maxCatCount) * 100);
       return `
         <div class="stats-category-row">
           <span class="stats-category-name">${this.capitalizeFirst(cat)}</span>
-          <div class="stats-category-bar-track"><div class="stats-category-bar-fill" style="width:${pct}%"></div></div>
+          <div class="stats-category-bar-track"><div class="stats-category-bar-fill${i === topCatIdx ? ' is-hi' : ''}" style="width:${pct}%"></div></div>
           <span class="stats-category-count">${count}</span>
         </div>
       `;
     }).join('');
+
+    // Top packs: ranked by live download count, filterable by category.
+    if (!presentCats.includes(this.statsTopCategory)) this.statsTopCategory = 'all';
+    const chipsEl = document.getElementById('stats-top-chips');
+    chipsEl.innerHTML = ['all', ...presentCats].map(cat => `
+      <button type="button" class="stats-chip${cat === this.statsTopCategory ? ' on' : ''}" data-cat="${cat}" aria-pressed="${cat === this.statsTopCategory}">${cat === 'all' ? 'All' : this.capitalizeFirst(cat)}</button>
+    `).join('');
+    chipsEl.querySelectorAll('.stats-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        this.statsTopCategory = chip.dataset.cat;
+        this.renderStatsPage();
+      });
+    });
+    const ranked = this.packs
+      .filter(p => this.statsTopCategory === 'all' || p.category === this.statsTopCategory)
+      .sort((a, b) => liveCount(b) - liveCount(a))
+      .slice(0, 10);
+    const topCount = Math.max(1, ...ranked.map(liveCount));
+    document.getElementById('stats-top-list').innerHTML = ranked.length ? ranked.map((pack, i) => {
+      const icon = this.isImagePath(pack.thumbnail)
+        ? this.pictureTag(pack.thumbnail, pack.thumbnailWebp)
+        : this.fallbackIconContent(pack);
+      const dl = liveCount(pack);
+      return `
+        <button type="button" class="stats-rank-row" data-pack-id="${pack.id}">
+          <span class="stats-rank-n">${i + 1}</span>
+          <span class="stats-rank-icon">${icon}</span>
+          <span class="stats-rank-name"><b>${this.escapeHtml(pack.name)}</b><span>${this.capitalizeFirst(pack.category)}</span></span>
+          <span class="stats-category-bar-track stats-rank-bar"><span class="stats-category-bar-fill${i === 0 ? ' is-hi' : ''}" style="width:${Math.round((dl / topCount) * 100)}%"></span></span>
+          <span class="stats-rank-num">${dl.toLocaleString('en-US')}</span>
+        </button>
+      `;
+    }).join('') : '<p class="stats-empty">No packs in this category yet</p>';
 
     const spotlightCard = (label, pack) => {
       if (!pack) return '';
@@ -1238,9 +1560,9 @@ class PackLibrary {
       `;
     };
     document.getElementById('stats-spotlight-grid').innerHTML =
-      spotlightCard('Most Downloaded', mostDownloaded) + spotlightCard('Newest Addition', newest);
+      spotlightCard('Most downloaded', mostDownloaded) + spotlightCard('Newest addition', newest);
 
-    document.querySelectorAll('.stats-spotlight-card').forEach(card => {
+    document.querySelectorAll('#page-stats .stats-spotlight-card, #page-stats .stats-rank-row').forEach(card => {
       card.addEventListener('click', () => {
         const id = parseInt(card.dataset.packId, 10);
         const pack = this.packs.find(p => p.id === id);
@@ -1263,7 +1585,9 @@ class PackLibrary {
   }
 
   saveFavorites() {
-    localStorage.setItem('favoritePacks', JSON.stringify([...this.favorites]));
+    try {
+      localStorage.setItem('favoritePacks', JSON.stringify([...this.favorites]));
+    } catch (e) { /* storage full or unavailable */ }
   }
 
   loadCollapsedSections() {
@@ -1277,7 +1601,9 @@ class PackLibrary {
   }
 
   saveCollapsedSections() {
-    localStorage.setItem('collapsedSections', JSON.stringify([...this.collapsedSections]));
+    try {
+      localStorage.setItem('collapsedSections', JSON.stringify([...this.collapsedSections]));
+    } catch (e) { /* storage full or unavailable */ }
   }
 
   // A leading "!" marks a section the user explicitly re-opened despite the
@@ -1333,14 +1659,42 @@ class PackLibrary {
     }
 
     if (this.currentPack && this.currentPack.id === packId) {
-      const detailFav = document.getElementById('detail-favorite-btn');
-      if (detailFav) detailFav.classList.toggle('active', this.favorites.has(packId));
+      this.syncDetailFavorite();
     }
   }
 
   updateFavoritesCount() {
     const elem = document.getElementById('count-favorites');
     if (elem) elem.textContent = this.favorites.size;
+  }
+
+  // Keeps the detail panel's heart button in step with the favorites set.
+  syncDetailFavorite() {
+    const btn = document.getElementById('detail-fav-btn');
+    if (!btn || !this.currentPack) return;
+    const on = this.favorites.has(this.currentPack.id);
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-pressed', String(on));
+    const label = on ? 'Remove from favorites' : 'Add to favorites';
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+    btn.querySelector('i').className = `${on ? 'fas' : 'far'} fa-heart`;
+  }
+
+  // "Open in Customizer" only shows for packs the customizer actually knows.
+  async syncCustomizerLink(pack) {
+    const btn = document.getElementById('detail-customizer-btn');
+    if (!btn) return;
+    btn.classList.add('hidden');
+    try {
+      if (!this._customizerNames) {
+        this._customizerNames = fetch('customizer-packs.json')
+          .then(r => (r.ok ? r.json() : { packs: [] }))
+          .then(d => new Set((d.packs || []).map(p => this.normalizeSearch(p.name))));
+      }
+      const names = await this._customizerNames;
+      if (this.currentPack === pack && names.has(this.normalizeSearch(pack.name))) btn.classList.remove('hidden');
+    } catch (e) { /* link just stays hidden */ }
   }
 
   clearFavorites() {
@@ -1356,7 +1710,10 @@ class PackLibrary {
   handleSearch(e) {
     const value = e.target.value;
     this.currentFilter.search = value.toLowerCase();
-    this.applyFilters();
+    // Re-rendering the whole grid on every keystroke is the most expensive
+    // thing on the page; suggestions stay instant, the grid catches up.
+    clearTimeout(this._searchTimer);
+    this._searchTimer = setTimeout(() => this.applyFilters(), value ? 120 : 0);
     document.getElementById('search-clear').classList.toggle('hidden', !value);
     this.renderSearchSuggestions(value);
   }
@@ -1464,12 +1821,13 @@ class PackLibrary {
 
   handleCategoryClick(e) {
     const row = e.currentTarget;
-    const category = row.dataset.category;
+    let category = row.dataset.category;
+    // Favorites is a switch in the Filters popover: clicking it again goes back to All.
+    if (category === 'favorites' && this.currentFilter.category === 'favorites') category = '';
     this.currentFilter.category = category;
     localStorage.setItem('selectedCategory', category);
 
-    document.querySelectorAll('#page-library .category-row').forEach(btn => btn.classList.remove('active'));
-    row.classList.add('active');
+    this.syncCategorySidebar();
 
     const currentEl = document.getElementById('library-category-current');
     if (currentEl) currentEl.textContent = row.querySelector('span:first-child').textContent.trim();
@@ -1491,6 +1849,7 @@ class PackLibrary {
     document.querySelectorAll('#page-library .category-row').forEach(btn => {
       const isActive = btn.dataset.category === this.currentFilter.category;
       btn.classList.toggle('active', isActive);
+      btn.setAttribute(btn.getAttribute('role') === 'switch' ? 'aria-checked' : 'aria-pressed', String(isActive));
       if (isActive) {
         const currentEl = document.getElementById('library-category-current');
         if (currentEl) currentEl.textContent = btn.querySelector('span:first-child').textContent.trim();
@@ -1552,10 +1911,10 @@ class PackLibrary {
         filtered.sort((a, b) => new Date(a.updatedAt || 0) - new Date(b.updatedAt || 0));
         break;
       case 'popular':
-        filtered.sort((a, b) => b.downloads - a.downloads);
+        filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
         break;
       case 'least-popular':
-        filtered.sort((a, b) => a.downloads - b.downloads);
+        filtered.sort((a, b) => (a.downloads || 0) - (b.downloads || 0));
         break;
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -1717,28 +2076,6 @@ class PackLibrary {
       grid.innerHTML = renderPackCards(this.filteredPacks);
     }
 
-    grid.querySelectorAll('.pack-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const id = parseInt(card.dataset.packId, 10);
-        const pack = this.packs.find(p => p.id === id);
-        if (!pack) return;
-
-        if (pack.category === 'website' && pack.externalUrl) {
-          this.openExternal(pack.externalUrl);
-        } else {
-          this.showDetail(pack);
-        }
-      });
-    });
-
-    grid.querySelectorAll('.pack-favorite-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = parseInt(btn.dataset.packId, 10);
-        this.toggleFavorite(id);
-      });
-    });
-
     // Collapsible category/sub-category sections: apply any already-collapsed
     // state (a divider carries the class from createCategoryDivider/createSubDivider,
     // but its sibling cards need it re-applied on every fresh render) and wire clicks.
@@ -1753,7 +2090,6 @@ class PackLibrary {
           el = el.nextElementSibling;
         }
       }
-      divider.addEventListener('click', () => this.toggleSectionCollapsed(divider));
     });
 
     this.fetchVisibleCardDownloadCounts();
@@ -1832,7 +2168,7 @@ class PackLibrary {
     if (pack.discontinued) {
       return `<span class="assets-tag assets-tag-discontinued"><i class="fas fa-ban"></i> Discontinued</span>`;
     }
-    if (pack.pinned || pack.category !== 'packs') return '';
+    if (pack.pinned || pack.community || pack.category !== 'packs') return '';
     return pack.requiresAssets
       ? `<span class="assets-tag assets-tag-required"><i class="fas fa-triangle-exclamation"></i> Assets Required</span>`
       : `<span class="assets-tag assets-tag-none"><i class="fas fa-check"></i> No Assets Needed</span>`;
@@ -1884,7 +2220,9 @@ class PackLibrary {
     if (!pack.updatedAt) return;
     const seen = this.loadSeenPackUpdates();
     seen[pack.id] = pack.updatedAt;
-    localStorage.setItem('seenPackUpdates', JSON.stringify(seen));
+    try {
+      localStorage.setItem('seenPackUpdates', JSON.stringify(seen));
+    } catch (e) { /* storage full or unavailable */ }
   }
 
   hasUnseenUpdate(pack) {
@@ -1931,78 +2269,44 @@ class PackLibrary {
     const requiredBadge = pack.pinned
       ? `<span class="pinned-badge"><i class="fas fa-thumbtack"></i> Required</span>`
       : '';
-    const assetsTag = this.assetsTag(pack);
-    const mcVersionTag = this.mcVersionTag(pack);
-    const comingSoonTag = this.comingSoonTag(pack);
-    const favoriteBtn = this.favoriteButton(pack);
-    const updatedBadge = this.updatedBadge(pack);
-    const newBadge = this.newBadge(pack);
-    const popularBadge = this.popularBadge(pack);
+    const flags = [
+      requiredBadge,
+      this.communityTag(pack),
+      this.mcVersionTag(pack),
+      this.assetsTag(pack),
+      this.comingSoonTag(pack),
+      this.newBadge(pack),
+      this.popularBadge(pack),
+      this.updatedBadge(pack)
+    ].join('');
+    const latest = (pack.versions && pack.versions[0]) || pack;
+    const version = String(latest.version || pack.version || '').replace(/^v/i, '');
+    const size = latest.size || pack.size || '';
+    const categoryLabel = pack.pinned ? 'Required' : this.capitalizeFirst(pack.category);
+    const iconContent = hasImage
+      ? this.pictureTag(pack.thumbnail, pack.thumbnailWebp)
+      : this.fallbackIconContent(pack);
 
-    if (this.viewMode === 'list') {
-      const iconBadge = hasImage
-        ? `<span class="pack-icon-badge">${this.pictureTag(pack.thumbnail, pack.thumbnailWebp)}</span>`
-        : `<span class="pack-icon-badge">${this.fallbackIconContent(pack)}</span>`;
-
-      return `
-        <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}" data-pack-id="${pack.id}">
-          <div class="pack-thumbnail">
-            ${iconBadge}
-          </div>
-          <div class="pack-content">
-            <div class="pack-title-row">
-              <span class="pack-name">${this.escapeHtml(pack.name)}</span>
-              ${mcVersionTag}
-              ${assetsTag}
-              ${comingSoonTag}
-              ${requiredBadge}
-              ${newBadge}
-              ${popularBadge}
-              ${updatedBadge}
-            </div>
-            <p class="pack-description">${this.escapeHtml(pack.description)}</p>
-            <div class="pack-footer">
-              <span class="pack-footer-author"><span class="pack-badge">${this.capitalizeFirst(pack.category)}</span> by ${this.escapeHtml(pack.author || 'Unknown')}</span>
-              <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
-            </div>
-          </div>
-          ${favoriteBtn}
-        </div>
-      `;
-    }
-
-    const hasBanner = this.isImagePath(pack.bannerUrl);
-    const bannerSrc = hasBanner ? pack.bannerUrl : DEFAULT_BANNER_URL;
-
-    const iconBadge = hasImage
-      ? `<span class="pack-icon-badge">${this.pictureTag(pack.thumbnail, pack.thumbnailWebp)}</span>`
-      : (pack.faIcon ? `<span class="pack-icon-badge">${this.fallbackIconContent(pack)}</span>` : '');
-
+    // One markup for both layouts (grid cards and list rows); library.css
+    // decides what each view shows.
     return `
       <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}" data-pack-id="${pack.id}">
-        ${requiredBadge}
-        <div class="pack-thumbnail">
-          ${this.pictureTag(bannerSrc, hasBanner ? pack.bannerUrlWebp : null, '', `class="pack-thumbnail-bg" onerror="this.style.display='none'"`)}
-          <span class="pack-splash-name"><span>${this.escapeHtml(pack.name)}</span></span>
-          ${iconBadge}
-          ${favoriteBtn}
-        </div>
+        <div class="pack-thumbnail"><span class="pack-icon-badge">${iconContent}</span></div>
+        ${this.favoriteButton(pack)}
         <div class="pack-content">
           <div class="pack-title-row">
             <span class="pack-name">${this.escapeHtml(pack.name)}</span>
-            <span class="pack-badge">${this.capitalizeFirst(pack.category)}</span>
-            ${mcVersionTag}
-            ${assetsTag}
-            ${comingSoonTag}
-            ${newBadge}
-            ${popularBadge}
-            ${updatedBadge}
           </div>
+          ${flags ? `<div class="pack-flags">${flags}</div>` : ''}
           <p class="pack-description">${this.escapeHtml(pack.description)}</p>
-          <div class="pack-footer">
-            <span>by ${this.escapeHtml(pack.author || 'Unknown')}</span>
-            <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
+          <div class="pack-meta">
+            <span class="pack-meta-main">${this.escapeHtml(categoryLabel)}${version ? ` &middot; v${this.escapeHtml(version)}` : ''}</span>
+            ${size ? `<span class="pack-meta-size">${this.escapeHtml(size)}</span>` : ''}
           </div>
+        </div>
+        <div class="pack-footer">
+          <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
+          <span class="pack-dl-btn"><i class="fas fa-download"></i> Download</span>
         </div>
       </div>
     `;
@@ -2020,7 +2324,9 @@ class PackLibrary {
     }
     ids = ids.filter(id => id !== pack.id);
     ids.unshift(pack.id);
-    localStorage.setItem('recentlyViewedPacks', JSON.stringify(ids.slice(0, 20)));
+    try {
+      localStorage.setItem('recentlyViewedPacks', JSON.stringify(ids.slice(0, 20)));
+    } catch (e) { /* storage full or unavailable */ }
   }
 
   showDetail(pack, { push = true } = {}) {
@@ -2040,10 +2346,10 @@ class PackLibrary {
 
     document.getElementById('detail-name').textContent = pack.name;
     document.getElementById('detail-badge').textContent = this.capitalizeFirst(pack.category);
-    document.getElementById('detail-author').textContent = `by ${pack.author || 'Unknown'}`;
+    document.getElementById('detail-author').textContent = `by ${pack.author || 'Unknown'}${pack.community ? ' · Community upload' : ''}`;
     document.getElementById('detail-description').textContent = pack.description;
 
-    const showsAssetsState = !pack.discontinued && !pack.pinned && pack.category === 'packs';
+    const showsAssetsState = !pack.discontinued && !pack.pinned && !pack.community && pack.category === 'packs';
     const assetsBadge = document.getElementById('detail-assets-badge');
     assetsBadge.classList.toggle('hidden', !(showsAssetsState && pack.requiresAssets));
     assetsBadge.onclick = () => this.showAssetsModal(pack, null);
@@ -2095,7 +2401,7 @@ class PackLibrary {
       const lootUrl = latestVersion.lootUrl || pack.lootUrl || '';
       detailDownload.dataset.rawUrl = rawUrl;
       detailDownload.dataset.lootUrl = lootUrl;
-      detailDownload.href = getMonetizedUrl(rawUrl, lootUrl);
+      detailDownload.href = getMonetizedUrl(rawUrl, lootUrl, undefined, this.lvIdFor(pack));
       detailDownload.innerHTML = pack.discontinued
         ? `<i class="fas fa-download"></i> Download (Archived)`
         : `<i class="fas fa-download"></i> Download`;
@@ -2108,6 +2414,8 @@ class PackLibrary {
     document.getElementById('detail-updated').textContent = this.formatDate(pack.updatedAt || pack.addedAt || pack.createdAt);
 
     this.currentPack = pack;
+    this.syncDetailFavorite();
+    this.syncCustomizerLink(pack);
     if (hasMultipleVersions) {
       // renderVersionsList() above already fetches each version's own count
       // and fills in #detail-downloads for the currently selected version.
@@ -2152,6 +2460,11 @@ class PackLibrary {
     statsEl.textContent = '';
     commentsEl.innerHTML = '';
     authorBadgeEl.classList.add('hidden');
+    const bannerImg = document.getElementById('user-profile-banner-img');
+    const editBtn = document.getElementById('user-profile-edit-btn');
+    bannerImg.classList.add('hidden');
+    bannerImg.removeAttribute('src');
+    editBtn.classList.add('hidden');
 
     try {
       const res = await this.authFetch(`/api/users/${userId}`);
@@ -2165,6 +2478,12 @@ class PackLibrary {
       joinedEl.textContent = data.user.joinedAt ? `Joined ${this.formatDate(data.user.joinedAt)}` : '';
       statsEl.textContent = `${data.commentCount} comment${data.commentCount === 1 ? '' : 's'} · ${data.ratingCount} rating${data.ratingCount === 1 ? '' : 's'}`;
       authorBadgeEl.classList.toggle('hidden', !data.user.isAuthor);
+      if (data.user.bannerUrl) {
+        bannerImg.src = data.user.bannerUrl;
+        bannerImg.classList.remove('hidden');
+      }
+      editBtn.classList.toggle('hidden', !(this.currentUser && data.user.id && this.currentUser.id === data.user.id));
+      editBtn.onclick = () => this.openProfileModal();
 
       const commentsRes = await this.authFetch(`/api/users/${userId}/comments`);
       if (commentsRes.ok) {
@@ -2265,7 +2584,10 @@ class PackLibrary {
       return `
         <button type="button" class="related-pack-card" data-pack-id="${p.id}">
           <span class="related-pack-icon">${iconContent}</span>
-          <span class="related-pack-name">${this.escapeHtml(p.name)}</span>
+          <span class="related-pack-text">
+            <span class="related-pack-name">${this.escapeHtml(p.name)}</span>
+            <span class="related-pack-meta">${this.escapeHtml(this.capitalizeFirst(p.category))}${(((p.versions && p.versions[0]) || p).version) ? ' &middot; v' + this.escapeHtml(String(((p.versions && p.versions[0]) || p).version).replace(/^v/i, '')) : ''}</span>
+          </span>
         </button>
       `;
     }).join('');
@@ -2280,10 +2602,15 @@ class PackLibrary {
   }
 
   getVoterId() {
-    let id = localStorage.getItem('voterId');
+    let id = null;
+    try {
+      id = localStorage.getItem('voterId');
+    } catch (e) { /* storage unavailable - fall back to a per-call id */ }
     if (!id) {
       id = 'v-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-      localStorage.setItem('voterId', id);
+      try {
+        localStorage.setItem('voterId', id);
+      } catch (e) { /* not persisted - not fatal */ }
     }
     return id;
   }
@@ -2356,7 +2683,11 @@ class PackLibrary {
   }
 
   getSessionToken() {
-    return localStorage.getItem('sessionToken');
+    try {
+      return localStorage.getItem('sessionToken');
+    } catch (e) {
+      return null; // storage blocked (private mode / site data cleared) - treat as signed out
+    }
   }
 
   // ===== Multi-account support =====
@@ -2546,7 +2877,7 @@ class PackLibrary {
     document.getElementById('auth-username-input').classList.toggle('hidden', !isSignup);
     document.getElementById('auth-password-input').autocomplete = isSignup ? 'new-password' : 'current-password';
     document.getElementById('auth-form-submit-btn').textContent = isSignup ? 'Sign up' : 'Login';
-    document.getElementById('email-auth-modal-title').textContent = isSignup ? 'Sign Up' : 'Login';
+    document.getElementById('email-auth-modal-title').textContent = isSignup ? 'Sign up' : 'Login';
     document.getElementById('email-auth-modal-sub').textContent = isSignup
       ? 'Create a new account with your email and password.'
       : 'Sign in with your email and password.';
@@ -2916,6 +3247,8 @@ class PackLibrary {
         input.value = '';
         this.loadComments(this.currentPack);
       }
+    } catch (e) {
+      /* network error - keep the draft so it can be re-sent */
     } finally {
       btn.disabled = false;
     }
@@ -2932,15 +3265,17 @@ class PackLibrary {
       const data = await res.json();
       btn.classList.toggle('liked', data.likedByMe);
       btn.innerHTML = `<i class="${data.likedByMe ? 'fas' : 'far'} fa-heart"></i> ${data.likeCount > 0 ? data.likeCount : ''}`;
-    } finally {
+    } catch (e) { /* network error - leave the button as it was */ } finally {
       btn.disabled = false;
     }
   }
 
   async deleteComment(commentId) {
     if (!confirm('Delete this comment?')) return;
-    const res = await this.authFetch(`/api/comment/${commentId}`, { method: 'DELETE' });
-    if (res.ok && this.currentPack) this.loadComments(this.currentPack);
+    try {
+      const res = await this.authFetch(`/api/comment/${commentId}`, { method: 'DELETE' });
+      if (res.ok && this.currentPack) this.loadComments(this.currentPack);
+    } catch (e) { /* network error - comment stays listed */ }
   }
 
   formatDate(dateStr) {
@@ -2950,7 +3285,43 @@ class PackLibrary {
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
+  // Approved community uploads from the uploads worker, shaped like
+  // packs.json entries. A slow or missing worker never blocks the library.
+  async loadCommunityPacks({ fresh = false } = {}) {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 5000);
+      const res = await fetch(`${UPLOADS_API}/api/community/packs`, { signal: ctrl.signal, cache: fresh ? 'reload' : 'default' });
+      clearTimeout(timer);
+      if (!res.ok) return [];
+      const data = await res.json();
+      // Each version already carries its own LootLabs link (made by the uploads worker).
+      return data.packs || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // Whose Linkvertise account a download credits: Pepe's for his packs,
+  // the uploader's for community packs (null = no Linkvertise).
+  lvIdFor(pack) {
+    if (pack && pack.community) return pack.linkvertiseId || null;
+    return LINKVERTISE_USER_ID;
+  }
+
+  // The Linkvertise/LootLabs chooser only makes sense when a pack has both.
+  hasProviderChoice(pack) {
+    if (!pack || !pack.community) return true;
+    return !!(pack.linkvertiseId && (pack.versions || []).some(v => v.lootUrl));
+  }
+
+  communityTag(pack) {
+    if (!pack.community) return '';
+    return `<span class="community-badge" title="Uploaded by ${this.escapeHtml(pack.author || 'a community member')}"><i class="fas fa-users"></i> Community</span>`;
+  }
+
   packSlug(pack) {
+    if (pack.slug) return pack.slug;
     return (pack.name || `pack-${pack.id}`)
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -3047,9 +3418,9 @@ class PackLibrary {
   renderVersionSelectMenu(pack) {
     const menu = document.getElementById('version-select-menu');
     menu.innerHTML = pack.versions.map((v, i) => `
-      <li role="option" data-index="${i}" class="${i === 0 ? 'selected' : ''}">${this.escapeHtml(pack.name)} v${this.escapeHtml(v.version || '1.0.0')}</li>
+      <li role="option" data-index="${i}" class="${i === 0 ? 'selected' : ''}" aria-selected="${i === 0}"><b>v${this.escapeHtml(String(v.version || '1.0.0').replace(/^v/i, ''))}</b>${i === 0 ? '<span class="version-opt-latest">latest</span>' : ''}<span class="version-opt-size">${this.escapeHtml(v.size || '')}</span></li>
     `).join('');
-    document.getElementById('version-select-label').textContent = `${pack.name} v${pack.versions[0].version || '1.0.0'}`;
+    document.getElementById('version-select-label').innerHTML = this.versionLabelHtml(pack, 0);
 
     menu.querySelectorAll('li').forEach(li => {
       li.addEventListener('click', () => {
@@ -3060,20 +3431,28 @@ class PackLibrary {
     });
   }
 
+  versionLabelHtml(pack, index) {
+    const v = pack.versions[index] || {};
+    const num = this.escapeHtml(String(v.version || '1.0.0').replace(/^v/i, ''));
+    return `v${num}${index === 0 ? ' <span class="version-opt-latest">latest</span>' : ''}`;
+  }
+
   selectPackVersion(pack, index) {
     const version = pack.versions[index];
     if (!version) return;
     this.selectedVersionIndex = index;
 
-    document.getElementById('version-select-label').textContent = `${pack.name} v${version.version || '1.0.0'}`;
+    document.getElementById('version-select-label').innerHTML = this.versionLabelHtml(pack, index);
     document.querySelectorAll('#version-select-menu li').forEach(li => {
-      li.classList.toggle('selected', parseInt(li.dataset.index, 10) === index);
+      const on = parseInt(li.dataset.index, 10) === index;
+      li.classList.toggle('selected', on);
+      li.setAttribute('aria-selected', String(on));
     });
 
     const detailDownload = document.getElementById('detail-download');
     detailDownload.dataset.rawUrl = version.downloadUrl;
     detailDownload.dataset.lootUrl = version.lootUrl || '';
-    detailDownload.href = getMonetizedUrl(version.downloadUrl, version.lootUrl);
+    detailDownload.href = getMonetizedUrl(version.downloadUrl, version.lootUrl, undefined, this.lvIdFor(pack));
     this.applyLinkTargets();
 
     document.getElementById('detail-downloads').textContent = '…';
@@ -3120,7 +3499,7 @@ class PackLibrary {
           </div>
           ${v.changelog ? `<p class="version-changelog">${this.escapeHtml(v.changelog)}</p>` : ''}
         </div>
-        <a href="${getMonetizedUrl(v.downloadUrl, v.lootUrl)}" class="btn-download version-download-btn" data-version-index="${i}" data-raw-url="${v.downloadUrl}" data-loot-url="${v.lootUrl || ''}">
+        <a href="${getMonetizedUrl(v.downloadUrl, v.lootUrl, undefined, this.lvIdFor(pack))}" class="btn-download version-download-btn" data-version-index="${i}" data-raw-url="${v.downloadUrl}" data-loot-url="${v.lootUrl || ''}">
           <i class="fas fa-download"></i> Download
         </a>
       </div>
@@ -3246,6 +3625,8 @@ class PackLibrary {
   // requests for the same pack/version so callers awaiting the same key
   // share one in-flight request instead of firing duplicates.
   fetchLiveDownloads(pack, version) {
+    // Community packs are counted by the uploads worker when the file is really fetched.
+    if (pack.community) return Promise.resolve((version ? version.downloads : pack.downloads) || 0);
     const key = this.counterKey(pack, version);
 
     // Short-lived cache across page loads: reloading the library repeatedly
@@ -3324,6 +3705,7 @@ class PackLibrary {
   }
 
   async incrementDownloads(pack, version) {
+    if (pack.community) return (version ? version.downloads : pack.downloads) || 0;
     const fallback = (version ? 0 : pack.downloads) + 1;
     try {
       const key = this.counterKey(pack, version);
@@ -3529,7 +3911,10 @@ class PackLibrary {
 
   syncDropdownSelection(dropdown, value) {
     if (!dropdown || !dropdown.menu) return;
-    const option = dropdown.menu.querySelector(`li[data-value="${value}"]`);
+    // Compare in JS instead of building a selector: a stored value containing
+    // quotes would make querySelector throw and abort loadTheme() entirely.
+    const option = Array.from(dropdown.menu.querySelectorAll('li[data-value]'))
+      .find(li => li.dataset.value === String(value));
     if (option) dropdown.select(option.dataset.value, option.textContent);
   }
 
@@ -3619,6 +4004,22 @@ class PackLibrary {
       const text = `${name ? name.textContent : ''} ${desc ? desc.textContent : ''}`.toLowerCase();
       row.classList.toggle('setting-row-hidden', !!term && !text.includes(term));
     });
+
+    // Group headings and their cards disappear when none of their rows match.
+    document.querySelectorAll('#page-settings .settings-list').forEach(list => {
+      const hasVisible = !!list.querySelector('.setting-row:not(.setting-row-hidden)');
+      list.classList.toggle('setting-row-hidden', !hasVisible);
+      const title = list.previousElementSibling;
+      if (title && title.classList.contains('settings-group-title')) title.classList.toggle('setting-row-hidden', !hasVisible);
+    });
+    const empty = document.getElementById('settings-empty');
+    if (empty) {
+      const anyHit = !!document.querySelector('#page-settings .setting-row:not(.setting-row-hidden)');
+      empty.hidden = !term || anyHit;
+    }
+    const clear = document.getElementById('settings-search-clear');
+    if (clear) clear.hidden = !term;
+    this.updateSettingsCategoryCounts();
   }
 
   // `value` is either a preset name ('green', 'blue', ...) or a custom
@@ -3633,9 +4034,16 @@ class PackLibrary {
     const light = shadeHex(accent, 0.25);
 
     const root = document.documentElement.style;
+    const isGreen = !isCustomHex && (value === 'green' || !ACCENT_PRESETS[value]);
     root.setProperty('--color-accent', accent);
-    root.setProperty('--color-accent-dark', dark);
-    root.setProperty('--color-accent-light', light);
+    root.setProperty('--color-accent-dark', isGreen ? '#348b25' : dark);
+    root.setProperty('--color-accent-light', isGreen ? '#a3de97' : light);
+    root.setProperty('--accent-deep', isGreen ? '#216639' : shadeHex(accent, -0.5));
+    root.setProperty('--accent-deepest', isGreen ? '#074723' : shadeHex(accent, -0.72));
+    // Text on an accent fill: dark ink on light accents, white on dark ones.
+    const { r: ar, g: ag, b: ab } = hexToRgb(accent);
+    const lum = (0.2126 * ar + 0.7152 * ag + 0.0722 * ab) / 255;
+    root.setProperty('--on-accent', lum > 0.55 ? (isGreen ? '#074723' : shadeHex(accent, -0.75)) : '#ffffff');
 
     this.syncThemeStudio(accent);
 
@@ -4002,7 +4410,7 @@ function updateBirthdayCountdown() {
 
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   if (startOfToday.getTime() === birthday.getTime()) {
-    el.textContent = "It's my birthday today! 🎉";
+    el.textContent = "It's my birthday today!";
     return;
   }
   if (startOfToday > birthday) {
@@ -4011,7 +4419,7 @@ function updateBirthdayCountdown() {
 
   const msPerDay = 24 * 60 * 60 * 1000;
   const days = Math.ceil((birthday - startOfToday) / msPerDay);
-  el.textContent = `${days} day${days === 1 ? '' : 's'} to go 🎂`;
+  el.textContent = `${days} day${days === 1 ? '' : 's'} to go`;
 }
 
 function show404() {

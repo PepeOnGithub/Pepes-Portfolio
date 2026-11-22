@@ -3,7 +3,7 @@
     "description": "An early Optifine-branded release built during the client's original run under the name Zephyx, before the project rebranded to Pepe and later evolved into the Glacier Client lineage.",
     "author": "Zephyx",
     "version": "1.0.0",
-    "thumbnail": "\ud83d\udce6",
+    "thumbnail": "📦",
     "tags": [
         "clients"
     ],
@@ -12,5 +12,6 @@
     "mcVersion": "1.19",
     "timelineOrder": 9,
     "faIcon": "fa-bolt",
-    "discontinued": true
+    "discontinued": true,
+    "showcaseUrl": "https://youtu.be/usrLHOm5GEc"
 }

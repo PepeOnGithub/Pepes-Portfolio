@@ -4,6 +4,7 @@
     "license": "MIT",
     "description": "Adds simple in-game controls to set the world time instantly, saving you from typing out commands whenever you want to skip to day, night, or a specific time.",
     "category": "utility",
-    "thumbnail": "\ud83d\udd27",
-    "version": "1.0.0"
+    "thumbnail": "🔧",
+    "version": "1.0.0",
+    "showcaseUrl": "https://youtu.be/1lASU1NnjZc"
 }

@@ -1,0 +1,38 @@
+name: Update item IDs
+
+# Keeps tools/food-saturation/item_ids.json in sync with the latest Minecraft
+# release, using the pack AsakiYuki/minecraft-item-id-viewer publishes.
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Refresh item IDs and rebuild the pack
+        run: python tools/update_item_ids.py --build
+
+      - name: Commit if the IDs changed
+        run: |
+          if git diff --quiet -- tools/food-saturation/item_ids.json; then
+            echo "No item ID changes."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add tools/food-saturation/item_ids.json
+            git commit -m "Update food item IDs"
+            git push
+          fi
