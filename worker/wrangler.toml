@@ -32,11 +32,14 @@ PUBLIC_ORIGIN = "https://pepes-portfolio-uploads.pepeoncloudeflare.workers.dev"
 [triggers]
 crons = ["*/10 * * * *"]
 
+# Shares the existing pepes-portfolio-db (same database the accounts worker
+# uses). The uploads tables (packs, versions, creators, stats_daily, seen) don't
+# overlap with the accounts tables (users, sessions, downloads, ratings,
+# comments, comment_likes, comment_reports).
 [[d1_databases]]
 binding = "DB"
-database_name = "pepes-portfolio-uploads"
-# Replace with the id printed by: npx wrangler d1 create pepes-portfolio-uploads
-database_id = "00000000-0000-0000-0000-000000000000"
+database_name = "pepes-portfolio-db"
+database_id = "377d1f3c-be1a-473b-985b-b7be5e1a1db2"
 
 [[r2_buckets]]
 binding = "FILES"

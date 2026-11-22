@@ -5,8 +5,8 @@ name: Deploy uploads worker
 #   CLOUDFLARE_API_TOKEN  - with Workers Scripts, D1 and R2 edit access
 #   GEMINI_API_KEY        - Google AI Studio key for the AI reviewer
 #   TOKEN_KEY             - long random string that encrypts creators' LootLabs tokens
-# Before the first run: create the D1 database and R2 bucket and put the
-# database_id in worker/wrangler.toml (see README "Community Uploads").
+# Uses the existing D1 database pepes-portfolio-db (id in worker/wrangler.toml)
+# and creates the R2 bucket pepes-portfolio-uploads on the first run.
 
 on:
   push:
@@ -40,30 +40,16 @@ jobs:
 
       - run: npm ci
 
-      # Creates the D1 database and R2 bucket if they don't exist yet, then
-      # writes the database ID into wrangler.toml for this run only (the file
-      # in git keeps the placeholder). Safe to re-run.
-      - name: Provision D1 database and R2 bucket
-        run: |
-          set -euo pipefail
-          DB=pepes-portfolio-uploads
-          ID=$(npx wrangler d1 list --json | jq -r --arg n "$DB" '.[] | select(.name == $n) | .uuid')
-          if [ -z "$ID" ]; then
-            npx wrangler d1 create "$DB"
-            ID=$(npx wrangler d1 list --json | jq -r --arg n "$DB" '.[] | select(.name == $n) | .uuid')
-          fi
-          if [ -z "$ID" ]; then
-            echo "Could not find or create D1 database $DB" >&2
-            exit 1
-          fi
-          echo "D1 database $DB id: $ID"
-          sed -i "s/^database_id = .*/database_id = \"$ID\"/" wrangler.toml
-          # Errors if the bucket already exists; that is fine on re-runs.
-          npx wrangler r2 bucket create "$DB" || echo "R2 bucket $DB not created (probably already exists)"
+      # Creates the R2 bucket if it doesn't exist yet. Errors if it already
+      # exists, which is fine on re-runs. The D1 database is pepes-portfolio-db,
+      # set in wrangler.toml, so nothing is created for D1.
+      - name: Ensure R2 bucket exists
+        run: npx wrangler r2 bucket create pepes-portfolio-uploads || echo "R2 bucket not created (probably already exists)"
 
-      # CREATE TABLE IF NOT EXISTS, so re-running it is safe.
+      # CREATE TABLE IF NOT EXISTS, so re-running it is safe. Only adds the
+      # uploads tables to pepes-portfolio-db; existing tables are not touched.
       - name: Apply database schema
-        run: npx wrangler d1 execute pepes-portfolio-uploads --remote --file=schema.sql
+        run: npx wrangler d1 execute pepes-portfolio-db --remote --file=schema.sql
 
       - name: Deploy
         run: npx wrangler deploy
