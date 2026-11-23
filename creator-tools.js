@@ -89,7 +89,7 @@ class CreatorTools {
   }
 
   async loadStats() {
-    this.setState('<div class="cs-msg"><i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i><p>Loading your stats…</p></div>');
+    this.setState('<div class="sk-stack" role="status" aria-label="Loading your stats"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px"><span class="sk" style="height:96px;border-radius:16px"></span><span class="sk" style="height:96px;border-radius:16px"></span><span class="sk" style="height:96px;border-radius:16px"></span><span class="sk" style="height:96px;border-radius:16px"></span></div><span class="sk" style="height:220px;border-radius:16px"></span></div>');
     try {
       const me = await this.up.api('/api/community/me');
       if (!me.user) {

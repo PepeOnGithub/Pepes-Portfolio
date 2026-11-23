@@ -20,7 +20,7 @@
 .user-profile-count b { color: var(--color-text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
 .user-profile-count:hover b, .user-profile-count:focus-visible b { color: var(--color-accent); }
 
-#page-user .user-profile-actions { flex: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+#page-user .user-profile-actions { flex: none; display: flex; flex-wrap: wrap; gap: 8px; padding-top: 16px; }
 #page-user .user-profile-actions .user-profile-edit { margin: 0; }
 #page-user .user-profile-actions .hidden { display: none; }
 #page-user .user-profile-actions button[disabled] { opacity: 0.5; cursor: not-allowed; }
@@ -30,8 +30,9 @@
 #page-user .user-profile-follow-btn:not(.is-following):hover { background: var(--color-accent-light); }
 
 @media (max-width: 720px) {
-  #page-user .user-profile-actions { margin: 0; }
-  #page-user .user-profile-actions button { min-height: 44px; }
+  /* Equal-width buttons in one row, like Instagram's Follow / Message. */
+  #page-user .user-profile-actions { width: 100%; padding-top: 4px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+  #page-user .user-profile-actions button { min-height: 44px; justify-content: center; padding: 0 8px; }
 }
 
 /* --- Followers / following list --- */
@@ -197,3 +198,34 @@
   flex: 0 0 100%; margin: 0; font-size: 13px; line-height: 1.45; color: var(--color-text-secondary);
 }
 #page-user .user-profile-verify.hidden { display: none; }
+
+/* ===== Skeleton placeholders =====
+   Shaped like the content that replaces them, so pages feel instant and nothing jumps.
+   .sk is one shimmering block; size it with width/height (or the helpers below). */
+.sk {
+  display: block; border-radius: 8px;
+  background: linear-gradient(90deg, var(--color-bg-tertiary) 25%, var(--color-bg-elevated, #3a3d42) 50%, var(--color-bg-tertiary) 75%);
+  background-size: 200% 100%; animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+.sk-inline { display: inline-block; vertical-align: middle; }
+.sk-circle { border-radius: 50%; flex: none; }
+.sk-line { height: 12px; border-radius: 6px; }
+.sk-row { display: flex; align-items: center; gap: 12px; padding: 10px 8px; }
+.sk-stack { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+.sk-card { padding: 16px 20px; border-radius: 12px; background: var(--color-bg-secondary); display: flex; flex-direction: column; gap: 10px; }
+.sk-bubble { height: 36px; border-radius: 16px; }
+.sk-bubble-wrap { display: flex; flex-direction: column; gap: 14px; padding: 16px; }
+.sk-bubble-wrap .sk:nth-child(even) { align-self: flex-end; }
+img.sk-img { color: transparent; }
+@media (prefers-reduced-motion: reduce) { .sk { animation: none; } }
+
+/* Upload page while it loads: tabs + form outline */
+.up-skeleton { display: flex; flex-direction: column; gap: 16px; }
+.up-skeleton-tabs { display: flex; gap: 8px; }
+.up-skeleton-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+.up-skeleton-note { margin: 0; text-align: center; font-size: 14px; color: var(--color-text-secondary); }
+@media (max-width: 960px) { .up-skeleton-grid { grid-template-columns: minmax(0, 1fr); } }
+#page-user .user-profile-avatar.sk-img {
+  background-image: linear-gradient(90deg, var(--color-bg-tertiary) 25%, var(--color-bg-elevated) 50%, var(--color-bg-tertiary) 75%);
+  background-size: 200% 100%; animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}

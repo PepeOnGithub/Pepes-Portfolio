@@ -174,7 +174,7 @@ class Social {
     const name = this.profile.user.name;
     document.getElementById('follow-list-title').textContent = which === 'followers' ? `${name}'s followers` : `${name} follows`;
     const box = document.getElementById('follow-list');
-    box.innerHTML = '<p class="follow-list-empty">Loading…</p>';
+    box.innerHTML = this.skRows(4, 40);
     document.getElementById('follow-list-overlay').classList.remove('hidden');
     try {
       const { users } = await this.api(`${this.userPath(this.profile.user.id)}/${which}`);
@@ -256,6 +256,7 @@ class Social {
   async openPanel(user) {
     if (!this.signedIn()) return this.signIn();
     document.getElementById('dm-overlay').classList.remove('hidden');
+    if (!user) this.showList(); // right pane ready while the list loads
     await this.loadList();
     if (user) this.openThread(user);
     else this.showList();
@@ -281,8 +282,16 @@ class Social {
     this.markActive();
   }
 
+  // Placeholder rows (avatar + two lines) while a list loads.
+  skRows(n, size) {
+    return '<div role="status" aria-label="Loading">' + Array.from({ length: n }, (_, i) => `
+      <div class="sk-row"><span class="sk sk-circle" style="width:${size}px;height:${size}px"></span>
+      <span class="sk-stack"><span class="sk sk-line" style="width:${45 + (i * 17) % 35}%"></span><span class="sk sk-line" style="width:${30 + (i * 23) % 40}%"></span></span></div>`).join('') + '</div>';
+  }
+
   async loadList() {
     const box = document.getElementById('dm-list');
+    if (!box.querySelector('.dm-conv')) box.innerHTML = this.skRows(5, 44);
     try {
       const { conversations, unread } = await this.api('/api/community/messages');
       this.setUnread(unread);
@@ -313,7 +322,8 @@ class Social {
     this.peer = { id: String(user.id), name: user.name || '', username: user.username || '', verified: !!user.verified, owner: !!user.owner };
     document.querySelector('.dm-panel').classList.add('has-thread');
     this.renderWho();
-    document.getElementById('dm-msgs').innerHTML = '<p class="dm-empty">Loading…</p>';
+    document.getElementById('dm-msgs').innerHTML = '<div class="sk-bubble-wrap" role="status" aria-label="Loading messages">'
+      + ['55%', '40%', '65%', '30%'].map(w => `<span class="sk sk-bubble" style="width:${w}"></span>`).join('') + '</div>';
     document.getElementById('dm-compose').classList.remove('hidden');
     this.markActive();
     await this.loadThread(true);
@@ -436,8 +446,10 @@ class Social {
   }
 
   setUnread(n) {
-    ['dm-pill-badge', 'dm-menu-badge'].forEach(id => {
+    this.unread = n;
+    ['dm-pill-badge', 'dm-menu-badge', 'dm-top-badge', 'dm-tab-badge'].forEach(id => {
       const el = document.getElementById(id);
+      if (!el) return;
       el.textContent = n > 99 ? '99+' : String(n);
       el.classList.toggle('hidden', !n);
     });

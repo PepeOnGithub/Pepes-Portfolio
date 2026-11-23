@@ -89,14 +89,15 @@
         <span class="brand-mark"><img src="assets/pepe-profile.png" alt="" class="brand-avatar"></span>
         <span class="brand-name">Pepe</span>
       </a>
-      <nav class="topnav-links">
+      <nav class="topnav-links" aria-label="Main">
         <a href="#" class="topnav-link active" data-page="home"><i class="fas fa-house" aria-hidden="true"></i><span>Home</span></a>
+        <a href="#" class="topnav-link" data-page="library"><i class="fas fa-compass" aria-hidden="true"></i><span>Library</span></a>
+        <a href="#" class="topnav-link" data-page="customizer"><i class="fas fa-sliders" aria-hidden="true"></i><span>Customizer</span></a>
+        <a href="#" class="topnav-link" data-page="upload"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i><span>Upload</span></a>
+        <p class="topnav-group" role="presentation">More from Pepe</p>
         <a href="#" class="topnav-link" data-page="projects"><i class="fas fa-diagram-project" aria-hidden="true"></i><span>Projects</span></a>
         <a href="#" class="topnav-link" data-page="socials"><i class="fas fa-share-nodes" aria-hidden="true"></i><span>Socials</span></a>
-        <a href="#" class="topnav-link" data-page="library"><i class="fas fa-box-open" aria-hidden="true"></i><span>Library</span></a>
-        <a href="#" class="topnav-link" data-page="customizer"><i class="fas fa-sliders" aria-hidden="true"></i><span>Customizer</span></a>
         <a href="#" class="topnav-link" data-page="stats"><i class="fas fa-chart-simple" aria-hidden="true"></i><span>Stats</span></a>
-        <a href="#" class="topnav-link" data-page="upload"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i><span>Upload</span></a>
       </nav>
     </div>
     <div class="topnav-right">
@@ -133,6 +134,10 @@
           <button type="button" class="auth-menu-item" id="auth-logout-btn"><i class="fas fa-right-from-bracket"></i> Sign out</button>
         </div>
       </div>
+      <button type="button" class="icon-btn mobile-only" id="top-search-btn" title="Search the library" aria-label="Search the library"><i class="fas fa-magnifying-glass" aria-hidden="true"></i></button>
+      <button type="button" class="icon-btn mobile-only top-dm-btn hidden" id="top-dm-btn" title="Messages" aria-label="Messages">
+        <i class="fas fa-paper-plane" aria-hidden="true"></i><span class="dm-badge hidden" id="dm-top-badge"></span>
+      </button>
       <button class="icon-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
         <i class="fas fa-sun"></i>
       </button>
@@ -145,24 +150,20 @@
     </div>
   </header>
 
-  <!-- Phones: bottom tab bar with the four main destinations, the rest under "More". -->
+  <!-- Phones: bottom tab bar like Instagram/TikTok/YouTube. Home, Library, a centre "+" for
+       Upload, Customize, and "You" (account, messages, the other pages and settings). nav.js -->
   <nav class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Main">
-    <a href="#" class="mobile-nav-link active" data-page="home"><i class="fas fa-house" aria-hidden="true"></i> Home</a>
-    <a href="#" class="mobile-nav-link" data-page="library"><i class="fas fa-box-open" aria-hidden="true"></i> Library</a>
-    <a href="#" class="mobile-nav-link" data-page="customizer"><i class="fas fa-sliders" aria-hidden="true"></i> Customize</a>
-    <a href="#" class="mobile-nav-link" data-page="upload"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Upload</a>
-    <button type="button" class="mobile-nav-link mobile-more-btn" id="mobile-more-btn" aria-expanded="false" aria-controls="mobile-more-sheet"><i class="fas fa-ellipsis" aria-hidden="true"></i> More</button>
+    <a href="#" class="mobile-nav-link active" data-page="home"><i class="fas fa-house" aria-hidden="true"></i><span>Home</span></a>
+    <a href="#" class="mobile-nav-link" data-page="library"><i class="fas fa-compass" aria-hidden="true"></i><span>Library</span></a>
+    <a href="#" class="mobile-nav-link mobile-nav-create" data-page="upload" aria-label="Upload a pack"><span class="mobile-nav-plus"><i class="fas fa-plus" aria-hidden="true"></i></span></a>
+    <a href="#" class="mobile-nav-link" data-page="customizer"><i class="fas fa-sliders" aria-hidden="true"></i><span>Customize</span></a>
+    <button type="button" class="mobile-nav-link mobile-you-btn" id="mobile-you-btn" aria-expanded="false" aria-controls="mobile-you-sheet">
+      <span class="mobile-you-icon" id="mobile-you-icon"><i class="fas fa-circle-user" aria-hidden="true"></i></span><span>You</span>
+      <span class="dm-badge mobile-you-badge hidden" id="dm-tab-badge" aria-hidden="true"></span>
+    </button>
   </nav>
-  <div class="mobile-more-sheet" id="mobile-more-sheet" hidden>
-    <div class="mobile-more-panel" role="dialog" aria-label="More pages">
-      <a href="#" class="mobile-more-link" data-page="projects"><i class="fas fa-diagram-project" aria-hidden="true"></i><span>Projects</span></a>
-      <a href="#" class="mobile-more-link" data-page="socials"><i class="fas fa-share-nodes" aria-hidden="true"></i><span>Socials</span></a>
-      <a href="#" class="mobile-more-link" data-page="stats"><i class="fas fa-chart-simple" aria-hidden="true"></i><span>Stats</span></a>
-      <a href="#" class="mobile-more-link" data-page="settings"><i class="fas fa-cog" aria-hidden="true"></i><span>Settings</span></a>
-      <p class="mobile-more-legal">
-        <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="guidelines.html">Guidelines</a><a href="copyright.html">Copyright</a>
-      </p>
-    </div>
+  <div class="mobile-more-sheet" id="mobile-you-sheet" hidden>
+    <div class="mobile-more-panel" role="dialog" aria-modal="true" aria-label="You" id="mobile-you-panel"></div>
   </div>
 
   <div id="main-content" tabindex="-1">
@@ -1787,9 +1788,13 @@
     </div>
 
     <div class="up-wrap">
-      <div class="up-state" id="up-loading">
-        <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
-        <p>Loading your uploads…</p>
+      <div class="up-skeleton" id="up-loading" role="status" aria-label="Loading your uploads">
+        <div class="up-skeleton-tabs"><span class="sk" style="width:130px;height:40px"></span><span class="sk" style="width:130px;height:40px"></span><span class="sk" style="width:110px;height:40px"></span></div>
+        <div class="up-skeleton-grid">
+          <div class="sk-stack"><span class="sk" style="height:180px;border-radius:12px"></span><span class="sk" style="height:64px;border-radius:12px"></span></div>
+          <div class="sk-stack"><span class="sk sk-line" style="width:30%"></span><span class="sk" style="height:44px"></span><span class="sk sk-line" style="width:40%"></span><span class="sk" style="height:96px"></span><span class="sk sk-line" style="width:25%"></span><span class="sk" style="height:44px"></span></div>
+        </div>
+        <p class="up-skeleton-note hidden" id="up-loading-note"></p>
       </div>
 
       <div class="up-state hidden" id="up-signed-out">
@@ -2099,5 +2104,6 @@
   <script src="creator-tools.js"></script>
   <script src="chat-format.js"></script>
   <script src="social.js"></script>
+  <script src="nav.js"></script>
 </body>
 </html>

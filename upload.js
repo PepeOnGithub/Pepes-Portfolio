@@ -114,9 +114,9 @@ class UploadsPage {
   async load() {
     this.loadedFor = this.token();
     this.showState('loading');
-    const note = document.querySelector('#up-loading p');
-    if (note) note.textContent = 'Loading your uploads…';
-    const slow = setTimeout(() => { if (note) note.textContent = 'Still loading… the upload service is slower than usual right now.'; }, 6000);
+    const note = document.getElementById('up-loading-note');
+    if (note) { note.textContent = ''; note.classList.add('hidden'); }
+    const slow = setTimeout(() => { if (note) { note.textContent = 'Still loading… the upload service is slower than usual right now.'; note.classList.remove('hidden'); } }, 6000);
     try {
       // These don't depend on each other, so ask for all of them at once rather
       // than one after the other. If you aren't signed in the last two answer
@@ -459,7 +459,7 @@ class UploadsPage {
     box.classList.remove('hidden');
     body.classList.add('hidden');
     state.classList.remove('hidden');
-    state.innerHTML = '<i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> Loading your creator profile…';
+    state.innerHTML = '<div class="sk-stack" role="status" aria-label="Loading your creator profile"><span class="sk sk-line" style="width:25%"></span><span class="sk" style="height:88px"></span><span class="sk sk-line" style="width:20%"></span><span class="sk" style="height:44px"></span></div>';
     try {
       const res = await this.api('/api/community/creator');
       if (seq !== this._creatorSeq) return; // the dialog was closed and reopened meanwhile

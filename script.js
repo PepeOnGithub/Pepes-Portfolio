@@ -314,28 +314,6 @@ class Router {
       if (drawer.contains(e.target) || toggle.contains(e.target)) return;
       closeDrawer();
     });
-
-    // Phones: "More" in the tab bar opens a sheet with the less-used pages.
-    const moreBtn = document.getElementById('mobile-more-btn');
-    const sheet = document.getElementById('mobile-more-sheet');
-    if (!moreBtn || !sheet) return;
-    const setMore = (open) => {
-      sheet.hidden = !open;
-      moreBtn.setAttribute('aria-expanded', String(open));
-      moreBtn.classList.toggle('open', open);
-      if (open) sheet.querySelector('a')?.focus({ preventScroll: true });
-    };
-    this.closeMoreSheet = () => setMore(false);
-    moreBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      setMore(sheet.hidden);
-    });
-    sheet.addEventListener('click', (e) => {
-      if (e.target === sheet || e.target.closest('a')) setMore(false);
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !sheet.hidden) { setMore(false); moreBtn.focus(); }
-    });
   }
 
   show(pageId, { push = true } = {}) {
@@ -346,12 +324,10 @@ class Router {
     // the customizer is a full-screen editor: it covers the site chrome and the page behind it stops scrolling
     document.body.classList.toggle('cz-open', pageId === 'customizer');
 
-    document.querySelectorAll('.topnav-link, .mobile-nav-link, .mobile-more-link').forEach(link => {
+    document.querySelectorAll('.topnav-link, .mobile-nav-link').forEach(link => {
       link.classList.toggle('active', link.dataset.page === pageId);
     });
-    const moreBtn = document.getElementById('mobile-more-btn');
-    if (moreBtn) moreBtn.classList.toggle('active', ['projects', 'socials', 'stats', 'settings'].includes(pageId));
-    if (this.closeMoreSheet) this.closeMoreSheet();
+    if (window.mobileNav) window.mobileNav.onPage(pageId);
 
     document.getElementById('main-content').focus({ preventScroll: true });
     if (getBoolSetting('scrollToTopOnNav', true)) {
@@ -2033,7 +2009,7 @@ class PackLibrary {
 
     emptyState.style.display = 'none';
     const count = this.filteredPacks.length;
-    resultsText.textContent = `${count} project${count !== 1 ? 's' : ''}`;
+    resultsText.textContent = `${count} result${count !== 1 ? "s" : ""}`;
 
     // Reusable card renderer
     const renderPackCards = (packs) => packs.map(pack => this.createPackCard(pack)).join('');
@@ -2498,11 +2474,14 @@ class PackLibrary {
 
     // The account being shown (accounts worker user), for follows, DMs and packs.
     this.viewedProfile = null;
-    nameEl.textContent = 'Loading…';
-    avatarEl.src = 'assets/pepe-profile.png';
-    joinedEl.textContent = '';
+    // Skeleton until the account loads, so the page never flashes someone else's name or avatar.
+    nameEl.innerHTML = '<span class="sk sk-inline" style="width:180px;height:34px" aria-label="Loading profile"></span>';
+    avatarEl.classList.add('sk', 'sk-img');
+    avatarEl.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+    joinedEl.innerHTML = '<span class="sk sk-inline sk-line" style="width:220px"></span>';
     statsEl.textContent = '';
-    commentsEl.innerHTML = '';
+    commentsEl.innerHTML = [0, 1].map(() => '<div class="sk-card"><span class="sk sk-line" style="width:90px"></span><span class="sk sk-line" style="width:60%"></span></div>').join('');
+    const doneLoading = () => avatarEl.classList.remove('sk', 'sk-img');
     authorBadgeEl.classList.add('hidden');
     const bannerImg = document.getElementById('user-profile-banner-img');
     const editBtn = document.getElementById('user-profile-edit-btn');
@@ -2513,10 +2492,15 @@ class PackLibrary {
     try {
       const res = await this.authFetch(`/api/users/${userId}`);
       if (!res.ok) {
+        doneLoading();
+        avatarEl.src = 'assets/pepe-profile.png';
         nameEl.textContent = 'User not found';
+        joinedEl.textContent = '';
+        commentsEl.innerHTML = '';
         return;
       }
       const data = await res.json();
+      doneLoading();
       this.viewedProfile = data.user;
       nameEl.textContent = data.user.name || data.user.username || 'Unknown';
       avatarEl.src = data.user.avatarUrl || 'assets/pepe-profile.png';
@@ -2545,9 +2529,15 @@ class PackLibrary {
               </div>
             `).join('')
           : '<p class="comments-empty">No comments yet.</p>';
+      } else {
+        commentsEl.innerHTML = '<p class="comments-empty">Comments couldn\'t be loaded.</p>';
       }
     } catch (e) {
+      doneLoading();
+      avatarEl.src = 'assets/pepe-profile.png';
       nameEl.textContent = 'Could not load profile';
+      joinedEl.textContent = '';
+      commentsEl.innerHTML = '';
     }
   }
 
@@ -3160,7 +3150,7 @@ class PackLibrary {
 
   async loadComments(pack) {
     const listEl = document.getElementById('comments-list');
-    listEl.innerHTML = '<p class="comments-empty">Loading comments...</p>';
+    listEl.innerHTML = [0, 1].map(() => '<div class="sk-row"><span class="sk sk-circle" style="width:36px;height:36px"></span><span class="sk-stack"><span class="sk sk-line" style="width:120px"></span><span class="sk sk-line" style="width:70%"></span></span></div>').join('');
     document.getElementById('comments-signed-out-note').classList.toggle('hidden', !!this.currentUser);
     document.getElementById('comment-form').classList.toggle('hidden', !this.currentUser);
 
@@ -4468,7 +4458,8 @@ function updateBirthdayCountdown() {
 }
 
 function clearNavActive() {
-  document.querySelectorAll('.topnav-link, .mobile-nav-link, .mobile-more-link').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.topnav-link, .mobile-nav-link').forEach(l => l.classList.remove('active'));
+  if (window.mobileNav) window.mobileNav.onPage(null);
 }
 
 function show404() {

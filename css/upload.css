@@ -509,3 +509,21 @@ body.light-mode .up-social-discord { background: rgba(88, 101, 242, 0.12); }
   .up-row-item { grid-template-columns: minmax(0, 1fr) auto; }
   .up-row-item .up-badge { grid-column: 1 / -1; grid-row: 2; justify-self: start; }
 }
+
+/* Phones: tabs keep their natural width and scroll sideways instead of clipping the last one. */
+@media (max-width: 768px) {
+  .up-tab { flex: 1 0 auto; }
+}
+
+/* Edit profile: Save stays in view at the bottom of the dialog while you scroll the long form. */
+#profile-modal-overlay .assets-modal-actions {
+  position: sticky; bottom: -32px; z-index: 2; margin: 0 -32px -32px; padding: 16px 32px 24px;
+  background: linear-gradient(to top, var(--color-bg-secondary) 75%, transparent);
+}
+@media (max-width: 768px) {
+  #profile-modal-overlay .assets-modal-actions {
+    bottom: calc(-24px - env(safe-area-inset-bottom)); margin: 0 -20px calc(-24px - env(safe-area-inset-bottom));
+    padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+  }
+  #profile-modal-overlay .assets-modal-actions .btn-download { width: 100%; min-height: 48px; }
+}
