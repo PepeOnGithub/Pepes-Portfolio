@@ -468,3 +468,73 @@
 }
 .st-sub { display: none; }
 #page-settings .settings-search-input::-webkit-search-cancel-button { display: none; }
+
+/* ===== Settings on desktop: the same Android-style look, two panes (see "Settings · desktop (Android style)") ===== */
+@media (min-width: 769px) {
+  #page-settings .page-hero-inner { padding: 40px 40px 4px; max-width: 1200px; }
+  #page-settings .page-subtitle, #page-settings .page-meta { display: none; }
+  #page-settings .page-title { font: 500 36px/1.1 var(--font-display); letter-spacing: -0.01em; padding-left: 12px; }
+  #page-settings .layout-container { gap: 48px; padding-top: 12px; }
+  #page-settings .sidebar { width: 380px; flex: none; background: transparent; border: 0; box-shadow: none; padding: 0; display: flex; flex-direction: column; gap: 10px; top: 24px; }
+  #page-settings .sidebar-section { padding: 0; gap: 0; border: 0; background: transparent; }
+  #page-settings .settings-account { margin: 0; }
+  .sa-card { border-radius: 28px; padding: 12px 16px; min-height: 72px; flex-wrap: nowrap; }
+  #page-settings .settings-search-input { height: 56px; border-radius: 28px; padding-left: 52px; font-size: 16px; background: var(--color-bg-secondary); border: 0; }
+  .settings-search-icon { left: 20px; top: 20px; font-size: 16px; }
+  #page-settings .settings-search-clear { top: 8px; right: 8px; width: 40px; height: 40px; }
+
+  /* categories: one grouped list, round tonal icons, one-line summaries, tonal selected row */
+  #page-settings .category-list { display: flex; flex-direction: column; gap: 2px; padding: 0; }
+  #page-settings .category-row {
+    width: 100%; height: auto; min-height: 72px; padding: 0 16px; border: 0; border-radius: 6px; justify-content: flex-start; gap: 0;
+    background: var(--color-bg-secondary); text-align: left; position: relative;
+  }
+  #page-settings .category-row:first-child { border-radius: 28px 28px 6px 6px; }
+  #page-settings .category-row:last-child { border-radius: 6px 6px 28px 28px; }
+  #page-settings .category-row:hover { background: var(--color-bg-tertiary); }
+  #page-settings .category-row.active { background: color-mix(in srgb, var(--color-accent) 20%, var(--color-bg-secondary)); color: var(--color-text-primary); }
+  #page-settings .category-row > span:first-child {
+    display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 16px; align-items: center; flex: 1; min-width: 0; font-size: 16px; font-weight: 500;
+  }
+  #page-settings .category-row.active > span:first-child { font-weight: 600; }
+  #page-settings .category-row > span:first-child i {
+    grid-row: 1 / span 2; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; background: #3a3d42; color: #d4d7da;
+  }
+  #page-settings .category-row .st-sub { grid-column: 2; display: block; font-size: 13px; font-weight: 400; line-height: 1.35; color: var(--color-text-secondary); }
+  #page-settings .category-row.active .st-sub { color: color-mix(in srgb, var(--color-text-primary) 70%, transparent); }
+  #page-settings .category-row .category-count { display: none; }
+  #page-settings .category-row[data-settings-category="appearance"] > span:first-child i, #page-settings .category-row.active[data-settings-category="appearance"] > span:first-child i { background: #1f6b3a; color: #c7f0bd; }
+  #page-settings .category-row[data-settings-category="theme"] > span:first-child i, #page-settings .category-row.active[data-settings-category="theme"] > span:first-child i { background: #4a2d6b; color: #e3ccff; }
+  #page-settings .category-row[data-settings-category="browsing"] > span:first-child i, #page-settings .category-row.active[data-settings-category="browsing"] > span:first-child i { background: #1f4b6b; color: #c7e6ff; }
+  #page-settings .category-row[data-settings-category="library"] > span:first-child i, #page-settings .category-row.active[data-settings-category="library"] > span:first-child i { background: #6b4a1f; color: #ffe1b3; }
+  #page-settings .category-row[data-settings-category="downloads"] > span:first-child i, #page-settings .category-row.active[data-settings-category="downloads"] > span:first-child i { background: #1f6b63; color: #b8f3ec; }
+  #page-settings .category-row[data-settings-category="messages"] > span:first-child i, #page-settings .category-row.active[data-settings-category="messages"] > span:first-child i { background: #6b1f4a; color: #ffc7e6; }
+
+  /* the chosen category: a plain title with Reset as a text action, accent section labels, stacked rounded cards */
+  #page-settings .settings-panel-header { margin: 0 0 4px; padding: 0 4px 0 16px; min-height: 64px; align-items: center; }
+  #page-settings .settings-panel-header-icon, #page-settings .settings-panel-desc { display: none; }
+  #page-settings .settings-panel-title { font: 500 28px/1.2 var(--font-display); }
+  .settings-reset-section { height: 48px; padding: 0 20px; border: 0; border-radius: 24px; background: transparent; color: var(--color-accent); font-weight: 600; }
+  .settings-reset-section:hover { background: var(--color-bg-secondary); }
+  #page-settings .settings-group-title { margin: 14px 0 6px; padding: 0 16px; font: 600 14px var(--font-family); color: var(--color-accent); }
+  #page-settings .settings-list { padding: 0; background: transparent; display: flex; flex-direction: column; gap: 2px; border: 0; border-radius: 0; }
+  #page-settings .settings-list > .setting-row, #page-settings .settings-list > * > .setting-row {
+    background: var(--color-bg-secondary); border: 0; border-radius: 6px; padding: 8px 24px; min-height: 76px;
+  }
+  #page-settings .settings-list > .setting-row:first-child { border-radius: 28px 28px 6px 6px; }
+  #page-settings .settings-list > .setting-row:last-child { border-radius: 6px 6px 28px 28px; }
+  #page-settings .settings-list > .setting-row:only-child { border-radius: 28px; }
+  #page-settings .setting-name { font-size: 16px; }
+  #page-settings .custom-checkbox { width: 52px; height: 32px; }
+  #page-settings .custom-checkbox-box { border-radius: 16px; }
+  #page-settings .custom-checkbox-box::after { left: 4px; top: 4px; width: 24px; height: 24px; }
+  #page-settings .custom-checkbox .setting-input:checked ~ .custom-checkbox-box::after { transform: translateX(20px); }
+}
+
+/* search first, then the account row (as in the designs); buttons stay on one line */
+#page-settings .sidebar { display: flex; flex-direction: column; }
+#page-settings .sidebar > .settings-account { order: 2; }
+#page-settings .sidebar > .sidebar-section:has(.settings-search) { order: 1; }
+#page-settings .sidebar > .sidebar-section:has(.filter-dropdown) { order: 3; }
+.sa-btn { white-space: nowrap; }
+.settings-reset-section i { display: none; }
