@@ -752,7 +752,7 @@
       const value = (n) => (n in allDefaults ? (n in values ? values[n] : allDefaults[n]) : otherValue(n));
       CzPreview.init($('cz-preview'), {
         bar: $('cz-bar-preview'), app: $('cz-main'), tooltip: $('cz-tt-card'), groupOf, openModule,
-        get: value, has: (n) => value(n) !== undefined, names: () => Object.keys(data.variables), meta, dropdown, active: () => active.pack.id,
+        get: value, has: (n) => value(n) !== undefined, set: (n, v, fromUi) => { if (n in allDefaults) setValue(n, v, !!fromUi); }, names: () => Object.keys(data.variables), meta, dropdown, active: () => active.pack.id,
         // the version chosen for a pack, else its latest; used() tells whether the visitor opened that pack at all
         version: (id) => picked[id] || ((packs.find((p) => p.id === id) || {}).versions || [])[0]?.version || null,
         used: (id) => !!picked[id],

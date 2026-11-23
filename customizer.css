@@ -573,3 +573,12 @@ body.light-mode .cz-pop, body.light-mode .cz-palette, body.light-mode .cz-menu {
 @media (max-height: 460px) and (orientation: landscape) {
   .cz-dd-list.cz-dd-sheet { left: auto; right: 8px; width: min(380px, calc(100vw - 16px)); max-height: calc(100vh - 16px); }
 }
+
+/* Dragging a module in the preview */
+.czu-hit.czu-drag { cursor: grab; touch-action: none; }
+.czu-hit.czu-drag:active { cursor: grabbing; }
+.czu-ghost { position: absolute; border: 1px dashed rgb(255 255 255 / .75); pointer-events: none; box-sizing: border-box; }
+.czu-guide { position: absolute; pointer-events: none; background: #20d5ec; opacity: .9; }
+.czu-guide-v { width: 1px; } .czu-guide-h { height: 1px; }
+.czu-readout { position: absolute; z-index: 6; transform-origin: 0 0; pointer-events: none; white-space: pre; padding: 5px 9px; border-radius: 8px;
+  background: #1e2124; color: #86d177; font: 500 12px/1 'JetBrains Mono', ui-monospace, monospace; box-shadow: 0 6px 18px rgb(0 0 0 / .4); }

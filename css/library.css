@@ -1075,3 +1075,15 @@ body.light-mode #page-library .pack-card:hover { box-shadow: 0 12px 28px rgba(0,
   #page-library .lib-shelf-track .pack-flags > * { display: none; }
 }
 #page-library .lib-shelf-track .pack-thumbnail { aspect-ratio: 16 / 10; }
+
+/* Pack page on phones: one primary action always in reach (Download, favourite), above the tab bar */
+@media (max-width: 768px) {
+  #page-library .detail-download-row {
+    position: fixed; left: 0; right: 0; bottom: calc(64px + env(safe-area-inset-bottom)); z-index: 40;
+    padding: 10px 12px; gap: 8px; background: var(--color-bg-primary, #1e2124);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  #page-library .detail-download-row .btn-download { flex: 1; min-height: 48px; border-radius: 12px; font-size: 16px; justify-content: center; }
+  #page-library .detail-download-row .detail-fav-btn { width: 48px; height: 48px; flex: none; border-radius: 12px; }
+  #page-library .detail-view { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }
+}

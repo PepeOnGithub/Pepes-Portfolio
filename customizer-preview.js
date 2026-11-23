@@ -760,6 +760,96 @@
     return true;
   }
 
+  /* ---------- drag a module to move it ----------
+     Press a module and drag: its offset variable follows the pointer in whole GUI pixels (what the game uses), with
+     snapping to other modules' edges, a live X/Y readout and a ghost where it started. Esc cancels; with the module
+     focused, arrow keys nudge 1 px (Shift 5). Without a move it is still a click that opens the settings. */
+  let zoomNow = 1, dragState = null, suppressClick = false, refocus = null;
+  const hotRects = new Map();
+  const hotOf = (g) => (root ? root.querySelector(`.czu-hit[aria-label="Edit ${g.replace(/"/g, '')}"]`) : null);
+  const OFFSET_RE = /^\$(.+?)_(mouse_controller_offset|touch_offset|offset)(\|default)?$/;
+  // the offset variable the preview currently reads for a settings group (same order as drawModules)
+  function offsetVarFor(g) {
+    const found = {};
+    for (const n of api.names()) {
+      const m = OFFSET_RE.exec(n);
+      if (!m || api.groupOf(n) !== g) continue;
+      found[m[2]] = n.replace(/\|default$/, '');
+    }
+    const order = (!PC_VARIANT && platform === 'mobile') ? ['touch_offset', 'mouse_controller_offset', 'offset'] : ['mouse_controller_offset', 'offset', 'touch_offset'];
+    for (const k of order) if (found[k]) return found[k];
+    return null;
+  }
+  const cur = (v) => { const a = get(v, [0, 0]); return Array.isArray(a) ? [Number(a[0]) || 0, Number(a[1]) || 0] : [0, 0]; };
+  function snapTo(g, nx, ny, d) {
+    const me = hotRects.get(g), res = { x: nx, y: ny, gx: null, gy: null };
+    if (!me) return res;
+    const w = me.x1 - me.x0, h = me.y1 - me.y0;
+    const mx = me.x0 + (nx - d.start[0]), my = me.y0 + (ny - d.start[1]);
+    let bx = 3, by = 3;
+    for (const [og, r] of hotRects) {
+      if (og === g) continue;
+      for (const t of [r.x0, r.x1, (r.x0 + r.x1) / 2]) for (const e of [mx, mx + w, mx + w / 2]) {
+        const dd = t - e; if (Math.abs(dd) < Math.abs(bx)) { bx = dd; res.gx = t; }
+      }
+      for (const t of [r.y0, r.y1, (r.y0 + r.y1) / 2]) for (const e of [my, my + h, my + h / 2]) {
+        const dd = t - e; if (Math.abs(dd) < Math.abs(by)) { by = dd; res.gy = t; }
+      }
+    }
+    if (Math.abs(bx) < 3 && res.gx !== null) res.x = nx + Math.round(bx); else res.gx = null;
+    if (Math.abs(by) < 3 && res.gy !== null) res.y = ny + Math.round(by); else res.gy = null;
+    return res;
+  }
+  function startDrag(e, g, open) {
+    const v = offsetVarFor(g);
+    if (!v || e.button > 0) return;
+    dragState = { g, v, sx: e.clientX, sy: e.clientY, start: cur(v), now: cur(v), moved: false, rect0: hotRects.get(g) ? { ...hotRects.get(g) } : null, gx: null, gy: null, open };
+    dragState.pointerId = e.pointerId;   // captured once it actually moves, so a plain press is still a click on the button
+  }
+  function moveDrag(e) {
+    const d = dragState; if (!d) return;
+    const px = e.clientX - d.sx, py = e.clientY - d.sy;
+    if (!d.moved && Math.hypot(px, py) < 5) return;
+    d.moved = true;
+    try { screen.setPointerCapture(d.pointerId); } catch (err) { /* ignore */ }
+    let nx = Math.round(d.start[0] + px / zoomNow), ny = Math.round(d.start[1] + py / zoomNow);
+    if (!e.altKey) { const s = snapTo(d.g, nx, ny, d); nx = s.x; ny = s.y; d.gx = s.gx; d.gy = s.gy; } else { d.gx = d.gy = null; }
+    d.now = [nx, ny];
+    api.set(d.v, [nx, ny], true);
+  }
+  function endModuleDrag(commit) {
+    const d = dragState; if (!d) return;
+    dragState = null;
+    if (d.moved) {
+      suppressClick = true; setTimeout(() => { suppressClick = false; }, 0);
+      api.set(d.v, commit ? d.now : d.start, false);   // final value, and the form's fields catch up
+      refocus = d.g;
+    }
+    scheduleRender();
+  }
+  function nudge(e, g) {
+    const v = offsetVarFor(g);
+    const k = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (!v || !k) return;
+    e.preventDefault();
+    const step = e.shiftKey ? 5 : 1, o = cur(v);
+    refocus = g;
+    api.set(v, [o[0] + k[0] * step, o[1] + k[1] * step], false);
+  }
+  function drawDragOverlay(w, h) {
+    const d = dragState; if (!d || !d.moved) return;
+    const add = (cls, css, text) => { const n = div(cls, css, text); screen.append(n); return n; };
+    if (d.rect0) add('czu-ghost', { left: d.rect0.x0 + 'px', top: d.rect0.y0 + 'px', width: d.rect0.x1 - d.rect0.x0 + 'px', height: d.rect0.y1 - d.rect0.y0 + 'px' });
+    if (d.gx !== null) add('czu-guide czu-guide-v', { left: d.gx + 'px', top: 0, height: h + 'px' });
+    if (d.gy !== null) add('czu-guide czu-guide-h', { top: d.gy + 'px', left: 0, width: w + 'px' });
+    const r = hotRects.get(d.g);
+    if (r) {
+      const y = Math.min(h - 6, r.y1 + 3);
+      const tag = add('czu-readout', { left: Math.max(0, r.x0) + 'px', top: y + 'px', transform: `scale(${1 / zoomNow})` }, `X ${d.now[0]}  Y ${d.now[1]}${d.gx !== null || d.gy !== null ? '  snapped' : ''}`);
+      tag.setAttribute('aria-hidden', 'true');
+    }
+  }
+
   // One button per settings group over the outermost on-screen control whose anchor, offset, alpha or visibility comes
   // from one of that group's variables: clicking it opens the group's settings (api.openModule).
   let selectedGroup = null;
@@ -781,6 +871,8 @@
       }
       (n.kids || []).forEach(walk);
     })(tree);
+    hotRects.clear();
+    for (const [g, r] of seen) hotRects.set(g, r);
     // smaller targets go last so they stay clickable where boxes overlap
     const order = [...seen].sort((a, b) => (b[1].x1 - b[1].x0) * (b[1].y1 - b[1].y0) - (a[1].x1 - a[1].x0) * (a[1].y1 - a[1].y0));
     for (const [g, r] of order) {
@@ -789,11 +881,17 @@
       b.setAttribute('aria-label', 'Edit ' + g); b.title = g;
       const x = Math.max(0, r.x0), y = Math.max(0, r.y0);
       Object.assign(b.style, { left: x + 'px', top: y + 'px', width: Math.min(w, r.x1) - x + 'px', height: Math.min(h, r.y1) - y + 'px' });
-      b.addEventListener('pointerdown', (e) => e.stopPropagation());
-      b.addEventListener('click', () => { selectedGroup = g; api.openModule(g, b); scheduleRender(); });
+      const movable = !!(api.set && offsetVarFor(g));
+      if (movable) { b.classList.add('czu-drag'); b.setAttribute('aria-description', 'Drag to move, arrow keys nudge'); }
+      const open = () => { selectedGroup = g; api.openModule(g, hotOf(g) || b); scheduleRender(); };
+      b.addEventListener('pointerdown', (e) => { e.stopPropagation(); if (movable) startDrag(e, g, open); });
+      b.addEventListener('click', () => { if (suppressClick || dragState) return; open(); });
+      if (movable) b.addEventListener('keydown', (e) => nudge(e, g));
       hot.append(b);
+      if (refocus === g) { refocus = null; requestAnimationFrame(() => b.isConnected && b.focus({ preventScroll: true })); }
     }
     screen.append(hot);
+    drawDragOverlay(w, h);
   }
   const select = (g) => { selectedGroup = g; scheduleRender(); };
 
@@ -817,6 +915,7 @@
     // so a bigger scale shows fewer GUI pixels and the HUD grows, as in the game; the canvas is then zoomed to fill the stage
     const lines = { 1: 360, 2: 300, 3: 240 }[gui] || 240;
     const zoom = stage.clientHeight / lines;
+    zoomNow = zoom;
     canvasW = stage.clientWidth / zoom; canvasH = lines;
     screen.style.transform = `scale(${zoom})`;
     const key = [platform, gui, canvasW.toFixed(2), canvasH.toFixed(2)].join('|');
@@ -825,7 +924,10 @@
     return true;
   }
   function resize() {
-    if (!stage || !stage.clientWidth) return;        // hidden tab: the ResizeObserver redraws once it is shown
+    // hidden tab: the ResizeObserver redraws once it is shown. The full-screen editor sizes the stage from its host,
+    // so a stage that is still 0 wide must not stop it (that left the preview blank when the host was laid out late).
+    if (!stage) return;
+    if (api && api.bar ? !stage.parentElement.clientWidth : !stage.clientWidth) return;
     if (fit()) render();
   }
 
@@ -945,6 +1047,10 @@
     stage = div('cz-pv-stage'); screen = div('cz-screen'); stage.append(screen);
     screen.style.imageRendering = 'pixelated';
     // drag across the screen to turn (0.5 degrees per pixel), wrapped to -180..180 like the slider
+    screen.addEventListener('pointermove', moveDrag);
+    screen.addEventListener('pointerup', () => endModuleDrag(true));
+    screen.addEventListener('pointercancel', () => endModuleDrag(false));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && dragState) { e.stopPropagation(); endModuleDrag(false); } }, true);
     let drag = null;
     stage.style.touchAction = 'none'; stage.style.cursor = 'ew-resize';
     stage.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, yaw }; stage.setPointerCapture(e.pointerId); });
@@ -976,6 +1082,6 @@
   }
 
   // hotspot(g): the on-screen box of a settings group, so a popover opened from the module list can sit beside it
-  const hotspot = (g) => (screen ? [...screen.querySelectorAll('.czu-hit')].find((b) => b.title === g) || null : null);
+  const hotspot = (g) => (screen ? [...screen.querySelectorAll('.czu-hit')].find((b) => b.getAttribute('aria-label') === 'Edit ' + g) || null : null);
   window.CzPreview = { init, update: scheduleRender, ui: () => lastUi, select, hotspot };
 })();

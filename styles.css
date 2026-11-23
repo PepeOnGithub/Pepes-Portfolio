@@ -5024,3 +5024,17 @@ html { -webkit-tap-highlight-color: transparent; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .page.active { animation: none; } }
 @media (display-mode: standalone) { .mobile-only { display: flex; } }
+
+/* ===== Touch targets: every tappable thing is at least about 40-44px on phones ===== */
+@media (max-width: 768px), (pointer: coarse) {
+  .brand { min-height: 44px; display: inline-flex; align-items: center; }
+  .site-footer nav a, .site-footer .ft-links a { display: inline-flex; align-items: center; min-height: 44px; }
+  .comment-like-btn, .comment-reply-btn, .comment-report-btn, .comment-delete-btn { min-height: 40px; min-width: 40px; justify-content: center; }
+  .category-row { min-height: 40px; }
+  .lib-shelf-more { position: relative; }
+  .lib-shelf-more::after { content: ''; position: absolute; inset: -9px -6px; }
+  .up-tab { min-height: 44px; }
+  .up-stepper button { min-height: 40px; }
+  .st-switch-btn { min-height: 40px; }
+  .assets-required-badge { min-height: 36px; }
+}
