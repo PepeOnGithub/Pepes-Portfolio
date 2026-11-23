@@ -732,6 +732,30 @@ class PackLibrary {
       else this.showDetail(pack);
     });
 
+    const shelves = document.getElementById('lib-shelves');
+    if (shelves) shelves.addEventListener('click', (e) => {
+      const more = e.target.closest('[data-more-sort]');
+      if (more) {
+        this.currentFilter.sort = more.dataset.moreSort;
+        this.syncSortDropdownLabel();
+        this.applyFilters();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      const arrow = e.target.closest('.lib-shelf-arrow');
+      if (arrow) {
+        const track = arrow.closest('.lib-shelf').querySelector('.lib-shelf-track');
+        track.scrollBy({ left: Number(arrow.dataset.dir) * track.clientWidth * 0.85, behavior: 'smooth' });
+        return;
+      }
+      const fav = e.target.closest('.pack-favorite-btn');
+      if (fav) { e.stopPropagation(); this.toggleFavorite(parseInt(fav.dataset.packId, 10)); return; }
+      const card = e.target.closest('.pack-card');
+      if (!card) return;
+      const pack = this.packs.find(p => p.id === parseInt(card.dataset.packId, 10));
+      if (pack) this.showDetail(pack);
+    });
+
     const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('input', (e) => this.handleSearch(e));
     searchInput.addEventListener('keydown', (e) => this.handleSearchKeydown(e));
@@ -1964,6 +1988,9 @@ class PackLibrary {
       case 'recent':
         filtered.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
         break;
+      case 'newest':
+        filtered.sort((a, b) => new Date(b.addedAt || b.updatedAt || 0) - new Date(a.addedAt || a.updatedAt || 0));
+        break;
       case 'oldest':
         filtered.sort((a, b) => new Date(a.updatedAt || 0) - new Date(b.updatedAt || 0));
         break;
@@ -2020,6 +2047,44 @@ class PackLibrary {
     listBtn.setAttribute('aria-pressed', this.viewMode === 'list');
   }
 
+  // MCPEDL-style shelves above the full list: Popular, New releases and
+  // Recently updated, each a scrolling row with a "More" button. Only on the
+  // plain library view (no search, filter or special sort), so they never
+  // compete with what someone asked for.
+  renderShelves() {
+    const box = document.getElementById('lib-shelves');
+    if (!box) return;
+    const f = this.currentFilter;
+    const plain = !f.search && !f.category && f.tags.size === 0 && f.sort === 'relevance' && !this.packsLoadError;
+    const pool = this.filteredPacks.filter(p => !p.pinned && !p.discontinued && p.category !== 'website');
+    if (!plain || pool.length < 6) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+    const day = 86400000;
+    const time = (v) => Date.parse(v || '') || 0;
+    const scores = new Map(pool.map(p => [p.id, this.packScore(p, [])]));
+    const shelves = [
+      { key: 'popular', title: 'Popular', sort: 'popular',
+        packs: [...pool].sort((a, b) => scores.get(b.id) - scores.get(a.id)) },
+      { key: 'new', title: 'New Releases', sort: 'newest',
+        packs: [...pool].sort((a, b) => time(b.addedAt || b.updatedAt) - time(a.addedAt || a.updatedAt)) },
+      { key: 'updated', title: 'Recently Updated', sort: 'recent',
+        packs: pool.filter(p => time(p.updatedAt) - time(p.addedAt) > day).sort((a, b) => time(b.updatedAt) - time(a.updatedAt)) }
+    ].map(sh => ({ ...sh, packs: sh.packs.slice(0, 12) })).filter(sh => sh.packs.length >= 3);
+    if (!shelves.length) { box.classList.add('hidden'); box.innerHTML = ''; return; }
+    box.classList.remove('hidden');
+    box.innerHTML = shelves.map(sh => `
+      <section class="lib-shelf" data-shelf="${sh.key}">
+        <div class="lib-shelf-head">
+          <h2>${sh.title}</h2>
+          <button type="button" class="lib-shelf-more" data-more-sort="${sh.sort}">More</button>
+          <span class="lib-shelf-arrows">
+            <button type="button" class="lib-shelf-arrow" data-dir="-1" aria-label="Scroll ${sh.title} left"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+            <button type="button" class="lib-shelf-arrow" data-dir="1" aria-label="Scroll ${sh.title} right"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+          </span>
+        </div>
+        <div class="lib-shelf-track">${sh.packs.map(p => this.createPackCard(p)).join('')}</div>
+      </section>`).join('') + '<h2 class="lib-all-title">All packs</h2>';
+  }
+
   render() {
     const grid = document.getElementById('packs-grid');
     const emptyState = document.getElementById('empty-state');
@@ -2027,6 +2092,7 @@ class PackLibrary {
 
     document.getElementById('clients-timeline').classList.toggle('hidden', this.currentFilter.category !== 'clients');
 
+    this.renderShelves();
     if (this.filteredPacks.length === 0) {
       grid.innerHTML = '';
       emptyState.style.display = 'block';
@@ -2161,7 +2227,7 @@ class PackLibrary {
   // exist), so fetch each visible card's real count from the counter API,
   // once per pack per session.
   fetchVisibleCardDownloadCounts() {
-    const cards = document.querySelectorAll('#packs-grid .downloads[data-pack-id]');
+    const cards = document.querySelectorAll('#packs-grid .downloads[data-pack-id], #lib-shelves .downloads[data-pack-id]');
     const pending = [];
     cards.forEach(el => {
       const id = parseInt(el.dataset.packId, 10);
@@ -2178,8 +2244,8 @@ class PackLibrary {
 
       pending.push(totalPromise.then(count => {
         this.liveDownloadCounts.set(id, count);
-        const liveEl = document.querySelector(`#packs-grid .downloads[data-pack-id="${id}"]`);
-        if (liveEl) liveEl.textContent = this.formatCount(count);
+        document.querySelectorAll(`#packs-grid .downloads[data-pack-id="${id}"], #lib-shelves .downloads[data-pack-id="${id}"]`)
+          .forEach(el => { el.textContent = this.formatCount(count); });
       }).catch(() => {}));
     });
     // The first ranking used snapshot numbers; once the real counts are in, rank once more.
