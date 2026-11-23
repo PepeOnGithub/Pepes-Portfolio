@@ -579,3 +579,5 @@ body.light-mode .up-social-discord { background: rgba(88, 101, 242, 0.12); }
   .up-preview-btn { display: none; }
   .up-stepper button { font-size: 13px; gap: 6px; }
 }
+.detail-owner-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.detail-owner-actions.hidden { display: none; }

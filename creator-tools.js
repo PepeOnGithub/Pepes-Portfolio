@@ -475,6 +475,12 @@ class CreatorTools {
       const pack = lib.currentPack;
       if (pack && pack.community && pack.authorId) lib.showUserProfile(pack.authorId);
     };
+    document.getElementById('detail-update-pack').addEventListener('click', () => {
+      if (lib.currentPack) this.up.editPack(lib.currentPack.id, 'version');
+    });
+    document.getElementById('detail-edit-pack').addEventListener('click', () => {
+      if (lib.currentPack) this.up.editPack(lib.currentPack.id, 'edit');
+    });
     nameEl.addEventListener('click', openAuthor);
     nameEl.addEventListener('keydown', (e) => {
       if ((e.key === 'Enter' || e.key === ' ') && nameEl.classList.contains('up-author-link')) { e.preventDefault(); openAuthor(); }
@@ -489,6 +495,8 @@ class CreatorTools {
     if (linked) { nameEl.setAttribute('role', 'link'); nameEl.tabIndex = 0; } else { nameEl.removeAttribute('role'); nameEl.removeAttribute('tabindex'); }
     box.classList.add('hidden');
     box.innerHTML = '';
+    const mine = linked && this.lib.currentUser && String(this.lib.currentUser.id) === String(pack.authorId);
+    document.getElementById('detail-owner-actions').classList.toggle('hidden', !mine);
     if (!linked) return;
 
     // One view per pack per browser session (the worker also counts once per visitor per day).

@@ -212,6 +212,20 @@ class UploadsPage {
     }, 4000);
   }
 
+  // Opens "My packs" with one pack's Edit or Update drawer ready (used by the
+  // Update button on a pack's own page).
+  async editPack(packId, drawer = 'version') {
+    window.router.show('upload', { push: false });
+    await this.open();
+    if (!this.me) return;
+    this.switchTab('mine');
+    const item = document.querySelector(`#up-mine-list .up-item[data-pack="${packId}"]`);
+    if (!item) return;
+    const btn = item.querySelector(`[data-act="toggle"][data-target="${drawer}"]`);
+    if (btn && item.querySelector(`[data-drawer="${drawer}"]`).classList.contains('hidden')) btn.click();
+    item.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   switchTab(tab) {
     this.tab = tab;
     document.querySelectorAll('.up-tab').forEach(btn => {
@@ -720,7 +734,7 @@ class UploadsPage {
           ${pack.status === 'approved' ? `<button type="button" class="up-btn" data-act="view" data-pack="${pack.id}"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> View in library</button>` : ''}
           ${pack.status === 'rejected' && (pack.aiRuns || 0) < 6 ? `<button type="button" class="up-btn up-btn-primary" data-act="recheck" data-pack="${pack.id}"><i class="fas fa-rotate-right" aria-hidden="true"></i> Check again</button>` : ''}
           <button type="button" class="up-btn" data-act="toggle" data-target="edit"><i class="fas fa-pen" aria-hidden="true"></i> Edit</button>
-          <button type="button" class="up-btn" data-act="toggle" data-target="version"><i class="fas fa-code-branch" aria-hidden="true"></i> New version</button>
+          <button type="button" class="up-btn" data-act="toggle" data-target="version"><i class="fas fa-code-branch" aria-hidden="true"></i> Update pack</button>
           <button type="button" class="up-btn up-btn-danger" data-act="delete" data-pack="${pack.id}"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
         </div>
 

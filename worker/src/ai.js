@@ -18,6 +18,7 @@ import { scanVersions } from './scan.js';
 import { textProblems } from './scan.js';
 import { isOwnerOrAdminId, clip, safeJson } from './util.js';
 import { ensureLootForVersion } from './loot.js';
+import { verification } from './verify.js';
 import {
   REVIEWER_PROMPT, REDTEAM_PROMPT, PROFILE_PROMPT, RESPONSE_SCHEMA, PROFILE_SCHEMA
 } from './knowledge.js';
@@ -63,6 +64,19 @@ export async function runAiReview(env, packId, { force = false } = {}) {
         summary: blockers.slice(0, 3).join(' '),
         issues: blockers.slice(0, 10),
         uploaderMessage: `${blockers[0]} Please fix this and upload again.`
+      });
+      return;
+    }
+
+    // Verified creators (and the site owner) skip the AI passes; the fixed
+    // rules above still protect everyone, and the Review tab can still take it down.
+    const standing = (await verification(env, [owner]).catch(() => new Map())).get(String(owner));
+    if (standing && standing.verified) {
+      await decide(env, pack, targets, {
+        verdict: 'approve', confidence: 1, category: 'clean',
+        summary: `Verified creator: the AI check is skipped. ${reports.flatMap(r => r.signals.slice(0, 3).map(x => `Scan: ${x}`)).join(' ')}`.trim(),
+        issues: reports.flatMap(r => r.signals.slice(0, 6).map(x => `Scan: ${x}`)),
+        uploaderMessage: ''
       });
       return;
     }
