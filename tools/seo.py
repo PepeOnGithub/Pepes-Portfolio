@@ -50,6 +50,15 @@ PAGES = {
     'projects': ('Projects by Pepe: Minecraft Bedrock packs, clients & tools', 'Everything Pepe has built for Minecraft Bedrock: packs, Glacier Client, tools and websites.'),
     'socials': ('Pepe on YouTube, Discord, X and GitHub', 'Follow Pepe, the Minecraft Bedrock pack creator behind Glacier Client, on YouTube, Discord, X, Instagram, TikTok and GitHub.'),
 }
+CAT_TITLES = {
+    'packs': 'Minecraft Bedrock HUD Packs & Texture Packs: free downloads',
+    'addons': 'Minecraft Bedrock Addons (.mcaddon): free downloads',
+    'clients': 'Minecraft Bedrock Clients: free downloads',
+    'apps': 'In-game Apps for Minecraft Bedrock: calculator, clock, notes',
+    'cosmetics': 'Minecraft Bedrock Cosmetic Packs: halos, overlays, effects',
+    'utility': 'Minecraft Bedrock Utility Packs: free downloads',
+    'website': 'Minecraft Bedrock Tools for Pack Creators',
+}
 NOINDEX = {'settings': 'Settings', 'stats': 'Stats', 'upload': 'Upload a pack'}
 
 
@@ -490,6 +499,22 @@ def main():
         inner = f'<h1>{esc(title)}</h1><p>{esc(desc)}</p>' + (cat_blocks if pid in ('library', 'projects') else '')
         (ROOT / f'{pid}.html').write_text(noscript(doc, inner), encoding='utf-8')
         urls.append((path, None, '0.9' if pid in ('library', 'customizer') else '0.5', ''))
+    for key, (label, noun, blurb) in CATS.items():
+        items = [p for p in packs if (p.get('category') or 'packs') == key]
+        if not items or key == 'other':
+            continue
+        path = f'/library/{key}'
+        title = CAT_TITLES.get(key) or f'Minecraft Bedrock {label}: free downloads'
+        desc = trim(f'{blurb} {len(items)} free {label.lower()} to download, updated regularly.', 158)
+        ld = [breadcrumbs([('Home', '/'), ('Library', '/library'), (label, path)]),
+              {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': title, 'url': f'{SITE}{path}', 'mainEntity': {
+                  '@type': 'ItemList', 'numberOfItems': len(items), 'itemListElement': [
+                      {'@type': 'ListItem', 'position': i + 1, 'url': f'{SITE}/pack/{slug_of(p)}', 'name': p.get('name')} for i, p in enumerate(items)]}}]
+        doc = head(template, title=title, desc=desc, path=path, image=default_og, ld=ld)
+        inner = f'<h1>{esc(title)}</h1><p>{esc(blurb)}</p><ul>' + ''.join(f'<li><a href="/pack/{esc(slug_of(p))}">{esc(p.get("name"))}</a>: {esc(trim(p.get("description"), 100))}</li>' for p in items) + '</ul>'
+        (ROOT / 'library').mkdir(exist_ok=True)
+        (ROOT / 'library' / f'{key}.html').write_text(noscript(doc, inner), encoding='utf-8')
+        urls.append((path, None, '0.8', ''))
     for pid, label in NOINDEX.items():
         doc = head(template, title=f'{label} | Pepe', desc='Pepe\'s portfolio and Minecraft Bedrock pack library.', path=f'/{pid}', image=default_og, robots='noindex, follow')
         (ROOT / f'{pid}.html').write_text(doc, encoding='utf-8')
@@ -499,6 +524,11 @@ def main():
         '@context': 'https://schema.org', '@type': 'WebSite', 'name': "Pepe's Portfolio", 'url': f'{SITE}/', 'inLanguage': 'en',
         'description': 'Free Minecraft Bedrock packs, addons, clients and a live HUD customizer by Pepe.',
         'potentialAction': {'@type': 'SearchAction', 'target': {'@type': 'EntryPoint', 'urlTemplate': f'{SITE}/library?q={{search_term_string}}'}, 'query-input': 'required name=search_term_string'},
+    }, {
+        '@context': 'https://schema.org', '@type': 'MobileApplication', 'name': 'Pepe for Android', 'operatingSystem': 'Android',
+        'applicationCategory': 'EntertainmentApplication', 'description': "Pepe's pack library and HUD customizer as an Android app.",
+        'image': f'{SITE}/assets/logo-3d.png', 'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'USD'},
+        'downloadUrl': 'https://www.mediafire.com/file/6utysrj63wpfx28/pepe%27s_portfolio_app_%281%29.apk/file',
     }, {
         '@context': 'https://schema.org', '@type': 'Organization', 'name': 'Glacier Client', 'url': 'https://glacierclient.xyz', 'founder': {'@type': 'Person', 'name': 'Pepe'},
         'logo': f'{SITE}/assets/glacier-icon.png',

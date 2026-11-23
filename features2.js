@@ -315,12 +315,33 @@
       else lib().showToast('Tap Share, then “Add to Home Screen”.');
     });
     show();
-    // the Android app (APK); not offered on iPhones, which cannot install it
+    // the Android app (APK); not offered on iPhones, which cannot install it, nor inside the app itself (a WebView)
+    const inApp = /; wv\)|\bwv\b/i.test(navigator.userAgent) || standalone;
     const apk = document.getElementById('st-apk');
     if (apk) {
-      apk.hidden = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      apk.hidden = /iphone|ipad|ipod/i.test(navigator.userAgent) || inApp;
       document.getElementById('st-apk-how').addEventListener('click', () => { const n = document.getElementById('st-apk-note'); n.hidden = !n.hidden; });
     }
+  }
+
+  /* ===== Android app banner: once, on Android browsers (see the "V · Android app card" board) ===== */
+  function apkBanner() {
+    const ua = navigator.userAgent;
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    if (!/android/i.test(ua) || /; wv\)|\bwv\b/i.test(ua) || standalone) return;
+    try { if (localStorage.getItem('apkBannerDismissed')) return; } catch (e) { /* show it once per visit */ }
+    const dl = document.getElementById('st-apk-dl'); if (!dl) return;
+    setTimeout(() => {
+      if (document.body.classList.contains('cz-open')) return;
+      const b = document.createElement('div');
+      b.className = 'apk-banner'; b.setAttribute('role', 'region'); b.setAttribute('aria-label', 'Get the Pepe app');
+      b.innerHTML = '<span class="apk-ico"><i class="fab fa-android" aria-hidden="true"></i></span><div class="apk-text"><b>Get the Pepe app</b><small>Faster, full screen, free</small></div><a class="apk-get" target="_blank" rel="noopener">Get</a><button type="button" class="apk-x" aria-label="Dismiss">×</button>';
+      b.querySelector('.apk-get').href = dl.href;
+      const close = () => { b.remove(); try { localStorage.setItem('apkBannerDismissed', '1'); } catch (e) { /* ignore */ } };
+      b.querySelector('.apk-x').addEventListener('click', close);
+      b.querySelector('.apk-get').addEventListener('click', () => setTimeout(close, 300));
+      document.body.append(b);
+    }, 5000);
   }
 
   /* ===== 10 · notification choices ===== */
@@ -339,6 +360,6 @@
 
   when(() => {
     const tryWrap = () => { if (!wrapDetail()) setTimeout(tryWrap, 100); else { Quick.render(); paintCompare(); } };
-    tryWrap(); backToTop(); pullToRefresh(); installCard(); notifSettings();
+    tryWrap(); backToTop(); pullToRefresh(); installCard(); notifSettings(); apkBanner();
   });
 })();

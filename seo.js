@@ -30,7 +30,17 @@
     meta('meta[property="og:url"]', 'content', 'property=og:url', url);
     if (image) { meta('meta[property="og:image"]', 'content', 'property=og:image', image); meta('meta[name="twitter:image"]', 'content', 'name=twitter:image', image); }
   }
+  const CATS = {
+    packs: ['Minecraft Bedrock HUD Packs & Texture Packs: free downloads', 'Minecraft Bedrock HUD and texture packs: clean, customizable HUDs, UI and resource packs.'],
+    addons: ['Minecraft Bedrock Addons (.mcaddon): free downloads', 'Minecraft Bedrock addons (.mcaddon) that add new items, blocks and mechanics.'],
+    clients: ['Minecraft Bedrock Clients: free downloads', 'Minecraft Bedrock clients with a better HUD, FPS counter and quality-of-life features.'],
+    apps: ['In-game Apps for Minecraft Bedrock: calculator, clock, notes', 'Working apps you can open inside Minecraft Bedrock: calculator, clock, notes and more.'],
+    cosmetics: ['Minecraft Bedrock Cosmetic Packs: halos, overlays, effects', 'Cosmetic packs for Minecraft Bedrock: halos, overlays and effects.'],
+    utility: ['Minecraft Bedrock Utility Packs: free downloads', 'Utility resource packs for Minecraft Bedrock that make the game easier to read and use.'],
+    website: ['Minecraft Bedrock Tools for Pack Creators', 'Web tools for Minecraft Bedrock pack creators.'],
+  };
   window.seo = {
+    category(cat) { const c = CATS[cat]; if (!c) return this.page('library'); apply(c[0], c[1], '/library/' + cat, { image: SITE + '/og/default.png' }); },
     page(id) { const p = PAGES[id] || PAGES.home; apply(p[0], p[1], p[2], { image: SITE + '/og/default.png', noindex: !!p[3] }); },
     pack(pack) {
       const slug = pack.slug || (pack.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');

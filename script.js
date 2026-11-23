@@ -1879,6 +1879,11 @@ class PackLibrary {
     localStorage.setItem('selectedCategory', category);
 
     this.syncCategorySidebar();
+    if (window.seo && document.getElementById('page-library').classList.contains('active') && !document.getElementById('browse-view').classList.contains('hidden')) {
+      const real = category && category !== 'favorites' && ['packs', 'addons', 'clients', 'apps', 'cosmetics', 'utility', 'website'].includes(category);
+      history.replaceState({ page: 'library' }, '', real ? `/library/${category}` : '/library');
+      if (real) window.seo.category(category); else window.seo.page('library');
+    }
 
     const currentEl = document.getElementById('library-category-current');
     if (currentEl) currentEl.textContent = row.querySelector('span:first-child').textContent.trim();
@@ -4905,6 +4910,19 @@ function resolveInitialRoute() {
       show404();
       history.replaceState({ page: '404' }, '', path);
     });
+    return;
+  }
+
+  const catMatch = path.match(/^\/library\/(packs|addons|clients|apps|cosmetics|utility|website)$/);
+  if (catMatch) {
+    const lib = window.packLibrary;
+    window.router.show('library', { push: false });
+    lib.currentFilter.category = catMatch[1];
+    localStorage.setItem('selectedCategory', catMatch[1]);
+    if (lib.syncCategorySidebar) lib.syncCategorySidebar();
+    if (lib.applyFilters) lib.applyFilters();
+    history.replaceState({ page: 'library' }, '', path);
+    if (window.seo) window.seo.category(catMatch[1]);
     return;
   }
 
