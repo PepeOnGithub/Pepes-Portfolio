@@ -373,11 +373,20 @@ class CreatorTools {
     const lib = this.lib;
     const original = lib.showUserProfile.bind(lib);
     lib.showUserProfile = async (userId, opts) => {
-      const out = await original(userId, opts);
-      await lib.ready;
-      await lib.communityReady; // their community packs
-      this.renderProfile(userId);
-      return out;
+      // Packs, videos and bio start loading at once instead of after the account
+      // and its comments, and the sections show skeletons until they arrive.
+      const page = document.getElementById('page-user');
+      page.classList.add('up-sections-loading');
+      this.creator(userId);
+      try {
+        const out = await original(userId, opts);
+        await lib.ready;
+        await lib.communityReady; // their community packs
+        await this.renderProfile(userId);
+        return out;
+      } finally {
+        page.classList.remove('up-sections-loading');
+      }
     };
     document.getElementById('user-profile-videos').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-video]');
@@ -432,8 +441,19 @@ class CreatorTools {
       const edit = socials.querySelector('[data-edit-profile]');
       if (edit) edit.addEventListener('click', () => this.lib.openProfileModal());
     }
-    if ((c.videos || []).length) {
-      videos.innerHTML = c.videos.map(v => `
+    const packs = [...((data && data.packs) || []), ...library];
+
+    // Videos: the ones they chose to feature, plus each pack's own showcase video.
+    const ytId = (url) => { const m = String(url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/); return m ? m[1] : ''; };
+    const seen = new Set((c.videos || []).map(v => v.id));
+    const fromPacks = [];
+    for (const p of packs) {
+      const id = ytId(p.showcaseUrl);
+      if (id && !seen.has(id)) { seen.add(id); fromPacks.push({ id, title: p.name, author: 'Showcase' }); }
+    }
+    const allVideos = [...(c.videos || []), ...fromPacks];
+    if (allVideos.length) {
+      videos.innerHTML = allVideos.map(v => `
         <button type="button" class="up-video" data-video="${this.esc(v.id)}" data-title="${this.esc(v.title)}" aria-label="Play ${this.esc(v.title || 'video')}">
           <img src="https://i.ytimg.com/vi/${encodeURIComponent(v.id)}/hqdefault.jpg" alt="" loading="lazy" decoding="async">
           <span class="up-video-play"><i class="fas fa-play" aria-hidden="true"></i></span>
@@ -441,7 +461,6 @@ class CreatorTools {
         </button>`).join('');
       videosBlock.classList.remove('hidden');
     }
-    const packs = [...((data && data.packs) || []), ...library];
     if (packs.length) {
       packsBox.innerHTML = packs.map(p => `
         <button type="button" class="up-profile-pack" data-open-pack="${p.id}">

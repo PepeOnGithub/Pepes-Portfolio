@@ -2655,6 +2655,8 @@ class PackLibrary {
     bannerImg.removeAttribute('src');
     editBtn.classList.add('hidden');
 
+    // Comments load alongside the account, not after it.
+    const commentsFetch = this.authFetch(`/api/users/${userId}/comments`).catch(() => null);
     try {
       const res = await this.authFetch(`/api/users/${userId}`);
       if (!res.ok) {
@@ -2691,8 +2693,8 @@ class PackLibrary {
       editBtn.classList.toggle('hidden', !(this.currentUser && data.user.id && this.currentUser.id === data.user.id));
       editBtn.onclick = () => this.openProfileModal();
 
-      const commentsRes = await this.authFetch(`/api/users/${userId}/comments`);
-      if (commentsRes.ok) {
+      const commentsRes = await commentsFetch;
+      if (commentsRes && commentsRes.ok) {
         const commentsData = await commentsRes.json();
         commentsEl.innerHTML = commentsData.comments.length
           ? commentsData.comments.map((c) => `

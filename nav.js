@@ -317,6 +317,7 @@ class MobileNav {
 
   function render() {
     const bar = document.getElementById('user-profile-tabs');
+    const page = document.getElementById('page-user');
     if (!bar) return;
     // Videos is always a tab (an empty one says so); Packs only when there are packs.
     const avail = SECTIONS.filter(([k, , id], i) => k === 'videos' || has(id, i));
@@ -326,13 +327,14 @@ class MobileNav {
     if (bar.dataset.html !== html) { bar.dataset.html = html; bar.innerHTML = html; } // no rewrite = no observer loop
     bar.classList.remove('hidden');
     SECTIONS.forEach(([k, , id], i) => block(id, i)?.classList.toggle('tab-off', k !== current));
+    document.getElementById('user-profile-sk')?.classList.toggle('tab-off', current === 'comments');
     const empty = document.getElementById('user-profile-videos-empty');
     if (empty) {
       const lib = window.packLibrary;
       const mine = lib && lib.currentUser && lib.viewedProfile && String(lib.currentUser.id) === String(lib.viewedProfile.id);
       const text = mine ? 'No featured videos yet. Add YouTube videos under Edit profile.' : 'No videos yet.';
       if (empty.dataset.t !== text) { empty.dataset.t = text; empty.innerHTML = `<i class="fas fa-circle-play" aria-hidden="true"></i><span>${text}</span>`; }
-      empty.classList.toggle('hidden', !(current === 'videos' && !has('user-profile-videos-block', 1)));
+      empty.classList.toggle('hidden', !(current === 'videos' && !has('user-profile-videos-block', 1) && !page.classList.contains('up-sections-loading')));
     }
   }
 

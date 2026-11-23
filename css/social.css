@@ -442,3 +442,12 @@ img.sk-img { color: transparent; }
   #page-user .user-profile-count > i { display: none; }
   .up-tab-btn i { font-size: 14px; }
 }
+
+/* Skeleton while a profile's packs / videos / bio load */
+#page-user .up-sk { display: none; }
+#page-user.up-sections-loading .up-sk { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 8px; margin: 16px 0; }
+#page-user.up-sections-loading .up-sk .up-sk-tile { height: 64px; border-radius: 10px; }
+@media (max-width: 768px) {
+  #page-user.up-sections-loading .up-sk { grid-column: 1 / -1; order: 9; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; margin: 2px -16px 0; }
+  #page-user.up-sections-loading .up-sk .up-sk-tile { height: auto; aspect-ratio: 1; border-radius: 0; }
+}
