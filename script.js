@@ -1893,6 +1893,44 @@ class PackLibrary {
       .trim();
   }
 
+  // Real download count: the live counter once it has loaded, else the snapshot.
+  downloadsOf(pack) {
+    const live = this.liveDownloadCounts.get(pack.id);
+    return live != null ? live : (pack.downloads || 0);
+  }
+
+  // Relevance score (higher is better). While searching, how well the words
+  // match comes first (name beats tags beats description). Always on top of
+  // that: popularity (log, so a huge pack can't bury everything), freshness
+  // (recently updated packs fade out slowly) and a short boost for brand-new
+  // packs so new uploads get seen. Pinned and discontinued packs are
+  // placed by applyFilters.
+  packScore(pack, words) {
+    let score = 0;
+    if (words.length) {
+      const name = this.normalizeSearch(pack.name);
+      const phrase = words.join(' ');
+      const nameWords = name.split(' ');
+      const tags = (pack.tags || []).map(t => this.normalizeSearch(t));
+      if (name === phrase) score += 100;
+      else if (name.startsWith(phrase)) score += 70;
+      else if (name.includes(phrase)) score += 50;
+      for (const w of words) {
+        if (nameWords.some(n => n === w)) score += 14;
+        else if (nameWords.some(n => n.startsWith(w))) score += 9;
+        else if (name.includes(w)) score += 5;
+        if (tags.some(t => t === w)) score += 6;
+        else if (tags.some(t => t.includes(w))) score += 3;
+      }
+    }
+    score += Math.log10(1 + this.downloadsOf(pack)) * 10;
+    const updated = Date.parse(pack.updatedAt || pack.addedAt || '') || 0;
+    if (updated) score += 15 * Math.exp(-Math.max(0, Date.now() - updated) / (90 * 86400000));
+    const added = Date.parse(pack.addedAt || '') || 0;
+    if (added && Date.now() - added < 14 * 86400000) score += 8;
+    return score;
+  }
+
   applyFilters() {
     let filtered = [...this.packs];
 
@@ -1930,10 +1968,10 @@ class PackLibrary {
         filtered.sort((a, b) => new Date(a.updatedAt || 0) - new Date(b.updatedAt || 0));
         break;
       case 'popular':
-        filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+        filtered.sort((a, b) => this.downloadsOf(b) - this.downloadsOf(a));
         break;
       case 'least-popular':
-        filtered.sort((a, b) => (a.downloads || 0) - (b.downloads || 0));
+        filtered.sort((a, b) => this.downloadsOf(a) - this.downloadsOf(b));
         break;
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -1941,10 +1979,11 @@ class PackLibrary {
       case 'name-desc':
         filtered.sort((a, b) => b.name.localeCompare(a.name));
         break;
-      default:
-        if (this.currentFilter.search) {
-          filtered.sort((a, b) => a.name.localeCompare(b.name));
-        }
+      default: {
+        const words = this.currentFilter.search ? this.normalizeSearch(this.currentFilter.search).split(' ').filter(Boolean) : [];
+        const scores = new Map(filtered.map(p => [p.id, this.packScore(p, words)]));
+        filtered.sort((a, b) => (scores.get(b.id) - scores.get(a.id)) || a.name.localeCompare(b.name));
+      }
     }
 
     // Pinned packs always float to the top, regardless of sort order.
@@ -2067,7 +2106,10 @@ class PackLibrary {
       return html;
     };
 
-    if (this.currentFilter.category === '') {
+    if (this.currentFilter.search && !this.currentFilter.category) {
+      // Searching: one list in rank order, so the best match is first whatever its category.
+      grid.innerHTML = renderPackCards(this.filteredPacks);
+    } else if (this.currentFilter.category === '') {
       // All categories view
       const pinnedPacks = this.filteredPacks.filter(p => p.pinned);
       const nonPinnedPacks = this.filteredPacks.filter(p => !p.pinned);
@@ -2120,6 +2162,7 @@ class PackLibrary {
   // once per pack per session.
   fetchVisibleCardDownloadCounts() {
     const cards = document.querySelectorAll('#packs-grid .downloads[data-pack-id]');
+    const pending = [];
     cards.forEach(el => {
       const id = parseInt(el.dataset.packId, 10);
       if (this.liveDownloadCounts.has(id)) {
@@ -2133,12 +2176,19 @@ class PackLibrary {
         ? Promise.all(pack.versions.map(v => this.fetchLiveDownloads(pack, v))).then(counts => counts.reduce((a, b) => a + b, 0))
         : this.fetchLiveDownloads(pack);
 
-      totalPromise.then(count => {
+      pending.push(totalPromise.then(count => {
         this.liveDownloadCounts.set(id, count);
         const liveEl = document.querySelector(`#packs-grid .downloads[data-pack-id="${id}"]`);
         if (liveEl) liveEl.textContent = this.formatCount(count);
-      });
+      }).catch(() => {}));
     });
+    // The first ranking used snapshot numbers; once the real counts are in, rank once more.
+    if (pending.length && !this.rankSettled) {
+      this.rankSettled = true;
+      Promise.all(pending).then(() => {
+        if (this.currentFilter.sort === 'relevance' || this.currentFilter.sort === 'popular') this.applyFilters();
+      });
+    }
   }
 
   openExternal(url) {
