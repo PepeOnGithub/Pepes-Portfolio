@@ -15,7 +15,7 @@
 
 import { scanVersions } from './scan.js';
 import { textProblems } from './scan.js';
-import { adminIds, clip, safeJson } from './util.js';
+import { isOwnerOrAdminId, clip, safeJson } from './util.js';
 import { ensureLootForVersion } from './loot.js';
 import {
   REVIEWER_PROMPT, REDTEAM_PROMPT, PROFILE_PROMPT, RESPONSE_SCHEMA, PROFILE_SCHEMA
@@ -43,7 +43,7 @@ export async function runAiReview(env, packId, { force = false } = {}) {
 
   try {
     const owner = pack.owner_id;
-    const ownerIsAdmin = adminIds(env).includes(String(owner));
+    const ownerIsAdmin = await isOwnerOrAdminId(env, owner);
 
     // ---- 1. Fixed rules ----
     const blockers = [];
@@ -256,7 +256,7 @@ export async function reviewProfile(env, userId) {
       removed.push(`Bio ${bioProblems.join(' and ')}.`);
       ok.bio = '';
     }
-    if (draft.bio && IMPERSONATION.test(draft.bio) && !adminIds(env).includes(String(row.user_id))) {
+    if (draft.bio && IMPERSONATION.test(draft.bio) && !(await isOwnerOrAdminId(env, row.user_id))) {
       removed.push('Bio mentions a protected name (Pepe, Glacier, Mojang, Microsoft, "official" ...).');
       ok.bio = '';
     }

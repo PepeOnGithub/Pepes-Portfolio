@@ -25,6 +25,11 @@ AI_AUTO_REJECT = "1"
 # ===== Creator earnings =====
 # TOKEN_KEY is a secret that encrypts creators' LootLabs API tokens:
 #   npx wrangler secret put TOKEN_KEY   (any long random string; never change it later)
+# The site owner's uploads earn through the site's own accounts, like the
+# library packs: this Linkvertise id (same as LINKVERTISE_USER_ID in
+# script.js) and the OWNER_LOOT_TOKEN secret, which the deploy workflow sets
+# from the LOOTLABS_API_TOKEN repo secret that generator.py uses.
+OWNER_LINKVERTISE_ID = "499358"
 SITE_URL = "https://pepe.glacierclient.xyz"
 PUBLIC_ORIGIN = "https://pepes-portfolio-uploads.pepeoncloudeflare.workers.dev"
 

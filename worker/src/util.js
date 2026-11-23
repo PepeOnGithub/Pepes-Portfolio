@@ -90,7 +90,10 @@ export async function getUser(ctx) {
       return null;
     }
     const data = await res.json();
-    if (data && data.user && data.user.id != null) ctx._user = data.user;
+    if (data && data.user && data.user.id != null) {
+      ctx._user = data.user;
+      ctx._user.isOwner = await isSiteOwner(ctx.env, data.user.id);
+    }
   } catch (e) {
     console.error('session check failed', e);
   }
@@ -108,7 +111,41 @@ export function adminIds(env) {
 }
 
 export function isAdmin(ctx, user) {
-  return !!user && adminIds(ctx.env).includes(String(user.id));
+  return !!user && (user.isOwner === true || adminIds(ctx.env).includes(String(user.id)));
+}
+
+// Is this account the site owner? The accounts worker already knows (its
+// OWNER_USER_ID drives the verified badge and shows as isAuthor on
+// /api/users/<id>), so ask it instead of keeping a second copy of the id.
+// Works in cron jobs too. Answers are cached per isolate for 10 minutes;
+// failed lookups aren't cached and count as "not the owner".
+const ownerCache = new Map();
+export async function isSiteOwner(env, userId) {
+  if (userId == null || userId === '') return false;
+  const id = String(userId);
+  const hit = ownerCache.get(id);
+  if (hit && Date.now() - hit.at < 10 * 60 * 1000) return hit.owner;
+  try {
+    const url = `${env.AUTH_API}/api/users/${encodeURIComponent(id)}`;
+    const res = env.AUTH ? await env.AUTH.fetch(url) : await fetch(url);
+    if (!res.ok && res.status !== 404) {
+      console.error('owner check failed: status', res.status);
+      return false;
+    }
+    const data = res.ok ? await res.json().catch(() => null) : null;
+    // Lookups match a username too, so make sure it's this exact account.
+    const owner = !!(data && data.user && String(data.user.id) === id && data.user.isAuthor);
+    ownerCache.set(id, { owner, at: Date.now() });
+    return owner;
+  } catch (e) {
+    console.error('owner check failed', e);
+    return false;
+  }
+}
+
+// Owner or someone listed in ADMIN_IDS, for code that only has a user id.
+export async function isOwnerOrAdminId(env, userId) {
+  return adminIds(env).includes(String(userId)) || isSiteOwner(env, userId);
 }
 
 export function publicUser(user) {

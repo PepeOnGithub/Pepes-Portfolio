@@ -64,6 +64,18 @@ jobs:
           fi
           printf '%s' "$GEMINI_API_KEY" | npx wrangler secret put GEMINI_API_KEY
 
+      # The site owner's uploads make LootLabs links with the site's own token,
+      # the same LOOTLABS_API_TOKEN secret the site build uses.
+      - name: Set owner LootLabs token
+        env:
+          LOOTLABS_API_TOKEN: ${{ secrets.LOOTLABS_API_TOKEN }}
+        run: |
+          if [ -z "$LOOTLABS_API_TOKEN" ]; then
+            echo "LOOTLABS_API_TOKEN secret is empty; the owner's uploads won't get LootLabs links."
+            exit 0
+          fi
+          printf '%s' "$LOOTLABS_API_TOKEN" | npx wrangler secret put OWNER_LOOT_TOKEN
+
       # Encrypts creators' LootLabs tokens. Set it once and never change it:
       # changing it makes saved tokens unreadable.
       - name: Set token key

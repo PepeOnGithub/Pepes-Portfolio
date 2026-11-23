@@ -539,7 +539,13 @@ class UploadsPage {
     if (st.hasLootToken) parts.push('LootLabs');
     const text = document.getElementById('up-earn-text');
     const btn = document.querySelector('#up-earn-note [data-up-goto]');
-    if (parts.length) {
+    // The site owner earns through the site's own accounts; no form to fill.
+    document.getElementById('up-earn-site').classList.toggle('hidden', !st.siteEarnings);
+    document.getElementById('up-earn-form').classList.toggle('hidden', !!st.siteEarnings);
+    btn.classList.toggle('hidden', !!st.siteEarnings);
+    if (st.siteEarnings) {
+      text.textContent = "Your packs use the site's own Linkvertise and LootLabs accounts, the same as the library packs. The links are made automatically.";
+    } else if (parts.length) {
       text.textContent = `Earning with ${parts.join(' and ')}. The site makes your download links automatically, and you keep 100%.`;
       btn.innerHTML = '<i class="fas fa-gear" aria-hidden="true"></i> Manage earnings';
     } else {

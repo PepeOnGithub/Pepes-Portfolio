@@ -111,12 +111,16 @@ async function creatorRow(ctx, user) {
   return ctx.env.DB.prepare('SELECT * FROM creators WHERE user_id = ?').bind(String(user.id)).first();
 }
 
-function settingsView(row) {
+function settingsView(row, user, env) {
   const publicProfile = safeJson(row.public_json, { bio: '', socials: [], videos: [] });
   const draft = safeJson(row.draft_json, null) || publicProfile;
+  // The site owner's packs use the site's own Linkvertise and LootLabs
+  // accounts, so the page doesn't ask them for either and shows those.
+  const site = !!(user && user.isOwner);
   return {
-    linkvertiseId: row.linkvertise_id || '',
-    hasLootToken: !!row.loot_token,
+    siteEarnings: site,
+    linkvertiseId: row.linkvertise_id || (site && env.OWNER_LINKVERTISE_ID ? String(env.OWNER_LINKVERTISE_ID) : ''),
+    hasLootToken: !!row.loot_token || (site && !!env.OWNER_LOOT_TOKEN),
     lootStatus: row.loot_status || '',
     profile: {
       status: row.profile_status,
@@ -132,7 +136,7 @@ function settingsView(row) {
 export async function getSettings(ctx) {
   const user = await requireUser(ctx);
   const row = await creatorRow(ctx, user);
-  return json({ settings: settingsView(row) });
+  return json({ settings: settingsView(row, user, ctx.env) });
 }
 
 export async function saveSettings(ctx) {
@@ -182,7 +186,7 @@ export async function saveSettings(ctx) {
   }
 
   row = await env.DB.prepare('SELECT * FROM creators WHERE user_id = ?').bind(userId).first();
-  return json({ settings: settingsView(row) });
+  return json({ settings: settingsView(row, user, ctx.env) });
 }
 
 // ===== Public profile =====
