@@ -16,7 +16,11 @@
     ['Switch theme (dark / light)', 'fa-circle-half-stroke', 'theme dark light mode', () => lib().toggleTheme()],
     ['Open messages', 'fa-paper-plane', 'messages dm chat inbox', () => { const b = document.getElementById('auth-dm-btn') || document.getElementById('top-dm-btn'); if (b) b.click(); }],
     ['Open notifications', 'fa-bell', 'notifications alerts bell', () => { const b = document.getElementById('notif-btn'); if (b) b.click(); }],
+    ['Keyboard shortcuts', 'fa-keyboard', 'keyboard shortcuts keys help', () => window.shortcutsHelp && window.shortcutsHelp.open()],
   ];
+  // recent searches (this device only)
+  const recents = () => { try { const a = JSON.parse(localStorage.getItem('recentSearches') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } };
+  const remember = (q) => { q = String(q || '').trim(); if (q.length < 2) return; try { localStorage.setItem('recentSearches', JSON.stringify([q, ...recents().filter((x) => x.toLowerCase() !== q.toLowerCase())].slice(0, 5))); } catch (e) { /* ignore */ } };
   const norm = (t) => (lib() ? lib().normalizeSearch(t) : String(t).toLowerCase());
   let root = null, input = null, list = null, items = [], sel = 0, lastFocus = null;
 
@@ -40,7 +44,11 @@
       else if (e.key === 'Escape') { e.preventDefault(); close(); }
       else if (e.key === 'Tab') { e.preventDefault(); input.focus(); }
     });
-    list.addEventListener('click', (e) => { const li = e.target.closest('[data-i]'); if (li) choose(Number(li.dataset.i)); });
+    list.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-q]'); if (chip) { input.value = chip.dataset.q; render(); input.focus(); return; }
+      if (e.target.closest('[data-clear-recents]')) { try { localStorage.removeItem('recentSearches'); } catch (err) { /* ignore */ } render(); return; }
+      const li = e.target.closest('[data-i]'); if (li) choose(Number(li.dataset.i));
+    });
     list.addEventListener('pointermove', (e) => { const li = e.target.closest('[data-i]'); if (li && Number(li.dataset.i) !== sel) { sel = Number(li.dataset.i); paintSel(false); } });
   }
 
@@ -66,6 +74,11 @@
     const q = input.value.trim(), words = norm(q).split(' ').filter(Boolean);
     items = [];
     const sections = [];
+    if (!words.length) {
+      const rs = recents();
+      if (rs.length) sections.push(['Recent searches', null, `<div class="qs-chips">${rs.map((r) => `<button type="button" class="qs-chip" data-q="${esc(r)}"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i>${esc(r)}</button>`).join('')}</div>`, '<button type="button" class="qs-clear" data-clear-recents>Clear</button>']);
+      sections.push(['', [{ kind: 'surprise', html: `<span class="qs-ico qs-surprise">${icon('fa-dice')}</span><span class="qs-txt"><b>Surprise me</b><small>Open a random pack</small></span>` }]]);
+    }
     const packs = packRows(words);
     if (packs.length) sections.push([words.length ? 'Packs' : 'Recently viewed', packs.map((p) => {
       const L = lib(), n = L.downloadsOf ? L.downloadsOf(p) : (p.downloads || 0);
@@ -79,7 +92,7 @@
     if (acts.length) sections.push(['Actions', acts.map(([label, ic, , run]) => ({ kind: 'action', run, html: `<span class="qs-ico">${icon(ic)}</span><span class="qs-txt"><b>${highlight(label, words)}</b></span>` }))]);
     if (words.length && !sections.length) { list.innerHTML = `<p class="qs-empty">Nothing matches “${esc(q)}”.</p>`; sel = 0; return; }
     if (words.length) sections.push(['Search', [{ kind: 'search', q, html: `<span class="qs-ico">${icon('fa-magnifying-glass')}</span><span class="qs-txt"><b>Search the library for “${esc(q)}”</b></span>` }]]);
-    list.innerHTML = sections.map(([title, rows]) => `<div class="qs-sec">${esc(title)}</div>` + rows.map((r) => { const i = items.push(r) - 1; return `<div class="qs-row" role="option" id="qs-o${i}" data-i="${i}">${r.html}<span class="qs-enter">↵</span></div>`; }).join('')).join('');
+    list.innerHTML = sections.map(([title, rows, raw, action]) => (title ? `<div class="qs-sec">${esc(title)}${action || ''}</div>` : '') + (raw || '') + (rows || []).map((r) => { const i = items.push(r) - 1; return `<div class="qs-row" role="option" id="qs-o${i}" data-i="${i}">${r.html}<span class="qs-enter">↵</span></div>`; }).join('')).join('');
     sel = 0; paintSel(false);
   }
 
@@ -90,8 +103,16 @@
 
   function choose(i) {
     const it = items[i]; if (!it) return;
+    const typed = input.value;
     close(true);
     const L = lib();
+    if (it.kind === 'pack' || it.kind === 'search') remember(it.kind === 'search' ? it.q : typed);
+    if (it.kind === 'surprise') {
+      const pool = (L.packs || []).filter((p) => !p.pinned && !p.discontinued && p.category !== 'website');
+      const p = pool[Math.floor(Math.random() * pool.length)];
+      if (p) { window.router.show('library', { push: false }); L.showDetail(p); }
+      return;
+    }
     if (it.kind === 'pack') { window.router.show('library', { push: false }); L.showDetail(it.pack); }
     else if (it.kind === 'page') window.router.show(it.id);
     else if (it.kind === 'action') it.run();

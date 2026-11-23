@@ -253,6 +253,7 @@
     defaults = buildDefaults(build, pack);
     settingMeta = build.settings ? settingsIndex(build) : {};
     values = Object.fromEntries(Object.entries(read(storeKey(pack), {})).filter(([k, v]) => isKnown(k) && typeof v === typeof defaults[k]));
+    undoStack.length = 0; redoStack.length = 0; lastPush = { name: null, at: 0 }; updateUR();
     paintPicker();
     const info = $('cz-pack');
     const count = Object.keys(defaults).length;
@@ -296,8 +297,72 @@
     return { title, icon: g.icon || 'fa-sliders', desc: g.desc || '', label, hide, suffix, m, stem };
   }
 
+  /* ---------- undo / redo and presets (Customizer tools design) ---------- */
+  const undoStack = [], redoStack = [];
+  let lastPush = { name: null, at: 0 };
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+  function updateUR() {
+    const u = document.getElementById('cz-undo'), r = document.getElementById('cz-redo');
+    if (u) u.disabled = !undoStack.length;
+    if (r) r.disabled = !redoStack.length;
+  }
+  // called before a change; edits to the same setting within 700 ms (a slider or a drag) count as one step
+  function pushHistory(name) {
+    const now = Date.now();
+    if (name && lastPush.name === name && now - lastPush.at < 700) { lastPush.at = now; return; }
+    undoStack.push(clone(values)); if (undoStack.length > 100) undoStack.shift();
+    redoStack.length = 0; lastPush = { name, at: now }; updateUR();
+  }
+  function restore(v) {
+    values = clone(v); write(storeKey(active.pack), values); rebuildInputs(); refreshState(); updateUR();
+  }
+  function undo() { if (!undoStack.length) return; redoStack.push(clone(values)); lastPush = { name: null, at: 0 }; restore(undoStack.pop()); }
+  function redo() { if (!redoStack.length) return; undoStack.push(clone(values)); lastPush = { name: null, at: 0 }; restore(redoStack.pop()); }
+
+  const presetStore = () => read('czPresets', {});
+  const presetsOf = () => presetStore()[storeKey(active.pack)] || [];
+  const savePresets = (list) => { const all = presetStore(); all[storeKey(active.pack)] = list; write('czPresets', all); };
+  const sameValues = (a, b) => JSON.stringify(Object.entries(a).sort()) === JSON.stringify(Object.entries(b).sort());
+  function renderPresets() {
+    const box = document.getElementById('cz-presets'); if (!box) return;
+    const list = presetsOf();
+    box.innerHTML = `<div class="cz-pr-title">Presets</div><div class="cz-pr-sub">Save your settings and switch between setups.</div>
+      ${list.map((p, i) => { const use = sameValues(p.values, values); const n = Object.keys(p.values).length;
+        return `<div class="cz-pr-row${use ? ' use' : ''}"><div class="cz-pr-text"><b>${p.name.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))}</b><small>${n} change${n === 1 ? '' : 's'}${use ? ' · in use' : ''}</small></div>
+          ${use ? '' : `<button type="button" class="cz-pr-apply" data-apply="${i}">Apply</button>`}<button type="button" class="cz-pr-del" data-del="${i}" aria-label="Delete ${p.name.replace(/"/g, '')}"><i class="fas fa-trash-can" aria-hidden="true"></i></button></div>`; }).join('')}
+      ${list.length ? '' : '<p class="cz-pr-empty">No presets yet. Change some settings, then name and save them below.</p>'}
+      <form class="cz-pr-new" autocomplete="off"><input type="text" maxlength="40" placeholder="Name this setup…" aria-label="Preset name"><button type="submit">Save</button></form>
+      <button type="button" class="cz-pr-share" data-share><i class="fas fa-link" aria-hidden="true"></i> Copy share link</button>`;
+  }
+  function closePresets() { const b = document.getElementById('cz-presets'); if (b) b.hidden = true; const t = document.getElementById('cz-presets-btn'); if (t) t.setAttribute('aria-expanded', 'false'); }
+  function togglePresets() {
+    let box = document.getElementById('cz-presets');
+    if (!box) {
+      box = document.createElement('div'); box.id = 'cz-presets'; box.className = 'cz-presets'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', 'Presets'); box.hidden = true;
+      $('cz-main').append(box);
+      box.addEventListener('click', (e) => {
+        const a = e.target.closest('[data-apply]'); if (a) { const p = presetsOf()[Number(a.dataset.apply)]; if (p) { pushHistory(null); restore(p.values); toast(`Applied “${p.name}”`); renderPresets(); } return; }
+        const d = e.target.closest('[data-del]'); if (d) { const l = presetsOf(); const [gone] = l.splice(Number(d.dataset.del), 1); savePresets(l); renderPresets(); toast(`Deleted “${gone.name}”`); return; }
+        if (e.target.closest('[data-share]')) { syncHash(); navigator.clipboard.writeText(location.href).then(() => toast('Share link copied.'), () => toast('Copy this page address to share your settings.')); }
+      });
+      box.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = box.querySelector('.cz-pr-new input').value.trim().slice(0, 40);
+        if (!name) return;
+        if (!Object.keys(values).length) { toast('Change some settings first, then save them.'); return; }
+        const l = presetsOf().filter((p) => p.name.toLowerCase() !== name.toLowerCase()); l.push({ name, values: clone(values), at: Date.now() }); savePresets(l); renderPresets(); toast(`Saved “${name}”`);
+      });
+      document.addEventListener('pointerdown', (e) => { if (!box.hidden && !e.target.closest('#cz-presets, #cz-presets-btn')) closePresets(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) { e.stopPropagation(); closePresets(); } }, true);
+    }
+    if (!box.hidden) { closePresets(); return; }
+    renderPresets(); box.hidden = false; $('cz-presets-btn').setAttribute('aria-expanded', 'true');
+    if (innerWidth > 768) { const r = $('cz-presets-btn').getBoundingClientRect(); box.style.top = r.bottom + 8 + 'px'; box.style.left = Math.max(8, Math.min(innerWidth - 368, r.right - 360)) + 'px'; } else { box.style.top = ''; box.style.left = ''; }
+  }
+
   /* ---------- controls ---------- */
   function setValue(name, v, fromUi) {
+    pushHistory(name);
     if (same(v, defaults[name])) delete values[name]; else values[name] = v;
     write(storeKey(active.pack), values);
     refreshState();
@@ -494,6 +559,7 @@
   }
   function resetModule(title) {
     const c = cardOf(title); if (!c) return;
+    pushHistory(null);
     c.names.forEach((n) => { delete values[n]; }); write(storeKey(active.pack), values); rebuildInputs(); refreshState();
   }
 
@@ -705,10 +771,13 @@
     $('cz-tip').hidden = !!read('czTipSeen', false);
     $('cz-search').addEventListener('input', refreshState);
     $('cz-only-wrap').replaceWith(checkbox({ id: 'cz-only-changed', label: 'Only changed', checked: false, onChange: (v) => { onlyChanged = v; refreshState(); } }).root);
+    $('cz-undo').addEventListener('click', undo); $('cz-redo').addEventListener('click', redo);
+    $('cz-presets-btn').addEventListener('click', (e) => { e.stopPropagation(); togglePresets(); });
     $('cz-reset').addEventListener('click', () => {
       const n = Object.keys(values).length;
       if (!n) { toast('Nothing to reset: every setting is already at its default.'); return; }
       if (!window.confirm(`Reset ${n} changed setting${n === 1 ? '' : 's'} of ${active.pack.name} to their defaults? This cannot be undone.`)) return;
+      pushHistory(null);
       values = {}; write(storeKey(active.pack), values); rebuildInputs(); refreshState(); toast('All settings reset.');
     });
     $('cz-import').addEventListener('change', onImport);
@@ -732,6 +801,11 @@
     });
     document.addEventListener('keydown', (e) => {
       if (!document.body.classList.contains('cz-open')) return;
+      if ((e.ctrlKey || e.metaKey) && !/^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '')) {
+        const k = e.key.toLowerCase();
+        if (k === 'z' && !e.shiftKey) { e.preventDefault(); undo(); return; }
+        if ((k === 'z' && e.shiftKey) || k === 'y') { e.preventDefault(); redo(); return; }
+      }
       const tag = document.activeElement && document.activeElement.tagName;
       const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
       if (e.key === 'Escape') {
@@ -752,7 +826,7 @@
       const value = (n) => (n in allDefaults ? (n in values ? values[n] : allDefaults[n]) : otherValue(n));
       CzPreview.init($('cz-preview'), {
         bar: $('cz-bar-preview'), app: $('cz-main'), tooltip: $('cz-tt-card'), groupOf, openModule,
-        get: value, has: (n) => value(n) !== undefined, set: (n, v, fromUi) => { if (n in allDefaults) setValue(n, v, !!fromUi); }, names: () => Object.keys(data.variables), meta, dropdown, active: () => active.pack.id,
+        get: value, has: (n) => value(n) !== undefined, undo, hint: (m) => (window.toastAction ? window.toastAction(m, 'Undo', undo) : toast(m)), set: (n, v, fromUi) => { if (n in allDefaults) setValue(n, v, !!fromUi); }, names: () => Object.keys(data.variables), meta, dropdown, active: () => active.pack.id,
         // the version chosen for a pack, else its latest; used() tells whether the visitor opened that pack at all
         version: (id) => picked[id] || ((packs.find((p) => p.id === id) || {}).versions || [])[0]?.version || null,
         used: (id) => !!picked[id],

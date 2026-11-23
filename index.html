@@ -85,6 +85,7 @@
   <link rel="stylesheet" href="css/social.css">
   <link rel="stylesheet" href="css/scrollbar.css">
   <link rel="stylesheet" href="css/features.css">
+  <link rel="stylesheet" href="css/features2.css">
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
@@ -495,6 +496,7 @@
             <span class="count" id="count-other">0</span>
           </button>
       </div>
+      <div class="lib-quick" id="lib-quick" role="group" aria-label="Quick filters"></div>
 
       <!-- Main Content -->
       <main class="main-content">
@@ -634,10 +636,14 @@
               <button type="button" class="detail-fav-btn" id="detail-fav-btn" aria-pressed="false" aria-label="Add to favorites" title="Add to favorites">
                 <i class="far fa-heart"></i>
               </button>
+              <button type="button" class="detail-fav-btn detail-list-btn" id="detail-list-btn" aria-haspopup="dialog" aria-label="Save to a list" title="Save to a list">
+                <i class="far fa-bookmark" aria-hidden="true"></i>
+              </button>
             </div>
             <a href="#" class="btn-secondary-small detail-customizer-btn hidden" id="detail-customizer-btn" data-page="customizer">
               <i class="fas fa-sliders-h"></i> Open in Customizer
             </a>
+            <button type="button" class="btn-secondary-small detail-compare-btn" id="detail-compare-btn" aria-pressed="false"><i class="fas fa-code-compare" aria-hidden="true"></i> <span>Add to compare</span></button>
             <button type="button" class="btn-secondary-small detail-install-btn" id="detail-install-btn"><i class="fas fa-circle-question" aria-hidden="true"></i> How to install</button>
             <div class="detail-action-row">
               <button type="button" class="btn-secondary-small" id="detail-share-btn" title="Copy a direct link to this pack">
@@ -922,6 +928,11 @@
         <div class="cz-picker" id="cz-picker"></div>
         <div class="cz-bar-preview" id="cz-bar-preview"></div>
         <div class="cz-bar-gap"></div>
+        <span class="cz-seg-ur" role="group" aria-label="History">
+          <button type="button" class="cz-ur" id="cz-undo" aria-label="Undo" title="Undo (Ctrl Z)" disabled><i class="fas fa-rotate-left" aria-hidden="true"></i></button>
+          <button type="button" class="cz-ur" id="cz-redo" aria-label="Redo" title="Redo (Ctrl Shift Z)" disabled><i class="fas fa-rotate-right" aria-hidden="true"></i></button>
+        </span>
+        <button type="button" class="cz-chip" id="cz-presets-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="cz-presets"><i class="fas fa-bookmark" aria-hidden="true"></i><span>Presets</span></button>
         <button type="button" class="cz-chip" id="cz-modules-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="cz-palette">
           <i class="fas fa-layer-group" aria-hidden="true"></i><span>Modules</span><kbd>/</kbd></button>
         <button type="button" class="cz-chip" id="cz-more-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="cz-more">
@@ -1007,6 +1018,11 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="settings-account" id="settings-account" hidden></div>
+        <div class="st-install" id="st-install" hidden>
+          <span class="st-install-ico"><i class="fas fa-mobile-screen-button" aria-hidden="true"></i></span>
+          <div class="st-install-text"><b>Install Pepe as an app</b><small>Opens full screen from your home screen, no browser bar.</small></div>
+          <button type="button" class="st-install-btn" id="st-install-btn">Install</button>
+        </div>
         <div class="sidebar-section">
           <div class="settings-search">
             <i class="fas fa-magnifying-glass settings-search-icon" aria-hidden="true"></i>
@@ -1026,7 +1042,10 @@
               <button class="category-row active" data-settings-category="appearance" data-label="Appearance">
                 <span><i class="fas fa-palette"></i> Appearance<small class="st-sub">Dark mode, font size, contrast</small></span>
               </button>
-              <button class="category-row" data-settings-category="theme" data-label="Theme Studio">
+              <button class="category-row" data-settings-category="notifications" data-label="Notifications">
+                <span><i class="fas fa-bell"></i> Notifications<small class="st-sub">Choose what shows in the bell</small></span>
+              </button>
+                            <button class="category-row" data-settings-category="theme" data-label="Theme Studio">
                 <span><i class="fas fa-eye-dropper"></i> Theme Studio<small class="st-sub">Accent colour and hue</small></span>
               </button>
               <button class="category-row" data-settings-category="browsing" data-label="Browsing">
@@ -1664,6 +1683,63 @@
 
         </div>
 
+        <div class="settings-panel" data-settings-panel="notifications">
+          <div class="settings-panel-header">
+            <span class="settings-panel-header-icon"><i class="fas fa-bell"></i></span>
+            <div>
+              <h3 class="settings-panel-title">Notifications</h3>
+              <p class="settings-panel-desc">Choose what shows in the bell. Kept in this browser.</p>
+            </div>
+          </div>
+          <h4 class="settings-group-title">Show in the bell</h4>
+          <div class="settings-list">
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-bell"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">New followers</p>
+                <p class="setting-desc">When someone follows you</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="np-follow" class="setting-input" data-notif-pref="follow" autocomplete="off" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-bell"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">New packs</p>
+                <p class="setting-desc">From creators you follow</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="np-new_pack" class="setting-input" data-notif-pref="new_pack" autocomplete="off" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-bell"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Review results</p>
+                <p class="setting-desc">When your upload is approved or not</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="np-review" class="setting-input" data-notif-pref="review" autocomplete="off" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-bell"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Unread messages</p>
+                <p class="setting-desc">Show them at the top of the bell</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="np-messages" class="setting-input" data-notif-pref="messages" autocomplete="off" checked>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+          </div>
+        </div>
+
         <div class="settings-panel" data-settings-panel="messages">
           <div class="settings-panel-header">
             <span class="settings-panel-header-icon"><i class="fas fa-paper-plane"></i></span>
@@ -2232,5 +2308,6 @@
   <script src="nav.js"></script>
   <script src="notify.js"></script>
   <script src="features.js"></script>
+  <script src="features2.js"></script>
 </body>
 </html>

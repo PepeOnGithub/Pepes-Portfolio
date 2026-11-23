@@ -125,7 +125,8 @@ class Notifications {
   }
 
   render(items) {
-    const msgs = (window.social && window.social.unread) || 0;
+    const prefs = window.notifPrefs;
+    const msgs = (prefs && !prefs.get('messages')) ? 0 : ((window.social && window.social.unread) || 0);
     const msgRow = msgs ? `
       <button type="button" class="notif-item unread" data-act="messages">
         <span class="notif-icon"><i class="fas fa-paper-plane" aria-hidden="true"></i></span>
@@ -133,6 +134,7 @@ class Notifications {
       </button>` : '';
     this._items = items;
     const rows = items.map((n, i) => {
+      if (prefs && !prefs.get(prefs.kindOf(n.type))) return '';
       const d = this.describe(n);
       const art = n.actor && n.type !== 'pack_approved' && n.type !== 'pack_rejected'
         ? (window.social ? window.social.avatar(n.actor, 'notif-avatar') : '')

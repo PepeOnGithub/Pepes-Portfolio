@@ -824,6 +824,7 @@
       suppressClick = true; setTimeout(() => { suppressClick = false; }, 0);
       api.set(d.v, commit ? d.now : d.start, false);   // final value, and the form's fields catch up
       refocus = d.g;
+      if (commit && api.hint) api.hint(`Moved ${d.g} · Ctrl Z to undo`);
     }
     scheduleRender();
   }

@@ -1690,9 +1690,10 @@ class PackLibrary {
     return this.favorites.has(packId);
   }
 
-  toggleFavorite(packId) {
+  toggleFavorite(packId, { silent = false } = {}) {
     if (this.favorites.has(packId)) {
       this.favorites.delete(packId);
+      if (!silent && window.toastAction) window.toastAction('Removed from Favorites', 'Undo', () => this.toggleFavorite(packId, { silent: true }));
     } else {
       this.favorites.add(packId);
     }
@@ -1923,6 +1924,21 @@ class PackLibrary {
       .trim();
   }
 
+  // Quick filters (Favorites, Downloaded, New this month, Updates, one of your lists).
+  matchesQuick(pack, q) {
+    if (q === 'fav') return this.favorites.has(pack.id);
+    if (q === 'dl') return this.downloadedIds().has(pack.id);
+    if (q === 'new') return (Date.now() - (Date.parse(pack.addedAt || pack.createdAt || '') || 0)) < 30 * 86400000;
+    if (q === 'upd') return !!this.updateInfo(pack);
+    if (q.startsWith('list:') && window.packLists) return window.packLists.has(q.slice(5), pack.id);
+    return true;
+  }
+
+  setQuick(q) {
+    this.quick = this.quick === q ? '' : q;
+    this.applyFilters();
+  }
+
   // Real download count: the live counter once it has loaded, else the snapshot.
   downloadsOf(pack) {
     const live = this.liveDownloadCounts.get(pack.id);
@@ -1990,6 +2006,8 @@ class PackLibrary {
       );
     }
 
+    if (this.quick) filtered = filtered.filter(p => this.matchesQuick(p, this.quick));
+
     switch (this.currentFilter.sort) {
       case 'recent':
         filtered.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));
@@ -2031,6 +2049,7 @@ class PackLibrary {
 
     this.filteredPacks = filtered;
     this.render();
+    if (window.libQuick) window.libQuick.render();
   }
 
   setViewMode(mode) {
@@ -2436,6 +2455,8 @@ class PackLibrary {
     const size = latest.size || pack.size || '';
     const categoryLabel = pack.pinned ? 'Required' : this.capitalizeFirst(pack.category);
     const updatedAgo = this.timeAgo(pack.updatedAt || (pack.versions && pack.versions[0] && pack.versions[0].date) || pack.addedAt);
+    const upd = this.updateInfo(pack);
+    const updFlag = upd ? `<span class="pack-update-chip" title="You downloaded v${this.escapeHtml(upd.from)}"><i class="fas fa-arrow-up" aria-hidden="true"></i> Update available &middot; v${this.escapeHtml(upd.from)} &rarr; v${this.escapeHtml(upd.to)}</span>` : '';
     const iconContent = hasImage
       ? this.pictureTag(pack.thumbnail, pack.thumbnailWebp)
       : this.fallbackIconContent(pack);
@@ -2443,13 +2464,15 @@ class PackLibrary {
     // One markup for both layouts (grid cards and list rows); library.css
     // decides what each view shows.
     return `
-      <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}${this.downloadedIds().has(pack.id) ? ' is-downloaded' : ''}" data-pack-id="${pack.id}">
+      <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}${this.downloadedIds().has(pack.id) ? ' is-downloaded' : ''}${upd ? ' has-update' : ''}" data-pack-id="${pack.id}">
         <div class="pack-thumbnail"><span class="pack-icon-badge">${iconContent}</span><span class="pack-cat-chip">${this.escapeHtml(this.capitalizeFirst(pack.category))}</span></div>
         ${this.favoriteButton(pack)}
+        <button type="button" class="pack-compare-btn${(window.packCompare && window.packCompare.has(pack.id)) ? ' on' : ''}" data-compare-id="${pack.id}" aria-label="Compare ${this.escapeHtml(pack.name)}" aria-pressed="${!!(window.packCompare && window.packCompare.has(pack.id))}" title="Compare"><i class="fas fa-code-compare" aria-hidden="true"></i></button>
         <div class="pack-content">
           <div class="pack-title-row">
             <span class="pack-name">${this.escapeHtml(pack.name)}</span>
           </div>
+          ${updFlag}
           <span class="pack-author">by ${this.escapeHtml(pack.author || 'Pepe')}</span>
           ${flags ? `<div class="pack-flags">${flags}</div>` : ''}
           <p class="pack-description">${this.escapeHtml(pack.description)}</p>
@@ -2461,7 +2484,7 @@ class PackLibrary {
         <div class="pack-footer">
           <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
           ${updatedAgo ? `<span class="pack-updated" title="Last updated"><i class="far fa-clock" aria-hidden="true"></i> ${updatedAgo}</span>` : ''}
-          <span class="pack-dl-btn">${this.downloadedIds().has(pack.id) ? '<i class="fas fa-check"></i> Downloaded' : '<i class="fas fa-download"></i> Download'}</span>
+          <span class="pack-dl-btn">${upd ? '<i class="fas fa-arrow-up"></i> Get update' : this.downloadedIds().has(pack.id) ? '<i class="fas fa-check"></i> Downloaded' : '<i class="fas fa-download"></i> Download'}</span>
         </div>
       </div>
     `;
@@ -3962,15 +3985,41 @@ class PackLibrary {
     try { const a = JSON.parse(localStorage.getItem('downloadedPacks') || '[]'); return new Set(Array.isArray(a) ? a : []); } catch (e) { return new Set(); }
   }
 
+  // The version a pack had when it was downloaded on this device (to show "Update available").
+  downloadedVersions() {
+    try { const o = JSON.parse(localStorage.getItem('downloadedVersions') || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; }
+  }
+
+  latestVersionOf(pack) {
+    const latest = (pack.versions && pack.versions[0]) || pack;
+    return String(latest.version || pack.version || '').replace(/^v/i, '');
+  }
+
+  // {from, to} when a downloaded pack has a newer version than the one you downloaded, else null.
+  updateInfo(pack) {
+    const got = this.downloadedVersions()[pack.id];
+    const to = this.latestVersionOf(pack);
+    if (!got || !got.v || !to || got.v === to) return null;
+    return { from: got.v, to, at: got.at };
+  }
+
   markDownloaded(pack) {
     const ids = this.downloadedIds();
     ids.add(pack.id);
-    try { localStorage.setItem('downloadedPacks', JSON.stringify([...ids].slice(-500))); } catch (e) { /* storage full or blocked */ }
+    try {
+      localStorage.setItem('downloadedPacks', JSON.stringify([...ids].slice(-500)));
+      const dv = this.downloadedVersions();
+      dv[pack.id] = { v: this.latestVersionOf(pack), at: Date.now() };
+      const keep = Object.fromEntries(Object.entries(dv).slice(-500));
+      localStorage.setItem('downloadedVersions', JSON.stringify(keep));
+    } catch (e) { /* storage full or blocked */ }
     document.querySelectorAll(`.pack-card[data-pack-id="${pack.id}"]`).forEach(c => this.paintDownloaded(c));
   }
 
   paintDownloaded(card) {
     card.classList.add('is-downloaded');
+    card.classList.remove('has-update');
+    const chip = card.querySelector('.pack-update-chip'); if (chip) chip.remove();
     const btn = card.querySelector('.pack-dl-btn');
     if (btn) btn.innerHTML = '<i class="fas fa-check"></i> Downloaded';
   }
