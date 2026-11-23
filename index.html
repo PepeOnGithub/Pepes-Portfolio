@@ -994,6 +994,13 @@
       </div>
     </div>
 
+    <!-- Phones: a category page's top bar (back, title, reset), like the system Settings app -->
+    <div class="st-appbar" id="st-appbar">
+      <button type="button" class="st-back" id="st-back" aria-label="Back to Settings"><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
+      <h2 id="st-appbar-title">Settings</h2>
+      <button type="button" class="st-reset" id="st-appbar-reset">Reset</button>
+    </div>
+
     <div class="layout-container">
       <!-- Sidebar -->
       <aside class="sidebar">
@@ -1014,26 +1021,26 @@
               <i class="fas fa-chevron-down filter-dropdown-chevron"></i>
             </summary>
             <div class="category-list">
-              <button class="category-row active" data-settings-category="appearance">
-                <span><i class="fas fa-palette"></i> Appearance</span>
+              <button class="category-row active" data-settings-category="appearance" data-label="Appearance">
+                <span><i class="fas fa-palette"></i> Appearance<small class="st-sub">Dark mode, font size, contrast</small></span>
               </button>
-              <button class="category-row" data-settings-category="theme">
-                <span><i class="fas fa-eye-dropper"></i> Theme Studio</span>
+              <button class="category-row" data-settings-category="theme" data-label="Theme Studio">
+                <span><i class="fas fa-eye-dropper"></i> Theme Studio<small class="st-sub">Accent colour and hue</small></span>
               </button>
-              <button class="category-row" data-settings-category="browsing">
-                <span><i class="fas fa-compass"></i> Browsing</span>
+              <button class="category-row" data-settings-category="browsing" data-label="Browsing">
+                <span><i class="fas fa-compass"></i> Browsing<small class="st-sub">Navigation, scrolling, links</small></span>
               </button>
-              <button class="category-row" data-settings-category="library">
-                <span><i class="fas fa-box-open"></i> Library</span>
+              <button class="category-row" data-settings-category="library" data-label="Library">
+                <span><i class="fas fa-box-open"></i> Library<small class="st-sub">Sorting, cards, tags</small></span>
               </button>
-              <button class="category-row" data-settings-category="downloads">
-                <span><i class="fas fa-download"></i> Downloads</span>
+              <button class="category-row" data-settings-category="downloads" data-label="Downloads">
+                <span><i class="fas fa-download"></i> Downloads<small class="st-sub">Download links and behaviour</small></span>
               </button>
-              <button class="category-row" data-settings-category="messages">
-                <span><i class="fas fa-paper-plane"></i> Messages</span>
+              <button class="category-row" data-settings-category="messages" data-label="Messages">
+                <span><i class="fas fa-paper-plane"></i> Messages<small class="st-sub">Who can message you, blocked accounts</small></span>
               </button>
-              <button class="category-row" data-settings-category="data">
-                <span><i class="fas fa-database"></i> Data</span>
+              <button class="category-row" data-settings-category="data" data-label="Data">
+                <span><i class="fas fa-database"></i> Data<small class="st-sub">Export, import, reset everything</small></span>
               </button>
             </div>
           </details>

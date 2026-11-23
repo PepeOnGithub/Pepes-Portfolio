@@ -479,3 +479,53 @@ class MobileNav {
     c.classList.add('hidden');
   });
 })();
+
+// Settings on phones works like the Android Settings app: a home list of categories, and each category
+// opens as its own page with a back arrow (the browser's back button returns to the list as well).
+(function settingsNav() {
+  const mq = matchMedia('(max-width: 768px)');
+  let page, appbar, titleEl, searching = false;
+  const label = () => { const r = page.querySelector('.category-row.active'); return (r && (r.dataset.label || r.textContent.trim())) || 'Settings'; };
+  function setView(v) {
+    if (!mq.matches) { delete page.dataset.stView; return; }
+    page.dataset.stView = v;
+    if (v === 'detail') titleEl.textContent = label();
+    appbar.classList.toggle('no-reset', false);
+    if (v !== 'search') window.scrollTo({ top: 0 });
+  }
+  function start() {
+    page = document.getElementById('page-settings');
+    if (!page || page.dataset.stBound) return;
+    page.dataset.stBound = '1';
+    appbar = document.getElementById('st-appbar'); titleEl = document.getElementById('st-appbar-title');
+    setView('home');
+    page.querySelectorAll('.category-row').forEach((row) => row.addEventListener('click', () => {
+      if (!mq.matches) return;
+      setView('detail');
+      try { history.pushState({ page: 'settings', st: 'detail' }, '', '/settings'); } catch (e) { /* ignore */ }
+    }));
+    document.getElementById('st-back').addEventListener('click', () => {
+      if (history.state && history.state.st === 'detail') history.back(); else setView('home');
+    });
+    document.getElementById('st-appbar-reset').addEventListener('click', () => {
+      const btn = page.querySelector('.settings-panel.active [data-reset-section]'); if (btn) btn.click();
+    });
+    const input = document.getElementById('settings-search-input');
+    if (input) input.addEventListener('input', () => {
+      if (!mq.matches) return;
+      if (input.value.trim()) { searching = true; setView('search'); }
+      else if (searching) { searching = false; setView('home'); }
+    });
+    window.addEventListener('popstate', (e) => {
+      if (!page.classList.contains('active')) return;
+      setView(e.state && e.state.st === 'detail' ? 'detail' : (searching ? 'search' : 'home'));
+    });
+    mq.addEventListener('change', () => setView('home'));
+    // every time the Settings page is opened it starts on the list
+    if (window.router && window.router.show) {
+      const show = window.router.show.bind(window.router);
+      window.router.show = (id, opts) => { const out = show(id, opts); if (id === 'settings') { searching = false; if (input) input.value = ''; setView('home'); } return out; };
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(start, 0)); else setTimeout(start, 0);
+})();

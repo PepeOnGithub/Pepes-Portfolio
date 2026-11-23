@@ -390,3 +390,81 @@
   #page-stats .stats-chip { min-height: 40px; }
 }
 @media (max-width: 768px) { #page-stats .stats-rank-row .stats-rank-num { min-width: 44px; text-align: right; } }
+
+/* ===== Settings on phones: the Android Settings app pattern =====
+   Home = large title, search, account and one grouped list of categories with round tonal icons.
+   Tap a category = its own page with a top bar (back, title, reset). See the Android-style Settings boards. */
+.st-appbar { display: none; }
+@media (max-width: 768px) {
+  #page-settings .page-hero-inner { padding: 56px 16px 4px; }
+  #page-settings .page-hero .back-link, #page-settings .page-subtitle, #page-settings .page-meta { display: none; }
+  #page-settings .page-title { font: 500 34px/1.1 var(--font-display); letter-spacing: -0.01em; }
+  #page-settings .layout-container { padding: 0 12px 24px; }
+
+  /* the two views */
+  #page-settings[data-st-view="home"] .main-content { display: none; }
+  #page-settings[data-st-view="detail"] .sidebar { display: none; }
+  #page-settings[data-st-view="detail"] .page-hero { display: none; }
+  #page-settings[data-st-view="search"] .settings-account,
+  #page-settings[data-st-view="search"] .sidebar-section:has(.filter-dropdown) { display: none; }
+  #page-settings[data-st-view="detail"] .st-appbar {
+    display: flex; align-items: center; gap: 4px; padding: 8px 4px 8px 4px; position: sticky; top: 0; z-index: 6; background: var(--color-bg-primary);
+  }
+  .st-back { width: 48px; height: 48px; flex: none; border: 0; border-radius: 50%; background: transparent; color: var(--color-text-primary); font-size: 18px; cursor: pointer; }
+  .st-back:active, .st-reset:active { background: var(--color-bg-secondary); }
+  .st-appbar h2 { flex: 1; margin: 0; font: 500 22px/1.2 var(--font-display); }
+  .st-reset { height: 48px; padding: 0 16px; border: 0; border-radius: 24px; background: transparent; color: var(--color-accent); font: 600 14px var(--font-family); cursor: pointer; }
+  .st-appbar.no-reset .st-reset { display: none; }
+
+  /* home: search pill, account row, grouped category list */
+  #page-settings .settings-search-input { height: 56px; border-radius: 28px; padding-left: 52px; font-size: 16px; background: var(--color-bg-secondary); border: 0; }
+  .settings-search-icon { left: 20px; top: 20px; font-size: 16px; }
+  .sa-card { border-radius: 28px; padding: 12px 16px; min-height: 72px; }
+  #page-settings .sidebar-section:has(.filter-dropdown) .category-list {
+    display: flex; flex-direction: column; flex-wrap: nowrap; overflow: visible; gap: 2px; padding: 0; margin: 0;
+  }
+  #page-settings .category-row {
+    width: 100%; height: auto; min-height: 72px; padding: 0 16px; border: 0; border-radius: 6px; justify-content: flex-start; gap: 0;
+    background: var(--color-bg-secondary); text-align: left; position: relative; white-space: normal;
+  }
+  #page-settings .category-row:first-child { border-radius: 28px 28px 6px 6px; }
+  #page-settings .category-row:last-child { border-radius: 6px 6px 28px 28px; }
+  #page-settings .category-row.active { background: var(--color-bg-secondary); color: var(--color-text-primary); border: 0; }
+  #page-settings .category-row:active { background: var(--color-bg-tertiary); }
+  #page-settings .category-row > span:first-child {
+    display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 16px; align-items: center; flex: 1; min-width: 0;
+    font-size: 16px; font-weight: 500;
+  }
+  #page-settings .category-row > span:first-child i {
+    grid-row: 1 / span 2; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 17px;
+    background: #3a3d42; color: #d4d7da;
+  }
+  #page-settings .category-row .st-sub { grid-column: 2; display: block; font-size: 13px; font-weight: 400; line-height: 1.35; color: var(--color-text-secondary); }
+  #page-settings .category-row::after { content: '\f054'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 12px; color: var(--color-text-secondary); margin-left: 8px; }
+  #page-settings .category-row .category-count { display: none; }
+  #page-settings .category-row[data-settings-category="appearance"] > span:first-child i, #page-settings .category-row.active[data-settings-category="appearance"] > span:first-child i { background: #1f6b3a; color: #c7f0bd; }
+  #page-settings .category-row[data-settings-category="theme"] > span:first-child i, #page-settings .category-row.active[data-settings-category="theme"] > span:first-child i { background: #4a2d6b; color: #e3ccff; }
+  #page-settings .category-row[data-settings-category="browsing"] > span:first-child i, #page-settings .category-row.active[data-settings-category="browsing"] > span:first-child i { background: #1f4b6b; color: #c7e6ff; }
+  #page-settings .category-row[data-settings-category="library"] > span:first-child i, #page-settings .category-row.active[data-settings-category="library"] > span:first-child i { background: #6b4a1f; color: #ffe1b3; }
+  #page-settings .category-row[data-settings-category="downloads"] > span:first-child i, #page-settings .category-row.active[data-settings-category="downloads"] > span:first-child i { background: #1f6b63; color: #b8f3ec; }
+  #page-settings .category-row[data-settings-category="messages"] > span:first-child i, #page-settings .category-row.active[data-settings-category="messages"] > span:first-child i { background: #6b1f4a; color: #ffc7e6; }
+
+  /* a category page: accent section labels, rows as stacked rounded cards */
+  #page-settings .settings-panel-header { display: none; }
+  #page-settings .settings-group-title { margin: 14px 0 6px; padding: 0 16px; font: 600 14px var(--font-family); letter-spacing: 0; text-transform: none; color: var(--color-accent); }
+  #page-settings .settings-list { padding: 0; background: transparent; display: flex; flex-direction: column; gap: 2px; border: 0; }
+  #page-settings .settings-list > .setting-row, #page-settings .settings-list > * > .setting-row { background: var(--color-bg-secondary); border: 0; border-radius: 6px; padding: 8px 16px; }
+  #page-settings .settings-list > .setting-row:first-child { border-radius: 28px 28px 6px 6px; }
+  #page-settings .settings-list > .setting-row:last-child { border-radius: 6px 6px 28px 28px; }
+  #page-settings .settings-list > .setting-row:only-child { border-radius: 28px; }
+  #page-settings .setting-row-title, #page-settings .setting-title { font-size: 16px; }
+}
+@media (max-width: 768px) {
+  #page-settings .sidebar { background: transparent; border: 0; box-shadow: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; position: static; max-height: none; overflow: visible; }
+  #page-settings .sidebar-section { padding: 0; margin: 0; gap: 0; border: 0; background: transparent; }
+  #page-settings .settings-account { margin: 0; }
+  .sa-card { flex-wrap: nowrap; gap: 12px; }
+  .sa-btn { padding: 0 14px; white-space: nowrap; }
+}
+.st-sub { display: none; }
+#page-settings .settings-search-input::-webkit-search-cancel-button { display: none; }

@@ -1207,7 +1207,7 @@ class PackLibrary {
     });
 
     const currentEl = document.getElementById('settings-category-current');
-    if (currentEl) currentEl.textContent = btn.querySelector('span').textContent.trim();
+    if (currentEl) currentEl.textContent = btn.dataset.label || btn.querySelector('span').textContent.trim();
     const dd = document.getElementById('settings-category-dropdown');
     if (dd) dd.setAttribute('open', '');
     btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
