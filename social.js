@@ -39,6 +39,13 @@ class Social {
 
   userPath(id) { return `/api/community/users/${encodeURIComponent(id)}`; }
 
+  // The verified tick: owner gets the "site owner" one, qualifying creators the "verified creator" one.
+  badge(user) {
+    if (!user || !(user.verified || user.owner)) return '';
+    const title = user.owner ? 'Verified: this is the site owner' : 'Verified creator';
+    return `<span class="author-badge" title="${title}"><i class="fas fa-check" aria-hidden="true"></i></span>`;
+  }
+
   avatar(user, cls) {
     return `<img class="${cls}" src="${UPLOADS_API}/api/community/avatars/${encodeURIComponent(user.id)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='assets/pepe-profile.png'">`;
   }
@@ -62,7 +69,7 @@ class Social {
 
   hideProfileControls() {
     this.profile = null;
-    ['user-profile-follow', 'user-profile-follow-btn', 'user-profile-message-btn']
+    ['user-profile-follow', 'user-profile-follow-btn', 'user-profile-message-btn', 'user-profile-verified-badge', 'user-profile-verify']
       .forEach(id => document.getElementById(id).classList.add('hidden'));
   }
 
@@ -86,6 +93,9 @@ class Social {
     document.getElementById('user-profile-following').textContent = this.lib.formatCount(p.following);
     document.querySelector('[data-follow-list="followers"]').lastChild.textContent = p.followers === 1 ? ' follower' : ' followers';
     document.getElementById('user-profile-follow').classList.remove('hidden');
+    // The site owner already has their own tick (from the accounts worker).
+    document.getElementById('user-profile-verified-badge').classList.toggle('hidden', !(p.user.verified && !p.user.owner));
+    this.renderVerify();
 
     const followBtn = document.getElementById('user-profile-follow-btn');
     const msgBtn = document.getElementById('user-profile-message-btn');
@@ -102,6 +112,27 @@ class Social {
     followBtn.disabled = this.signedIn() && !p.isFollowing && !p.canMessage;
     msgBtn.classList.remove('hidden');
     msgBtn.disabled = this.signedIn() && !p.canMessage && !p.blockedByYou;
+  }
+
+  // Your own progress toward the verified tick, shown on your own profile.
+  renderVerify() {
+    const box = document.getElementById('user-profile-verify');
+    const v = this.profile && this.profile.verification;
+    if (!v || v.owner) { box.classList.add('hidden'); return; }
+    const n = (x) => this.lib.formatCount(x);
+    if (v.verified) {
+      box.textContent = 'You have the verified badge.';
+    } else {
+      const ok = (met, text) => `${met ? '✓ ' : ''}${text}`;
+      const need = v.need;
+      box.textContent = 'To get the verified badge: ' + [
+        ok(v.followers >= need.followers, `${n(v.followers)}/${n(need.followers)} followers`),
+        ok(v.downloads >= need.downloads, `${n(v.downloads)}/${n(need.downloads)} downloads`),
+        ok(v.ratings >= need.ratings && v.rating >= need.rating,
+          `rating ${v.ratings ? v.rating.toFixed(1) : '–'} (needs ${need.rating.toFixed(1)}+ from ${need.ratings}+ ratings, you have ${v.ratings})`)
+      ].join(' · ');
+    }
+    box.classList.remove('hidden');
   }
 
   async toggleFollow() {
@@ -151,7 +182,7 @@ class Social {
         ? users.map(u => `
             <button type="button" class="follow-row" data-user="${this.esc(u.username || u.id)}">
               ${this.avatar(u, 'follow-row-avatar')}
-              <span class="follow-row-text"><b>${this.esc(u.name)}</b>${u.username ? `<small>@${this.esc(u.username)}</small>` : ''}</span>
+              <span class="follow-row-text"><b>${this.esc(u.name)}${this.badge(u)}</b>${u.username ? `<small>@${this.esc(u.username)}</small>` : ''}</span>
             </button>`).join('')
         : `<p class="follow-list-empty">${which === 'followers' ? 'No followers yet.' : 'Not following anyone yet.'}</p>`;
     } catch (e) {
@@ -176,7 +207,7 @@ class Social {
     document.getElementById('dm-back').addEventListener('click', () => this.showList());
     document.getElementById('dm-list').addEventListener('click', (e) => {
       const row = e.target.closest('[data-user-id]');
-      if (row) this.openThread({ id: row.dataset.userId, name: row.dataset.name, username: row.dataset.username });
+      if (row) this.openThread({ id: row.dataset.userId, name: row.dataset.name, username: row.dataset.username, verified: !!row.dataset.verified, owner: !!row.dataset.owner });
     });
     document.getElementById('dm-who').addEventListener('click', () => {
       if (!this.peer) return;
@@ -194,6 +225,32 @@ class Social {
       }
     });
     document.getElementById('dm-compose').addEventListener('submit', (e) => { e.preventDefault(); this.send(); });
+    this.bindEmoji();
+  }
+
+  bindEmoji() {
+    const pop = document.getElementById('dm-emoji-pop');
+    const btn = document.getElementById('dm-emoji');
+    const grid = document.getElementById('dm-emoji-grid');
+    grid.innerHTML = ChatFormat.PICKER.map(e => `<button type="button" class="dm-emoji-item" data-emoji="${e}">${e}</button>`).join('');
+    const setOpen = (open) => { pop.classList.toggle('hidden', !open); btn.setAttribute('aria-expanded', String(open)); };
+    btn.addEventListener('click', () => setOpen(pop.classList.contains('hidden')));
+    grid.addEventListener('click', (e) => {
+      const item = e.target.closest('[data-emoji]');
+      if (!item) return;
+      const t = document.getElementById('dm-text');
+      t.setRangeText(item.dataset.emoji, t.selectionStart, t.selectionEnd, 'end');
+      t.dispatchEvent(new Event('input'));
+      t.focus();
+    });
+    document.addEventListener('click', (e) => {
+      if (!pop.classList.contains('hidden') && !e.target.closest('#dm-emoji-pop, #dm-emoji')) setOpen(false);
+    });
+    // Escape closes the picker first, then the panel.
+    document.getElementById('dm-compose').addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !pop.classList.contains('hidden')) { e.stopPropagation(); setOpen(false); }
+    });
+    this.closeEmoji = () => setOpen(false);
   }
 
   async openPanel(user) {
@@ -205,6 +262,7 @@ class Social {
   }
 
   closePanel() {
+    if (this.closeEmoji) this.closeEmoji();
     document.getElementById('dm-overlay').classList.add('hidden');
     clearInterval(this._threadTimer);
     this.peer = null;
@@ -230,11 +288,11 @@ class Social {
       this.setUnread(unread);
       box.innerHTML = conversations.length
         ? conversations.map(c => `
-            <button type="button" class="dm-conv${c.unread ? ' is-unread' : ''}" data-user-id="${this.esc(c.user.id)}" data-name="${this.esc(c.user.name)}" data-username="${this.esc(c.user.username)}">
+            <button type="button" class="dm-conv${c.unread ? ' is-unread' : ''}" data-user-id="${this.esc(c.user.id)}" data-name="${this.esc(c.user.name)}" data-username="${this.esc(c.user.username)}" data-verified="${c.user.verified || c.user.owner ? 1 : ''}" data-owner="${c.user.owner ? 1 : ''}">
               ${this.avatar(c.user, 'dm-avatar')}
               <span class="dm-conv-text">
-                <span class="dm-conv-top"><b>${this.esc(c.user.name)}</b><small>${this.esc(this.when(c.last.createdAt))}</small></span>
-                <span class="dm-conv-last">${c.last.mine ? 'You: ' : ''}${this.esc(c.last.text)}</span>
+                <span class="dm-conv-top"><b>${this.esc(c.user.name)}${this.badge(c.user)}</b><small>${this.esc(this.when(c.last.createdAt))}</small></span>
+                <span class="dm-conv-last">${c.last.mine ? 'You: ' : ''}${this.esc(ChatFormat.preview(c.last.text))}</span>
               </span>
               ${c.unread ? `<span class="dm-badge">${c.unread}</span>` : ''}
             </button>`).join('')
@@ -252,9 +310,9 @@ class Social {
   }
 
   async openThread(user) {
-    this.peer = { id: String(user.id), name: user.name || '', username: user.username || '' };
+    this.peer = { id: String(user.id), name: user.name || '', username: user.username || '', verified: !!user.verified, owner: !!user.owner };
     document.querySelector('.dm-panel').classList.add('has-thread');
-    document.getElementById('dm-who').innerHTML = `${this.avatar(this.peer, 'dm-avatar dm-avatar-sm')}<span>${this.esc(this.peer.name || 'Conversation')}</span>`;
+    this.renderWho();
     document.getElementById('dm-msgs').innerHTML = '<p class="dm-empty">Loading…</p>';
     document.getElementById('dm-compose').classList.remove('hidden');
     this.markActive();
@@ -276,15 +334,15 @@ class Social {
     }
     if (this.peer !== peer) return;
     Object.assign(peer, data.user, { canMessage: data.canMessage, blockedByYou: data.blockedByYou });
-    document.querySelector('#dm-who span').textContent = peer.name;
+    this.renderWho();
     const box = document.getElementById('dm-msgs');
     const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 40;
     const lastId = data.messages.length ? data.messages[data.messages.length - 1].id : 0;
     if (first || lastId !== this._lastId) {
       box.innerHTML = data.messages.length
         ? data.messages.map(m => `
-            <div class="dm-msg${m.mine ? ' is-mine' : ''}">
-              <p>${this.esc(m.text)}</p>
+            <div class="dm-msg${m.mine ? ' is-mine' : ''}${ChatFormat.isEmojiOnly(m.text) ? ' is-jumbo' : ''}">
+              <div class="dm-text">${ChatFormat.render(m.text)}</div>
               <time datetime="${this.esc(m.createdAt)}">${this.esc(this.when(m.createdAt))}</time>
             </div>`).join('')
         : `<p class="dm-empty">Say hi to ${this.esc(peer.name)}.</p>`;
@@ -293,6 +351,12 @@ class Social {
     }
     this.renderThreadState();
     if (first) { this.loadList(); this.refreshUnread(); }
+  }
+
+  renderWho() {
+    const p = this.peer;
+    document.getElementById('dm-who').innerHTML =
+      `${this.avatar(p, 'dm-avatar dm-avatar-sm')}<span>${this.esc(p.name || 'Conversation')}</span>${this.badge(p)}`;
   }
 
   renderThreadState() {

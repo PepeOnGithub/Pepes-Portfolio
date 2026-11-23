@@ -724,6 +724,11 @@
         <div class="dm-msgs" id="dm-msgs" aria-live="polite"></div>
         <p class="dm-note hidden" id="dm-note"></p>
         <form class="dm-compose" id="dm-compose">
+          <div class="dm-emoji-pop hidden" id="dm-emoji-pop" role="dialog" aria-label="Emoji">
+            <div class="dm-emoji-grid" id="dm-emoji-grid"></div>
+            <p class="dm-emoji-tip">Type <b>:thumbsup:</b> for emoji. For a GIF, paste a direct link ending in .gif from Tenor, Giphy or Imgur. Markdown works too: <b>**bold**</b>, <i>*italic*</i>, <code>`code`</code>.</p>
+          </div>
+          <button type="button" class="dm-icon-btn dm-emoji-btn" id="dm-emoji" aria-label="Emoji and formatting help" aria-expanded="false"><i class="far fa-face-smile"></i></button>
           <textarea id="dm-text" rows="1" maxlength="1000" placeholder="Write a message" aria-label="Message"></textarea>
           <button type="submit" class="dm-send" id="dm-send" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
         </form>
@@ -1986,6 +1991,7 @@
           <h2 class="user-profile-name">
             <span id="user-profile-name-text"></span>
             <span class="author-badge hidden" id="user-profile-author-badge" title="Verified: this is the site owner"><i class="fas fa-check"></i></span>
+            <span class="author-badge hidden" id="user-profile-verified-badge" title="Verified creator"><i class="fas fa-check"></i></span>
           </h2>
           <p class="user-profile-joined" id="user-profile-joined"></p>
           <p class="user-profile-stats" id="user-profile-stats"></p>
@@ -1993,6 +1999,7 @@
             <button type="button" class="user-profile-count" data-follow-list="followers"><b id="user-profile-followers">0</b> followers</button>
             <button type="button" class="user-profile-count" data-follow-list="following"><b id="user-profile-following">0</b> following</button>
           </p>
+          <p class="user-profile-verify hidden" id="user-profile-verify"></p>
         </div>
         <div class="user-profile-actions">
           <button type="button" class="btn-secondary-small user-profile-edit hidden" id="user-profile-edit-btn"><i class="fas fa-pen"></i> Edit profile</button>
@@ -2102,6 +2109,7 @@
   <script src="script.js"></script>
   <script src="upload.js"></script>
   <script src="creator-tools.js"></script>
+  <script src="chat-format.js"></script>
   <script src="social.js"></script>
 </body>
 </html>

@@ -4,6 +4,7 @@ import { HttpError, json, requireUser, publicUser, displayName, safeJson, clip, 
 import { versionsFor, packExtras, toSitePack } from './packs.js';
 import { encryptToken, ensureLootForCreator, clearLootLinks } from './loot.js';
 import { reviewProfile } from './ai.js';
+import { verification } from './verify.js';
 
 const MAX_SOCIALS = 8;
 const MAX_VIDEOS = 3;
@@ -217,9 +218,12 @@ export async function publicCreator(ctx, key) {
   const sitePacks = packs.map(p => toSitePack(ctx, p, versions.get(p.id) || [], { extras })).filter(p => p.versions.length);
   const profile = safeJson(row && row.public_json, { bio: '', socials: [], videos: [] });
   const downloads = sitePacks.reduce((n, p) => n + (p.downloads || 0), 0);
+  const badge = (await verification(env, [owner])).get(String(owner));
   return json({
     creator: {
       id: owner,
+      verified: !!(badge && badge.verified),
+      owner: !!(badge && badge.owner),
       username: (row && row.username) || (packs[0] && packs[0].owner_name) || '',
       bio: profile.bio || '',
       socials: profile.socials || [],

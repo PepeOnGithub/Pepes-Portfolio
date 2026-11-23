@@ -9,6 +9,7 @@
 // stops messages and follows in both directions.
 
 import { HttpError, json, requireUser, getUser, clip } from './util.js';
+import { verification, thresholds } from './verify.js';
 
 const MAX_MESSAGE = 1000;
 const SEND_LIMIT = 20;
@@ -39,13 +40,19 @@ function summary(row) {
   };
 }
 
-async function summaries(env, ids) {
+// People by id, each with verified / owner flags. `known` can pass an
+// already-computed verification map.
+async function summaries(env, ids, known) {
   const map = new Map();
   if (!ids.length) return map;
   const { results } = await env.DB.prepare(
     `SELECT id, username, name, display_name FROM users WHERE id IN (${ids.map(() => '?').join(',')})`
   ).bind(...ids).all();
-  for (const r of results) map.set(String(r.id), summary(r));
+  const v = known || await verification(env, results.map(r => r.id));
+  for (const r of results) {
+    const x = v.get(String(r.id)) || {};
+    map.set(String(r.id), { ...summary(r), verified: !!x.verified, owner: !!x.owner });
+  }
   return map;
 }
 
@@ -85,12 +92,21 @@ export async function socialInfo(ctx, key) {
   const id = String(target.id);
   const viewer = await getUser(ctx);
   const v = viewer ? String(viewer.id) : null;
+  const stats = (await verification(ctx.env, [id])).get(id);
   const out = {
-    user: summary(target),
+    user: { ...summary(target), verified: !!stats.verified, owner: !!stats.owner },
     ...(await counts(ctx.env, id)),
     self: v === id,
     isFollowing: false, followsYou: false, blockedByYou: false, canMessage: false
   };
+  // Your own progress toward the verified tick.
+  if (out.self) {
+    out.verification = {
+      verified: !!stats.verified, owner: !!stats.owner,
+      followers: stats.followers, downloads: stats.downloads, rating: stats.rating, ratings: stats.ratings,
+      need: thresholds(ctx.env)
+    };
+  }
   if (v && v !== id) Object.assign(out, await relation(ctx.env, v, id));
   return json(out);
 }
@@ -118,10 +134,11 @@ export async function followList(ctx, key, which) {
   const target = await requireAccount(ctx.env, key);
   const [match, other] = which === 'followers' ? ['followee_id', 'follower_id'] : ['follower_id', 'followee_id'];
   const { results } = await ctx.env.DB.prepare(
-    `SELECT u.id, u.username, u.name, u.display_name FROM follows f JOIN users u ON u.id = f.${other}
-     WHERE f.${match} = ? ORDER BY f.created_at DESC LIMIT ${LIST_LIMIT}`
+    `SELECT f.${other} AS id FROM follows f WHERE f.${match} = ? ORDER BY f.created_at DESC LIMIT ${LIST_LIMIT}`
   ).bind(String(target.id)).all();
-  return json({ users: results.map(summary) });
+  const ids = results.map(r => String(r.id));
+  const people = await summaries(ctx.env, ids);
+  return json({ users: ids.map(id => people.get(id)).filter(Boolean) });
 }
 
 // ===== Blocks =====
@@ -190,7 +207,7 @@ export async function conversations(ctx) {
     conversations: last.map(m => {
       const o = otherOf(m);
       return {
-        user: people.get(o) || { id: o, username: '', name: 'Deleted account' },
+        user: people.get(o) || { id: o, username: '', name: 'Deleted account', verified: false, owner: false },
         last: { text: clip(m.text, 120), mine: String(m.sender_id) === v, createdAt: m.created_at },
         unread: unread.get(o) || 0
       };
@@ -212,7 +229,7 @@ export async function thread(ctx, key) {
   await ctx.env.DB.prepare('UPDATE messages SET read_at = ? WHERE pair = ? AND recipient_id = ? AND read_at IS NULL')
     .bind(new Date().toISOString(), pair, v).run();
   return json({
-    user: summary(other),
+    user: (await summaries(ctx.env, [o])).get(o),
     ...(await relation(ctx.env, v, o)),
     messages: results.reverse().map(m => ({ id: m.id, mine: String(m.sender_id) === v, text: m.text, createdAt: m.created_at }))
   });

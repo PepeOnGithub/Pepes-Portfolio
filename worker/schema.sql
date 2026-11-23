@@ -107,3 +107,11 @@ CREATE TABLE IF NOT EXISTS blocks (
   created_at TEXT NOT NULL,
   PRIMARY KEY (blocker_id, blocked_id)
 );
+
+-- Small facts the worker learns about the site, e.g. which account is the
+-- site owner (so lists and DMs can badge them without asking the accounts
+-- worker about every person).
+CREATE TABLE IF NOT EXISTS site_meta (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL
+);

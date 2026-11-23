@@ -501,6 +501,10 @@ class CreatorTools {
 
     const data = await this.creator(pack.authorId);
     if (!data || this.lib.currentPack !== pack) return;
+    if (data.creator.verified && !nameEl.querySelector('.author-badge')) {
+      const title = data.creator.owner ? 'Verified: this is the site owner' : 'Verified creator';
+      nameEl.insertAdjacentHTML('beforeend', `<span class="author-badge" title="${title}"><i class="fas fa-check" aria-hidden="true"></i></span>`);
+    }
     const socials = (data.creator.socials || []).slice(0, 5);
     if (!socials.length) return;
     box.innerHTML = socials.map(s => this.socialLink(s, { compact: true })).join('');

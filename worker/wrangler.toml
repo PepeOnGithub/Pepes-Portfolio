@@ -30,6 +30,12 @@ AI_AUTO_REJECT = "1"
 # script.js) and the OWNER_LOOT_TOKEN secret, which the deploy workflow sets
 # from the LOOTLABS_API_TOKEN repo secret that generator.py uses.
 OWNER_LINKVERTISE_ID = "499358"
+# Verified tick for creators: ALL of these must be met (live counts, so it
+# appears and goes away on its own). The site owner always has it.
+VERIFY_FOLLOWERS = "50"
+VERIFY_DOWNLOADS = "1000"
+VERIFY_RATING = "4"        # average rating, 1-5
+VERIFY_MIN_RATINGS = "5"   # how many ratings the average needs
 SITE_URL = "https://pepe.glacierclient.xyz"
 PUBLIC_ORIGIN = "https://pepes-portfolio-uploads.pepeoncloudeflare.workers.dev"
 

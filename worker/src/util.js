@@ -93,6 +93,7 @@ export async function getUser(ctx) {
     if (data && data.user && data.user.id != null) {
       ctx._user = data.user;
       ctx._user.isOwner = await isSiteOwner(ctx.env, data.user.id);
+      if (ctx._user.isOwner) await rememberOwner(ctx.env, data.user.id);
     }
   } catch (e) {
     console.error('session check failed', e);
@@ -140,6 +141,33 @@ export async function isSiteOwner(env, userId) {
   } catch (e) {
     console.error('owner check failed', e);
     return false;
+  }
+}
+
+// The owner's account id, learned the first time the owner makes a signed-in
+// request and kept in site_meta. Lets lists and messages badge the owner
+// without one accounts-worker lookup per person.
+let ownerMemo = { id: undefined, at: 0 };
+export async function ownerId(env) {
+  if (ownerMemo.id !== undefined && Date.now() - ownerMemo.at < 5 * 60 * 1000) return ownerMemo.id;
+  try {
+    const row = await env.DB.prepare("SELECT value FROM site_meta WHERE key = 'owner_id'").first();
+    ownerMemo = { id: row ? row.value : null, at: Date.now() };
+  } catch (e) {
+    ownerMemo = { id: null, at: Date.now() - 4 * 60 * 1000 }; // table not there yet; retry soon
+  }
+  return ownerMemo.id;
+}
+
+export async function rememberOwner(env, id) {
+  const value = String(id);
+  if ((await ownerId(env)) === value) return;
+  try {
+    await env.DB.prepare("INSERT INTO site_meta (key, value) VALUES ('owner_id', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value")
+      .bind(value).run();
+    ownerMemo = { id: value, at: Date.now() };
+  } catch (e) {
+    console.error('could not remember the owner', e);
   }
 }
 
