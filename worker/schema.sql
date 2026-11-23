@@ -133,3 +133,21 @@ CREATE TABLE IF NOT EXISTS dm_settings (
   user_id TEXT PRIMARY KEY,
   followers_only INTEGER NOT NULL DEFAULT 0
 );
+
+-- In-site notifications. dedupe stops the same event from notifying twice
+-- (one "followed you" per follower, one "new pack" per follower and pack).
+-- Messages are not stored here: unread messages are counted from messages.
+CREATE TABLE IF NOT EXISTS notifications (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT NOT NULL,
+  type TEXT NOT NULL,
+  actor_id TEXT,
+  pack_slug TEXT,
+  pack_name TEXT,
+  note TEXT,
+  dedupe TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  read_at TEXT,
+  UNIQUE (user_id, dedupe)
+);
+CREATE INDEX IF NOT EXISTS notifications_user ON notifications(user_id, id);

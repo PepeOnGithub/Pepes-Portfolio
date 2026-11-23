@@ -13,6 +13,7 @@
 // Profiles: bio, links and videos are checked item by item; what passes is
 // published, the rest is removed with an explanation.
 
+import { notifyReview } from './notifications.js';
 import { scanVersions } from './scan.js';
 import { textProblems } from './scan.js';
 import { isOwnerOrAdminId, clip, safeJson } from './util.js';
@@ -214,6 +215,9 @@ async function decide(env, pack, versions, d) {
       .bind(approve ? 'approved' : 'rejected', note, d.verdict, v.id));
   }
   await env.DB.batch(stmts);
+  if (pack.status === 'pending' || versions.length) {
+    await notifyReview(env, pack, approve, note, { first: approve && pack.status === 'pending' });
+  }
 
   if (approve) {
     for (const v of versions) await ensureLootForVersion(env, v.id).catch(e => console.error('loot link failed', e));

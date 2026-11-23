@@ -143,6 +143,9 @@
       <button type="button" class="icon-btn mobile-only top-dm-btn hidden" id="top-dm-btn" title="Messages" aria-label="Messages">
         <i class="fas fa-paper-plane" aria-hidden="true"></i><span class="dm-badge hidden" id="dm-top-badge"></span>
       </button>
+      <button type="button" class="icon-btn notif-btn hidden" id="notif-btn" title="Notifications" aria-label="Notifications" aria-haspopup="dialog" aria-expanded="false">
+        <i class="fas fa-bell" aria-hidden="true"></i><span class="dm-badge hidden" id="notif-badge"></span>
+      </button>
       <button class="icon-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
         <i class="fas fa-sun"></i>
       </button>
@@ -167,6 +170,15 @@
       <span class="dm-badge mobile-you-badge hidden" id="dm-tab-badge" aria-hidden="true"></span>
     </button>
   </nav>
+  <div class="notif-scrim hidden" id="notif-scrim"></div>
+  <section class="notif-panel hidden" id="notif-panel" role="dialog" aria-label="Notifications">
+    <header class="notif-head">
+      <h2>Notifications</h2>
+      <button type="button" class="notif-link" id="notif-readall">Mark all read</button>
+      <button type="button" class="notif-close" id="notif-close" aria-label="Close notifications"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+    </header>
+    <div class="notif-list" id="notif-list"></div>
+  </section>
   <div class="mobile-more-sheet" id="mobile-you-sheet" hidden>
     <div class="mobile-more-panel" role="dialog" aria-modal="true" aria-label="You" id="mobile-you-panel"></div>
   </div>
@@ -2182,5 +2194,6 @@
   <script src="chat-format.js"></script>
   <script src="social.js"></script>
   <script src="nav.js"></script>
+  <script src="notify.js"></script>
 </body>
 </html>

@@ -24,6 +24,7 @@ import {
   socialInfo, setFollow, followList, setBlock, avatar, unreadCount, conversations, thread, sendMessage,
   getDmSettings, setDmSettings, blockedList
 } from './social.js';
+import { listNotifications, notificationsUnread, markNotificationsRead, notifyReview } from './notifications.js';
 
 // The version of the terms (the "Last updated" date on terms.html) that the
 // upload form asks people to agree to. Change it in upload.js too whenever
@@ -108,6 +109,9 @@ async function route(request, env, exec) {
     if (method === 'PUT') return setDmSettings(ctx);
   }
   if (path === '/api/community/blocks' && method === 'GET') return blockedList(ctx);
+  if (path === '/api/community/notifications' && method === 'GET') return listNotifications(ctx);
+  if (path === '/api/community/notifications/unread' && method === 'GET') return notificationsUnread(ctx);
+  if (path === '/api/community/notifications/read' && method === 'POST') return markNotificationsRead(ctx);
   if ((m = path.match(/^\/api\/community\/messages\/([^/]+)$/))) {
     if (method === 'GET') return thread(ctx, m[1]);
     if (method === 'POST') return sendMessage(ctx, m[1]);
@@ -348,6 +352,7 @@ async function reviewPack(ctx, rowId) {
   ).bind(status, note, row.id));
   await ctx.env.DB.batch(statements);
   if (action === 'approve') queueLoot(ctx, row.id);
+  if (row.status !== status) await notifyReview(ctx.env, row, action === 'approve', note, { first: action === 'approve' && row.status === 'pending' });
   return json({ pack: await loadOwnPack(ctx, row.id, { withAi: true }) });
 }
 

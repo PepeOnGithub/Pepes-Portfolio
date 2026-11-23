@@ -10,6 +10,7 @@
 
 import { HttpError, json, requireUser, getUser, clip } from './util.js';
 import { verification, thresholds } from './verify.js';
+import { notify } from './notifications.js';
 
 const MAX_MESSAGE = 1000;
 const SEND_LIMIT = 20;
@@ -42,7 +43,7 @@ function summary(row) {
 
 // People by id, each with verified / owner flags. `known` can pass an
 // already-computed verification map.
-async function summaries(env, ids, known) {
+export async function summaries(env, ids, known) {
   const map = new Map();
   if (!ids.length) return map;
   const { results } = await env.DB.prepare(
@@ -136,6 +137,7 @@ export async function setFollow(ctx, key, on) {
     if (!rel.canMessage) throw new HttpError(403, "You can't follow this account.");
     await ctx.env.DB.prepare('INSERT OR IGNORE INTO follows (follower_id, followee_id, created_at) VALUES (?, ?, ?)')
       .bind(v, id, new Date().toISOString()).run();
+    await notify(ctx.env, id, { type: 'follow', actorId: v, dedupe: `follow:${v}` });
   } else {
     await ctx.env.DB.prepare('DELETE FROM follows WHERE follower_id = ? AND followee_id = ?').bind(v, id).run();
   }
