@@ -295,7 +295,7 @@ export async function creatorStats(ctx) {
   const owner = String(user.id);
   const days = [7, 30, 90].includes(Number(ctx.url.searchParams.get('days'))) ? Number(ctx.url.searchParams.get('days')) : 30;
 
-  const { results: packs } = await env.DB.prepare('SELECT id, name, slug, status, category, icon_key, created_at FROM packs WHERE owner_id = ? ORDER BY created_at DESC').bind(owner).all();
+  const { results: packs } = await env.DB.prepare('SELECT id, name, slug, status, category, icon_key, description, tags, showcase_url, created_at FROM packs WHERE owner_id = ? ORDER BY created_at DESC').bind(owner).all();
   const ids = packs.map(p => p.id);
   const empty = {
     days, series: [], totals: { views: 0, downloads: 0, prevViews: 0, prevDownloads: 0, allTimeDownloads: 0, allTimeViews: 0 },
@@ -337,9 +337,25 @@ export async function creatorStats(ctx) {
   }
 
   const versions = await versionsFor(ctx, ids, '');
+  const { results: logs } = await env.DB
+    .prepare(`SELECT pack_id, COUNT(*) AS n, SUM(CASE WHEN TRIM(changelog) != '' THEN 1 ELSE 0 END) AS c FROM versions WHERE status = 'approved' AND pack_id IN (${marks}) GROUP BY pack_id`)
+    .bind(...ids).all();
+  const logMap = new Map(logs.map(r => [r.pack_id, r]));
   const outPacks = packs.map(p => {
     const s = perPack.get(p.id);
+    const lg = logMap.get(p.id);
+    let tags = [];
+    try { tags = JSON.parse(p.tags || '[]'); } catch (e) { /* keep empty */ }
     return {
+      // What a visitor sees on the pack page; the site turns this into the "health" score.
+      health: {
+        words: String(p.description || '').trim().split(/\s+/).filter(Boolean).length,
+        video: !!p.showcase_url,
+        icon: !!p.icon_key,
+        tags: Array.isArray(tags) ? tags.length : 0,
+        versions: lg ? lg.n : 0,
+        changelogs: lg ? lg.c : 0
+      },
       id: ID_OFFSET + p.id,
       name: p.name,
       slug: p.slug,
@@ -358,13 +374,22 @@ export async function creatorStats(ctx) {
   ).all();
   const at = board.findIndex(r => r.o === owner);
 
+  // Median views-to-downloads rate across live packs with enough views to mean something.
+  const { results: rates } = await env.DB.prepare(
+    `SELECT SUM(s.views) AS v, SUM(s.downloads) AS d FROM stats_daily s JOIN packs p ON p.id = s.pack_id
+     WHERE p.status = 'approved' AND s.day >= ? GROUP BY s.pack_id HAVING v >= 10`
+  ).bind(start).all();
+  const sortedRates = rates.map(r => r.d / r.v).sort((a, b) => a - b);
+  const medianRate = sortedRates.length >= 3 ? sortedRates[Math.floor(sortedRates.length / 2)] : null;
+
   return json({
     days,
     series: [...dayMap.values()],
     totals,
     packs: outPacks,
     rank: at >= 0 ? at + 1 : null,
-    creators: board.length
+    creators: board.length,
+    medianRate
   });
 }
 

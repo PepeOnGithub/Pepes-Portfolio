@@ -178,18 +178,15 @@ class CreatorTools {
         day: new Date(Date.now() - (s.days - 1 - i) * 86400000).toISOString().slice(0, 10), downloads: 0, views: 0
       }));
     }
-    const conv = t.views ? Math.round((t.downloads / t.views) * 1000) / 10 : 0;
-    const prevConv = t.prevViews ? (t.prevDownloads / t.prevViews) * 100 : 0;
     const cards = [
       ['Downloads', this.fmt(t.downloads), this.deltaHtml(t.downloads, t.prevDownloads), `last ${s.days} days`],
       ['Views', this.fmt(t.views), this.deltaHtml(t.views, t.prevViews), `last ${s.days} days`],
-      ['Views to downloads', `${conv}%`, this.deltaHtml(conv, prevConv), 'visitors who download'],
       ['All-time downloads', this.fmt(t.allTimeDownloads), '', `${this.fmt(t.allTimeViews)} views`],
       ['Your rank', s.rank ? `#${s.rank}` : '–', '', s.rank ? `of ${s.creators} creators` : 'no downloads yet'],
       ['Rating', '…', '', 'average across packs']
     ];
     document.getElementById('cs-cards').innerHTML = cards.map(([label, value, delta, sub], i) => `
-      <div class="cs-card" ${i === 5 ? 'id="cs-card-rating"' : ''}>
+      <div class="cs-card" ${i === 4 ? 'id="cs-card-rating"' : ''}>
         <span class="cs-card-label">${label}</span>
         <span class="cs-card-value">${value}${delta ? ` ${delta}` : ''}</span>
         <span class="cs-card-sub">${sub}</span>
@@ -212,7 +209,89 @@ class CreatorTools {
       </div>
       ${sorted.map(p => this.packRow(p)).join('')}`;
 
+    this.renderInsights();
     this.renderEarn();
+  }
+
+  // "Insights": the download rate against the site median, which weekdays people download on,
+  // and a health score per pack with the specific things to fix (see the "Creator Insights" board).
+  renderInsights() {
+    const s = this.stats, t = s.totals, box = document.getElementById('cs-insights');
+    if (!box) return;
+    const own = s.packs.filter(p => !p.library && p.health);
+    if (!own.length) { box.innerHTML = ''; return; }
+    const rate = t.views ? t.downloads / t.views : 0;
+    const prevRate = t.prevViews ? t.prevDownloads / t.prevViews : 0;
+    const med = s.medianRate;
+    const pct = (v) => `${(Math.round(v * 1000) / 10).toFixed(1)}`;
+    const dRate = t.prevViews ? Math.round((rate - prevRate) * 1000) / 10 : null;
+    const scale = Math.max(0.2, Math.ceil(Math.max(rate, med || 0) * 10 + 1) / 10);
+    // weekday heat map: the last five weeks, one column per week (Monday first)
+    const wd = (iso) => (new Date(`${iso}T00:00:00Z`).getUTCDay() + 6) % 7;
+    const byDay = new Map(s.series.map(d => [d.day, d.downloads]));
+    const last = new Date(`${s.series[s.series.length - 1].day}T00:00:00Z`);
+    const monday = new Date(last.getTime() - wd(last.toISOString().slice(0, 10)) * 86400000 - 28 * 86400000);
+    const cells = [];
+    for (let w = 0; w < 5; w++) for (let d = 0; d < 7; d++) {
+      const day = new Date(monday.getTime() + (w * 7 + d) * 86400000).toISOString().slice(0, 10);
+      cells.push({ day, d, n: byDay.has(day) ? byDay.get(day) : null });
+    }
+    const peak = Math.max(1, ...cells.map(c => c.n || 0));
+    const lvl = (n) => (n === null ? 'x' : n === 0 ? 0 : Math.min(4, Math.ceil((n / peak) * 4)));
+    const totalsByWd = Array(7).fill(0);
+    s.series.forEach(d => { totalsByWd[wd(d.day)] += d.downloads; });
+    const names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const bestWd = totalsByWd.some(Boolean) ? totalsByWd.indexOf(Math.max(...totalsByWd)) : -1;
+    const grid = names.map((n, d) => `<span class="ins-wd">${n.slice(0, 3)}</span>${[0, 1, 2, 3, 4].map(w => {
+      const c = cells[w * 7 + d];
+      return `<span class="ins-cell l${lvl(c.n)}" title="${this.fmtDay(c.day)}: ${c.n === null ? 'no data' : `${c.n} downloads`}"></span>`;
+    }).join('')}`).join('');
+    const tip = bestWd >= 4 ? 'Publish updates on Friday so they land before the weekend peak.'
+      : bestWd >= 0 ? `Most downloads land on ${names[bestWd]}s. Publish updates the day before.` : '';
+
+    const earning = !!(this.settings && (this.settings.linkvertiseId || this.settings.hasLootToken));
+    const coach = own.map(p => {
+      const h = p.health, items = [];
+      const add = (ok, good, bad, pts, soft) => items.push({ ok: ok ? 'ok' : (soft ? 'warn' : 'fail'), t: ok ? good : bad, pts: ok ? pts : 0, max: pts });
+      add(h.video, 'Video added', 'No video', 20, true);
+      add(h.words >= 80, 'Full description', `Description is ${h.words} word${h.words === 1 ? '' : 's'}, aim for 80+`, 20, h.words >= 30);
+      add(h.icon, 'Has an icon', 'No icon', 10, false);
+      add(h.tags >= 3, `${h.tags} tags`, h.tags ? `Only ${h.tags} tag${h.tags === 1 ? '' : 's'}, add 3+` : 'No tags', 10, h.tags > 0);
+      add(h.versions && h.changelogs >= h.versions, 'Changelog on every version', 'A version has no changelog', 10, true);
+      add(earning, 'Earning link set', 'No earning link set', 10, false);
+      const pRate = p.views >= 10 ? p.downloads / p.views : null;
+      const conv = pRate === null ? 10 : Math.min(20, Math.round(20 * (pRate / (med || 0.1))));
+      const score = Math.min(100, items.reduce((n, i) => n + i.pts, 0) + conv);
+      const tier = score >= 80 ? ['Healthy', 'g'] : score >= 50 ? ['Needs work', 'a'] : ['Hard to find', 'r'];
+      return { p, score, tier, items, rate: p.views ? p.downloads / p.views : null };
+    }).sort((a, b) => a.score - b.score);
+    const mark = { ok: '✓', warn: '!', fail: '×' };
+    box.innerHTML = `
+      <div class="ins-top">
+        <div class="ins-card ins-rate">
+          <span class="ins-label">Download rate</span>
+          <div class="ins-big"><b>${pct(rate)}<small>%</small></b>${dRate === null ? '' : `<span class="ins-pill ${dRate >= 0 ? 'up' : 'down'}">${dRate >= 0 ? '+' : ''}${dRate} pts</span>`}</div>
+          <p>of people who open a pack of yours download it</p>
+          <div class="ins-meter" aria-hidden="true"><i style="width:${Math.min(100, rate / scale * 100)}%"></i>${med ? `<u style="left:${Math.min(100, med / scale * 100)}%"></u>` : ''}</div>
+          <div class="ins-meter-l"><span>0%</span>${med ? `<span>site median ${pct(med)}%</span>` : '<span>not enough data for a site median yet</span>'}<span>${Math.round(scale * 100)}%</span></div>
+          <div class="ins-two"><div><b>${this.fmt(t.views)}</b><span>Pack views</span></div><div><b>${this.fmt(t.downloads)}</b><span>Downloads</span></div></div>
+        </div>
+        <div class="ins-card ins-heat">
+          <div class="ins-head"><div><h3>When people download</h3><p>Last 5 weeks, darker green is more downloads</p></div>${bestWd >= 0 ? `<span class="ins-pill up">Best day: ${names[bestWd]}</span>` : ''}</div>
+          <div class="ins-grid">${grid}</div>
+          <div class="ins-legend">Less ${[0, 1, 2, 3, 4].map(l => `<i class="ins-cell l${l}"></i>`).join('')} More<span>${tip}</span></div>
+        </div>
+      </div>
+      <div class="ins-head ins-coach-head"><h3>Pack health</h3><p>Score = how complete the page is, plus its download rate</p></div>
+      <div class="ins-coach">${coach.map(c => `
+        <div class="ins-pack">
+          <span class="ins-ring ${c.tier[1]}" style="--p:${c.score * 3.6}deg"><b>${c.score}</b></span>
+          <div class="ins-pack-body">
+            <div><b>${this.esc(c.p.name)}</b><span class="ins-tier ${c.tier[1]}">${c.tier[0]}</span></div>
+            <ul>${c.items.map(i => `<li class="${i.ok}"><i aria-hidden="true">${mark[i.ok]}</i>${this.esc(i.t)}</li>`).join('')}</ul>
+          </div>
+          <div class="ins-pack-rate"><b>${c.rate === null ? '–' : `${pct(c.rate)}%`}</b><span>views to downloads</span></div>
+        </div>`).join('')}</div>`;
   }
 
   packRow(p) {

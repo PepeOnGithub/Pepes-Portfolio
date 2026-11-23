@@ -834,5 +834,31 @@
     }
   }
 
+  // The state the Loadout card (loadout-card.js) draws: every module with its anchor, offset and whether it is shown,
+  // and which ones the visitor changed.
+  window.CzCard = {
+    snapshot() {
+      if (!active || !defaults) return null;
+      const val = (n) => (n in values ? values[n] : allDefaults[n]);
+      const keyOf = (n) => (n in allDefaults ? n : (n + '|default' in allDefaults ? n + '|default' : null));
+      const mods = [];
+      for (const raw of Object.keys(allDefaults)) {
+        const m = /^\$(.+?)_anchor(\|default)?$/.exec(raw);
+        if (!m) continue;
+        const stem = m[1];
+        const offName = ['_offset', '_touch_offset', '_mouse_controller_offset'].map((s) => keyOf('$' + stem + s)).find(Boolean);
+        const hideName = keyOf('$hide_' + stem);
+        const names = Object.keys(allDefaults).filter((n) => n.replace(/^\$/, '').replace(/\|default$/, '').startsWith(stem) || n === hideName);
+        const changed = Object.keys(values).some((n) => n === raw || n === hideName || n === offName || n.replace(/^\$/, '').startsWith(stem + '_'));
+        mods.push({
+          stem, title: groupOf(raw) || humanize(bare(stem)), anchor: String(val(raw)), offset: offName ? val(offName) : [0, 0],
+          hidden: hideName ? !!val(hideName) : false, changed, count: names.length,
+        });
+      }
+      const pack = active.pack;
+      return { pack: plain(pack.name), version: active.build && active.build.version, mods, changedCount: Object.keys(changedOnly()).length, link: location.href };
+    },
+  };
+
   window.CzBoot = boot; // called by script.js the first time the Customizer tab opens
 })();

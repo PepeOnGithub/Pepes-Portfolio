@@ -380,6 +380,7 @@ class Router {
       .then(() => load('customizer-ui.js'))
       .then(() => load('customizer-preview.js'))
       .then(() => load('customizer.js'))
+      .then(() => load('loadout-card.js').catch(() => {}))
       .then(() => window.CzBoot && window.CzBoot())
       .catch(() => {
         const info = document.getElementById('cz-pack');

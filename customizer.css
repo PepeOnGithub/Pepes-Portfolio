@@ -617,3 +617,39 @@ body.light-mode .cz-pop, body.light-mode .cz-palette, body.light-mode .cz-menu {
   .cz-presets { left: 8px; right: 8px; bottom: 8px; top: auto; width: auto; max-height: 80vh; overflow: auto; }
 }
 @media (max-height: 460px) and (orientation: landscape) { .cz-presets { left: auto; right: 8px; width: min(360px, calc(100vw - 16px)); max-height: calc(100vh - 16px); top: 8px; bottom: auto; } }
+
+/* ===== Loadout card dialog (see the "III · Loadout card" board) ===== */
+html.lc-open { overflow: hidden; }
+.lc-wrap { position: fixed; inset: 0; z-index: 2500; display: grid; place-items: center; padding: 16px; }
+.lc-wrap[hidden] { display: none; }
+.lc-scrim { position: absolute; inset: 0; background: rgb(8 9 10 / .62); }
+.lc { position: relative; width: min(1120px, 100%); max-height: calc(100dvh - 32px); overflow: auto; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; padding: 28px 32px; border-radius: 28px; background: #2b2e33; border: 1px solid #3a3d42; box-shadow: 0 32px 80px rgb(0 0 0 / .55); color: #fff; animation: lc-in .16s ease-out; }
+@keyframes lc-in { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: none; } }
+.lc-eyebrow { font-size: 13px; color: #86d177; font-weight: 600; letter-spacing: .04em; }
+.lc h2 { margin: 4px 0 16px; font: 500 30px/1.2 var(--font-display); }
+.lc-canvas { width: 100%; height: auto; aspect-ratio: 1200 / 630; display: block; border-radius: 24px; border: 1px solid #3a3d42; background: #1e2124; }
+.lc-note { margin: 14px 0 0; font-size: 13px; color: #b4b8bd; }
+.lc-side { display: flex; flex-direction: column; gap: 10px; padding-top: 56px; }
+.lc-btn { min-height: 56px; border: 0; border-radius: 28px; background: #3a3d42; color: #fff; font: 600 15px var(--font-family); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+.lc-btn:hover { background: #4a4d52; }
+.lc-primary { background: #86d177; color: #074723; } .lc-primary:hover { background: #a3de97; }
+.lc-btn:focus-visible { outline: 2px solid #86d177; outline-offset: 2px; }
+.lc-info { margin: 10px 0 0; padding: 14px; border-radius: 16px; background: #23262a; font-size: 13px; color: #b4b8bd; line-height: 1.5; }
+.lc-opt { margin-top: 4px; font-size: 13px; color: #b4b8bd; }
+.lc-sw { display: flex; justify-content: space-between; align-items: center; min-height: 44px; font-size: 14px; cursor: pointer; position: relative; }
+.lc-sw input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.lc-sw i { width: 44px; height: 26px; border-radius: 13px; background: #3a3d42; border: 2px solid #6b6f75; box-sizing: border-box; position: relative; flex: none; transition: background .15s; }
+.lc-sw i::after { content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #9a9ea3; transition: transform .15s, background .15s; }
+.lc-sw input:checked + i { background: #86d177; border-color: #86d177; }
+.lc-sw input:checked + i::after { transform: translate(18px, 2px) scale(1.25); background: #074723; }
+.lc-sw input:focus-visible + i { outline: 2px solid #86d177; outline-offset: 2px; }
+.lc-status { min-height: 20px; font-size: 13px; color: #c4d9c8; }
+.lc-close { display: none; }
+@media (max-width: 860px) {
+  .lc-wrap { padding: 0; align-items: end; }
+  .lc { grid-template-columns: 1fr; gap: 16px; padding: 20px 16px; border-radius: 24px 24px 0 0; max-height: 94dvh; }
+  .lc h2 { font-size: 24px; margin-bottom: 12px; }
+  .lc-side { padding-top: 0; }
+  .lc-close { display: inline-flex; }
+}
+@media (prefers-reduced-motion: reduce) { .lc { animation: none; } }

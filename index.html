@@ -86,6 +86,8 @@
   <link rel="stylesheet" href="css/scrollbar.css">
   <link rel="stylesheet" href="css/features.css">
   <link rel="stylesheet" href="css/features2.css">
+  <link rel="stylesheet" href="css/insights.css">
+  <link rel="stylesheet" href="css/preflight.css">
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
@@ -946,6 +948,7 @@
         <button type="button" role="menuitem" id="cz-reset"><i class="fas fa-rotate-left" aria-hidden="true"></i> Reset all</button>
         <label role="menuitem" for="cz-import" tabindex="0"><i class="fas fa-file-import" aria-hidden="true"></i> Import .json or .mcpack
           <input type="file" id="cz-import" accept=".json,.mcpack,.zip" hidden></label>
+        <button type="button" role="menuitem" id="cz-card-btn"><i class="fas fa-id-card" aria-hidden="true"></i> Share loadout card</button>
         <button type="button" role="menuitem" id="cz-export"><i class="fas fa-file-export" aria-hidden="true"></i> Export JSON</button>
         <button type="button" role="menuitem" id="cz-tooltip-btn"><i class="fas fa-message" aria-hidden="true"></i> Hover tooltip preview</button>
         <p class="cz-menu-note">Your build keeps the original pack id, so it replaces the pack when imported. Keep it above every other Pepe pack. Settings are saved in this browser.</p>
@@ -1918,6 +1921,7 @@
           </div>
         </div>
         <div class="cs-cards" id="cs-cards"></div>
+        <section class="ins" id="cs-insights" aria-label="Insights"></section>
         <section class="stats-card cs-chart-card" aria-label="Daily activity">
           <div class="stats-card-head">
             <div>
@@ -2301,6 +2305,7 @@
   </footer>
 
   <script src="script.js"></script>
+  <script src="preflight.js"></script>
   <script src="upload.js"></script>
   <script src="creator-tools.js"></script>
   <script src="chat-format.js"></script>

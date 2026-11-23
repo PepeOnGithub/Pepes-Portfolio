@@ -271,6 +271,7 @@ class UploadsPage {
       }
     });
 
+    document.getElementById('up-form').elements.name.addEventListener('input', (e) => { if (e.isTrusted) e.target.dataset.auto = '0'; });
     const iconInput = document.getElementById('up-icon');
     iconInput.addEventListener('change', () => this.previewIcon(iconInput.files[0], document.getElementById('up-icon-preview')));
 
@@ -310,16 +311,33 @@ class UploadsPage {
     }
     label.textContent = `${file.name} · ${this.formatSize(file.size)}`;
     drop.classList.add('has-file');
+    this.runPreflight(file);
     // Prefill the name and version from a file like "My_Pack_v1.2.0.mcpack".
     const form = document.getElementById('up-form');
     const base = file.name.replace(/\.(mcpack|mcaddon|brarchive|mcworld|mctemplate|zip)$/i, '');
     const vMatch = base.match(/[_\s-]v?(\d+(?:\.\d+){1,3})$/i);
     if (!form.elements.name.value.trim()) {
       form.elements.name.value = (vMatch ? base.slice(0, vMatch.index) : base).replace(/[_]+/g, ' ').trim().slice(0, 60);
+      form.elements.name.dataset.auto = '1';
     }
     if (vMatch && (!form.elements.version.value.trim() || form.elements.version.value === '1.0.0')) {
       form.elements.version.value = vMatch[1];
     }
+  }
+
+  // Pre-flight: look inside the file in the browser and show what is wrong before the details step.
+  async runPreflight(file) {
+    if (!window.packPreflight || !/\.(mcpack|mcaddon|zip)$/i.test(file.name)) return;
+    const fileInput = document.getElementById('up-file');
+    const r = await window.packPreflight.run(file);
+    if (fileInput.files[0] !== file) return;
+    if (!r.go) { fileInput.value = ''; this.onPackFile(null); return; }
+    const info = r.info, form = document.getElementById('up-form');
+    if (!info) return;
+    if (info.name && (!form.elements.name.value.trim() || form.elements.name.dataset.auto === '1')) { form.elements.name.value = info.name.slice(0, 60); form.elements.name.dataset.auto = '1'; }
+    if (info.version) form.elements.version.value = info.version;
+    if (info.description && !form.elements.description.value.trim()) form.elements.description.value = info.description.slice(0, 2000);
+    form.elements.name.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
   previewIcon(file, target) {
