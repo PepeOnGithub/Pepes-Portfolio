@@ -14,7 +14,10 @@
   <meta property="og:site_name" content="Pepe's Portfolio" />
   <meta property="og:description" content="MCBE Texture Pack Creator, Glacier Client Owner, Website & Discord Bot Maker" />
   <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://pepe.glacierclient.xyz/assets/og-banner.png">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://pepe.glacierclient.xyz/assets/og-banner.png">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pepe">
   <meta name="twitter:description" content="MCBE Texture Pack Creator, Glacier Client Owner, Website & Discord Bot Maker">
   <meta name="theme-color" content="#1a1c1f">
@@ -1025,6 +1028,17 @@
           <span class="st-install-ico"><i class="fas fa-mobile-screen-button" aria-hidden="true"></i></span>
           <div class="st-install-text"><b>Install Pepe as an app</b><small>Opens full screen from your home screen, no browser bar.</small></div>
           <button type="button" class="st-install-btn" id="st-install-btn">Install</button>
+        </div>
+        <div class="st-apk" id="st-apk" hidden>
+          <div class="st-apk-top">
+            <span class="st-install-ico"><i class="fab fa-android" aria-hidden="true"></i></span>
+            <div class="st-install-text"><b>Pepe for Android</b><small>The whole site as an app. Free, about the size of a photo.</small></div>
+          </div>
+          <div class="st-apk-actions">
+            <a class="st-apk-dl" id="st-apk-dl" href="https://www.mediafire.com/file/6utysrj63wpfx28/pepe%27s_portfolio_app_%281%29.apk/file" target="_blank" rel="noopener"><i class="fas fa-download" aria-hidden="true"></i> Download APK</a>
+            <button type="button" class="st-apk-how" id="st-apk-how">How to install</button>
+          </div>
+          <p class="st-apk-note" id="st-apk-note" hidden>Open the downloaded file. Android will ask you to <b>allow installs from this browser</b> the first time: turn it on, go back, and tap Install. The file is hosted on MediaFire.</p>
         </div>
         <div class="sidebar-section">
           <div class="settings-search">
@@ -2304,6 +2318,7 @@
     </div>
   </footer>
 
+  <script src="seo.js"></script>
   <script src="script.js"></script>
   <script src="preflight.js"></script>
   <script src="upload.js"></script>

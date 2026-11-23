@@ -358,7 +358,7 @@ class Router {
     if (push) {
       history.pushState({ page: pageId }, '', pageId === 'home' ? '/' : `/${pageId}`);
     }
-    document.title = "Pepe's Portfolio";
+    if (window.seo) window.seo.page(pageId); else document.title = "Pepe's Portfolio";
   }
 
   // The customizer (index.html #page-customizer) loads its scripts the first time the tab opens,
@@ -2665,7 +2665,7 @@ class PackLibrary {
     if (push) {
       history.pushState({ page: 'pack', id: pack.id }, '', `/pack/${this.packSlug(pack)}`);
     }
-    document.title = `${pack.name} · Pepe`;
+    if (window.seo) window.seo.pack(pack); else document.title = `${pack.name} · Pepe`;
   }
 
   async showUserProfile(userId, { push = true } = {}) {
@@ -2777,7 +2777,7 @@ class PackLibrary {
     if (push) {
       history.pushState({ page: 'library' }, '', '/library');
     }
-    document.title = 'Pepe';
+    if (window.seo) window.seo.page('library'); else document.title = 'Pepe';
   }
 
   copyPackLink() {

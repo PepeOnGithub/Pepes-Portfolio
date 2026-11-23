@@ -315,6 +315,12 @@
       else lib().showToast('Tap Share, then “Add to Home Screen”.');
     });
     show();
+    // the Android app (APK); not offered on iPhones, which cannot install it
+    const apk = document.getElementById('st-apk');
+    if (apk) {
+      apk.hidden = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      document.getElementById('st-apk-how').addEventListener('click', () => { const n = document.getElementById('st-apk-note'); n.hidden = !n.hidden; });
+    }
   }
 
   /* ===== 10 · notification choices ===== */

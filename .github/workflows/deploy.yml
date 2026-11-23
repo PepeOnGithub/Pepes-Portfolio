@@ -80,6 +80,11 @@ jobs:
             --exclude='.gitattributes' --exclude='README.md' --exclude='worker' \
             --exclude='*.mcpack' --exclude='*.mcaddon' ./ _site/
 
+      - name: Build SEO pages, link previews, sitemap and robots.txt
+        # /pack/<slug> is a route of the single-page app, so GitHub Pages answers it with a 404 status. This writes a
+        # real page per pack (title, description, canonical, Open Graph, JSON-LD) plus og images, sitemap.xml and robots.txt.
+        run: python tools/seo.py _site .
+
       - name: Version the page's scripts and styles
         # The Cloudflare purge below may be unavailable, and Cloudflare/browsers
         # keep script.js and friends for hours. Tagging each local script and
@@ -87,7 +92,7 @@ jobs:
         # get the new files at once.
         run: |
           v="${GITHUB_SHA::8}"
-          sed -i -E "s#(src|href)=\"((css/)?[A-Za-z0-9_.-]+\.(css|js))\"#\1=\"\2?v=$v\"#g" _site/*.html
+          sed -i -E "s#(src|href)=\"((css/)?[A-Za-z0-9_.-]+\.(css|js))\"#\1=\"\2?v=$v\"#g" _site/*.html _site/pack/*.html
           grep -o 'script.js?v=[0-9a-f]*' _site/index.html | head -1
 
       - name: Upload Pages artifact
