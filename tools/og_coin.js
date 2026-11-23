@@ -22,9 +22,9 @@ const srv = http.createServer((q, s) => {
   const r = new THREE.WebGLRenderer({ canvas: c, antialias: true, alpha: true, preserveDrawingBuffer: true });
   r.setSize(900, 900, false); r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = .9; r.outputColorSpace = THREE.SRGBColorSpace;
   r.shadowMap.enabled = true;
-  const scene = new THREE.Scene(); scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), .04).texture; scene.environmentIntensity = .6;
+  const scene = new THREE.Scene(); scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), .04).texture; scene.environmentIntensity = .15;
   const cam = new THREE.PerspectiveCamera(24, 1, 100, 4000); cam.position.set(0, 0, 1400);
-  const key = new THREE.DirectionalLight(0xffffff, 2.4); key.position.set(-380, 520, 700); key.castShadow = true; scene.add(key);
+  const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-380, 520, 700); key.castShadow = true; scene.add(key);
   const rim = new THREE.DirectionalLight(0xffffff, 2.2); rim.position.set(500, -200, -300); scene.add(rim);
   window.draw = async (img, rimCol, sideCol, ry, rx) => {
     while (scene.children.length > 3) scene.remove(scene.children[scene.children.length - 1]);
@@ -33,13 +33,13 @@ const srv = http.createServer((q, s) => {
     const g = new THREE.Group(); scene.add(g);
     const body = new THREE.Mesh(new THREE.CylinderGeometry(200, 200, 40, 128), [
       new THREE.MeshPhysicalMaterial({ color: sideCol, metalness: .6, roughness: .3, clearcoat: 1 }),
-      new THREE.MeshPhysicalMaterial({ map: tex, metalness: .05, roughness: .35, clearcoat: 1, clearcoatRoughness: .08 }),
+      new THREE.MeshPhysicalMaterial({ map: tex, metalness: 0, roughness: .75, clearcoat: .08, clearcoatRoughness: .5 }),
       new THREE.MeshPhysicalMaterial({ color: sideCol, metalness: .6, roughness: .4 })]);
     body.rotation.x = Math.PI / 2; body.castShadow = true; g.add(body);
     // the cap texture is mapped upright for a cylinder lying on its side
     const ring = new THREE.Mesh(new THREE.TorusGeometry(204, 15, 40, 160), new THREE.MeshPhysicalMaterial({ color: rimCol, metalness: .35, roughness: .22, clearcoat: 1, clearcoatRoughness: .08 }));
     ring.scale.z = .95; ring.position.z = 2; ring.castShadow = true; g.add(ring);
-    g.rotation.set(THREE.MathUtils.degToRad(rx), THREE.MathUtils.degToRad(ry), THREE.MathUtils.degToRad(-3));
+    g.rotation.set(THREE.MathUtils.degToRad(rx), THREE.MathUtils.degToRad(ry), 0);
     r.render(scene, cam); return c.toDataURL('image/png');
   };
   window.ready = true;
@@ -48,7 +48,7 @@ const srv = http.createServer((q, s) => {
   for (const j of jobs) {
     try {
       const data = 'data:image/png;base64,' + fs.readFileSync(j.image).toString('base64');
-      const url = await p.evaluate(([i, a, s]) => window.draw(i, a, s, -32, 9), [data, j.rim, j.side]);
+      const url = await p.evaluate(([i, a, s]) => window.draw(i, a, s, 0, -14), [data, j.rim, j.side]);
       fs.writeFileSync(path.join(out, j.key + '.png'), Buffer.from(url.split(',')[1], 'base64'));
     } catch (e) { console.log('coin failed', j.key, e.message); }
   }
