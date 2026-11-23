@@ -4008,8 +4008,10 @@ class PackLibrary {
     this.setDarkMode(isLight);
   }
 
-  setDarkMode(isDark) {
+  setDarkMode(isDark, { fromSystem = false } = {}) {
     const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if (!fromSystem) { try { localStorage.setItem('themeMode', isDark ? 'dark' : 'light'); } catch (e) { /* ignore */ } }
+    this.syncThemeCards();
     const themeIcon = document.querySelector('#theme-toggle i');
     if (isDark) {
       document.body.classList.remove('light-mode');
@@ -4075,14 +4077,42 @@ class PackLibrary {
     });
   }
 
+  // Theme cards: Dark, Light, or Match device (follows the device and changes with it).
+  setThemeMode(mode) {
+    this.themeMq = this.themeMq || matchMedia('(prefers-color-scheme: dark)');
+    if (!this.themeMqBound) {
+      this.themeMqBound = true;
+      this.themeMq.addEventListener('change', () => { if (localStorage.getItem('themeMode') === 'system') this.setDarkMode(this.themeMq.matches, { fromSystem: true }); });
+    }
+    if (mode === 'system') {
+      try { localStorage.setItem('themeMode', 'system'); } catch (e) { /* ignore */ }
+      this.setDarkMode(this.themeMq.matches, { fromSystem: true });
+    } else {
+      this.setDarkMode(mode !== 'light');
+    }
+    this.syncThemeCards();
+  }
+
+  syncThemeCards() {
+    let mode = 'dark';
+    try { mode = localStorage.getItem('themeMode') || (localStorage.getItem('darkMode') === 'false' ? 'light' : 'dark'); } catch (e) { /* ignore */ }
+    document.querySelectorAll('#st-themes .st-theme').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.themeMode === mode)));
+  }
+
   loadTheme() {
+    if (localStorage.getItem('themeMode') === 'system') {
+      this.themeMq = matchMedia('(prefers-color-scheme: dark)');
+      this.setThemeMode('system');
+    }
+    document.querySelectorAll('#st-themes .st-theme').forEach((b) => b.addEventListener('click', () => this.setThemeMode(b.dataset.themeMode)));
+    this.syncThemeCards();
     const darkMode = localStorage.getItem('darkMode');
     const compactView = localStorage.getItem('compactView');
     const reduceMotion = localStorage.getItem('reduceMotion');
     const newTabLinks = localStorage.getItem('newTabLinks');
 
     if (darkMode === 'false') {
-      this.setDarkMode(false);
+      this.setDarkMode(false, { fromSystem: true });   // restore only: the chosen theme mode is already stored
     }
 
     if (compactView === 'true') {

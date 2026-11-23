@@ -529,3 +529,53 @@ class MobileNav {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(start, 0)); else setTimeout(start, 0);
 })();
+
+// Settings: the Text size control (Small / Default / Large) drives the font-size slider, and on desktop the
+// search sits in the page head and the account card on top of the panel (the Settings design).
+(function settingsExtras() {
+  const SIZES = [['Small', 90], ['Default', 100], ['Large', 115]];
+  function textSize() {
+    const slider = document.getElementById('font-size-slider');
+    const row = slider && slider.closest('.setting-row');
+    if (!row || row.dataset.segBound) return;
+    row.dataset.segBound = '1';
+    const seg = document.createElement('span');
+    seg.className = 'st-seg'; seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', 'Text size');
+    seg.innerHTML = SIZES.map(([l, v]) => `<button type="button" data-size="${v}" aria-pressed="false">${l}</button>`).join('');
+    row.append(seg); row.classList.add('st-seg-on');
+    const paint = () => {
+      const v = Number(slider.value);
+      const near = SIZES.reduce((a, b) => (Math.abs(b[1] - v) < Math.abs(a[1] - v) ? b : a));
+      seg.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.size) === near[1])));
+    };
+    seg.addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      e.preventDefault(); e.stopPropagation();
+      slider.value = b.dataset.size;
+      slider.dispatchEvent(new Event('input', { bubbles: true }));
+      paint();
+    });
+    slider.addEventListener('input', paint);
+    new MutationObserver(paint).observe(slider, { attributes: true, attributeFilter: ['value'] });
+    paint();
+    // reset section / load can change the value without an event
+    setInterval(paint, 1500);
+  }
+  const mq = matchMedia('(max-width: 768px)');
+  function place() {
+    const page = document.getElementById('page-settings'); if (!page) return;
+    const search = page.querySelector('.settings-search'), account = document.getElementById('settings-account');
+    const headRow = page.querySelector('.page-head-row'), main = page.querySelector('.main-content'), side = page.querySelector('.sidebar');
+    if (!search || !account || !headRow || !main || !side) return;
+    if (!place.home) place.home = { searchParent: search.parentElement, accountParent: account.parentElement };
+    if (mq.matches) {
+      if (search.parentElement !== place.home.searchParent) place.home.searchParent.append(search);
+      if (account.parentElement !== place.home.accountParent) place.home.accountParent.prepend(account);
+    } else {
+      if (search.parentElement !== headRow) headRow.append(search);
+      if (account.parentElement !== main) main.prepend(account);
+    }
+  }
+  function start() { textSize(); place(); mq.addEventListener('change', place); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(start, 0)); else setTimeout(start, 0);
+})();

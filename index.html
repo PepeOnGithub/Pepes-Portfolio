@@ -987,7 +987,7 @@
         <div class="page-head-row">
           <div>
             <h2 class="page-title">Settings</h2>
-            <p class="page-subtitle">Customize how the site looks and behaves.</p>
+            <p class="page-subtitle">Changes save as you make them.</p>
           </div>
           <span class="page-meta">Saved in this browser</span>
         </div>
@@ -1059,9 +1059,15 @@
             </div>
             <button type="button" class="settings-reset-section" data-reset-section="appearance"><i class="fas fa-rotate-left" aria-hidden="true"></i> Reset section</button>
           </div>
+          <h4 class="settings-group-title">Theme</h4>
+          <div class="st-themes" id="st-themes" role="radiogroup" aria-label="Theme">
+            <button type="button" class="st-theme" role="radio" aria-checked="true" data-theme-mode="dark"><span class="st-theme-prev st-prev-dark"></span><span class="st-theme-name">Dark</span></button>
+            <button type="button" class="st-theme" role="radio" aria-checked="false" data-theme-mode="light"><span class="st-theme-prev st-prev-light"></span><span class="st-theme-name">Light</span></button>
+            <button type="button" class="st-theme" role="radio" aria-checked="false" data-theme-mode="system"><span class="st-theme-prev st-prev-system"></span><span class="st-theme-name">Match device</span></button>
+          </div>
           <h4 class="settings-group-title">Display</h4>
           <div class="settings-list">
-            <label class="setting-row">
+            <label class="setting-row st-theme-hidden" id="st-dark-row">
               <span class="setting-row-icon"><i class="fas fa-moon"></i></span>
               <div class="setting-row-text">
                 <p class="setting-name">Dark mode</p>
