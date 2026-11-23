@@ -117,7 +117,13 @@ async function creatorRow(ctx, user) {
   return select();
 }
 
-function settingsView(row, user, env) {
+async function lvConfirmed(env, row) {
+  if (!row || !row.linkvertise_id) return false;
+  const m = await env.DB.prepare('SELECT value FROM site_meta WHERE key = ?').bind(`lv_ok:${row.user_id}`).first();
+  return !!m && m.value === row.linkvertise_id;
+}
+
+function settingsView(row, user, env, confirmed = false) {
   const publicProfile = safeJson(row.public_json, { bio: '', socials: [], videos: [] });
   const draft = safeJson(row.draft_json, null) || publicProfile;
   // The site owner's packs use the site's own Linkvertise and LootLabs
@@ -125,6 +131,7 @@ function settingsView(row, user, env) {
   const site = !!(user && user.isOwner);
   return {
     siteEarnings: site,
+    linkvertiseConfirmed: !!(row.linkvertise_id && confirmed),
     linkvertiseId: row.linkvertise_id || (site && env.OWNER_LINKVERTISE_ID ? String(env.OWNER_LINKVERTISE_ID) : ''),
     hasLootToken: !!row.loot_token || (site && !!env.OWNER_LOOT_TOKEN),
     lootStatus: row.loot_status || '',
@@ -142,7 +149,7 @@ function settingsView(row, user, env) {
 export async function getSettings(ctx) {
   const user = await requireUser(ctx);
   const row = await creatorRow(ctx, user);
-  return json({ settings: settingsView(row, user, ctx.env) });
+  return json({ settings: settingsView(row, user, ctx.env, await lvConfirmed(ctx.env, row)) });
 }
 
 export async function saveSettings(ctx) {
@@ -166,6 +173,17 @@ export async function saveSettings(ctx) {
       await env.DB.prepare('UPDATE creators SET linkvertise_id = ?, updated_at = ? WHERE user_id = ?').bind(id || null, now, userId).run();
       earningsChanged = true;
     }
+  }
+
+  // "It worked" after testing the link: from then on the creator's own id is used.
+  if ('linkvertiseConfirmed' in body) {
+    const cur = (await env.DB.prepare('SELECT linkvertise_id FROM creators WHERE user_id = ?').bind(userId).first() || {}).linkvertise_id;
+    if (body.linkvertiseConfirmed === true && cur) {
+      await env.DB.prepare("INSERT INTO site_meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").bind(`lv_ok:${userId}`, cur).run();
+    } else {
+      await env.DB.prepare('DELETE FROM site_meta WHERE key = ?').bind(`lv_ok:${userId}`).run();
+    }
+    earningsChanged = true;
   }
 
   if ('lootToken' in body) {
@@ -203,7 +221,7 @@ export async function saveSettings(ctx) {
   }
 
   row = await env.DB.prepare('SELECT * FROM creators WHERE user_id = ?').bind(userId).first();
-  return json({ settings: settingsView(row, user, ctx.env) });
+  return json({ settings: settingsView(row, user, ctx.env, await lvConfirmed(ctx.env, row)) });
 }
 
 // ===== Public profile =====

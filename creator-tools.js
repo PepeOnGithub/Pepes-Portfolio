@@ -470,6 +470,8 @@ class CreatorTools {
       this.decorateDetail(pack);
       return out;
     };
+    const renderAuth = lib.renderAuthUI.bind(lib);
+    lib.renderAuthUI = (...a) => { const out = renderAuth(...a); this.syncOwnerActions(); return out; };
     const nameEl = document.getElementById('detail-author-name');
     const openAuthor = () => {
       const pack = lib.currentPack;
@@ -487,6 +489,14 @@ class CreatorTools {
     });
   }
 
+  // Update / Edit buttons on your own pack page. Sign-in can finish after the page loaded.
+  syncOwnerActions() {
+    const pack = this.lib.currentPack;
+    const me = this.lib.currentUser;
+    const mine = !!(pack && pack.community && pack.authorId && me && String(me.id) === String(pack.authorId));
+    document.getElementById('detail-owner-actions').classList.toggle('hidden', !mine);
+  }
+
   async decorateDetail(pack) {
     const nameEl = document.getElementById('detail-author-name');
     const box = document.getElementById('detail-creator-links');
@@ -495,8 +505,7 @@ class CreatorTools {
     if (linked) { nameEl.setAttribute('role', 'link'); nameEl.tabIndex = 0; } else { nameEl.removeAttribute('role'); nameEl.removeAttribute('tabindex'); }
     box.classList.add('hidden');
     box.innerHTML = '';
-    const mine = linked && this.lib.currentUser && String(this.lib.currentUser.id) === String(pack.authorId);
-    document.getElementById('detail-owner-actions').classList.toggle('hidden', !mine);
+    this.syncOwnerActions();
     if (!linked) return;
 
     // One view per pack per browser session (the worker also counts once per visitor per day).

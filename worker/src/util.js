@@ -203,6 +203,25 @@ async function forgetOwner(env) {
   }
 }
 
+// A creator's Linkvertise id only counts once they have tested it and confirmed
+// it works (Linkvertise rejects links from accounts that aren't set up for the
+// site's domain). Until then their downloads use the site's own account, the
+// same links as the library packs. The confirmation is remembered in site_meta
+// as lv_ok:<user id> = <the id that was confirmed>, so changing the id undoes it.
+export async function applyLinkvertiseConfirmation(env, rows, key = 'user_id') {
+  const list = (rows || []).filter(r => r && r.linkvertise_id);
+  if (!list.length) return rows;
+  const keys = [...new Set(list.map(r => `lv_ok:${r[key]}`))];
+  const { results } = await env.DB.prepare(`SELECT key, value FROM site_meta WHERE key IN (${keys.map(() => '?').join(',')})`)
+    .bind(...keys).all().catch(() => ({ results: [] }));
+  const ok = new Map(results.map(r => [r.key, r.value]));
+  for (const r of list) {
+    r.linkvertise_raw = r.linkvertise_id;
+    if (ok.get(`lv_ok:${r[key]}`) !== r.linkvertise_id) r.linkvertise_id = null;
+  }
+  return rows;
+}
+
 // Whose accounts a creator's downloads earn for. The site owner, and any
 // creator who hasn't added Linkvertise or LootLabs, use the site's own
 // accounts (OWNER_LINKVERTISE_ID / OWNER_LOOT_TOKEN). `creator` is their

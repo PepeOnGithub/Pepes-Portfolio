@@ -2429,10 +2429,19 @@ class PackLibrary {
     this.applyLinkTargets();
 
     const detailAvatar = document.getElementById('detail-avatar');
-    detailAvatar.onerror = () => { detailAvatar.onerror = null; detailAvatar.src = 'assets/pepe-profile.png'; };
-    detailAvatar.src = pack.community && pack.authorId
-      ? `${UPLOADS_API}/api/community/avatars/${encodeURIComponent(pack.authorId)}`
-      : 'assets/pepe-profile.png';
+    if (pack.community) {
+      // Someone else's pack: show their picture, or their initial when they have none
+      // (never the site's own logo, which looks like it's Pepe's).
+      const letter = (pack.author || '?').trim().charAt(0).toUpperCase() || '?';
+      const hue = [...(pack.author || '')].reduce((n, c) => (n * 31 + c.charCodeAt(0)) % 360, 0);
+      const fallback = 'data:image/svg+xml,' + encodeURIComponent(
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="hsl(${hue},45%,40%)"/><text x="32" y="43" font-family="Arial,sans-serif" font-size="32" font-weight="700" text-anchor="middle" fill="#fff">${this.escapeHtml(letter)}</text></svg>`);
+      detailAvatar.onerror = () => { detailAvatar.onerror = null; detailAvatar.src = fallback; };
+      detailAvatar.src = pack.authorId ? `${UPLOADS_API}/api/community/avatars/${encodeURIComponent(pack.authorId)}` : fallback;
+    } else {
+      detailAvatar.onerror = null;
+      detailAvatar.src = 'assets/pepe-profile.png';
+    }
     document.getElementById('detail-author-name').textContent = pack.author || 'Unknown';
     document.getElementById('detail-made').textContent = this.formatDate(pack.addedAt || pack.createdAt);
     document.getElementById('detail-updated').textContent = this.formatDate(pack.updatedAt || pack.addedAt || pack.createdAt);

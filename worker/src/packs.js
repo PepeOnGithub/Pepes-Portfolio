@@ -1,7 +1,7 @@
 // Turns database rows into the pack objects the site's library renders
 // (same shape as an entry in packs.json).
 
-import { ID_OFFSET, encodeKey, safeJson, usesSiteEarnings } from './util.js';
+import { ID_OFFSET, encodeKey, safeJson, usesSiteEarnings, applyLinkvertiseConfirmation } from './util.js';
 
 export async function versionsFor(ctx, packIds, extraWhere) {
   const map = new Map();
@@ -27,6 +27,7 @@ export async function packExtras(ctx, packRows) {
   const { results: creators } = await ctx.env.DB
     .prepare(`SELECT user_id, linkvertise_id, loot_token IS NOT NULL AS has_loot FROM creators WHERE user_id IN (${owners.map(() => '?').join(',')})`)
     .bind(...owners).all();
+  await applyLinkvertiseConfirmation(ctx.env, creators);
   for (const c of creators) extras.creators.set(c.user_id, c);
   // The site owner's packs, and packs of creators without their own
   // accounts, earn through the site's own Linkvertise account.

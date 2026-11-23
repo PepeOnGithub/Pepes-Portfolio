@@ -416,6 +416,7 @@ class UploadsPage {
   bindCreator() {
     document.getElementById('up-earn-form').addEventListener('submit', (e) => { e.preventDefault(); this.saveEarnings(); });
     document.getElementById('up-lv-test').addEventListener('click', () => this.testLinkvertise());
+    document.getElementById('up-lv-confirm').addEventListener('click', () => this.saveEarnings({ confirmLv: true }));
     document.getElementById('up-loot-remove').addEventListener('click', () => {
       if (confirm('Remove your LootLabs token? Your LootLabs download links will stop being made and existing ones are removed.')) this.saveEarnings({ removeToken: true });
     });
@@ -567,7 +568,7 @@ class UploadsPage {
 
     // Earnings summary on the New upload tab.
     const parts = [];
-    if (st.linkvertiseId) parts.push('Linkvertise');
+    if (st.linkvertiseId && st.linkvertiseConfirmed) parts.push('Linkvertise');
     if (st.hasLootToken) parts.push('LootLabs');
     const text = document.getElementById('up-earn-text');
     const btn = document.querySelector('#up-earn-note [data-up-goto]');
@@ -590,6 +591,15 @@ class UploadsPage {
       this.profileFilled = true;
       document.getElementById('up-lv-id').value = st.linkvertiseId || '';
       document.getElementById('up-loot-token').value = '';
+    }
+
+    const lvStatus = document.getElementById('up-lv-status');
+    const lvConfirm = document.getElementById('up-lv-confirm');
+    if (lvStatus && lvConfirm) {
+      lvConfirm.classList.toggle('hidden', !(st.linkvertiseId && !st.linkvertiseConfirmed));
+      lvStatus.textContent = !st.linkvertiseId ? ''
+        : st.linkvertiseConfirmed ? '✓ Confirmed: downloads of your packs earn on your Linkvertise account.'
+        : 'Not confirmed yet: your downloads use the site\'s links for now. Save, test the link, and confirm it opened.';
     }
 
     const lootState = document.getElementById('up-loot-state');
@@ -651,7 +661,7 @@ class UploadsPage {
     window.open(getLinkvertiseUrl(`${location.origin}/library`, lv), '_blank', 'noopener');
   }
 
-  async saveEarnings({ removeToken = false } = {}) {
+  async saveEarnings({ removeToken = false, confirmLv = false } = {}) {
     const err = document.getElementById('up-earn-error');
     const btn = document.getElementById('up-earn-save');
     err.classList.add('hidden');
@@ -659,6 +669,7 @@ class UploadsPage {
     const token = document.getElementById('up-loot-token').value.trim();
     if (lv && !/^\d{1,12}$/.test(lv)) { err.textContent = 'Your Linkvertise user id is a number, like 123456.'; err.classList.remove('hidden'); return; }
     const body = { linkvertiseId: lv };
+    if (confirmLv) body.linkvertiseConfirmed = true;
     if (removeToken) body.lootToken = '';
     else if (token) body.lootToken = token;
     btn.disabled = true;
@@ -668,7 +679,7 @@ class UploadsPage {
       document.getElementById('up-loot-token').value = '';
       this.render();
       this.refreshLibrary();
-      this.lib.showToast(removeToken ? 'LootLabs token removed.' : 'Earnings saved.');
+      this.lib.showToast(removeToken ? 'LootLabs token removed.' : confirmLv ? 'Confirmed. Your Linkvertise account is now used.' : 'Earnings saved.');
       if (body.lootToken) this.scheduleCheckPoll();
     } catch (e) {
       err.textContent = e.message;
@@ -717,9 +728,9 @@ class UploadsPage {
     const note = pack.status === 'rejected' && pack.reviewNote
       ? `<p class="up-note"><i class="fas fa-message" aria-hidden="true"></i> ${this.esc(pack.reviewNote)}</p>` : '';
     const earning = [
-      st.linkvertiseId ? `<span class="up-pill"><i class="fas fa-link" aria-hidden="true"></i> Linkvertise ${this.esc(st.linkvertiseId)}</span>` : '',
+      st.linkvertiseId && st.linkvertiseConfirmed ? `<span class="up-pill"><i class="fas fa-link" aria-hidden="true"></i> Linkvertise ${this.esc(st.linkvertiseId)}</span>` : '',
       st.hasLootToken ? `<span class="up-pill"><i class="fas fa-link" aria-hidden="true"></i> LootLabs ${latest.lootUrl ? 'link ready' : 'link being made'}</span>` : '',
-      !st.linkvertiseId && !st.hasLootToken ? '<span class="up-pill up-pill-muted">Earning for the site <button type="button" class="up-link-btn" data-up-goto="profile">Use my accounts</button></span>' : ''
+      !(st.linkvertiseId && st.linkvertiseConfirmed) && !st.hasLootToken ? '<span class="up-pill up-pill-muted">Earning for the site <button type="button" class="up-link-btn" data-up-goto="profile">Use my accounts</button></span>' : ''
     ].join('');
     const versions = pack.versions.map(v => `
       <li>

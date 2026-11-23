@@ -8,7 +8,7 @@
 // worker makes the link for it. Same settings as Pepe's own packs
 // (generator.py): tier 1, 3 tasks, theme 1.
 
-import { base64UrlJson, encodeKey, publicOrigin, clip, usesSiteEarnings } from './util.js';
+import { base64UrlJson, encodeKey, publicOrigin, clip, usesSiteEarnings, applyLinkvertiseConfirmation } from './util.js';
 
 const LOOT_API = 'https://creators.lootlabs.gg/api/public/content_locker';
 const MAX_TRIES = 6;
@@ -94,6 +94,7 @@ export async function ensureLootForVersion(env, versionId) {
   ).bind(versionId).first();
   if (!v || v.status !== 'approved' || v.pack_status !== 'approved') return { ok: false, error: 'not live' };
   const creator = await env.DB.prepare('SELECT user_id, loot_token, linkvertise_id FROM creators WHERE user_id = ?').bind(v.owner_id).first();
+  await applyLinkvertiseConfirmation(env, creator ? [creator] : []);
   let token = null;
   let siteToken = false;
   if (creator && creator.loot_token) {
@@ -166,6 +167,7 @@ export async function retryMissingLoot(env) {
      WHERE c.loot_token IS NULL AND p.status = 'approved' AND v.status = 'approved'
        AND v.loot_url IS NULL AND v.loot_tries < ? LIMIT 50`
   ).bind(MAX_TRIES).all();
+  await applyLinkvertiseConfirmation(env, owners, 'owner_id');
   for (const o of owners) {
     if (await usesSiteEarnings(env, o.owner_id, o)) await ensureLootForCreator(env, o.owner_id);
   }
