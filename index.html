@@ -1858,6 +1858,36 @@
                 <p class="up-help">Shown on your profile page. Promote your channel, Discord server and socials. Everything is checked automatically before it appears.</p>
                 <p class="up-note hidden" id="up-profile-status"></p>
                 <label class="up-field">
+                  <span class="up-label">Username <span class="up-optional">letters, numbers, underscore</span></span>
+                  <input type="text" id="up-acc-username" maxlength="32" autocomplete="off" spellcheck="false" placeholder="your_name">
+                </label>
+                <label class="up-field">
+                  <span class="up-label">Display name</span>
+                  <input type="text" id="up-acc-display-name" maxlength="60" autocomplete="off" placeholder="Shown instead of your account name">
+                </label>
+                <div class="up-field">
+                  <span class="up-label">Profile picture</span>
+                  <div class="profile-avatar-upload">
+                    <img src="assets/pepe-profile.png" alt="" class="profile-avatar-preview" id="up-acc-avatar-preview" loading="lazy" decoding="async">
+                    <div class="profile-avatar-upload-actions">
+                      <button type="button" class="up-btn" id="up-acc-avatar-pick">Choose image</button>
+                      <button type="button" class="up-btn hidden" id="up-acc-avatar-remove">Remove</button>
+                      <input type="file" id="up-acc-avatar-file" accept="image/png,image/jpeg,image/webp" class="hidden" aria-label="Choose profile picture">
+                    </div>
+                  </div>
+                </div>
+                <div class="up-field">
+                  <span class="up-label">Banner</span>
+                  <div class="profile-banner-upload">
+                    <img src="" alt="" class="profile-banner-preview hidden" id="up-acc-banner-preview" loading="lazy" decoding="async">
+                    <div class="profile-banner-upload-actions">
+                      <button type="button" class="up-btn" id="up-acc-banner-pick">Choose image</button>
+                      <button type="button" class="up-btn hidden" id="up-acc-banner-remove">Remove</button>
+                      <input type="file" id="up-acc-banner-file" accept="image/png,image/jpeg,image/webp" class="hidden" aria-label="Choose banner image">
+                    </div>
+                  </div>
+                </div>
+                <label class="up-field">
                   <span class="up-label">About you <span class="up-optional" id="up-bio-count">0/500</span></span>
                   <textarea id="up-bio" rows="3" maxlength="500" placeholder="Who you are and what you make. Links go in the section below."></textarea>
                 </label>
