@@ -21,7 +21,7 @@ import {
 } from './creator.js';
 import { ensureLootForVersion, retryMissingLoot } from './loot.js';
 import {
-  socialInfo, setFollow, followList, setBlock, avatar, unreadCount, conversations, thread, sendMessage,
+  socialInfo, setFollow, followList, setBlock, avatar, banner, unreadCount, conversations, thread, sendMessage,
   getDmSettings, setDmSettings, blockedList
 } from './social.js';
 import { listNotifications, notificationsUnread, markNotificationsRead, notifyReview } from './notifications.js';
@@ -102,6 +102,7 @@ async function route(request, env, exec) {
   if ((m = path.match(/^\/api\/community\/users\/([^/]+)\/(followers|following)$/)) && method === 'GET') return followList(ctx, m[1], m[2]);
   if ((m = path.match(/^\/api\/community\/users\/([^/]+)\/block$/)) && (method === 'POST' || method === 'DELETE')) return setBlock(ctx, m[1], method === 'POST');
   if ((m = path.match(/^\/api\/community\/avatars\/([^/]+)$/)) && method === 'GET') return avatar(ctx, m[1]);
+  if ((m = path.match(/^\/api\/community\/banners\/([^/]+)$/)) && method === 'GET') return banner(ctx, m[1]);
   if (path === '/api/community/messages' && method === 'GET') return conversations(ctx);
   if (path === '/api/community/messages/unread' && method === 'GET') return unreadCount(ctx);
   if (path === '/api/community/messages/settings') {

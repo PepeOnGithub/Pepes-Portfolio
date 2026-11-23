@@ -2515,6 +2515,14 @@ class PackLibrary {
       detailAvatar.onerror = null;
       detailAvatar.src = fallback;
       this.applyAuthorLook(pack);
+      // Straight from the uploads service too, so the author's banner doesn't wait on anything else.
+      const bannerImg = document.querySelector('#detail-banner img.detail-banner-bg');
+      if (bannerImg && pack.authorId) {
+        const mine = `${UPLOADS_API}/api/community/banners/${encodeURIComponent(pack.authorId)}`;
+        bannerImg.removeAttribute('onerror');
+        bannerImg.onerror = () => { bannerImg.onerror = null; bannerImg.src = DEFAULT_BANNER_URL; };
+        bannerImg.src = mine;
+      }
     } else {
       detailAvatar.onerror = null;
       detailAvatar.src = 'assets/pepe-profile.png';

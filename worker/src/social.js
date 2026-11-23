@@ -192,6 +192,28 @@ export async function avatar(ctx, key) {
   return new Response(null, { status: 404, headers: cache });
 }
 
+// The profile banner, served the same way. The column name isn't fixed by this
+// worker (the accounts worker owns the users table), so it is looked up once.
+let bannerColumns = null;
+export async function banner(ctx, key) {
+  if (!bannerColumns) {
+    const { results } = await ctx.env.DB.prepare('PRAGMA table_info(users)').all();
+    bannerColumns = (results || []).map(c => c.name).filter(n => /^[a-z_]*banner[a-z_]*$/i.test(n));
+  }
+  const cache = { 'Cache-Control': 'public, max-age=300' };
+  if (!bannerColumns.length) return new Response(null, { status: 404, headers: cache });
+  const row = await ctx.env.DB.prepare(`SELECT ${bannerColumns.join(', ')} FROM users WHERE id = ?`)
+    .bind(decodeURIComponent(key)).first();
+  const src = row && bannerColumns.map(c => row[c]).find(v => v);
+  const m = src && /^data:(image\/(?:png|jpeg|webp|gif));base64,([A-Za-z0-9+/=]+)$/.exec(src);
+  if (m) {
+    const bytes = Uint8Array.from(atob(m[2]), c => c.charCodeAt(0));
+    return new Response(bytes, { headers: { 'Content-Type': m[1], 'X-Content-Type-Options': 'nosniff', ...cache } });
+  }
+  if (src && /^https:\/\//.test(src)) return new Response(null, { status: 302, headers: { Location: src, ...cache } });
+  return new Response(null, { status: 404, headers: cache });
+}
+
 // ===== Messages =====
 
 export async function unreadCount(ctx) {
