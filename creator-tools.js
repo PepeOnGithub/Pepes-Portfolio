@@ -132,9 +132,20 @@ class CreatorTools {
   // The library only counts all-time downloads (no daily numbers or views),
   // using the same counters as the library cards.
   async addLibraryPacks(stats) {
+    const rows = (await this.ownerLibraryPacks()).map(p => ({
+      id: p.id, name: p.name, slug: this.lib.packSlug(p), status: 'approved', library: true, versions: [],
+      downloads: null, views: null, prevDownloads: 0, prevViews: 0, totalDownloads: p.downloads, totalViews: null
+    }));
+    stats.packs.push(...rows);
+    stats.totals.allTimeDownloads += rows.reduce((n, r) => n + r.totalDownloads, 0);
+  }
+
+  // The site owner's packs from packs.json, each with its all-time download
+  // total from the same counters as the library cards.
+  async ownerLibraryPacks() {
     await Promise.race([this.lib.ready, new Promise(r => setTimeout(r, 8000))]);
     const mine = (this.lib.packs || []).filter(p => !p.community && OWNER_AUTHOR.test(p.author || ''));
-    const rows = await Promise.all(mine.map(async (pack) => {
+    return Promise.all(mine.map(async (pack) => {
       let total = this.lib.liveDownloadCounts.get(pack.id);
       if (total === undefined) {
         total = await ((pack.versions && pack.versions.length > 1)
@@ -142,13 +153,8 @@ class CreatorTools {
           : this.lib.fetchLiveDownloads(pack));
         this.lib.liveDownloadCounts.set(pack.id, total);
       }
-      return {
-        id: pack.id, name: pack.name, slug: this.lib.packSlug(pack), status: 'approved', library: true, versions: [],
-        downloads: null, views: null, prevDownloads: 0, prevViews: 0, totalDownloads: total || 0, totalViews: null
-      };
+      return { ...pack, downloads: total || 0 };
     }));
-    stats.packs.push(...rows);
-    stats.totals.allTimeDownloads += rows.reduce((n, r) => n + r.totalDownloads, 0);
   }
 
   delta(cur, prev) {
@@ -397,21 +403,26 @@ class CreatorTools {
 
     const data = await this.creator(userId);
     // The page may have moved on while we waited.
-    if (!data || !document.getElementById('page-user').classList.contains('active')) return;
-    const c = data.creator;
+    if (!document.getElementById('page-user').classList.contains('active')) return;
+    // The account shown (accounts worker), or null for a creator without one.
+    const account = this.lib.viewedProfile;
+    // The site owner's profile also lists their library packs.
+    const library = account && account.isAuthor ? await this.ownerLibraryPacks() : [];
+    if (!data && !library.length) return;
+    const c = data ? data.creator : { packCount: 0, downloads: 0, socials: [], videos: [] };
 
-    // Community creators aren't accounts-worker users, so take the name from here.
-    if (c.username) {
+    // Creators who aren't accounts-worker users: take the name from here.
+    if (!account && c.username) {
       document.getElementById('user-profile-name-text').textContent = c.username;
       document.getElementById('user-profile-joined').textContent = '';
-      document.getElementById('user-profile-stats').textContent = `${c.packCount} pack${c.packCount === 1 ? '' : 's'} · ${this.fmt(c.downloads)} downloads`;
+      document.getElementById('user-profile-stats').textContent = '';
     }
 
     if (c.bio) {
       bio.textContent = c.bio;
       bio.classList.remove('hidden');
     }
-    const own = this.up.me && String(this.up.me.id) === String(c.id);
+    const own = !!c.id && this.up.me && String(this.up.me.id) === String(c.id);
     const links = (c.socials || []).map(s => this.socialLink(s)).join('');
     const editLink = own ? '<button type="button" class="up-link-btn" data-edit-profile><i class="fas fa-pen" aria-hidden="true"></i> Edit creator profile</button>' : '';
     if (links || editLink) {
@@ -429,19 +440,22 @@ class CreatorTools {
         </button>`).join('');
       videosBlock.classList.remove('hidden');
     }
-    if ((data.packs || []).length) {
-      packsBox.innerHTML = data.packs.map(p => `
+    const packs = [...((data && data.packs) || []), ...library];
+    if (packs.length) {
+      packsBox.innerHTML = packs.map(p => `
         <button type="button" class="up-profile-pack" data-open-pack="${p.id}">
           <span class="up-item-icon">${p.thumbnail ? `<img src="${this.esc(p.thumbnail)}" alt="" loading="lazy">` : `<span>${this.esc(p.name.charAt(0))}</span>`}</span>
           <span class="up-profile-pack-text">
             <b>${this.esc(p.name)}</b>
-            <span>${this.esc(this.lib.capitalizeFirst(p.category))} · v${this.esc(p.version)} · ${this.fmt(p.downloads)} downloads</span>
+            <span>${this.esc(this.lib.capitalizeFirst(p.category))}${p.version ? ` · v${this.esc(p.version)}` : ''} · ${this.fmt(p.downloads)} downloads</span>
           </span>
           <i class="fas fa-chevron-right" aria-hidden="true"></i>
         </button>`).join('');
       packsBlock.classList.remove('hidden');
+      const downloads = c.downloads + library.reduce((n, p) => n + (p.downloads || 0), 0);
+      const summary = `${packs.length} pack${packs.length === 1 ? '' : 's'} · ${this.fmt(downloads)} downloads`;
       const stats = document.getElementById('user-profile-stats');
-      if (stats && !/downloads/.test(stats.textContent)) stats.textContent = `${stats.textContent} · ${c.packCount} pack${c.packCount === 1 ? '' : 's'} · ${this.fmt(c.downloads)} downloads`;
+      stats.textContent = stats.textContent ? `${stats.textContent} · ${summary}` : summary;
     }
   }
 

@@ -1,0 +1,144 @@
+/* ===== Follows and direct messages ===== */
+
+/* --- Unread badge (account pill, menu, conversation list) --- */
+.dm-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px;
+  background: var(--color-accent); color: var(--on-accent);
+  font: 600 11px/1 var(--font-family); font-variant-numeric: tabular-nums;
+}
+.dm-badge.hidden { display: none; }
+.auth-menu-item .dm-badge { margin-left: auto; }
+
+/* --- Profile: counts and actions --- */
+#page-user .user-profile-follow { flex: 0 0 100%; display: flex; gap: 16px; margin: 0; }
+#page-user .user-profile-follow.hidden { display: none; }
+.user-profile-count {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font: 400 14px var(--font-family); color: var(--color-text-secondary);
+}
+.user-profile-count b { color: var(--color-text-primary); font-weight: 600; font-variant-numeric: tabular-nums; }
+.user-profile-count:hover b, .user-profile-count:focus-visible b { color: var(--color-accent); }
+
+#page-user .user-profile-actions { flex: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+#page-user .user-profile-actions .user-profile-edit { margin: 0; }
+#page-user .user-profile-actions .hidden { display: none; }
+#page-user .user-profile-actions button[disabled] { opacity: 0.5; cursor: not-allowed; }
+#page-user .user-profile-follow-btn:not(.is-following) {
+  background: var(--color-accent); color: var(--on-accent); border-color: transparent;
+}
+#page-user .user-profile-follow-btn:not(.is-following):hover { background: var(--color-accent-light); }
+
+@media (max-width: 720px) {
+  #page-user .user-profile-actions { margin: 0; }
+  #page-user .user-profile-actions button { min-height: 44px; }
+}
+
+/* --- Followers / following list --- */
+.follow-list-modal { text-align: left; max-width: 400px; }
+.follow-list-modal h3 { margin: 0 32px 12px 0; }
+.follow-list { display: flex; flex-direction: column; max-height: 60vh; overflow-y: auto; margin: 0 -8px; }
+.follow-row {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px; border: 0; border-radius: 8px;
+  background: none; color: inherit; text-align: left; cursor: pointer; font: inherit;
+}
+.follow-row:hover, .follow-row:focus-visible { background: var(--color-bg-elevated); }
+.follow-row-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; }
+.follow-row-text { display: flex; flex-direction: column; min-width: 0; }
+.follow-row-text b { font-weight: 600; }
+.follow-row-text small { color: var(--color-text-secondary); }
+.follow-list-empty { margin: 8px; color: var(--color-text-secondary); }
+
+/* --- Messages panel --- */
+.dm-overlay { padding: 24px; }
+.dm-panel {
+  display: grid; grid-template-columns: 280px 1fr;
+  width: 100%; max-width: 860px; height: min(640px, 100%);
+  background: var(--color-bg-secondary); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); overflow: hidden;
+  animation: cardIn 0.2s ease both;
+}
+.dm-side { display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--color-border); }
+.dm-thread { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.dm-head {
+  display: flex; align-items: center; gap: 8px; min-height: 56px; padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+.dm-head h3 { flex: 1; margin: 0; font: 500 18px var(--font-display); }
+.dm-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 36px; height: 36px; border: 0; border-radius: 8px; background: none;
+  color: var(--color-text-secondary); cursor: pointer; font-size: 16px;
+}
+.dm-icon-btn:hover, .dm-icon-btn:focus-visible { background: var(--color-bg-elevated); color: var(--color-text-primary); }
+.dm-back, .dm-close-thread { display: none; }
+.dm-who {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 4px 6px;
+  border: 0; border-radius: 8px; background: none; color: var(--color-text-primary);
+  font: 600 15px var(--font-family); text-align: left; cursor: pointer;
+}
+.dm-who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dm-who:empty { cursor: default; }
+.dm-who:not(:empty):hover { background: var(--color-bg-elevated); }
+.dm-link-btn {
+  flex: none; padding: 6px 10px; border: 0; border-radius: 8px; background: none; cursor: pointer;
+  font: 500 13px var(--font-family); color: var(--color-text-secondary);
+}
+.dm-link-btn:hover { color: #e0616f; background: var(--color-bg-elevated); }
+.dm-link-btn.hidden { display: none; }
+
+.dm-list { flex: 1; overflow-y: auto; padding: 6px; }
+.dm-conv {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 8px; border: 0; border-radius: 8px;
+  background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.dm-conv:hover, .dm-conv:focus-visible { background: var(--color-bg-elevated); }
+.dm-conv.is-active { background: var(--color-bg-elevated); box-shadow: inset 3px 0 0 var(--color-accent); }
+.dm-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; }
+.dm-avatar-sm { width: 32px; height: 32px; }
+.dm-conv-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.dm-conv-top { display: flex; align-items: baseline; gap: 8px; }
+.dm-conv-top b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.dm-conv-top small { flex: none; color: var(--color-text-secondary); font-size: 12px; }
+.dm-conv-last { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--color-text-secondary); font-size: 13px; }
+.dm-conv.is-unread .dm-conv-last { color: var(--color-text-primary); font-weight: 500; }
+
+.dm-msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding: 16px; }
+.dm-msg { align-self: flex-start; max-width: min(78%, 520px); }
+.dm-msg p {
+  margin: 0; padding: 8px 12px; border-radius: 14px 14px 14px 4px;
+  background: var(--color-bg-elevated); color: var(--color-text-primary);
+  white-space: pre-wrap; overflow-wrap: anywhere; font-size: 14px; line-height: 1.45;
+}
+.dm-msg time { display: block; margin: 2px 6px 0; font-size: 11px; color: var(--color-text-secondary); }
+.dm-msg.is-mine { align-self: flex-end; text-align: right; }
+.dm-msg.is-mine p { border-radius: 14px 14px 4px 14px; background: var(--color-accent); color: var(--on-accent); text-align: left; }
+.dm-empty { margin: auto; padding: 24px; max-width: 320px; text-align: center; color: var(--color-text-secondary); font-size: 14px; }
+
+.dm-note { margin: 0; padding: 12px 16px; border-top: 1px solid var(--color-border); color: var(--color-text-secondary); font-size: 14px; }
+.dm-note.hidden { display: none; }
+.dm-compose { display: flex; align-items: flex-end; gap: 8px; padding: 12px; border-top: 1px solid var(--color-border); }
+.dm-compose.hidden { display: none; }
+.dm-compose textarea {
+  flex: 1; min-height: 40px; max-height: 140px; padding: 9px 12px; resize: none;
+  border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-bg-primary);
+  color: var(--color-text-primary); font: 400 14px/1.45 var(--font-family);
+}
+.dm-compose textarea:focus { outline: none; border-color: var(--color-accent); }
+.dm-send {
+  flex: none; width: 40px; height: 40px; border: 0; border-radius: 50%; cursor: pointer;
+  background: var(--color-accent); color: var(--on-accent); font-size: 15px;
+}
+.dm-send:hover { background: var(--color-accent-light); }
+.dm-send[disabled] { opacity: 0.5; cursor: wait; }
+
+/* One side at a time on phones: the list, or the open conversation. */
+@media (max-width: 720px) {
+  .dm-overlay { padding: 0; }
+  .dm-panel { grid-template-columns: 1fr; max-width: none; height: 100%; border: 0; border-radius: 0; }
+  .dm-side { border-right: 0; }
+  .dm-panel.has-thread .dm-side, .dm-panel:not(.has-thread) .dm-thread { display: none; }
+  .dm-back, .dm-close-thread { display: inline-flex; }
+  .dm-icon-btn { width: 44px; height: 44px; }
+  .dm-compose { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+}

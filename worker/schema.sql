@@ -74,3 +74,36 @@ CREATE TABLE IF NOT EXISTS seen (
   key TEXT PRIMARY KEY,
   day TEXT NOT NULL
 );
+
+-- ===== Follows, direct messages and blocks =====
+-- Ids are accounts-worker user ids (users.id in this same database).
+
+CREATE TABLE IF NOT EXISTS follows (
+  follower_id TEXT NOT NULL,
+  followee_id TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  PRIMARY KEY (follower_id, followee_id)
+);
+CREATE INDEX IF NOT EXISTS follows_followee ON follows(followee_id);
+
+-- pair is the two user ids sorted and joined with "|", one per conversation.
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  pair TEXT NOT NULL,
+  sender_id TEXT NOT NULL,
+  recipient_id TEXT NOT NULL,
+  text TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  read_at TEXT
+);
+CREATE INDEX IF NOT EXISTS messages_pair ON messages(pair, id);
+CREATE INDEX IF NOT EXISTS messages_unread ON messages(recipient_id, read_at);
+CREATE INDEX IF NOT EXISTS messages_sender ON messages(sender_id, created_at);
+
+-- A block stops messages and follows in both directions.
+CREATE TABLE IF NOT EXISTS blocks (
+  blocker_id TEXT NOT NULL,
+  blocked_id TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  PRIMARY KEY (blocker_id, blocked_id)
+);

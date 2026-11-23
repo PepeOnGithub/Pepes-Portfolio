@@ -2454,6 +2454,8 @@ class PackLibrary {
     const commentsEl = document.getElementById('user-profile-comments');
     const authorBadgeEl = document.getElementById('user-profile-author-badge');
 
+    // The account being shown (accounts worker user), for follows, DMs and packs.
+    this.viewedProfile = null;
     nameEl.textContent = 'Loading…';
     avatarEl.src = 'assets/pepe-profile.png';
     joinedEl.textContent = '';
@@ -2473,6 +2475,7 @@ class PackLibrary {
         return;
       }
       const data = await res.json();
+      this.viewedProfile = data.user;
       nameEl.textContent = data.user.name || data.user.username || 'Unknown';
       avatarEl.src = data.user.avatarUrl || 'assets/pepe-profile.png';
       joinedEl.textContent = data.user.joinedAt ? `Joined ${this.formatDate(data.user.joinedAt)}` : '';

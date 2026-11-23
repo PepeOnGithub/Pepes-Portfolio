@@ -20,6 +20,9 @@ import {
   ensureCreator, getSettings, saveSettings, publicCreator, creatorStats, recordView, recordDownload
 } from './creator.js';
 import { ensureLootForVersion, retryMissingLoot } from './loot.js';
+import {
+  socialInfo, setFollow, followList, setBlock, avatar, unreadCount, conversations, thread, sendMessage
+} from './social.js';
 
 const CATEGORIES = ['packs', 'cosmetics', 'utility', 'addons', 'other'];
 // .brarchive is Minecraft's own packed-JSON archive; everything else is a zip.
@@ -85,6 +88,19 @@ async function route(request, env, exec) {
 
   let m;
   if ((m = path.match(/^\/api\/community\/creators\/([^/]+)$/)) && method === 'GET') return publicCreator(ctx, m[1]);
+
+  // Follows, blocks, avatars and direct messages (social.js)
+  if ((m = path.match(/^\/api\/community\/users\/([^/]+)\/social$/)) && method === 'GET') return socialInfo(ctx, m[1]);
+  if ((m = path.match(/^\/api\/community\/users\/([^/]+)\/follow$/)) && (method === 'POST' || method === 'DELETE')) return setFollow(ctx, m[1], method === 'POST');
+  if ((m = path.match(/^\/api\/community\/users\/([^/]+)\/(followers|following)$/)) && method === 'GET') return followList(ctx, m[1], m[2]);
+  if ((m = path.match(/^\/api\/community\/users\/([^/]+)\/block$/)) && (method === 'POST' || method === 'DELETE')) return setBlock(ctx, m[1], method === 'POST');
+  if ((m = path.match(/^\/api\/community\/avatars\/([^/]+)$/)) && method === 'GET') return avatar(ctx, m[1]);
+  if (path === '/api/community/messages' && method === 'GET') return conversations(ctx);
+  if (path === '/api/community/messages/unread' && method === 'GET') return unreadCount(ctx);
+  if ((m = path.match(/^\/api\/community\/messages\/([^/]+)$/))) {
+    if (method === 'GET') return thread(ctx, m[1]);
+    if (method === 'POST') return sendMessage(ctx, m[1]);
+  }
 
   if ((m = path.match(/^\/api\/community\/packs\/(\d+)$/))) {
     const id = toRowId(m[1]);
