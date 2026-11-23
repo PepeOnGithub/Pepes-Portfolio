@@ -78,10 +78,17 @@ export async function getUser(ctx) {
   }
 
   try {
-    const res = await fetch(`${ctx.env.AUTH_API}/api/session`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok) return null;
+    // Workers on the same account can't reach each other with a plain fetch
+    // (Cloudflare answers with error 1042), so use the AUTH service binding
+    // when it exists. The URL's host is ignored by the binding; plain fetch
+    // is only for local dev.
+    const url = `${ctx.env.AUTH_API}/api/session`;
+    const init = { headers: { Authorization: `Bearer ${token}` } };
+    const res = ctx.env.AUTH ? await ctx.env.AUTH.fetch(url, init) : await fetch(url, init);
+    if (!res.ok) {
+      console.error('session check failed: status', res.status, ctx.env.AUTH ? '(service binding)' : '(plain fetch)');
+      return null;
+    }
     const data = await res.json();
     if (data && data.user && data.user.id != null) ctx._user = data.user;
   } catch (e) {

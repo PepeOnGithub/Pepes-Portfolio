@@ -45,6 +45,12 @@ database_id = "377d1f3c-be1a-473b-985b-b7be5e1a1db2"
 binding = "FILES"
 bucket_name = "pepes-portfolio-uploads"
 
+# Direct line to the accounts worker for sign-in checks. A plain fetch to
+# another workers.dev Worker on the same account fails with error 1042.
+[[services]]
+binding = "AUTH"
+service = "pepes-portfolio-api"
+
 # Workers Logs, so sign-in and upload errors show up in the dashboard.
 [observability.logs]
 enabled = true
