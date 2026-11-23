@@ -420,7 +420,7 @@ body {
   padding: 12px 16px; border: 0; border-radius: 12px; background: var(--color-bg-secondary); color: var(--lib-soft); font-size: 14px;
 }
 #page-library .detail-discontinued-notice i { color: var(--color-accent); margin-right: 8px; }
-#page-library .detail-showcase { margin: 0; }
+#page-library .detail-showcase { margin-left: 0; margin-right: 0; margin-bottom: 0; } /* keep the 48px gap above from .detail-main */
 #page-library .detail-showcase-embed { border-radius: 16px; overflow: hidden; }
 
 #page-library .versions-list, #page-library .extension-version-items, #page-library .older-versions {
@@ -734,7 +734,8 @@ body {
 @media (max-width: 768px) {
   /* Topbar is sticky on phones; stick the toolbar just under it. */
   #page-library .search-bar-wrap { top: 64px; padding: 8px 16px; gap: 8px; }
-  #page-library .search-wrapper { order: 1; flex: 1 1 0; }
+  /* Search gets its own full-width row; filters, sort and view sit below it. */
+  #page-library .search-wrapper { order: 1; flex: 1 1 100%; }
   #page-library .lib-filters { order: 2; }
   #page-library .sort-wrap { order: 3; flex: 1 1 0; min-width: 0; }
   #page-library .view-toggle { order: 4; }

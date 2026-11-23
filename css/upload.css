@@ -21,6 +21,14 @@ body.light-mode #page-upload {
   padding: 8px 32px 64px;
 }
 
+/* Plain header like Library, Stats and Settings, lined up with the content below. */
+#page-upload .page-hero { border-bottom: 0; overflow: visible; }
+#page-upload .page-hero::before, #page-upload .page-hero::after { display: none; }
+#page-upload .page-hero-inner { max-width: 1080px; padding: 48px 32px 24px; box-sizing: border-box; }
+#page-upload .back-link { display: none; }
+#page-upload .page-title { font-size: 36px; line-height: 1.15; letter-spacing: -0.02em; margin: 0; }
+#page-upload .page-subtitle { color: var(--color-text-secondary); margin: 8px 0 0; max-width: 62ch; font-size: 15px; }
+
 /* --- Empty, signed-out and offline states --- */
 .up-state,
 .up-empty {
@@ -29,6 +37,8 @@ body.light-mode #page-upload {
   background: var(--up-surface); border-radius: var(--up-r);
   box-shadow: inset 0 0 0 1px var(--up-line);
 }
+.up-state-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.up-state-actions a.up-btn { text-decoration: none; }
 .up-state > i,
 .up-empty > i { font-size: 28px; color: var(--color-accent); }
 .up-state h3 { margin: 0; font: 500 20px/1.3 var(--font-display); color: var(--color-text-primary); }
@@ -301,6 +311,8 @@ body.light-mode #page-library .pack-flags .community-badge { color: var(--accent
 }
 @media (max-width: 768px) {
   .up-wrap { padding: 4px 16px calc(64px + env(safe-area-inset-bottom) + 32px); }
+  #page-upload .page-hero-inner { padding: 24px 16px 12px; }
+  #page-upload .page-title { font-size: 30px; }
   .up-tabs { width: 100%; }
   .up-tab { flex: 1 1 0; justify-content: center; gap: 6px; padding: 0 8px; font-size: 13px; }
   .up-tab > i { display: none; }

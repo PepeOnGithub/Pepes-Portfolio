@@ -314,6 +314,28 @@ class Router {
       if (drawer.contains(e.target) || toggle.contains(e.target)) return;
       closeDrawer();
     });
+
+    // Phones: "More" in the tab bar opens a sheet with the less-used pages.
+    const moreBtn = document.getElementById('mobile-more-btn');
+    const sheet = document.getElementById('mobile-more-sheet');
+    if (!moreBtn || !sheet) return;
+    const setMore = (open) => {
+      sheet.hidden = !open;
+      moreBtn.setAttribute('aria-expanded', String(open));
+      moreBtn.classList.toggle('open', open);
+      if (open) sheet.querySelector('a')?.focus({ preventScroll: true });
+    };
+    this.closeMoreSheet = () => setMore(false);
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setMore(sheet.hidden);
+    });
+    sheet.addEventListener('click', (e) => {
+      if (e.target === sheet || e.target.closest('a')) setMore(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !sheet.hidden) { setMore(false); moreBtn.focus(); }
+    });
   }
 
   show(pageId, { push = true } = {}) {
@@ -324,9 +346,12 @@ class Router {
     // the customizer is a full-screen editor: it covers the site chrome and the page behind it stops scrolling
     document.body.classList.toggle('cz-open', pageId === 'customizer');
 
-    document.querySelectorAll('.topnav-link, .mobile-nav-link').forEach(link => {
+    document.querySelectorAll('.topnav-link, .mobile-nav-link, .mobile-more-link').forEach(link => {
       link.classList.toggle('active', link.dataset.page === pageId);
     });
+    const moreBtn = document.getElementById('mobile-more-btn');
+    if (moreBtn) moreBtn.classList.toggle('active', ['projects', 'socials', 'stats', 'settings'].includes(pageId));
+    if (this.closeMoreSheet) this.closeMoreSheet();
 
     document.getElementById('main-content').focus({ preventScroll: true });
     if (getBoolSetting('scrollToTopOnNav', true)) {
@@ -515,6 +540,20 @@ class PackLibrary {
     this.syncSettingsCategorySidebar();
     this.applyFilters();
     this.setupFilterDropdowns();
+    this.communityReady = this.communityPromise.then(list => this.mergeCommunityPacks(list));
+  }
+
+  // Adds approved community packs to the library and refreshes everything
+  // that counts or lists packs. Safe to call again with a fresh list.
+  mergeCommunityPacks(list) {
+    if (this.packsLoadError) return;
+    const hadCommunity = this.packs.some(p => p.community);
+    if (!list.length && !hadCommunity) return;
+    this.packs = [...this.packs.filter(p => !p.community), ...list];
+    this.updateCategoryCounts();
+    this.renderTagChips();
+    this.renderHomeAndProjects();
+    this.applyFilters();
   }
 
   // Categories/Tags use a <details> that's forced open on desktop (via the
@@ -1360,13 +1399,16 @@ class PackLibrary {
     this.pendingDownloadLink = null;
   }
 
+  // packs.json renders straight away; community packs come from the uploads
+  // worker and are merged in when they arrive (see mergeCommunityPacks), so a
+  // slow worker never holds up the library or the first page load.
   async loadPacks() {
-    const community = this.loadCommunityPacks();
+    this.communityPromise = this.loadCommunityPacks();
     try {
       const response = await fetch('packs.json', { cache: 'no-cache' });
       if (!response.ok) throw new Error(`packs.json request failed: ${response.status}`);
       const data = await response.json();
-      this.packs = [...(data.packs || []), ...(await community)];
+      this.packs = [...(data.packs || [])];
       this.packsLoadError = false;
       this.filteredPacks = [...this.packs];
       return this.packs;
@@ -4425,9 +4467,14 @@ function updateBirthdayCountdown() {
   el.textContent = `${days} day${days === 1 ? '' : 's'} to go`;
 }
 
+function clearNavActive() {
+  document.querySelectorAll('.topnav-link, .mobile-nav-link, .mobile-more-link').forEach(l => l.classList.remove('active'));
+}
+
 function show404() {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-404').classList.add('active');
+  clearNavActive();
   document.title = "Page Not Found · Pepe";
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -4435,6 +4482,7 @@ function show404() {
 function showDownloadGate(token) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-download').classList.add('active');
+  clearNavActive();
   document.title = 'Preparing Download · Pepe';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -4530,17 +4578,25 @@ function resolveInitialRoute() {
   if (packMatch) {
     const identifier = decodeURIComponent(packMatch[1]);
     const numericId = /^\d+$/.test(identifier) ? parseInt(identifier, 10) : null;
-    const pack = window.packLibrary.packs.find(p =>
-      window.packLibrary.packSlug(p) === identifier || p.id === numericId
-    );
-    if (!pack) {
+    const lib = window.packLibrary;
+    const find = () => lib.packs.find(p => lib.packSlug(p) === identifier || p.id === numericId);
+    const open = (pack) => {
+      window.router.show('library', { push: false });
+      history.replaceState({ page: 'library' }, '', '/library');
+      lib.showDetail(pack, { push: true });
+    };
+    const pack = find();
+    if (pack) { open(pack); return; }
+    // Not in packs.json: it may be a community pack that is still loading.
+    window.router.show('library', { push: false });
+    history.replaceState({ page: 'pack-loading' }, '', path);
+    Promise.resolve(lib.communityReady).then(() => {
+      if (location.pathname.replace(/\/+$/, '') !== path) return; // visitor moved on
+      const late = find();
+      if (late) { open(late); return; }
       show404();
       history.replaceState({ page: '404' }, '', path);
-      return;
-    }
-    window.router.show('library', { push: false });
-    history.replaceState({ page: 'library' }, '', '/library');
-    window.packLibrary.showDetail(pack, { push: true });
+    });
     return;
   }
 
@@ -4564,7 +4620,7 @@ function resolveInitialRoute() {
 window.addEventListener('popstate', (e) => {
   const state = e.state;
 
-  if (!state) {
+  if (!state || state.page === 'pack-loading') {
     resolveInitialRoute();
     return;
   }

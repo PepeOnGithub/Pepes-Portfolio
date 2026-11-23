@@ -1006,11 +1006,7 @@ class UploadsPage {
 
   // Re-pulls approved community packs so the library matches without a reload.
   async refreshLibrary() {
-    const community = await this.lib.loadCommunityPacks({ fresh: true });
-    this.lib.packs = [...this.lib.packs.filter(p => !p.community), ...community];
-    this.lib.updateCategoryCounts();
-    this.lib.renderTagChips();
-    this.lib.applyFilters();
+    this.lib.mergeCommunityPacks(await this.lib.loadCommunityPacks({ fresh: true }));
   }
 
   // ===== Helpers =====

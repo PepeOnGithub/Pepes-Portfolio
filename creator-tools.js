@@ -375,6 +375,7 @@ class CreatorTools {
     lib.showUserProfile = async (userId, opts) => {
       const out = await original(userId, opts);
       await lib.ready;
+      await lib.communityReady; // their community packs
       this.renderProfile(userId);
       return out;
     };

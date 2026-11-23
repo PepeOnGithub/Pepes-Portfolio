@@ -9,6 +9,17 @@
   font-display: swap;
 }
 
+/* Form controls use the page font instead of the browser's default.
+   :where() keeps this at zero specificity so any component rule wins. */
+:where(button, input, select, textarea) { font-family: inherit; }
+:where(button) { color: inherit; }
+
+/* Visible keyboard focus everywhere, never on mouse clicks. */
+:where(a, button, [role="button"], [tabindex], input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-accent, #86d177);
+  outline-offset: 2px;
+}
+
 /* ===== Design Tokens ===== */
 :root {
   /* Green palette: #86D177 fill / #348B25 / #216639 selected / #074723 deep / #489C49 brand */
@@ -4883,6 +4894,37 @@ h1, h2, h3, .page-title { font-family: var(--font-display); font-weight: 500; }
   }
   .mobile-nav-link i { width: auto; font-size: 18px; }
   .mobile-nav-link.active, .mobile-nav-link:hover { background: transparent; color: var(--color-text-primary); }
-  .mobile-nav-link.active i { color: var(--color-accent); }
-  .mobile-nav-link[data-page="customizer"], .mobile-nav-link[data-page="stats"] { display: none; }
+  .mobile-nav-link.active i, .mobile-nav-link.open i { color: var(--color-accent); }
+  .mobile-nav-link { font-family: inherit; cursor: pointer; }
+
+  /* "More" sheet: slides up above the tab bar. */
+  .mobile-more-sheet {
+    position: fixed; inset: 0; z-index: 94; background: rgba(0, 0, 0, 0.5);
+    display: flex; align-items: flex-end;
+  }
+  .mobile-more-sheet[hidden] { display: none; }
+  .mobile-more-panel {
+    width: 100%; box-sizing: border-box;
+    padding: 12px 12px calc(64px + env(safe-area-inset-bottom) + 12px);
+    background: var(--color-bg-secondary); border-top: 1px solid var(--color-border);
+    border-radius: 20px 20px 0 0;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
+    animation: moreSheetUp 180ms ease-out;
+  }
+  .mobile-more-link {
+    display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 0 16px;
+    border-radius: 12px; background: var(--color-bg-tertiary); color: var(--color-text-primary);
+    text-decoration: none; font-size: 15px; font-weight: 500;
+  }
+  .mobile-more-link i { width: 18px; text-align: center; color: var(--color-text-secondary); }
+  .mobile-more-link.active { outline: 1px solid var(--color-accent-dark); }
+  .mobile-more-link.active i { color: var(--color-accent); }
+  .mobile-more-legal {
+    grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 16px;
+    margin: 8px 0 0; font-size: 13px;
+  }
+  .mobile-more-legal a { color: var(--color-text-secondary); text-decoration: none; padding: 6px 0; }
 }
+@media (min-width: 769px) { .mobile-more-sheet { display: none !important; } }
+@keyframes moreSheetUp { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .mobile-more-panel { animation: none; } }

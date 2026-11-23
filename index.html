@@ -145,15 +145,25 @@
     </div>
   </header>
 
-  <nav class="mobile-nav-drawer" id="mobile-nav-drawer">
-    <a href="#" class="mobile-nav-link active" data-page="home"><i class="fas fa-house"></i> Home</a>
-    <a href="#" class="mobile-nav-link" data-page="projects"><i class="fas fa-diagram-project"></i> Projects</a>
-    <a href="#" class="mobile-nav-link" data-page="socials"><i class="fas fa-share-nodes"></i> Socials</a>
-    <a href="#" class="mobile-nav-link" data-page="library"><i class="fas fa-box-open"></i> Library</a>
-    <a href="#" class="mobile-nav-link" data-page="customizer"><i class="fas fa-sliders"></i> Customizer</a>
-    <a href="#" class="mobile-nav-link" data-page="stats"><i class="fas fa-chart-simple"></i> Stats</a>
-    <a href="#" class="mobile-nav-link" data-page="settings"><i class="fas fa-cog"></i> Settings</a>
+  <!-- Phones: bottom tab bar with the four main destinations, the rest under "More". -->
+  <nav class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Main">
+    <a href="#" class="mobile-nav-link active" data-page="home"><i class="fas fa-house" aria-hidden="true"></i> Home</a>
+    <a href="#" class="mobile-nav-link" data-page="library"><i class="fas fa-box-open" aria-hidden="true"></i> Library</a>
+    <a href="#" class="mobile-nav-link" data-page="customizer"><i class="fas fa-sliders" aria-hidden="true"></i> Customize</a>
+    <a href="#" class="mobile-nav-link" data-page="upload"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Upload</a>
+    <button type="button" class="mobile-nav-link mobile-more-btn" id="mobile-more-btn" aria-expanded="false" aria-controls="mobile-more-sheet"><i class="fas fa-ellipsis" aria-hidden="true"></i> More</button>
   </nav>
+  <div class="mobile-more-sheet" id="mobile-more-sheet" hidden>
+    <div class="mobile-more-panel" role="dialog" aria-label="More pages">
+      <a href="#" class="mobile-more-link" data-page="projects"><i class="fas fa-diagram-project" aria-hidden="true"></i><span>Projects</span></a>
+      <a href="#" class="mobile-more-link" data-page="socials"><i class="fas fa-share-nodes" aria-hidden="true"></i><span>Socials</span></a>
+      <a href="#" class="mobile-more-link" data-page="stats"><i class="fas fa-chart-simple" aria-hidden="true"></i><span>Stats</span></a>
+      <a href="#" class="mobile-more-link" data-page="settings"><i class="fas fa-cog" aria-hidden="true"></i><span>Settings</span></a>
+      <p class="mobile-more-legal">
+        <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="guidelines.html">Guidelines</a><a href="copyright.html">Copyright</a>
+      </p>
+    </div>
+  </div>
 
   <div id="main-content" tabindex="-1">
 
@@ -1770,7 +1780,7 @@
         <div class="page-head-row">
           <div>
             <h2 class="page-title">Upload a pack</h2>
-            <p class="page-subtitle">Share your packs in the library. Downloads go through your own Linkvertise or LootLabs account, so you keep 100% of what they earn.</p>
+            <p class="page-subtitle">Share your packs with everyone in the library. Add your Linkvertise or LootLabs account under Earnings to keep 100% of what downloads earn.</p>
           </div>
         </div>
       </div>
@@ -1792,8 +1802,11 @@
       <div class="up-state hidden" id="up-offline">
         <i class="fas fa-plug-circle-xmark" aria-hidden="true"></i>
         <h3>Uploads aren't available right now</h3>
-        <p>The upload service didn't respond. Try again in a few minutes.</p>
-        <button type="button" class="up-btn" id="up-retry-btn"><i class="fas fa-rotate-right" aria-hidden="true"></i> Try again</button>
+        <p>The upload service didn't respond. You can still browse and download everything in the library. Try again in a few minutes.</p>
+        <div class="up-state-actions">
+          <button type="button" class="up-btn" id="up-retry-btn"><i class="fas fa-rotate-right" aria-hidden="true"></i> Try again</button>
+          <a href="#" class="up-btn" data-page="library"><i class="fas fa-box-open" aria-hidden="true"></i> Browse the library</a>
+        </div>
       </div>
 
       <div class="hidden" id="up-main">
