@@ -1531,14 +1531,14 @@ class PackLibrary {
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
     const summary = [
-      { label: 'Total packs', value: this.packs.length },
-      { label: 'Total downloads', value: this.formatCount(totalDownloads), hi: true },
-      { label: 'Active', value: active.length },
-      { label: 'Discontinued', value: this.packs.length - active.length },
+      { label: 'Total packs', value: this.packs.length, icon: 'fa-cube' },
+      { label: 'Downloads', value: this.formatCount(totalDownloads), hi: true, icon: 'fa-download' },
+      { label: 'Active', value: active.length, icon: 'fa-circle-check' },
+      { label: 'Discontinued', value: this.packs.length - active.length, icon: 'fa-ban' },
     ];
     document.getElementById('stats-summary-grid').innerHTML = summary.map(s => `
       <div class="stats-summary-card${s.hi ? ' is-hi' : ''}">
-        <span class="stats-summary-label">${s.label}</span>
+        <span class="stats-summary-label"><i class="fas ${s.icon}" aria-hidden="true"></i> ${s.label}</span>
         <span class="stats-summary-value">${s.value}</span>
       </div>
     `).join('');
