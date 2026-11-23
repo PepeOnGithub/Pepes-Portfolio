@@ -478,7 +478,7 @@ class PackLibrary {
       sort: localStorage.getItem('defaultSort') || 'relevance',
       tags: new Set()
     };
-    this.viewMode = localStorage.getItem('libraryViewMode') === 'list' ? 'list' : 'grid';
+    this.viewMode = localStorage.getItem('libraryViewMode') === 'grid' ? 'grid' : 'list';
     this.favorites = this.loadFavorites();
     this.collapsedSections = this.loadCollapsedSections();
     this.defaultCollapseSections = localStorage.getItem('collapseSectionsByDefault') === 'true';
@@ -2302,6 +2302,7 @@ class PackLibrary {
     const version = String(latest.version || pack.version || '').replace(/^v/i, '');
     const size = latest.size || pack.size || '';
     const categoryLabel = pack.pinned ? 'Required' : this.capitalizeFirst(pack.category);
+    const updatedAgo = this.timeAgo(pack.updatedAt || (pack.versions && pack.versions[0] && pack.versions[0].date) || pack.addedAt);
     const iconContent = hasImage
       ? this.pictureTag(pack.thumbnail, pack.thumbnailWebp)
       : this.fallbackIconContent(pack);
@@ -2326,6 +2327,7 @@ class PackLibrary {
         </div>
         <div class="pack-footer">
           <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
+          ${updatedAgo ? `<span class="pack-updated" title="Last updated"><i class="far fa-clock" aria-hidden="true"></i> ${updatedAgo}</span>` : ''}
           <span class="pack-dl-btn">${this.downloadedIds().has(pack.id) ? '<i class="fas fa-check"></i> Downloaded' : '<i class="fas fa-download"></i> Download'}</span>
         </div>
       </div>
@@ -3359,6 +3361,17 @@ class PackLibrary {
       const res = await this.authFetch(`/api/comment/${commentId}`, { method: 'DELETE' });
       if (res.ok && this.currentPack) this.loadComments(this.currentPack);
     } catch (e) { /* network error - comment stays listed */ }
+  }
+
+  // "3d ago" style, for the library rows.
+  timeAgo(dateStr) {
+    const t = Date.parse(dateStr || '');
+    if (!t) return '';
+    const days = Math.floor((Date.now() - t) / 86400000);
+    if (days < 1) return 'today';
+    if (days < 30) return `${days}d ago`;
+    if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+    return `${Math.floor(days / 365)}y ago`;
   }
 
   formatDate(dateStr) {

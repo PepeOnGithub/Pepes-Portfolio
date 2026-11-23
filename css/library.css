@@ -971,3 +971,66 @@ body.light-mode #page-library .pack-card:hover { box-shadow: 0 12px 28px rgba(0,
 .comment-replies { margin-top: 4px; padding-left: 0; border-left: 0; }
 .comment-replies .comment-item { padding: 8px 0 0; }
 .comment-replies .comment-avatar { width: 28px; height: 28px; }
+
+/* ===== Library rows (Modrinth / CurseForge style) =====
+   One row per pack: big icon, name + author, two-line summary, small tags,
+   then downloads, last update and ONE button. The list is the default view. */
+#page-library .pack-updated { display: none; }
+#page-library .packs-grid.list-view { border-top: 0; gap: 12px; }
+#page-library .packs-grid.list-view .pack-card {
+  grid-template-columns: 96px minmax(0, 1fr) auto; grid-template-rows: auto;
+  gap: 8px 20px; align-items: center; padding: 14px 16px 14px 14px;
+  background: var(--color-bg-secondary); border: 0; border-radius: 14px;
+}
+#page-library .packs-grid.list-view .pack-card:hover { background: var(--lib-hover); }
+#page-library .packs-grid.list-view .pack-card-pinned { box-shadow: inset 0 0 0 1px var(--accent-deep); }
+#page-library .packs-grid.list-view .pack-thumbnail { width: 96px; height: 96px; padding: 8px; border-radius: 12px; }
+#page-library .packs-grid.list-view .pack-cat-chip { display: none; }
+#page-library .packs-grid.list-view .pack-content { gap: 4px; }
+#page-library .packs-grid.list-view .pack-title-row { display: block; }
+#page-library .packs-grid.list-view .pack-name { font: 600 17px/1.3 var(--font-family); }
+#page-library .packs-grid.list-view .pack-author { font-size: 13px; color: var(--color-text-secondary); }
+#page-library .packs-grid.list-view .pack-description {
+  -webkit-line-clamp: 2; font-size: 14px; line-height: 1.45; margin: 2px 0 4px;
+}
+#page-library .packs-grid.list-view .pack-flags { order: 5; }
+#page-library .packs-grid.list-view .pack-meta { order: 4; justify-content: flex-start; flex-wrap: wrap; gap: 6px; font-family: var(--font-family); }
+#page-library .packs-grid.list-view .pack-meta > span {
+  display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px;
+  background: var(--color-bg-tertiary); color: var(--lib-soft); font: 500 12px/1 var(--font-family);
+}
+/* Right column: numbers, then the one action */
+#page-library .packs-grid.list-view .pack-footer {
+  grid-column: 3; grid-row: 1; display: grid; grid-template-columns: auto; justify-items: end; align-content: center; gap: 8px;
+}
+#page-library .packs-grid.list-view .pack-footer .downloads { font: 600 14px/1 var(--font-family); color: var(--color-text-primary); }
+#page-library .packs-grid.list-view .pack-footer .downloads::before { color: var(--color-text-secondary); }
+#page-library .packs-grid.list-view .pack-updated { display: inline; font: 400 12px/1 var(--font-family); color: var(--color-text-secondary); }
+#page-library .packs-grid.list-view .pack-dl-btn { height: 38px; min-width: 128px; margin-top: 4px; }
+#page-library .packs-grid.list-view .pack-favorite-btn {
+  position: absolute; grid-column: auto; top: 10px; right: 10px; width: 30px; height: 30px; background: transparent; opacity: 0;
+  transition: opacity 150ms, color 150ms;
+}
+#page-library .packs-grid.list-view .pack-card:hover .pack-favorite-btn,
+#page-library .packs-grid.list-view .pack-favorite-btn.active,
+#page-library .packs-grid.list-view .pack-favorite-btn:focus-visible { opacity: 1; }
+#page-library .packs-grid.list-view .pack-card.is-downloaded .pack-dl-btn { background: var(--color-bg-tertiary); color: var(--color-text-primary); }
+
+@media (max-width: 768px) {
+  #page-library .packs-grid.list-view { gap: 10px; }
+  #page-library .packs-grid.list-view .pack-card {
+    grid-template-columns: 64px minmax(0, 1fr); gap: 4px 14px; padding: 12px; min-height: 0; align-items: start;
+  }
+  #page-library .packs-grid.list-view .pack-thumbnail { width: 64px; height: 64px; padding: 6px; border-radius: 10px; }
+  #page-library .packs-grid.list-view .pack-name { font-size: 16px; }
+  #page-library .packs-grid.list-view .pack-description { display: -webkit-box; font-size: 13px; }
+  #page-library .packs-grid.list-view .pack-footer {
+    display: flex; grid-column: 1 / -1; grid-row: 2; justify-content: space-between; align-items: center; gap: 12px; padding-top: 8px;
+    border-top: 1px solid var(--color-border);
+  }
+  #page-library .packs-grid.list-view .pack-footer .downloads { display: inline; font-size: 13px; }
+  #page-library .packs-grid.list-view .pack-updated { margin-right: auto; }
+  #page-library .packs-grid.list-view .pack-dl-btn { min-width: 0; flex: none; height: 40px; padding: 0 18px; margin: 0; }
+  #page-library .packs-grid.list-view .pack-flags > * { display: inline-flex; }
+  #page-library .packs-grid.list-view .pack-favorite-btn { opacity: 1; width: 40px; height: 40px; top: 4px; right: 4px; }
+}
