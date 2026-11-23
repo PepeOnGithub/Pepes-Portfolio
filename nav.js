@@ -306,9 +306,9 @@ class MobileNav {
 // state (set when creator data loads); tabs just add .tab-off to the others.
 (function profileTabs() {
   const SECTIONS = [
-    ['packs', 'Packs', 'user-profile-packs-block'],
-    ['videos', 'Videos', 'user-profile-videos-block'],
-    ['comments', 'Comments', null]
+    ['packs', 'Packs', 'user-profile-packs-block', 'fa-cube'],
+    ['videos', 'Videos', 'user-profile-videos-block', 'fa-circle-play'],
+    ['comments', 'Comments', null, 'fa-comment']
   ];
   let current = null, wired = false;
   const commentsBlock = () => document.getElementById('user-profile-comments')?.closest('.versions-block');
@@ -321,8 +321,8 @@ class MobileNav {
     // Videos is always a tab (an empty one says so); Packs only when there are packs.
     const avail = SECTIONS.filter(([k, , id], i) => k === 'videos' || has(id, i));
     if (!avail.some(([k]) => k === current)) current = (SECTIONS.find(([, , id], i) => has(id, i)) || avail[0])[0];
-    const html = avail.map(([k, label]) =>
-      `<button type="button" role="tab" class="up-tab-btn${k === current ? ' active' : ''}" aria-selected="${k === current}" data-tab="${k}">${label}</button>`).join('');
+    const html = avail.map(([k, label, , icon]) =>
+      `<button type="button" role="tab" class="up-tab-btn${k === current ? ' active' : ''}" aria-selected="${k === current}" data-tab="${k}"><i class="fas ${icon}" aria-hidden="true"></i> ${label}</button>`).join('');
     if (bar.dataset.html !== html) { bar.dataset.html = html; bar.innerHTML = html; } // no rewrite = no observer loop
     bar.classList.remove('hidden');
     SECTIONS.forEach(([k, , id], i) => block(id, i)?.classList.toggle('tab-off', k !== current));
@@ -331,7 +331,7 @@ class MobileNav {
       const lib = window.packLibrary;
       const mine = lib && lib.currentUser && lib.viewedProfile && String(lib.currentUser.id) === String(lib.viewedProfile.id);
       const text = mine ? 'No featured videos yet. Add YouTube videos under Edit profile.' : 'No videos yet.';
-      if (empty.textContent !== text) empty.textContent = text;
+      if (empty.dataset.t !== text) { empty.dataset.t = text; empty.innerHTML = `<i class="fas fa-circle-play" aria-hidden="true"></i><span>${text}</span>`; }
       empty.classList.toggle('hidden', !(current === 'videos' && !has('user-profile-videos-block', 1)));
     }
   }
