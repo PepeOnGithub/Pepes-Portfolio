@@ -258,10 +258,10 @@ class CreatorTools {
         <div class="cs-earn-item ${lv ? 'on' : ''}"><i class="fas ${lv ? 'fa-circle-check' : 'fa-circle-xmark'}" aria-hidden="true"></i>
           <div><b>Linkvertise</b><span>${lv ? `Connected (user ${this.esc(st.linkvertiseId)}). Links are made for every download.` : 'Not connected'}</span></div></div>
         <div class="cs-earn-item ${loot ? 'on' : ''}"><i class="fas ${loot ? 'fa-circle-check' : 'fa-circle-xmark'}" aria-hidden="true"></i>
-          <div><b>LootLabs</b><span>${loot ? (st.lootStatus === 'ok' ? 'Connected. A link is made for every live version.' : st.lootStatus && st.lootStatus.startsWith('failed') ? 'Token problem. Check it in Profile & earnings.' : 'Token saved. Links are made as versions go live.') : 'Not connected'}</span></div></div>
+          <div><b>LootLabs</b><span>${loot ? (st.lootStatus === 'ok' ? 'Connected. A link is made for every live version.' : st.lootStatus && st.lootStatus.startsWith('failed') ? 'Token problem. Check it on the Earnings tab.' : 'Token saved. Links are made as versions go live.') : 'Not connected'}</span></div></div>
       </div>
       ${lv || loot ? '' : '<p class="cs-earn-warn">Until you connect an account, downloads of your packs go through the site\'s Linkvertise and LootLabs.</p>'}
-      <div class="cs-actions"><a href="#" class="up-btn" data-cs-goto="profile"><i class="fas fa-gear" aria-hidden="true"></i> Manage earnings and profile</a></div>`;
+      <div class="cs-actions"><a href="#" class="up-btn" data-cs-goto="profile"><i class="fas fa-gear" aria-hidden="true"></i> Manage earnings</a></div>`;
   }
 
   async loadRatings() {
@@ -424,12 +424,12 @@ class CreatorTools {
     }
     const own = !!c.id && this.up.me && String(this.up.me.id) === String(c.id);
     const links = (c.socials || []).map(s => this.socialLink(s)).join('');
-    const editLink = own ? '<button type="button" class="up-link-btn" data-edit-profile><i class="fas fa-pen" aria-hidden="true"></i> Edit creator profile</button>' : '';
+    const editLink = own ? '<button type="button" class="up-link-btn" data-edit-profile><i class="fas fa-pen" aria-hidden="true"></i> Edit profile</button>' : '';
     if (links || editLink) {
       socials.innerHTML = links + editLink;
       socials.classList.remove('hidden');
       const edit = socials.querySelector('[data-edit-profile]');
-      if (edit) edit.addEventListener('click', () => { window.router.show('upload'); if (window.uploadsPage) window.uploadsPage.switchTab('profile'); });
+      if (edit) edit.addEventListener('click', () => this.lib.openProfileModal());
     }
     if ((c.videos || []).length) {
       videos.innerHTML = c.videos.map(v => `

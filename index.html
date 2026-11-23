@@ -777,6 +777,25 @@
           </div>
           <p class="profile-banner-error hidden" id="profile-banner-error"></p>
         </label>
+        <div class="profile-creator hidden" id="profile-creator-fields">
+          <h4 class="profile-section-title">Creator profile</h4>
+          <p class="profile-section-help">Shown on your profile page. Promote your channel, Discord server and socials. Everything is checked automatically before it appears.</p>
+          <p class="up-note hidden" id="up-profile-status"></p>
+          <label class="profile-field">
+            <span>About you <small class="profile-count" id="up-bio-count">0/500</small></span>
+            <textarea id="up-bio" rows="3" maxlength="500" placeholder="Who you are and what you make. Links go in the section below."></textarea>
+          </label>
+          <div class="profile-field">
+            <span>Links <small>Discord, YouTube, X, TikTok, Twitch, Instagram, GitHub, Patreon, Ko-fi, website</small></span>
+            <div class="up-rows" id="up-social-rows"></div>
+            <button type="button" class="up-link-btn" id="up-social-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a link</button>
+          </div>
+          <div class="profile-field">
+            <span>Featured YouTube videos <small>up to 3</small></span>
+            <div class="up-rows" id="up-video-rows"></div>
+            <button type="button" class="up-link-btn" id="up-video-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a video</button>
+          </div>
+        </div>
         <p class="profile-form-error hidden" id="profile-form-error"></p>
       </div>
       <div class="assets-modal-actions">
@@ -1778,7 +1797,7 @@
         <div class="up-tabs" role="tablist" aria-label="Uploads">
           <button type="button" class="up-tab active" role="tab" aria-selected="true" data-up-tab="new"><i class="fas fa-plus" aria-hidden="true"></i> New upload</button>
           <button type="button" class="up-tab" role="tab" aria-selected="false" data-up-tab="mine"><i class="fas fa-box" aria-hidden="true"></i> My uploads <span class="up-count" id="up-mine-count">0</span></button>
-          <button type="button" class="up-tab" role="tab" aria-selected="false" data-up-tab="profile"><i class="fas fa-id-badge" aria-hidden="true"></i> Profile &amp; earnings</button>
+          <button type="button" class="up-tab" role="tab" aria-selected="false" data-up-tab="profile"><i class="fas fa-sack-dollar" aria-hidden="true"></i> Earnings</button>
           <button type="button" class="up-tab hidden" role="tab" aria-selected="false" data-up-tab="queue" id="up-queue-tab"><i class="fas fa-clipboard-check" aria-hidden="true"></i> Review <span class="up-count" id="up-queue-count">0</span></button>
         </div>
 
@@ -1902,62 +1921,6 @@
               </form>
             </div>
 
-            <div class="up-col">
-              <form class="up-card up-form" id="up-profile-form" novalidate>
-                <p class="up-label up-legend"><i class="fas fa-address-card" aria-hidden="true"></i> Public creator profile</p>
-                <p class="up-help">Shown on your profile page. Promote your channel, Discord server and socials. Everything is checked automatically before it appears.</p>
-                <p class="up-note hidden" id="up-profile-status"></p>
-                <label class="up-field">
-                  <span class="up-label">Username <span class="up-optional">letters, numbers, underscore</span></span>
-                  <input type="text" id="up-acc-username" maxlength="32" autocomplete="off" spellcheck="false" placeholder="your_name">
-                </label>
-                <label class="up-field">
-                  <span class="up-label">Display name</span>
-                  <input type="text" id="up-acc-display-name" maxlength="60" autocomplete="off" placeholder="Shown instead of your account name">
-                </label>
-                <div class="up-field">
-                  <span class="up-label">Profile picture</span>
-                  <div class="profile-avatar-upload">
-                    <img src="assets/pepe-profile.png" alt="" class="profile-avatar-preview" id="up-acc-avatar-preview" loading="lazy" decoding="async">
-                    <div class="profile-avatar-upload-actions">
-                      <button type="button" class="up-btn" id="up-acc-avatar-pick">Choose image</button>
-                      <button type="button" class="up-btn hidden" id="up-acc-avatar-remove">Remove</button>
-                      <input type="file" id="up-acc-avatar-file" accept="image/png,image/jpeg,image/webp" class="hidden" aria-label="Choose profile picture">
-                    </div>
-                  </div>
-                </div>
-                <div class="up-field">
-                  <span class="up-label">Banner</span>
-                  <div class="profile-banner-upload">
-                    <img src="" alt="" class="profile-banner-preview hidden" id="up-acc-banner-preview" loading="lazy" decoding="async">
-                    <div class="profile-banner-upload-actions">
-                      <button type="button" class="up-btn" id="up-acc-banner-pick">Choose image</button>
-                      <button type="button" class="up-btn hidden" id="up-acc-banner-remove">Remove</button>
-                      <input type="file" id="up-acc-banner-file" accept="image/png,image/jpeg,image/webp" class="hidden" aria-label="Choose banner image">
-                    </div>
-                  </div>
-                </div>
-                <label class="up-field">
-                  <span class="up-label">About you <span class="up-optional" id="up-bio-count">0/500</span></span>
-                  <textarea id="up-bio" rows="3" maxlength="500" placeholder="Who you are and what you make. Links go in the section below."></textarea>
-                </label>
-                <div class="up-field">
-                  <span class="up-label">Links <span class="up-optional">Discord, YouTube, X, TikTok, Twitch, Instagram, GitHub, Patreon, Ko-fi, website</span></span>
-                  <div class="up-rows" id="up-social-rows"></div>
-                  <button type="button" class="up-link-btn" id="up-social-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a link</button>
-                </div>
-                <div class="up-field">
-                  <span class="up-label">Featured YouTube videos <span class="up-optional">up to 3</span></span>
-                  <div class="up-rows" id="up-video-rows"></div>
-                  <button type="button" class="up-link-btn" id="up-video-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a video</button>
-                </div>
-                <p class="up-error hidden" id="up-profile-error" role="alert"></p>
-                <div class="up-actions">
-                  <button type="submit" class="up-btn up-btn-primary" id="up-profile-save"><i class="fas fa-check" aria-hidden="true"></i> Save profile</button>
-                  <a href="#" class="up-btn" id="up-profile-view"><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> View my profile</a>
-                </div>
-              </form>
-            </div>
           </div>
         </section>
 

@@ -82,7 +82,7 @@ class Social {
     } catch (e) {
       return; // social features unavailable; the rest of the profile still works
     }
-    if (!this.lib.viewedProfile || this.lib.viewedProfile.id !== account.id) return;
+    if (!info || !info.user || !this.lib.viewedProfile || this.lib.viewedProfile.id !== account.id) return;
     this.profile = info;
     this.renderProfile();
   }

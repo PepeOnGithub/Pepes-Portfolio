@@ -258,9 +258,6 @@ class UploadsPage {
         this.loadedFor = undefined;
         this.me = null;
         if (document.getElementById('page-upload').classList.contains('active')) this.load();
-      } else if (this.profileFilled && !this.accountFieldsEdited()) {
-        // Saved from the header's Edit profile dialog: show the new values here too.
-        this.fillAccountFields();
       }
       return out;
     };
@@ -377,24 +374,25 @@ class UploadsPage {
     }
   }
 
-  // ===== Profile & earnings =====
+  // ===== Earnings, and the creator profile in the Edit profile dialog =====
 
   bindCreator() {
     document.getElementById('up-earn-form').addEventListener('submit', (e) => { e.preventDefault(); this.saveEarnings(); });
     document.getElementById('up-loot-remove').addEventListener('click', () => {
       if (confirm('Remove your LootLabs token? Your LootLabs download links will stop being made and existing ones are removed.')) this.saveEarnings({ removeToken: true });
     });
-    document.getElementById('up-profile-form').addEventListener('submit', (e) => { e.preventDefault(); this.saveProfile(); });
+    this.bindProfileDialog();
+  }
+
+  // The bio, links and featured videos live in the header's Edit profile
+  // dialog (script.js) next to the username, picture and banner. This adds
+  // their loading and saving to that dialog: they're loaded from the uploads
+  // worker when it opens, and saved together with the account details.
+  bindProfileDialog() {
     document.getElementById('up-social-add').addEventListener('click', () => this.addRow('up-social-rows', 8, 'social'));
     document.getElementById('up-video-add').addEventListener('click', () => this.addRow('up-video-rows', 3, 'video'));
     const bio = document.getElementById('up-bio');
     bio.addEventListener('input', () => { document.getElementById('up-bio-count').textContent = `${bio.value.length}/500`; });
-    document.getElementById('up-profile-view').addEventListener('click', (e) => {
-      e.preventDefault();
-      if (this.me) this.lib.showUserProfile(this.me.username || this.me.id);
-    });
-    this.bindAccountImage('avatar', 256, 256);
-    this.bindAccountImage('banner', 960, 240);
     ['up-social-rows', 'up-video-rows'].forEach(id => {
       const box = document.getElementById(id);
       box.addEventListener('click', (e) => {
@@ -406,102 +404,77 @@ class UploadsPage {
         if (row && id === 'up-social-rows') this.updateBadge(row);
       });
     });
+
+    const open = this.lib.openProfileModal.bind(this.lib);
+    this.lib.openProfileModal = () => { open(); this.loadCreatorFields(); };
+
+    // Creator details are saved first; if they're rejected the dialog stays open
+    // with the reason, and the account details are saved once they're fine.
+    const save = this.lib.saveProfile.bind(this.lib);
+    this.lib.saveProfile = async () => {
+      const result = await this.saveCreatorFields();
+      if (!result.ok) return;
+      await save();
+      if (result.pending && document.getElementById('profile-modal-overlay').classList.contains('hidden')) {
+        this.lib.showToast('Profile saved. Your bio and links are being checked.');
+      }
+    };
   }
 
-  // Profile picture and banner pickers in the creator profile card. Same
-  // sizes and formats as the header's Edit profile dialog; saved to the
-  // accounts worker together with username and display name.
-  bindAccountImage(kind, width, height) {
-    const file = document.getElementById(`up-acc-${kind}-file`);
-    const preview = document.getElementById(`up-acc-${kind}-preview`);
-    const remove = document.getElementById(`up-acc-${kind}-remove`);
-    const key = kind === 'avatar' ? 'pendingAvatar' : 'pendingBanner';
-    document.getElementById(`up-acc-${kind}-pick`).addEventListener('click', () => file.click());
-    remove.addEventListener('click', () => {
-      this[key] = '';
-      file.value = '';
-      this.showAccountImage(kind, '');
-    });
-    file.addEventListener('change', async () => {
-      const f = file.files[0];
-      if (!f) return;
-      const err = document.getElementById('up-profile-error');
-      err.classList.add('hidden');
-      if (!/^image\/(png|jpeg|webp)$/.test(f.type)) {
-        err.textContent = 'Please choose a PNG, JPEG, or WebP image.';
-        err.classList.remove('hidden');
-        return;
-      }
-      try {
-        this[key] = await this.lib.resizeImageToDataUrl(f, width, height);
-        this.showAccountImage(kind, this[key]);
-      } catch (e) {
-        err.textContent = 'Could not process that image. Please try another.';
-        err.classList.remove('hidden');
-      }
-    });
-    preview.addEventListener('error', () => { if (kind === 'avatar') preview.src = 'assets/pepe-profile.png'; });
-  }
-
-  showAccountImage(kind, src) {
-    const preview = document.getElementById(`up-acc-${kind}-preview`);
-    const remove = document.getElementById(`up-acc-${kind}-remove`);
-    if (kind === 'avatar') {
-      preview.src = src || 'assets/pepe-profile.png';
-    } else {
-      preview.src = src || '';
-      preview.classList.toggle('hidden', !src);
+  async loadCreatorFields() {
+    const box = document.getElementById('profile-creator-fields');
+    box.classList.add('hidden');
+    this.creatorFieldsReady = false;
+    if (!this.lib.currentUser) return;
+    try {
+      const res = await this.api('/api/community/creator');
+      this.settings = res.settings;
+      this.fillCreatorFields();
+      this.renderCreator();
+      this.creatorFieldsReady = true;
+      box.classList.remove('hidden');
+    } catch (e) {
+      // The uploads service didn't answer: leave the creator section out; the account details still save.
     }
-    remove.classList.toggle('hidden', !src);
   }
 
-  accountFieldsEdited() {
-    const snap = this._accountSnapshot;
-    if (!snap) return false;
-    return this.pendingAvatar !== undefined || this.pendingBanner !== undefined
-      || document.getElementById('up-acc-username').value !== snap.username
-      || document.getElementById('up-acc-display-name').value !== snap.name;
+  fillCreatorFields() {
+    const draft = (this.settings && this.settings.profile && this.settings.profile.draft) || { bio: '', socials: [], videos: [] };
+    const bio = document.getElementById('up-bio');
+    bio.value = draft.bio || '';
+    document.getElementById('up-bio-count').textContent = `${bio.value.length}/500`;
+    document.getElementById('up-social-rows').innerHTML = '';
+    document.getElementById('up-video-rows').innerHTML = '';
+    (draft.socials || []).forEach(s => this.addRow('up-social-rows', 8, 'social', s.url));
+    (draft.videos || []).forEach(v => this.addRow('up-video-rows', 3, 'video', `https://youtu.be/${typeof v === 'string' ? v : v.id}`));
+    this.syncRowButtons();
   }
 
-  fillAccountFields() {
-    const u = this.lib.currentUser || {};
-    this._accountSnapshot = { username: u.username || '', name: u.name || '' };
-    document.getElementById('up-acc-username').value = u.username || '';
-    document.getElementById('up-acc-display-name').value = u.name || '';
-    this.pendingAvatar = undefined;
-    this.pendingBanner = undefined;
-    document.getElementById('up-acc-avatar-file').value = '';
-    document.getElementById('up-acc-banner-file').value = '';
-    this.showAccountImage('avatar', u.avatarUrl || '');
-    this.showAccountImage('banner', u.bannerUrl || '');
-  }
-
-  // Saves username, display name, picture and banner to the accounts worker
-  // when any of them changed. Throws with the server's message on failure.
-  async saveAccountFields() {
-    const u = this.lib.currentUser || {};
-    const username = document.getElementById('up-acc-username').value.trim();
-    const displayName = document.getElementById('up-acc-display-name').value.trim();
-    const changed = username !== (u.username || '') || displayName !== (u.name || '')
-      || this.pendingAvatar !== undefined || this.pendingBanner !== undefined;
-    if (!changed) return false;
-    const res = await this.lib.authFetch('/api/profile', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: username || null,
-        displayName: displayName || null,
-        avatarUrl: this.pendingAvatar !== undefined ? this.pendingAvatar : null,
-        bannerUrl: this.pendingBanner !== undefined ? this.pendingBanner : null
-      })
-    });
-    let data = null;
-    try { data = await res.json(); } catch (e) { /* empty body */ }
-    if (!res.ok) throw new Error((data && data.error) || 'Could not save your account details.');
-    this.lib.currentUser = data.user;
-    this.lib.renderAuthUI();
-    this.fillAccountFields();
-    return true;
+  // Returns { ok, pending }. Nothing to save if the creator section never loaded.
+  async saveCreatorFields() {
+    if (!this.creatorFieldsReady) return { ok: true, pending: false };
+    const err = document.getElementById('profile-form-error');
+    err.classList.add('hidden');
+    const socials = [...document.querySelectorAll('#up-social-rows input')].map(i => i.value.trim()).filter(Boolean);
+    const videos = [...document.querySelectorAll('#up-video-rows input')].map(i => i.value.trim()).filter(Boolean);
+    const btn = document.getElementById('profile-save-btn');
+    btn.disabled = true;
+    try {
+      const res = await this.api('/api/community/creator', {
+        method: 'PUT',
+        json: { profile: { bio: document.getElementById('up-bio').value.trim(), socials, videos } }
+      });
+      this.settings = res.settings;
+      this._settingsPolls = 0;
+      this.renderCreator();
+      return { ok: true, pending: !!(res.settings.profile && res.settings.profile.status === 'pending') };
+    } catch (e) {
+      err.textContent = e.message;
+      err.classList.remove('hidden');
+      return { ok: false, pending: false };
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   addRow(boxId, max, kind, value = '') {
@@ -564,16 +537,6 @@ class UploadsPage {
       this.profileFilled = true;
       document.getElementById('up-lv-id').value = st.linkvertiseId || '';
       document.getElementById('up-loot-token').value = '';
-      this.fillAccountFields();
-      const draft = (st.profile && st.profile.draft) || { bio: '', socials: [], videos: [] };
-      const bio = document.getElementById('up-bio');
-      bio.value = draft.bio || '';
-      document.getElementById('up-bio-count').textContent = `${bio.value.length}/500`;
-      document.getElementById('up-social-rows').innerHTML = '';
-      document.getElementById('up-video-rows').innerHTML = '';
-      (draft.socials || []).forEach(s => this.addRow('up-social-rows', 8, 'social', s.url));
-      (draft.videos || []).forEach(v => this.addRow('up-video-rows', 3, 'video', `https://youtu.be/${typeof v === 'string' ? v : v.id}`));
-      this.syncRowButtons();
     }
 
     const lootState = document.getElementById('up-loot-state');
@@ -644,31 +607,6 @@ class UploadsPage {
       this.refreshLibrary();
       this.lib.showToast(removeToken ? 'LootLabs token removed.' : 'Earnings saved.');
       if (body.lootToken) this.scheduleCheckPoll();
-    } catch (e) {
-      err.textContent = e.message;
-      err.classList.remove('hidden');
-    } finally {
-      btn.disabled = false;
-    }
-  }
-
-  async saveProfile() {
-    const err = document.getElementById('up-profile-error');
-    const btn = document.getElementById('up-profile-save');
-    err.classList.add('hidden');
-    const socials = [...document.querySelectorAll('#up-social-rows input')].map(i => i.value.trim()).filter(Boolean);
-    const videos = [...document.querySelectorAll('#up-video-rows input')].map(i => i.value.trim()).filter(Boolean);
-    btn.disabled = true;
-    try {
-      await this.saveAccountFields();
-      const res = await this.api('/api/community/creator', {
-        method: 'PUT',
-        json: { profile: { bio: document.getElementById('up-bio').value.trim(), socials, videos } }
-      });
-      this.settings = res.settings;
-      this._settingsPolls = 0;
-      this.renderCreator();
-      this.lib.showToast('Profile saved. It is being checked.');
     } catch (e) {
       err.textContent = e.message;
       err.classList.remove('hidden');
