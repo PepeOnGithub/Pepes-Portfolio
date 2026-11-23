@@ -164,11 +164,40 @@ async function askModel(env, model, system, parts) {
   };
 }
 
-export async function callGemini(env, { model, system, parts, schema, timeoutMs = 40000 }) {
+// Stable names to fall back to if a "-latest" alias is retired or not served.
+const FALLBACK_MODELS = {
+  'gemini-flash-lite-latest': 'gemini-2.5-flash-lite',
+  'gemini-flash-latest': 'gemini-2.5-flash'
+};
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+// Asks Gemini and returns the parsed JSON answer. Retries overloads, rate
+// limits and timeouts, and switches to a stable model name if the alias is
+// not found, so one hiccup does not leave an upload waiting.
+export async function callGemini(env, { model, system, parts, schema, timeoutMs = 60000 }) {
+  const tryModels = [model];
+  if (FALLBACK_MODELS[model]) tryModels.push(FALLBACK_MODELS[model]);
+  let lastErr;
+  for (const name of tryModels) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        return await callGeminiOnce(env, name, { system, parts, schema, timeoutMs });
+      } catch (err) {
+        lastErr = err;
+        if (err.notFound) break;                  // try the fallback name
+        if (!err.retry) throw err;                // a real answer problem: do not repeat
+        await sleep(1500 * (attempt + 1) + Math.random() * 500);
+      }
+    }
+  }
+  throw lastErr;
+}
+
+async function callGeminiOnce(env, model, { system, parts, schema, timeoutMs }) {
   const base = env.GEMINI_API_BASE || 'https://generativelanguage.googleapis.com';
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-  let res;
+  let res, data;
   try {
     res = await fetch(`${base}/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST',
@@ -177,20 +206,36 @@ export async function callGemini(env, { model, system, parts, schema, timeoutMs 
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: system }] },
         contents: [{ role: 'user', parts }],
-        generationConfig: { temperature: 0, responseMimeType: 'application/json', responseSchema: schema }
+        generationConfig: { temperature: 0, maxOutputTokens: 8192, responseMimeType: 'application/json', responseSchema: schema }
       })
     });
+    data = await res.json().catch(() => null);
+  } catch (err) {
+    const e = new Error(err && err.name === 'AbortError' ? 'Gemini took too long to answer.' : `Could not reach Gemini (${err && err.message || err}).`);
+    e.retry = true;
+    throw e;
   } finally {
     clearTimeout(timer);
   }
-  const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error((data && data.error && data.error.message) || `Gemini returned ${res.status}`);
-  const cand = data && data.candidates && data.candidates[0];
-  if (!cand || !cand.content) {
-    const why = (data && data.promptFeedback && data.promptFeedback.blockReason) || (cand && cand.finishReason) || 'no answer';
-    throw new Error(`Gemini gave no answer (${why}).`);
+  if (!res.ok) {
+    const e = new Error((data && data.error && data.error.message) || `Gemini returned ${res.status}`);
+    e.notFound = res.status === 404;
+    e.retry = res.status === 429 || res.status >= 500;
+    throw e;
   }
-  return safeJson((cand.content.parts || []).map(p => p.text || '').join(''), null);
+  const cand = data && data.candidates && data.candidates[0];
+  const text = cand && cand.content ? (cand.content.parts || []).filter(p => !p.thought).map(p => p.text || '').join('') : '';
+  if (!text) {
+    const why = (data && data.promptFeedback && data.promptFeedback.blockReason) || (cand && cand.finishReason) || 'no answer';
+    const e = new Error(`Gemini gave no answer (${why}).`);
+    e.retry = !(data && data.promptFeedback && data.promptFeedback.blockReason);
+    throw e;
+  }
+  // Some answers arrive wrapped in a code fence; take the JSON object inside.
+  const m = text.match(/\{[\s\S]*\}/);
+  const parsed = safeJson(m ? m[0] : text, null);
+  if (parsed == null) { const e = new Error('Gemini gave an answer the site could not read.'); e.retry = true; throw e; }
+  return parsed;
 }
 
 // ===== Applying a decision =====

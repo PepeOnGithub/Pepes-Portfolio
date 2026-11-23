@@ -2428,7 +2428,11 @@ class PackLibrary {
     }
     this.applyLinkTargets();
 
-    document.getElementById('detail-avatar').textContent = (pack.author || 'U').charAt(0).toUpperCase();
+    const detailAvatar = document.getElementById('detail-avatar');
+    detailAvatar.onerror = () => { detailAvatar.onerror = null; detailAvatar.src = 'assets/pepe-profile.png'; };
+    detailAvatar.src = pack.community && pack.authorId
+      ? `${UPLOADS_API}/api/community/avatars/${encodeURIComponent(pack.authorId)}`
+      : 'assets/pepe-profile.png';
     document.getElementById('detail-author-name').textContent = pack.author || 'Unknown';
     document.getElementById('detail-made').textContent = this.formatDate(pack.addedAt || pack.createdAt);
     document.getElementById('detail-updated').textContent = this.formatDate(pack.updatedAt || pack.addedAt || pack.createdAt);
