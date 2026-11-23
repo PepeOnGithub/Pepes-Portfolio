@@ -860,3 +860,8 @@ body {
 @media (max-width: 720px) {
   .assets-modal-overlay .profile-field textarea, .assets-modal-overlay .profile-creator .up-row-item input { font-size: 16px; }
 }
+.profile-creator-state { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--color-bg-tertiary); font-size: 13px; line-height: 1.45; color: var(--color-text-secondary); }
+.assets-modal-overlay .profile-creator-state { font-size: 13px; }
+.profile-creator-state.hidden, .profile-creator-body.hidden { display: none; }
+.profile-creator-body { display: flex; flex-direction: column; gap: 12px; }
+.profile-creator-state i { margin-right: 6px; }

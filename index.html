@@ -779,21 +779,24 @@
         </label>
         <div class="profile-creator hidden" id="profile-creator-fields">
           <h4 class="profile-section-title">Creator profile</h4>
-          <p class="profile-section-help">Shown on your profile page. Promote your channel, Discord server and socials. Everything is checked automatically before it appears.</p>
-          <p class="up-note hidden" id="up-profile-status"></p>
-          <label class="profile-field">
-            <span>About you <small class="profile-count" id="up-bio-count">0/500</small></span>
-            <textarea id="up-bio" rows="3" maxlength="500" placeholder="Who you are and what you make. Links go in the section below."></textarea>
-          </label>
-          <div class="profile-field">
-            <span>Links <small>Discord, YouTube, X, TikTok, Twitch, Instagram, GitHub, Patreon, Ko-fi, website</small></span>
-            <div class="up-rows" id="up-social-rows"></div>
-            <button type="button" class="up-link-btn" id="up-social-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a link</button>
-          </div>
-          <div class="profile-field">
-            <span>Featured YouTube videos <small>up to 3</small></span>
-            <div class="up-rows" id="up-video-rows"></div>
-            <button type="button" class="up-link-btn" id="up-video-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a video</button>
+          <p class="profile-creator-state hidden" id="profile-creator-state" role="status"></p>
+          <div class="profile-creator-body hidden" id="profile-creator-body">
+            <p class="profile-section-help">Shown on your profile page. Promote your channel, Discord server and socials. Everything is checked automatically before it appears.</p>
+            <p class="up-note hidden" id="up-profile-status"></p>
+            <label class="profile-field">
+              <span>About you <small class="profile-count" id="up-bio-count">0/500</small></span>
+              <textarea id="up-bio" rows="3" maxlength="500" placeholder="Who you are and what you make. Links go in the section below."></textarea>
+            </label>
+            <div class="profile-field">
+              <span>Links <small>Discord, YouTube, X, TikTok, Twitch, Instagram, GitHub, Patreon, Ko-fi, website</small></span>
+              <div class="up-rows" id="up-social-rows"></div>
+              <button type="button" class="up-link-btn" id="up-social-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a link</button>
+            </div>
+            <div class="profile-field">
+              <span>Featured YouTube videos <small>up to 3</small></span>
+              <div class="up-rows" id="up-video-rows"></div>
+              <button type="button" class="up-link-btn" id="up-video-add"><i class="fas fa-plus" aria-hidden="true"></i> Add a video</button>
+            </div>
           </div>
         </div>
         <p class="profile-form-error hidden" id="profile-form-error"></p>

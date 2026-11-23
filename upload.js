@@ -114,6 +114,9 @@ class UploadsPage {
   async load() {
     this.loadedFor = this.token();
     this.showState('loading');
+    const note = document.querySelector('#up-loading p');
+    if (note) note.textContent = 'Loading your uploads…';
+    const slow = setTimeout(() => { if (note) note.textContent = 'Still loading… the upload service is slower than usual right now.'; }, 6000);
     try {
       // These don't depend on each other, so ask for all of them at once rather
       // than one after the other. If you aren't signed in the last two answer
@@ -144,6 +147,8 @@ class UploadsPage {
       this.me = null;
       this.loadedFor = undefined;
       this.showState('offline');
+    } finally {
+      clearTimeout(slow);
     }
   }
 
@@ -423,6 +428,10 @@ class UploadsPage {
       });
     });
 
+    document.getElementById('profile-creator-state').addEventListener('click', (e) => {
+      if (e.target.closest('#profile-creator-retry')) this.loadCreatorFields();
+    });
+
     const open = this.lib.openProfileModal.bind(this.lib);
     this.lib.openProfileModal = () => { open(); this.loadCreatorFields(); };
 
@@ -441,18 +450,29 @@ class UploadsPage {
 
   async loadCreatorFields() {
     const box = document.getElementById('profile-creator-fields');
-    box.classList.add('hidden');
+    const state = document.getElementById('profile-creator-state');
+    const body = document.getElementById('profile-creator-body');
     this.creatorFieldsReady = false;
-    if (!this.lib.currentUser) return;
+    const seq = this._creatorSeq = (this._creatorSeq || 0) + 1;
+    if (!this.lib.currentUser) { box.classList.add('hidden'); return; }
+    // Show the section straight away so it's clear something is coming.
+    box.classList.remove('hidden');
+    body.classList.add('hidden');
+    state.classList.remove('hidden');
+    state.innerHTML = '<i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> Loading your creator profile…';
     try {
       const res = await this.api('/api/community/creator');
+      if (seq !== this._creatorSeq) return; // the dialog was closed and reopened meanwhile
       this.settings = res.settings;
       this.fillCreatorFields();
       this.renderCreator();
       this.creatorFieldsReady = true;
-      box.classList.remove('hidden');
+      state.classList.add('hidden');
+      body.classList.remove('hidden');
     } catch (e) {
-      // The uploads service didn't answer: leave the creator section out; the account details still save.
+      if (seq !== this._creatorSeq) return;
+      // Your username, picture and banner still save without it.
+      state.innerHTML = `Couldn't load your creator profile (${this.esc(e.message)}). <button type="button" class="up-link-btn" id="profile-creator-retry">Try again</button>`;
     }
   }
 
