@@ -37,6 +37,7 @@ class MobileNav {
     const render = this.lib.renderAuthUI.bind(this.lib);
     this.lib.renderAuthUI = (...args) => {
       const out = render(...args);
+      this.syncComments();
       this.renderAccount();
       this.renderSettingsAccount();
       return out;
@@ -50,6 +51,13 @@ class MobileNav {
     };
     this.renderAccount();
     this.renderSettingsAccount();
+  }
+
+  // Sign-in can finish after a pack page has loaded: keep the comment box and the "sign in" note in step.
+  syncComments() {
+    const me = this.lib.currentUser;
+    document.getElementById('comment-form')?.classList.toggle('hidden', !me);
+    document.getElementById('comments-signed-out-note')?.classList.toggle('hidden', !!me);
   }
 
   isOpen() { return !this.sheet.hidden; }
@@ -416,4 +424,52 @@ class MobileNav {
     go(1); preview();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+
+// Composer (comment and reply box): avatar + a text box that grows as you type, a counter,
+// a button that only lights up when there is something to send, Ctrl/Cmd + Enter to send,
+// and Cancel on replies. Works for any .composer on the page.
+(function composers() {
+  const MAX_H = 220;
+  const sendBtn = (c) => c.querySelector('.composer-btn:not(.composer-cancel)');
+  function refresh(ta) {
+    const c = ta.closest('.composer');
+    if (!c) return;
+    ta.style.height = 'auto';
+    ta.style.height = `${Math.min(ta.scrollHeight, MAX_H)}px`;
+    const n = ta.value.length, max = ta.maxLength > 0 ? ta.maxLength : 1000;
+    const count = c.querySelector('.composer-count');
+    if (count) { count.textContent = `${n} / ${max}`; count.classList.toggle('near', n > max * 0.9); }
+    c.classList.toggle('has-text', n > 0);
+    const btn = sendBtn(c);
+    if (btn) btn.disabled = !ta.value.trim();
+  }
+  document.addEventListener('input', (e) => { if (e.target.matches('.composer textarea')) refresh(e.target); });
+  document.addEventListener('focusin', (e) => {
+    const c = e.target.closest && e.target.closest('.composer');
+    if (!c) return;
+    const me = window.packLibrary && window.packLibrary.currentUser;
+    const av = c.querySelector('.composer-avatar');
+    if (me && av) av.src = me.avatarUrl || 'assets/pepe-profile.png';
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!e.target.matches || !e.target.matches('.composer textarea')) return;
+    const c = e.target.closest('.composer');
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      const btn = sendBtn(c);
+      if (btn && !btn.disabled) btn.click();
+    } else if (e.key === 'Escape' && c.classList.contains('composer-reply')) {
+      c.querySelector('.composer-cancel')?.click();
+    }
+  });
+  document.addEventListener('click', (e) => {
+    const cancel = e.target.closest('.composer-cancel');
+    if (!cancel) return;
+    const c = cancel.closest('.composer');
+    const ta = c.querySelector('textarea');
+    ta.value = '';
+    refresh(ta);
+    c.classList.add('hidden');
+  });
 })();

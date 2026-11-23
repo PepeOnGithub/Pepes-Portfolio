@@ -585,9 +585,16 @@
             <div class="versions-block" id="comments-block">
               <h3>Comments</h3>
               <p class="versions-sub" id="comments-signed-out-note">Sign in to leave a comment.</p>
-              <div class="comment-form hidden" id="comment-form">
-                <textarea id="comment-input" placeholder="Share your thoughts..." aria-label="Your comment" maxlength="1000" rows="2"></textarea>
-                <button type="button" class="btn-secondary-small" id="comment-submit-btn">Post</button>
+              <div class="composer hidden" id="comment-form">
+                <img class="composer-avatar" id="comment-avatar" src="assets/pepe-profile.png" alt="" decoding="async">
+                <div class="composer-main">
+                  <textarea id="comment-input" placeholder="Add a comment…" aria-label="Your comment" maxlength="1000" rows="1"></textarea>
+                  <div class="composer-bar">
+                    <span class="composer-hint">Ctrl + Enter to post</span>
+                    <span class="composer-count" aria-live="off">0 / 1000</span>
+                    <button type="button" class="composer-btn" id="comment-submit-btn" disabled>Comment</button>
+                  </div>
+                </div>
               </div>
               <div class="comments-list" id="comments-list"></div>
             </div>

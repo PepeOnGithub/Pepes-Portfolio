@@ -3204,9 +3204,16 @@ class PackLibrary {
               ${canReply ? `<button type="button" class="comment-reply-btn" data-comment-id="${c.id}">Reply</button>` : ''}
               ${!isOwn ? `<button type="button" class="comment-report-btn" data-comment-id="${c.id}" title="Report this comment"><i class="fas fa-flag"></i></button>` : ''}
             </div>
-            <div class="comment-reply-form hidden" id="reply-form-${c.id}">
-              <textarea placeholder="Write a reply..." maxlength="1000" rows="1" data-parent-id="${c.id}"></textarea>
-              <button type="button" class="btn-secondary-small comment-reply-submit-btn" data-parent-id="${c.id}">Reply</button>
+            <div class="composer composer-reply hidden" id="reply-form-${c.id}">
+              <img class="composer-avatar" src="${this.currentUser ? (this.currentUser.avatarUrl || 'assets/pepe-profile.png') : 'assets/pepe-profile.png'}" alt="" decoding="async">
+              <div class="composer-main">
+                <textarea placeholder="Reply to ${this.escapeHtml(c.user.name || 'this comment')}…" aria-label="Your reply" maxlength="1000" rows="1" data-parent-id="${c.id}"></textarea>
+                <div class="composer-bar">
+                  <span class="composer-count">0 / 1000</span>
+                  <button type="button" class="composer-btn composer-cancel" data-cancel-reply="${c.id}">Cancel</button>
+                  <button type="button" class="composer-btn comment-reply-submit-btn" data-parent-id="${c.id}" disabled>Reply</button>
+                </div>
+              </div>
             </div>
             ${replies.length ? `<div class="comment-replies">${replies.map((r) => renderOne(r, depth + 1)).join('')}</div>` : ''}
           </div>
@@ -3282,6 +3289,7 @@ class PackLibrary {
       });
       if (res.ok) {
         input.value = '';
+        input.dispatchEvent(new Event('input', { bubbles: true })); // reset height, counter and button
         this.loadComments(this.currentPack);
       }
     } catch (e) {
