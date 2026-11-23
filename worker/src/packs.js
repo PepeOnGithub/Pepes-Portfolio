@@ -1,7 +1,7 @@
 // Turns database rows into the pack objects the site's library renders
 // (same shape as an entry in packs.json).
 
-import { ID_OFFSET, encodeKey, safeJson, isSiteOwner } from './util.js';
+import { ID_OFFSET, encodeKey, safeJson, usesSiteEarnings } from './util.js';
 
 export async function versionsFor(ctx, packIds, extraWhere) {
   const map = new Map();
@@ -20,17 +20,20 @@ export async function versionsFor(ctx, packIds, extraWhere) {
 
 // Creator settings (Linkvertise id) and download totals for a set of packs.
 export async function packExtras(ctx, packRows) {
-  const extras = { creators: new Map(), downloads: new Map(), siteOwners: new Set() };
+  const extras = { creators: new Map(), downloads: new Map(), siteEarners: new Set() };
   if (!packRows.length) return extras;
 
   const owners = [...new Set(packRows.map(p => p.owner_id))];
   const { results: creators } = await ctx.env.DB
-    .prepare(`SELECT user_id, linkvertise_id FROM creators WHERE user_id IN (${owners.map(() => '?').join(',')})`)
+    .prepare(`SELECT user_id, linkvertise_id, loot_token IS NOT NULL AS has_loot FROM creators WHERE user_id IN (${owners.map(() => '?').join(',')})`)
     .bind(...owners).all();
   for (const c of creators) extras.creators.set(c.user_id, c);
-  // The site owner's packs earn through the site's own Linkvertise account.
+  // The site owner's packs, and packs of creators without their own
+  // accounts, earn through the site's own Linkvertise account.
   if (ctx.env.OWNER_LINKVERTISE_ID) {
-    for (const id of owners) if (await isSiteOwner(ctx.env, id)) extras.siteOwners.add(id);
+    for (const id of owners) {
+      if (await usesSiteEarnings(ctx.env, id, extras.creators.get(id) || null)) extras.siteEarners.add(id);
+    }
   }
 
   const ids = packRows.map(p => p.id);
@@ -91,7 +94,7 @@ export function toSitePack(ctx, row, versionRows, { withStatus = false, withAi =
     updatedAt: (versionRows[0] && versionRows[0].created_at > row.updated_at) ? versionRows[0].created_at : row.updated_at,
     // The creator's Linkvertise account; the site builds the link per download.
     linkvertiseId: (creator && creator.linkvertise_id)
-      || (extras && extras.siteOwners && extras.siteOwners.has(row.owner_id) ? String(ctx.env.OWNER_LINKVERTISE_ID) : ''),
+      || (extras && extras.siteEarners.has(row.owner_id) ? String(ctx.env.OWNER_LINKVERTISE_ID) : ''),
     showcaseUrl: row.showcase_url || ''
   };
   if (withStatus) {

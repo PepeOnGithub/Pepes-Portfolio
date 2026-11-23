@@ -549,7 +549,7 @@ class UploadsPage {
       text.textContent = `Earning with ${parts.join(' and ')}. The site makes your download links automatically, and you keep 100%.`;
       btn.innerHTML = '<i class="fas fa-gear" aria-hidden="true"></i> Manage earnings';
     } else {
-      text.textContent = "You haven't added an earning account yet, so downloads will be direct with no ads and no earnings. Add Linkvertise and/or LootLabs and every download earns for you.";
+      text.textContent = "You haven't added an earning account yet, so downloads of your packs go through the site's Linkvertise and LootLabs. Add yours and every download earns for you instead.";
       btn.innerHTML = '<i class="fas fa-sack-dollar" aria-hidden="true"></i> Set up earnings';
     }
 
@@ -712,7 +712,7 @@ class UploadsPage {
     const earning = [
       st.linkvertiseId ? `<span class="up-pill"><i class="fas fa-link" aria-hidden="true"></i> Linkvertise ${this.esc(st.linkvertiseId)}</span>` : '',
       st.hasLootToken ? `<span class="up-pill"><i class="fas fa-link" aria-hidden="true"></i> LootLabs ${latest.lootUrl ? 'link ready' : 'link being made'}</span>` : '',
-      !st.linkvertiseId && !st.hasLootToken ? '<span class="up-pill up-pill-muted">Direct download, no earnings <button type="button" class="up-link-btn" data-up-goto="profile">Set up</button></span>' : ''
+      !st.linkvertiseId && !st.hasLootToken ? '<span class="up-pill up-pill-muted">Earning for the site <button type="button" class="up-link-btn" data-up-goto="profile">Use my accounts</button></span>' : ''
     ].join('');
     const versions = pack.versions.map(v => `
       <li>

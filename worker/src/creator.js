@@ -148,26 +148,37 @@ export async function saveSettings(ctx) {
   let row = await creatorRow(ctx, user);
   const now = new Date().toISOString();
 
+  // Any change to whose accounts the downloads earn for rebuilds the
+  // creator's LootLabs links: with their own token, with the site's (no
+  // accounts of their own), or none (Linkvertise only).
+  let earningsChanged = false;
+
   if ('linkvertiseId' in body) {
     const id = String(body.linkvertiseId == null ? '' : body.linkvertiseId).trim();
     if (id && !/^\d{1,12}$/.test(id)) throw new HttpError(400, 'Your Linkvertise user id is a number, like 123456.');
-    await env.DB.prepare('UPDATE creators SET linkvertise_id = ?, updated_at = ? WHERE user_id = ?').bind(id || null, now, userId).run();
+    if ((id || null) !== (row.linkvertise_id || null)) {
+      await env.DB.prepare('UPDATE creators SET linkvertise_id = ?, updated_at = ? WHERE user_id = ?').bind(id || null, now, userId).run();
+      earningsChanged = true;
+    }
   }
 
   if ('lootToken' in body) {
     const token = String(body.lootToken == null ? '' : body.lootToken).trim();
     if (!token) {
       await env.DB.prepare('UPDATE creators SET loot_token = NULL, loot_status = NULL, updated_at = ? WHERE user_id = ?').bind(now, userId).run();
-      await clearLootLinks(env, userId);
     } else {
       if (!/^[A-Za-z0-9_\-:.=+/]{16,300}$/.test(token)) throw new HttpError(400, "That doesn't look like a LootLabs API token. Copy it from LootLabs → Advanced.");
       if (!env.TOKEN_KEY) throw new HttpError(503, "Saving LootLabs tokens isn't set up on the server yet.");
       const stored = await encryptToken(env, token);
       await env.DB.prepare("UPDATE creators SET loot_token = ?, loot_status = 'untested', updated_at = ? WHERE user_id = ?").bind(stored, now, userId).run();
-      await clearLootLinks(env, userId);
-      const job = ensureLootForCreator(env, userId).catch(e => console.error('loot setup failed', e));
-      if (ctx.exec && ctx.exec.waitUntil) ctx.exec.waitUntil(job); else await job;
     }
+    earningsChanged = true;
+  }
+
+  if (earningsChanged) {
+    await clearLootLinks(env, userId);
+    const job = ensureLootForCreator(env, userId).catch(e => console.error('loot setup failed', e));
+    if (ctx.exec && ctx.exec.waitUntil) ctx.exec.waitUntil(job); else await job;
   }
 
   if (body.profile && typeof body.profile === 'object') {

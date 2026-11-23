@@ -143,6 +143,15 @@ export async function isSiteOwner(env, userId) {
   }
 }
 
+// Whose accounts a creator's downloads earn for. The site owner, and any
+// creator who hasn't added Linkvertise or LootLabs, use the site's own
+// accounts (OWNER_LINKVERTISE_ID / OWNER_LOOT_TOKEN). `creator` is their
+// creators row, or null if they have none yet.
+export async function usesSiteEarnings(env, userId, creator) {
+  const hasOwn = !!(creator && (creator.linkvertise_id || creator.loot_token || creator.has_loot));
+  return !hasOwn || isSiteOwner(env, userId);
+}
+
 // Owner or someone listed in ADMIN_IDS, for code that only has a user id.
 export async function isOwnerOrAdminId(env, userId) {
   return adminIds(env).includes(String(userId)) || isSiteOwner(env, userId);

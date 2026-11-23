@@ -8,7 +8,7 @@
 // worker makes the link for it. Same settings as Pepe's own packs
 // (generator.py): tier 1, 3 tasks, theme 1.
 
-import { base64UrlJson, encodeKey, publicOrigin, clip, isSiteOwner } from './util.js';
+import { base64UrlJson, encodeKey, publicOrigin, clip, usesSiteEarnings } from './util.js';
 
 const LOOT_API = 'https://creators.lootlabs.gg/api/public/content_locker';
 const MAX_TRIES = 6;
@@ -93,18 +93,20 @@ export async function ensureLootForVersion(env, versionId) {
      FROM versions v JOIN packs p ON p.id = v.pack_id WHERE v.id = ?`
   ).bind(versionId).first();
   if (!v || v.status !== 'approved' || v.pack_status !== 'approved') return { ok: false, error: 'not live' };
-  const creator = await env.DB.prepare('SELECT user_id, loot_token FROM creators WHERE user_id = ?').bind(v.owner_id).first();
+  const creator = await env.DB.prepare('SELECT user_id, loot_token, linkvertise_id FROM creators WHERE user_id = ?').bind(v.owner_id).first();
   let token = null;
+  let siteToken = false;
   if (creator && creator.loot_token) {
     token = await decryptToken(env, creator.loot_token);
     if (!token) {
       await setLootStatus(env, v.owner_id, 'failed: the stored token could not be read. Save it again.');
       return { ok: false, error: 'token unreadable' };
     }
-  } else if (env.OWNER_LOOT_TOKEN && await isSiteOwner(env, v.owner_id)) {
-    // The site owner's uploads use the site's own LootLabs account, the
-    // same token generator.py uses for the library packs.
+  } else if (env.OWNER_LOOT_TOKEN && await usesSiteEarnings(env, v.owner_id, creator)) {
+    // The site owner and creators without their own accounts use the site's
+    // LootLabs account, the same token generator.py uses for library packs.
     token = env.OWNER_LOOT_TOKEN;
+    siteToken = true;
   } else {
     return { ok: false, error: 'no token' };
   }
@@ -120,8 +122,9 @@ export async function ensureLootForVersion(env, versionId) {
   } catch (err) {
     await env.DB.prepare('UPDATE versions SET loot_tries = loot_tries + 1 WHERE id = ?').bind(versionId).run();
     const msg = String(err && err.message || err);
-    // Only mark the token as bad when LootLabs itself says so.
-    if (/token|auth|api|invalid|unauthor|forbidden|key/i.test(msg)) {
+    // Only mark the creator's own token as bad, and only when LootLabs itself
+    // says so; a problem with the site's token isn't theirs to fix.
+    if (!siteToken && /token|auth|api|invalid|unauthor|forbidden|key/i.test(msg)) {
       await setLootStatus(env, v.owner_id, `failed: ${clip(msg, 120)}`);
     }
     return { ok: false, error: msg };
@@ -154,17 +157,17 @@ export async function retryMissingLoot(env) {
   ).bind(MAX_TRIES).all();
   for (const row of results) await ensureLootForVersion(env, row.id);
 
-  // The site owner has no saved token; their links use OWNER_LOOT_TOKEN.
+  // Creators without their own token whose links use the site's account.
   if (!env.OWNER_LOOT_TOKEN) return;
   const { results: owners } = await env.DB.prepare(
-    `SELECT DISTINCT p.owner_id FROM versions v
+    `SELECT DISTINCT p.owner_id, c.linkvertise_id FROM versions v
      JOIN packs p ON p.id = v.pack_id
      LEFT JOIN creators c ON c.user_id = p.owner_id
      WHERE c.loot_token IS NULL AND p.status = 'approved' AND v.status = 'approved'
        AND v.loot_url IS NULL AND v.loot_tries < ? LIMIT 50`
   ).bind(MAX_TRIES).all();
   for (const o of owners) {
-    if (await isSiteOwner(env, o.owner_id)) await ensureLootForCreator(env, o.owner_id);
+    if (await usesSiteEarnings(env, o.owner_id, o)) await ensureLootForCreator(env, o.owner_id);
   }
 }
 

@@ -4,6 +4,11 @@
 //   - Pack pages: view counting and the creator's links next to the author.
 // Data comes from the uploads worker (UPLOADS_API); ratings from the accounts worker.
 
+// Library packs (packs.json) credited to the site owner. The site reserves
+// "Pepe" names for the owner (Pepe, PepeOnMinecraft, PepeOnMCBE), so other
+// people's packs in packs.json don't match.
+const OWNER_AUTHOR = /^pepe/i;
+
 class CreatorTools {
   constructor(library, uploads) {
     this.lib = library;
@@ -104,6 +109,7 @@ class CreatorTools {
       ]);
       this.stats = stats;
       this.settings = settings.settings;
+      if (this.settings && this.settings.siteEarnings) await this.addLibraryPacks(stats);
       if (!stats.packs.length) {
         this.setState(`<div class="cs-msg"><i class="fas fa-box-open" aria-hidden="true"></i><h3>No packs yet</h3>
           <p>Upload a pack and its downloads, views and ratings show up here.</p>
@@ -122,6 +128,29 @@ class CreatorTools {
     }
   }
 
+  // For the site owner: their library packs show next to their uploads.
+  // The library only counts all-time downloads (no daily numbers or views),
+  // using the same counters as the library cards.
+  async addLibraryPacks(stats) {
+    await Promise.race([this.lib.ready, new Promise(r => setTimeout(r, 8000))]);
+    const mine = (this.lib.packs || []).filter(p => !p.community && OWNER_AUTHOR.test(p.author || ''));
+    const rows = await Promise.all(mine.map(async (pack) => {
+      let total = this.lib.liveDownloadCounts.get(pack.id);
+      if (total === undefined) {
+        total = await ((pack.versions && pack.versions.length > 1)
+          ? Promise.all(pack.versions.map(v => this.lib.fetchLiveDownloads(pack, v))).then(c => c.reduce((a, b) => a + b, 0))
+          : this.lib.fetchLiveDownloads(pack));
+        this.lib.liveDownloadCounts.set(pack.id, total);
+      }
+      return {
+        id: pack.id, name: pack.name, slug: this.lib.packSlug(pack), status: 'approved', library: true, versions: [],
+        downloads: null, views: null, prevDownloads: 0, prevViews: 0, totalDownloads: total || 0, totalViews: null
+      };
+    }));
+    stats.packs.push(...rows);
+    stats.totals.allTimeDownloads += rows.reduce((n, r) => n + r.totalDownloads, 0);
+  }
+
   delta(cur, prev) {
     if (!prev) return cur ? { text: 'new', cls: 'up' } : { text: '–', cls: '' };
     const pct = Math.round(((cur - prev) / prev) * 100);
@@ -137,6 +166,12 @@ class CreatorTools {
   renderStats() {
     const s = this.stats;
     const t = s.totals;
+    // No uploads yet (only library packs): the worker sends no daily series.
+    if (!s.series.length) {
+      s.series = Array.from({ length: s.days }, (_, i) => ({
+        day: new Date(Date.now() - (s.days - 1 - i) * 86400000).toISOString().slice(0, 10), downloads: 0, views: 0
+      }));
+    }
     const conv = t.views ? Math.round((t.downloads / t.views) * 1000) / 10 : 0;
     const prevConv = t.prevViews ? (t.prevDownloads / t.prevViews) * 100 : 0;
     const cards = [
@@ -160,8 +195,10 @@ class CreatorTools {
       : `Last ${s.days} days`;
     document.getElementById('cs-chart').innerHTML = this.chart(s.series);
 
-    const sorted = [...s.packs].sort((a, b) => b.downloads - a.downloads || b.totalDownloads - a.totalDownloads);
-    document.getElementById('cs-table-sub').textContent = `${s.packs.length} pack${s.packs.length === 1 ? '' : 's'} · sorted by downloads in the last ${s.days} days`;
+    const sorted = [...s.packs].sort((a, b) => (b.downloads || 0) - (a.downloads || 0) || b.totalDownloads - a.totalDownloads);
+    const lib = s.packs.filter(p => p.library).length;
+    const count = `${s.packs.length} pack${s.packs.length === 1 ? '' : 's'}${lib ? ` (${lib} from the library)` : ''}`;
+    document.getElementById('cs-table-sub').textContent = `${count} · sorted by downloads in the last ${s.days} days, then all time`;
     document.getElementById('cs-table').innerHTML = `
       <div class="cs-row cs-row-head" role="row">
         <span role="columnheader">Pack</span><span role="columnheader">Downloads</span><span role="columnheader">Views</span>
@@ -173,6 +210,19 @@ class CreatorTools {
   }
 
   packRow(p) {
+    if (p.library) {
+      return `
+      <div class="cs-row" role="row" data-slug="${this.esc(p.slug)}">
+        <span class="cs-cell-name" role="cell">
+          <button type="button" class="cs-link" data-cs-open="${p.id}">${this.esc(p.name)}</button> <span class="up-status">Library</span>
+        </span>
+        <span data-label="Downloads" role="cell">–</span>
+        <span data-label="Views" role="cell">–</span>
+        <span data-label="Conversion" role="cell">–</span>
+        <span data-label="Rating" role="cell" class="cs-rating">…</span>
+        <span data-label="All time" role="cell">${this.fmt(p.totalDownloads)} <small>dl</small></span>
+      </div>`;
+    }
     const conv = p.views ? `${Math.round((p.downloads / p.views) * 1000) / 10}%` : '–';
     const live = p.status === 'approved';
     const chip = { approved: '', pending: '<span class="up-status up-status-pending">Checking</span>', rejected: '<span class="up-status up-status-rejected">Not approved</span>' }[p.status] || '';
@@ -204,7 +254,7 @@ class CreatorTools {
         <div class="cs-earn-item ${loot ? 'on' : ''}"><i class="fas ${loot ? 'fa-circle-check' : 'fa-circle-xmark'}" aria-hidden="true"></i>
           <div><b>LootLabs</b><span>${loot ? (st.lootStatus === 'ok' ? 'Connected. A link is made for every live version.' : st.lootStatus && st.lootStatus.startsWith('failed') ? 'Token problem. Check it in Profile & earnings.' : 'Token saved. Links are made as versions go live.') : 'Not connected'}</span></div></div>
       </div>
-      ${lv || loot ? '' : '<p class="cs-earn-warn">Without an earning account, downloads are direct and earn nothing.</p>'}
+      ${lv || loot ? '' : '<p class="cs-earn-warn">Until you connect an account, downloads of your packs go through the site\'s Linkvertise and LootLabs.</p>'}
       <div class="cs-actions"><a href="#" class="up-btn" data-cs-goto="profile"><i class="fas fa-gear" aria-hidden="true"></i> Manage earnings and profile</a></div>`;
   }
 
@@ -273,7 +323,7 @@ class CreatorTools {
       ...s.series.map(d => `${d.day},${d.downloads},${d.views}`),
       '',
       'Packs', `pack,status,downloads_last_${s.days}_days,views_last_${s.days}_days,all_time_downloads,all_time_views`,
-      ...s.packs.map(p => `${q(p.name)},${p.status},${p.downloads},${p.views},${p.totalDownloads},${p.totalViews}`)
+      ...s.packs.map(p => `${q(p.name)},${p.library ? 'library' : p.status},${p.downloads ?? ''},${p.views ?? ''},${p.totalDownloads},${p.totalViews ?? ''}`)
     ];
     const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' });
     const a = document.createElement('a');
