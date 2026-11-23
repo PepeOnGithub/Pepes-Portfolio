@@ -38,6 +38,7 @@ class MobileNav {
     this.lib.renderAuthUI = (...args) => {
       const out = render(...args);
       this.renderAccount();
+      this.renderSettingsAccount();
       return out;
     };
     const showProfile = this.lib.showUserProfile.bind(this.lib);
@@ -48,6 +49,7 @@ class MobileNav {
       return out;
     };
     this.renderAccount();
+    this.renderSettingsAccount();
   }
 
   isOpen() { return !this.sheet.hidden; }
@@ -88,6 +90,34 @@ class MobileNav {
   }
 
   esc(v) { return this.lib.escapeHtml(v == null ? '' : String(v)); }
+
+  // Account card at the top of Settings (name, username, edit profile, sign out).
+  renderSettingsAccount() {
+    const box = document.getElementById('settings-account');
+    if (!box) return;
+    const me = this.lib.currentUser;
+    if (!me) {
+      box.innerHTML = `<div class="sa-card"><span class="sa-text"><b>You're not signed in</b><small>Sign in to follow creators, message and upload.</small></span><button type="button" class="sa-btn sa-primary" data-sa="signin">Sign in</button></div>`;
+    } else {
+      box.innerHTML = `<div class="sa-card">
+        <img class="sa-avatar" src="${this.esc(me.avatarUrl || 'assets/pepe-profile.png')}" alt="">
+        <span class="sa-text"><b>${this.esc(me.name || me.username || 'You')}</b><small>${me.username ? '@' + this.esc(me.username) : 'No username yet'}</small></span>
+        <button type="button" class="sa-btn" data-sa="edit">Edit profile</button>
+        <button type="button" class="sa-btn sa-danger" data-sa="logout">Sign out</button></div>`;
+    }
+    box.hidden = false;
+    if (!box.dataset.bound) {
+      box.dataset.bound = '1';
+      box.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-sa]');
+        if (!b) return;
+        if (b.dataset.sa === 'edit') this.lib.openProfileModal();
+        else if (b.dataset.sa === 'logout') document.getElementById('auth-logout-btn').click();
+        else if (this.mq.matches) this.open();
+        else document.getElementById('auth-login-btn').click();
+      });
+    }
+  }
 
   renderAccount() {
     const me = this.lib.currentUser;
@@ -261,4 +291,129 @@ class MobileNav {
     return true;
   };
   if (!start()) document.addEventListener('DOMContentLoaded', start, { once: true });
+})();
+
+// Profile tabs (Packs / Videos / Comments): only the chosen section shows, and a tab
+// exists only for sections that have content. The sections keep their own hidden
+// state (set when creator data loads); tabs just add .tab-off to the others.
+(function profileTabs() {
+  const SECTIONS = [
+    ['packs', 'Packs', 'user-profile-packs-block'],
+    ['videos', 'Videos', 'user-profile-videos-block'],
+    ['comments', 'Comments', null]
+  ];
+  let current = null, wired = false;
+  const commentsBlock = () => document.getElementById('user-profile-comments')?.closest('.versions-block');
+  const block = (id, i) => (i === 2 ? commentsBlock() : document.getElementById(id));
+  const has = (id, i) => { const el = block(id, i); return !!el && !el.classList.contains('hidden'); };
+
+  function render() {
+    const bar = document.getElementById('user-profile-tabs');
+    if (!bar) return;
+    const avail = SECTIONS.filter(([, , id], i) => has(id, i));
+    if (avail.length < 2) {
+      bar.classList.add('hidden');
+      SECTIONS.forEach(([, , id], i) => block(id, i)?.classList.remove('tab-off'));
+      return;
+    }
+    if (!avail.some(([k]) => k === current)) current = avail[0][0];
+    const html = avail.map(([k, label]) =>
+      `<button type="button" role="tab" class="up-tab-btn${k === current ? ' active' : ''}" aria-selected="${k === current}" data-tab="${k}">${label}</button>`).join('');
+    if (bar.dataset.html !== html) { bar.dataset.html = html; bar.innerHTML = html; } // no rewrite = no observer loop
+    bar.classList.remove('hidden');
+    SECTIONS.forEach(([k, , id], i) => block(id, i)?.classList.toggle('tab-off', k !== current));
+  }
+
+  function start() {
+    const page = document.getElementById('page-user');
+    if (!page || wired) return;
+    wired = true;
+    const bar = document.getElementById('user-profile-tabs');
+    bar.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-tab]');
+      if (b) { current = b.dataset.tab; render(); }
+    });
+    let queued = false;
+    new MutationObserver(() => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; render(); });
+    }).observe(page, { subtree: true, attributes: true, attributeFilter: ['class'], childList: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+
+// Upload form as three steps (Choose file, Details, Publish) with a live preview of the
+// library card. Fields keep their names and ids; steps only show/hide them.
+(function uploadSteps() {
+  function start() {
+    const form = document.getElementById('up-form');
+    if (!form) return;
+    const lib = () => window.packLibrary;
+    const fileIn = document.getElementById('up-file');
+    const iconIn = document.getElementById('up-icon');
+    const nameIn = form.elements.name;
+    const catIn = form.elements.category;
+    const back = document.getElementById('up-step-back');
+    const next = document.getElementById('up-step-next');
+    const toast = (m) => (lib() && lib().showToast ? lib().showToast(m) : alert(m));
+    let step = 1, iconUrl = null;
+
+    function problem(n) {
+      if (n >= 2 && !(fileIn.files && fileIn.files.length)) return 'Choose your pack file first.';
+      if (n >= 3 && !nameIn.value.trim()) return 'Give your pack a name.';
+      return '';
+    }
+    function go(n) {
+      n = Math.max(1, Math.min(3, n));
+      if (n > step) { const msg = problem(n); if (msg) { toast(msg); return; } }
+      step = n;
+      form.dataset.stepNow = String(n);
+      form.querySelectorAll('[data-step]').forEach(el => { el.hidden = Number(el.dataset.step) !== n; });
+      form.querySelectorAll('#up-stepper [data-goto]').forEach(b => {
+        const k = Number(b.dataset.goto);
+        b.parentElement.className = k < n ? 'done' : (k === n ? 'current' : '');
+        b.setAttribute('aria-current', k === n ? 'step' : 'false');
+        b.firstElementChild.textContent = k < n ? '✓' : String(k);
+      });
+      back.style.visibility = n === 1 ? 'hidden' : 'visible';
+      next.hidden = n === 3;
+      // Hidden error/progress boxes keep their own .hidden class; [hidden] must not override a shown error on step 3.
+    }
+    form.querySelectorAll('#up-stepper [data-goto]').forEach(b => b.addEventListener('click', () => go(Number(b.dataset.goto))));
+    back.addEventListener('click', () => go(step - 1));
+    next.addEventListener('click', () => go(step + 1));
+    // Enter in a text field moves on instead of submitting early.
+    form.addEventListener('submit', (e) => {
+      if (step < 3) { e.preventDefault(); e.stopImmediatePropagation(); go(step + 1); }
+    }, true);
+    form.addEventListener('reset', () => setTimeout(() => { iconUrl && URL.revokeObjectURL(iconUrl); iconUrl = null; go(1); preview(); }, 0));
+
+    function preview() {
+      const name = nameIn.value.trim();
+      document.getElementById('up-prev-name').textContent = name || 'Your pack name';
+      const me = lib() && lib().currentUser;
+      const cat = catIn.options[catIn.selectedIndex];
+      document.getElementById('up-prev-meta').textContent = `by ${(me && (me.username || me.name)) || 'you'} · ${cat ? cat.textContent : ''}`;
+      const img = document.getElementById('up-prev-icon'), ph = document.getElementById('up-prev-ph');
+      img.hidden = !iconUrl; ph.hidden = !!iconUrl;
+      if (iconUrl) img.src = iconUrl;
+    }
+    nameIn.addEventListener('input', preview);
+    catIn.addEventListener('change', preview);
+    iconIn.addEventListener('change', () => {
+      if (iconUrl) URL.revokeObjectURL(iconUrl);
+      iconUrl = iconIn.files[0] ? URL.createObjectURL(iconIn.files[0]) : null;
+      preview();
+    });
+    fileIn.addEventListener('change', () => {
+      const f = fileIn.files[0];
+      if (f && !nameIn.value.trim()) {
+        nameIn.value = f.name.replace(/\.(mcpack|mcaddon|brarchive|mcworld|mctemplate|zip)$/i, '').replace(/[_-]+/g, ' ').trim();
+      }
+      setTimeout(preview, 0); // after upload.js has had its turn with the file
+    });
+    go(1); preview();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();

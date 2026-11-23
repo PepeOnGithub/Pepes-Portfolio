@@ -216,6 +216,14 @@ class Social {
       this.lib.showUserProfile(key);
     });
     document.getElementById('dm-block').addEventListener('click', () => this.toggleBlock());
+    this.dmFilter = 'all';
+    this.dmQuery = '';
+    document.getElementById('dm-search').addEventListener('input', (e) => { this.dmQuery = e.target.value.trim().toLowerCase(); this.renderList(); });
+    document.querySelectorAll('[data-dm-filter]').forEach(b => b.addEventListener('click', () => {
+      this.dmFilter = b.dataset.dmFilter;
+      document.querySelectorAll('[data-dm-filter]').forEach(x => { const on = x === b; x.classList.toggle('active', on); x.setAttribute('aria-pressed', String(on)); });
+      this.renderList();
+    }));
     const text = document.getElementById('dm-text');
     text.addEventListener('input', () => this.autosize());
     text.addEventListener('keydown', (e) => {
@@ -295,21 +303,31 @@ class Social {
     try {
       const { conversations, unread } = await this.api('/api/community/messages');
       this.setUnread(unread);
-      box.innerHTML = conversations.length
-        ? conversations.map(c => `
-            <button type="button" class="dm-conv${c.unread ? ' is-unread' : ''}" data-user-id="${this.esc(c.user.id)}" data-name="${this.esc(c.user.name)}" data-username="${this.esc(c.user.username)}" data-verified="${c.user.verified || c.user.owner ? 1 : ''}" data-owner="${c.user.owner ? 1 : ''}">
-              ${this.avatar(c.user, 'dm-avatar')}
-              <span class="dm-conv-text">
-                <span class="dm-conv-top"><b>${this.esc(c.user.name)}${this.badge(c.user)}</b><small>${this.esc(this.when(c.last.createdAt))}</small></span>
-                <span class="dm-conv-last">${c.last.mine ? 'You: ' : ''}${this.esc(ChatFormat.preview(c.last.text))}</span>
-              </span>
-              ${c.unread ? `<span class="dm-badge">${c.unread}</span>` : ''}
-            </button>`).join('')
-        : '<p class="dm-empty">No messages yet.</p>';
-      this.markActive();
+      this.convs = conversations;
+      this.renderList();
     } catch (e) {
       box.innerHTML = `<p class="dm-empty">${this.esc(e.message)}</p>`;
     }
+  }
+
+  renderList() {
+    const box = document.getElementById('dm-list');
+    const all = this.convs || [];
+    const q = this.dmQuery || '';
+    const rows = all.filter(c => (this.dmFilter !== 'unread' || c.unread) &&
+      (!q || `${c.user.name} ${c.user.username || ''} ${c.last.text}`.toLowerCase().includes(q)));
+    box.innerHTML = rows.length
+      ? rows.map(c => `
+          <button type="button" class="dm-conv${c.unread ? ' is-unread' : ''}" data-user-id="${this.esc(c.user.id)}" data-name="${this.esc(c.user.name)}" data-username="${this.esc(c.user.username)}" data-verified="${c.user.verified || c.user.owner ? 1 : ''}" data-owner="${c.user.owner ? 1 : ''}">
+            ${this.avatar(c.user, 'dm-avatar')}
+            <span class="dm-conv-text">
+              <span class="dm-conv-top"><b>${this.esc(c.user.name)}${this.badge(c.user)}</b><small>${this.esc(this.when(c.last.createdAt))}</small></span>
+              <span class="dm-conv-last">${c.last.mine ? 'You: ' : ''}${this.esc(ChatFormat.preview(c.last.text))}</span>
+            </span>
+            ${c.unread ? `<span class="dm-badge">${c.unread}</span>` : ''}
+          </button>`).join('')
+      : `<p class="dm-empty">${all.length ? 'No conversations match.' : 'No messages yet.'}</p>`;
+    this.markActive();
   }
 
   markActive() {

@@ -2309,12 +2309,13 @@ class PackLibrary {
     // decides what each view shows.
     return `
       <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}" data-pack-id="${pack.id}">
-        <div class="pack-thumbnail"><span class="pack-icon-badge">${iconContent}</span></div>
+        <div class="pack-thumbnail"><span class="pack-icon-badge">${iconContent}</span><span class="pack-cat-chip">${this.escapeHtml(this.capitalizeFirst(pack.category))}</span></div>
         ${this.favoriteButton(pack)}
         <div class="pack-content">
           <div class="pack-title-row">
             <span class="pack-name">${this.escapeHtml(pack.name)}</span>
           </div>
+          <span class="pack-author">by ${this.escapeHtml(pack.author || 'Pepe')}</span>
           ${flags ? `<div class="pack-flags">${flags}</div>` : ''}
           <p class="pack-description">${this.escapeHtml(pack.description)}</p>
           <div class="pack-meta">

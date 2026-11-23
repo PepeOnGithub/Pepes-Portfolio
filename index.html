@@ -6,7 +6,7 @@
        resolving against the site root even after clean-URL routing changes
        the address bar path via history.pushState/replaceState. -->
   <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="Pepe's portfolio - about, projects, socials, and a personal pack library">
   <meta name="robots" content="index, follow">
   <meta name="author" content="Pepe">
@@ -18,6 +18,11 @@
   <meta name="twitter:title" content="Pepe">
   <meta name="twitter:description" content="MCBE Texture Pack Creator, Glacier Client Owner, Website & Discord Bot Maker">
   <meta name="theme-color" content="#1a1c1f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pepe">
+  <link rel="manifest" href="manifest.webmanifest">
   <title>Pepe's Portfolio</title>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <script type="application/ld+json">
@@ -725,6 +730,13 @@
           <h3 id="dm-title">Messages</h3>
           <button type="button" class="dm-icon-btn" id="dm-close" aria-label="Close messages"><i class="fas fa-xmark"></i></button>
         </div>
+        <div class="dm-filter">
+          <label class="dm-search"><span class="sr-only">Search conversations</span><i class="fas fa-magnifying-glass" aria-hidden="true"></i><input type="search" id="dm-search" placeholder="Search" autocomplete="off"></label>
+          <div class="dm-chips" role="group" aria-label="Filter conversations">
+            <button type="button" class="dm-chip active" data-dm-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="dm-chip" data-dm-filter="unread" aria-pressed="false">Unread</button>
+          </div>
+        </div>
         <div class="dm-list" id="dm-list"></div>
       </div>
       <div class="dm-thread">
@@ -958,6 +970,7 @@
     <div class="layout-container">
       <!-- Sidebar -->
       <aside class="sidebar">
+        <div class="settings-account" id="settings-account" hidden></div>
         <div class="sidebar-section">
           <div class="settings-search">
             <i class="fas fa-magnifying-glass settings-search-icon" aria-hidden="true"></i>
@@ -1824,17 +1837,23 @@
 
         <!-- New upload -->
         <section class="up-panel" id="up-panel-new" role="tabpanel">
-          <form class="up-form" id="up-form" novalidate>
+          <form class="up-form" id="up-form" novalidate data-step-now="1">
+            <ol class="up-stepper" id="up-stepper" aria-label="Upload steps">
+              <li><button type="button" data-goto="1"><span class="up-step-dot">1</span>Choose file</button></li>
+              <li><button type="button" data-goto="2"><span class="up-step-dot">2</span>Details</button></li>
+              <li><button type="button" data-goto="3"><span class="up-step-dot">3</span>Publish</button></li>
+            </ol>
+            <div class="up-form-body">
             <div class="up-grid">
               <div class="up-col">
-                <label class="up-drop" id="up-file-drop">
+                <label data-step="1" class="up-drop" id="up-file-drop">
                   <input type="file" id="up-file" name="file" accept=".mcpack,.mcaddon,.brarchive,.mcworld,.mctemplate,.zip">
                   <i class="fas fa-file-zipper" aria-hidden="true"></i>
                   <span class="up-drop-title" id="up-file-label">Choose your pack file</span>
                   <span class="up-drop-sub">.mcpack, .mcaddon or .brarchive (also .mcworld, .mctemplate, .zip), up to 50 MB</span>
                 </label>
 
-                <div class="up-icon-row">
+                <div data-step="1" class="up-icon-row">
                   <label class="up-icon-pick" aria-label="Choose an icon">
                     <input type="file" id="up-icon" name="icon" accept="image/png,image/jpeg,image/webp">
                     <span class="up-icon-preview" id="up-icon-preview"><i class="fas fa-image" aria-hidden="true"></i></span>
@@ -1845,12 +1864,12 @@
                   </div>
                 </div>
 
-                <label class="up-field">
+                <label class="up-field" data-step="2">
                   <span class="up-label">Name</span>
                   <input type="text" name="name" maxlength="60" placeholder="My HUD Pack">
                 </label>
 
-                <div class="up-row">
+                <div data-step="2" class="up-row">
                   <label class="up-field">
                     <span class="up-label">Category</span>
                     <select name="category">
@@ -1867,35 +1886,35 @@
                   </label>
                 </div>
 
-                <label class="up-field">
+                <label class="up-field" data-step="2">
                   <span class="up-label">Description</span>
                   <textarea name="description" rows="4" maxlength="2000" placeholder="What does it do? What does it change?"></textarea>
                 </label>
 
-                <label class="up-field">
+                <label class="up-field" data-step="2">
                   <span class="up-label">Tags <span class="up-optional">up to 6, comma separated</span></span>
                   <input type="text" name="tags" maxlength="140" placeholder="HUD, PvP, UI">
                 </label>
 
-                <label class="up-field">
+                <label class="up-field" data-step="2">
                   <span class="up-label">What's in this version <span class="up-optional">optional</span></span>
                   <textarea name="changelog" rows="2" maxlength="2000" placeholder="First release"></textarea>
                 </label>
               </div>
 
               <div class="up-col">
-                <div class="up-card" id="up-earn-note">
+                <div data-step="3" class="up-card" id="up-earn-note">
                   <p class="up-label"><i class="fas fa-sack-dollar" aria-hidden="true"></i> Your earnings</p>
                   <p class="up-help" id="up-earn-text">Downloads of your packs go through your own Linkvertise and LootLabs accounts, and the site makes the links for you. You keep 100%.</p>
                   <button type="button" class="up-btn" data-up-goto="profile"><i class="fas fa-gear" aria-hidden="true"></i> Set up earnings</button>
                 </div>
 
-                <label class="up-field">
+                <label class="up-field" data-step="3">
                   <span class="up-label">Showcase video <span class="up-optional">optional</span></span>
                   <input type="url" name="showcaseUrl" maxlength="500" placeholder="https://youtu.be/…">
                 </label>
 
-                <div class="up-card up-rules">
+                <div data-step="3" class="up-card up-rules">
                   <p class="up-label"><i class="fas fa-shield-halved" aria-hidden="true"></i> Before it goes live</p>
                   <p class="up-help">Every upload is checked before it shows up in the library. Changing the name, icon or links of a live pack sends it back for a check.</p>
                   <label class="up-check">
@@ -1904,11 +1923,24 @@
                   </label>
                 </div>
 
-                <p class="up-error hidden" id="up-form-error" role="alert"></p>
-                <div class="up-progress hidden" id="up-progress"><div class="up-progress-fill" id="up-progress-fill"></div></div>
-                <button type="submit" class="up-btn up-btn-primary up-submit" id="up-submit"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Upload for review</button>
+                <p data-step="3" class="up-error hidden" id="up-form-error" role="alert"></p>
+                <div data-step="3" class="up-progress hidden" id="up-progress"><div class="up-progress-fill" id="up-progress-fill"></div></div>
+                <button type="submit" data-step="3" class="up-btn up-btn-primary up-submit" id="up-submit"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Upload for review</button>
               </div>
             </div>
+            <aside class="up-preview" aria-label="Preview">
+              <span class="up-preview-label">How it will look in the library</span>
+              <article class="up-preview-card">
+                <div class="up-preview-art"><img id="up-prev-icon" alt="" hidden><i class="fas fa-box-open" id="up-prev-ph" aria-hidden="true"></i><span class="up-preview-chip">Community</span></div>
+                <div class="up-preview-text"><b id="up-prev-name">Your pack name</b><span id="up-prev-meta">by you · Packs</span><span class="up-preview-btn"><i class="fas fa-download" aria-hidden="true"></i> Download</span></div>
+              </article>
+            </aside>
+            </div>
+            <div class="up-step-actions">
+              <button type="button" class="up-btn" id="up-step-back">Back</button>
+              <button type="button" class="up-btn up-btn-primary" id="up-step-next">Continue</button>
+            </div>
+
           </form>
         </section>
 
@@ -1994,6 +2026,7 @@
         </div>
       </div>
 
+      <div class="up-tabs-bar hidden" id="user-profile-tabs" role="tablist" aria-label="Profile sections"></div>
       <p class="up-bio hidden" id="user-profile-bio"></p>
       <div class="up-socials hidden" id="user-profile-socials"></div>
 
