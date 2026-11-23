@@ -2669,6 +2669,17 @@ class PackLibrary {
       doneLoading();
       this.viewedProfile = data.user;
       nameEl.textContent = data.user.name || data.user.username || 'Unknown';
+      const topName = document.getElementById('user-profile-topname');
+      if (topName) topName.textContent = `@${data.user.username || data.user.name || ''}`;
+      const shareBtn = document.getElementById('user-profile-share');
+      if (shareBtn) shareBtn.onclick = async () => {
+        const url = location.href;
+        try {
+          if (navigator.share) { await navigator.share({ title: `${data.user.name || 'Profile'} on Pepe`, url }); return; }
+          await navigator.clipboard.writeText(url);
+          this.showToast('Profile link copied.');
+        } catch (e) { /* cancelled */ }
+      };
       avatarEl.src = data.user.avatarUrl || 'assets/pepe-profile.png';
       joinedEl.textContent = data.user.joinedAt ? `Joined ${this.formatDate(data.user.joinedAt)}` : '';
       statsEl.textContent = `${data.commentCount} comment${data.commentCount === 1 ? '' : 's'} · ${data.ratingCount} rating${data.ratingCount === 1 ? '' : 's'}`;

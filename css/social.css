@@ -368,3 +368,62 @@ img.sk-img { color: transparent; }
   .notif-link { min-height: 44px; }
   .notif-close { width: 44px; height: 44px; }
 }
+
+/* ===== Profile on a phone (matches the PhoneProfile design) =====
+   Slim top bar, avatar with three stats beside it, name, bio, two buttons,
+   Packs / Videos / Comments tabs, then a 3-column grid of pack tiles. */
+#page-user .up-topname, #page-user .up-topshare { display: none; }
+#page-user #user-profile-author-badge:not(.hidden) ~ #user-profile-verified-badge { display: none; }
+@media (max-width: 768px) {
+  #page-user .page-hero-inner { display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 4px; }
+  #page-user .page-hero .back-link { width: 44px; height: 44px; display: grid; place-items: center; margin: 0; font-size: 0; color: var(--color-text-primary); }
+  #page-user .page-hero .back-link i { font-size: 20px; margin: 0; }
+  #page-user .up-topname { display: block; font: 600 16px var(--font-family); }
+  #page-user .up-topshare {
+    display: grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; color: var(--color-text-primary); font-size: 18px; cursor: pointer;
+  }
+
+  #page-user .user-profile-content {
+    display: grid; grid-template-columns: 84px minmax(0, 1fr); column-gap: 16px; row-gap: 10px; align-content: start;
+    padding: 4px 16px 24px; max-width: none;
+  }
+  #page-user .user-profile-banner { display: none; }
+  #page-user .user-profile-header, #page-user .user-profile-info { display: contents; }
+  #page-user .user-profile-avatar {
+    order: 1; grid-column: 1; width: 84px; height: 84px; margin: 0; border: 0; box-shadow: none; position: static;
+  }
+  #page-user .user-profile-follow {
+    order: 2; grid-column: 2; align-self: center; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; width: auto;
+  }
+  #page-user .user-profile-follow.hidden { display: none; }
+  #page-user .user-profile-count { background: transparent; padding: 0; min-width: 0; border-radius: 8px; gap: 0; font-size: 12px; }
+  #page-user .user-profile-count b { font: 700 18px var(--font-family); }
+  #page-user #user-profile-downloads-tile { display: none; }
+  #page-user .user-profile-name { order: 3; grid-column: 1 / -1; font: 600 17px var(--font-family); gap: 6px; margin: 4px 0 0; }
+  #page-user .user-profile-name .author-badge { width: 16px; height: 16px; font-size: 9px; }
+  #page-user .user-profile-joined, #page-user .user-profile-stats { display: none; }
+  #page-user .user-profile-verify { order: 4; grid-column: 1 / -1; margin: 0; }
+  #page-user .up-bio { order: 5; grid-column: 1 / -1; margin: -4px 0 0; font-size: 14px; line-height: 1.45; }
+  #page-user .up-socials { order: 6; grid-column: 1 / -1; margin: 0; }
+  #page-user .user-profile-actions {
+    order: 7; grid-column: 1 / -1; width: 100%; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px;
+  }
+  #page-user .user-profile-actions button { height: 40px; min-height: 40px; border-radius: 10px; font: 600 14px var(--font-family); justify-content: center; }
+  #page-user .user-profile-follow-btn:not(.is-following) { background: var(--color-accent); color: var(--on-accent); }
+  #page-user .up-tabs-bar { order: 8; grid-column: 1 / -1; margin: 8px -16px 0; }
+  #page-user .up-tab-btn { height: 44px; }
+  #page-user .up-tab-btn.active { color: var(--color-text-primary); border-bottom-color: var(--color-text-primary); }
+  #page-user .versions-block { grid-column: 1 / -1; order: 9; margin: 0 -16px; }
+  #page-user .versions-block > h3 { display: none; }
+  #page-user .versions-block:not(#user-profile-packs-block) { margin: 0; }
+  #page-user .up-profile-packs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; padding-top: 2px; }
+  #page-user .up-profile-pack {
+    aspect-ratio: 1; display: grid; place-items: center; padding: 0; border-radius: 0; box-shadow: none;
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 22%, var(--color-bg-secondary)), var(--color-bg-secondary) 75%);
+  }
+  #page-user .up-profile-pack:hover { background: var(--color-bg-tertiary); }
+  #page-user .up-profile-pack-text, #page-user .up-profile-pack > i { display: none; }
+  #page-user .up-profile-pack .up-item-icon { width: 72%; height: 72%; display: grid; place-items: center; background: none; padding: 0; box-shadow: none; }
+  #page-user .up-profile-pack .up-item-icon img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+  #page-user .versions-block:not(#user-profile-packs-block):not(#user-profile-videos-block) { padding: 8px 16px; }
+}
