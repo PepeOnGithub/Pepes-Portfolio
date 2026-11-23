@@ -145,35 +145,99 @@ def breadcrumbs(items):
         {'@type': 'ListItem', 'position': i + 1, 'name': n, 'item': f'{SITE}{p}'} for i, (n, p) in enumerate(items)]}
 
 
+# ---------- creator palettes ----------
+SITE_GREEN = ('#489c49', '#86d177', '#216639')  # primary, accent, deep: used when an image has no usable colour
+
+
+def _hex(rgb):
+    return '#%02x%02x%02x' % tuple(int(max(0, min(255, c))) for c in rgb)
+
+
+def palette(*images):
+    """A palette from a creator's profile picture and banner: the two strongest hues, weighted by how vivid
+    and how common they are. Returns dict(primary, accent, deep, bg, bg2, secondary) of #rrggbb."""
+    import colorsys
+    bins = {}
+    for im in images:
+        if im is None:
+            continue
+        sm = im.convert('RGB').resize((64, 64))
+        for r, g, b in sm.getdata():
+            h, s_, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
+            if s_ < .28 or v < .22:
+                continue
+            k = int(h * 24) % 24
+            w = s_ * v
+            acc = bins.setdefault(k, [0, 0, 0, 0])
+            acc[0] += w; acc[1] += r * w; acc[2] += g * w; acc[3] += b * w
+    if not bins or max(a[0] for a in bins.values()) < 6:
+        h = colorsys.rgb_to_hsv(*[c / 255 for c in (0x48, 0x9c, 0x49)])[0]
+        sec = None
+    else:
+        ranked = sorted(bins.items(), key=lambda kv: -kv[1][0])
+        k1, a1 = ranked[0]
+        h = colorsys.rgb_to_hsv(a1[1] / a1[0] / 255, a1[2] / a1[0] / 255, a1[3] / a1[0] / 255)[0]
+        sec = None
+        for k2, a2 in ranked[1:]:
+            if min((k2 - k1) % 24, (k1 - k2) % 24) >= 3 and a2[0] > ranked[0][1][0] * .25:
+                sec = colorsys.rgb_to_hsv(a2[1] / a2[0] / 255, a2[2] / a2[0] / 255, a2[3] / a2[0] / 255)[0]
+                break
+    hs = lambda hh, ss, vv: _hex([c * 255 for c in colorsys.hsv_to_rgb(hh % 1, ss, vv)])
+    return {
+        'primary': hs(h, .72, .62), 'accent': hs(h, .5, .95), 'deep': hs(h, .85, .30),
+        'bg': hs(h, .55, .10), 'bg2': hs(h, .5, .17), 'secondary': hs(sec if sec is not None else h + .08, .6, .75),
+    }
+
+
+def _fit(im, w, h):
+    from PIL import Image
+    r = max(w / im.width, h / im.height)
+    im = im.resize((max(w, int(im.width * r + .5)), max(h, int(im.height * r + .5))))
+    x, y = (im.width - w) // 2, (im.height - h) // 2
+    return im.crop((x, y, x + w, y + h))
+
+
 # ---------- link-preview images ----------
-def og_image(out, name, noun, icon_path, size='', author='Pepe'):
+def og_image(out, name, noun, icon_path, size='', author='Pepe', pal=None, coin=None, banner=None):
+    """1200x630 preview: creator's colours, their banner softly behind, the pack icon, and a 3D coin of their picture."""
     try:
         from PIL import Image, ImageDraw, ImageFont, ImageFilter
     except Exception:
         return False
     W, H = 1200, 630
-    img = Image.new('RGB', (W, H), '#1e2124')
-    px = img.load()
-    for y in range(H):  # soft diagonal-ish gradient
-        for x in range(0, W, 4):
-            t = (x / W * .6 + y / H * .4)
-            c = (int(27 + 11 * t), int(42 - 6 * t), int(33 - 2 * t))
-            for k in range(4):
-                if x + k < W:
-                    px[x + k, y] = c
+    pal = pal or palette(None)
+    img = Image.new('RGB', (W, H), pal['bg'])
+    if banner is not None:
+        bg = _fit(banner.convert('RGB'), W, H).filter(ImageFilter.GaussianBlur(14))
+        img = Image.blend(Image.new('RGB', (W, H), pal['bg']), bg, .28)
+    # colour wash: deep colour from the lower left, the primary glowing behind the coin on the right
+    wash = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    wd = ImageDraw.Draw(wash)
+    wd.ellipse((-260, 330, 640, 1000), fill=tuple(int(pal['deep'][i:i + 2], 16) for i in (1, 3, 5)) + (150,))
+    wd.ellipse((660, 20, 1240, 600), fill=tuple(int(pal['primary'][i:i + 2], 16) for i in (1, 3, 5)) + (120,))
+    img = Image.alpha_composite(img.convert('RGBA'), wash.filter(ImageFilter.GaussianBlur(90))).convert('RGB')
     d = ImageDraw.Draw(img)
-    font_path = SRC / 'assets' / 'fonts' / 'gyroscope-mojang-f.otf'
+    # a faint grid, as on the site banner
+    grid = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(grid)
+    for x in range(0, W, 48):
+        gd.line((x, 0, x, H), fill=(255, 255, 255, 9))
+    for y in range(0, H, 48):
+        gd.line((0, y, W, y), fill=(255, 255, 255, 9))
+    img = Image.alpha_composite(img.convert('RGBA'), grid).convert('RGB')
+    d = ImageDraw.Draw(img)
 
-    def font(sz, bold=False):
-        for p in ['/usr/share/fonts/opentype/inter/Inter-ExtraBold.otf', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf'] + ([str(font_path)] if font_path.exists() else []):
+    def font(sz):
+        for p in ['/usr/share/fonts/opentype/inter/Inter-ExtraBold.otf', '/usr/share/fonts/opentype/inter/Inter-Bold.otf',
+                  '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf']:
             try:
                 return ImageFont.truetype(p, sz)
             except Exception:
                 continue
         return ImageFont.load_default(sz)
-    # icon
-    ix, iy, isz = 72, 86, 200
-    d.rounded_rectangle((ix - 6, iy - 6, ix + isz + 6, iy + isz + 6), 44, outline='#86d177', width=5, fill='#23262a')
+    # pack icon
+    ix, iy, isz = 72, 86, 190
+    d.rounded_rectangle((ix - 6, iy - 6, ix + isz + 6, iy + isz + 6), 44, outline=pal['accent'], width=5, fill=pal['bg'])
     drew = False
     if icon_path and Path(icon_path).exists():
         try:
@@ -185,53 +249,134 @@ def og_image(out, name, noun, icon_path, size='', author='Pepe'):
         except Exception:
             pass
     if not drew:
-        f = font(110)
-        ch = (name.replace("Pepe's ", '')[:1] or 'P').upper()
-        d.text((ix + isz / 2, iy + isz / 2), ch, font=f, fill='#86d177', anchor='mm')
-    # the circle logo, as in the site's default banner
-    logo = SRC / 'assets' / 'pepe-profile.png'
-    if logo.exists():
-        try:
-            L = Image.open(logo).convert('RGBA').resize((220, 220), Image.LANCZOS)
-            m = Image.new('L', (220, 220), 0)
-            ImageDraw.Draw(m).ellipse((0, 0, 219, 219), fill=255)
-            glow = Image.new('RGBA', (300, 300), (72, 156, 73, 0))
-            ImageDraw.Draw(glow).ellipse((20, 20, 280, 280), fill=(72, 156, 73, 90))
-            gb = glow.filter(ImageFilter.GaussianBlur(28))
-            img.paste(gb.convert('RGB'), (890, 70), gb.split()[3])
-            img.paste(L, (930, 110), m)
-        except Exception:
-            pass
-    # name, wrapped to 2 lines
+        d.text((ix + isz / 2, iy + isz / 2), (name.replace("Pepe's ", '')[:1] or 'P').upper(), font=font(110), fill=pal['accent'], anchor='mm')
+    # the coin
+    if coin is not None:
+        L = coin.convert('RGBA')
+        L.thumbnail((320, 400), Image.LANCZOS)
+        sh = Image.new('RGBA', (440, 60), (0, 0, 0, 0))
+        ImageDraw.Draw(sh).ellipse((40, 14, 400, 46), fill=(0, 0, 0, 150))
+        sh = sh.filter(ImageFilter.GaussianBlur(10))
+        cx = 860 + (320 - L.width) // 2
+        cy = 96 + (400 - L.height) // 2
+        img.paste(sh.convert('RGB'), (cx - 45, cy + L.height - 24), sh.split()[3])
+        img.paste(L, (cx, cy), L)
+    # name over at most two lines, then the line under it
     f = font(60)
-    words, lines, cur = name.split(), [], ''
-    for w in words:
+    lines, cur = [], ''
+    for w in name.split():
         t = (cur + ' ' + w).strip()
-        if d.textlength(t, font=f) > 540 and cur:
-            lines.append(cur)
-            cur = w
+        if d.textlength(t, font=f) > 500 and cur:
+            lines.append(cur); cur = w
         else:
             cur = t
     lines.append(cur)
-    y = 96
+    y = 92
     for ln in lines[:2]:
-        d.text((330, y), ln, font=f, fill='#ffffff')
-        y += 78
+        d.text((300, y), ln, font=f, fill='#ffffff')
+        y += 74
     f2 = font(30)
-    d.text((330, y + 10), f'Free {noun} for Minecraft Bedrock', font=f2, fill='#b4b8bd')
-    # pills
+    d.text((300, y + 8), f'Free {noun} for Minecraft Bedrock', font=font(27), fill='#c9ccd0')
+    # pills in the creator's colours
     px_ = 72
-    for label, fg, bg in ([(size, '#c7f0bd', '#24412d')] if size else []) + [('Free download', '#c7f0bd', '#24412d'), (f'by {author}', '#d4d7da', '#2b2e33')]:
+    for label, fg, bg in ([(size, pal['accent'], pal['bg2'])] if size else []) + [('Free download', pal['bg'], pal['accent']), (f'by {author}', '#e6e8ea', pal['deep'])]:
         w = d.textlength(label, font=f2) + 44
         d.rounded_rectangle((px_, 392, px_ + w, 392 + 56), 28, fill=bg)
         d.text((px_ + 22, 392 + 28), label, font=f2, fill=fg, anchor='lm')
         px_ += w + 14
-    d.rectangle((0, H - 88, W, H), fill='#161819')
+    d.rectangle((0, H - 88, W, H), fill=pal['bg'])
+    d.rectangle((0, H - 90, W, H - 88), fill=pal['primary'])
     d.text((72, H - 44), 'pepe.glacierclient.xyz', font=font(34), fill='#ffffff', anchor='lm')
-    d.text((W - 72, H - 44), 'Packs · Addons · Clients · Customizer', font=font(26), fill='#86d177', anchor='rm')
+    d.text((W - 72, H - 44), 'Packs · Addons · Clients · Customizer', font=font(26), fill=pal['accent'], anchor='rm')
     out.parent.mkdir(parents=True, exist_ok=True)
     img.save(out, optimize=True)
     return True
+
+
+
+def creator_key(p):
+    if p.get('_src') == 'community' and p.get('authorId'):
+        return f'u{p["authorId"]}'
+    return 'owner' if re.match(r'^pepe', str(p.get('author') or ''), re.I) else '_default'
+
+
+def download(url, dest, limit=3_000_000):
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'pepe-site-seo-build'})
+        with urllib.request.urlopen(req, timeout=12) as r:
+            dest.write_bytes(r.read(limit))
+        return True
+    except Exception as e:
+        print(f'  (no image at {url}: {e})')
+        return False
+
+
+def creator_looks(packs):
+    """For every creator: a palette from their picture and banner, and a 3D coin of the picture.
+    The site owner uses the extruded logo (assets/logo-3d.png); everyone else gets a coin rendered by tools/og_coin.js."""
+    import subprocess
+    import tempfile
+    try:
+        from PIL import Image, ImageDraw
+    except Exception:
+        return {'_default': {'pal': None, 'coin': None, 'banner': None}}
+    tmp = Path(tempfile.mkdtemp(prefix='og-'))
+    looks, jobs, avatars = {}, [], {}
+    keys = {creator_key(p): p for p in packs}
+    for key, p in keys.items():
+        if key == '_default':
+            continue
+        pic = ban = None
+        if key == 'owner':
+            pic = Image.open(SRC / 'assets' / 'pepe-profile.png')
+            bp = SRC / 'assets' / 'default-banner.png'
+            ban = Image.open(bp) if bp.exists() else None
+        elif key.startswith('u'):
+            uid = key[1:]
+            if download(f'{UPLOADS_API}/api/community/avatars/{uid}', tmp / f'{key}.avatar'):
+                try:
+                    pic = Image.open(tmp / f'{key}.avatar')
+                    pic.load()
+                except Exception:
+                    pic = None
+            if download(f'{UPLOADS_API}/api/community/banners/{uid}', tmp / f'{key}.banner'):
+                try:
+                    ban = Image.open(tmp / f'{key}.banner')
+                    ban.load()
+                except Exception:
+                    ban = None
+        pal = palette(pic, ban)
+        coin = None
+        if key == 'owner' and (SRC / 'assets' / 'logo-3d.png').exists():
+            coin = Image.open(SRC / 'assets' / 'logo-3d.png')
+        elif pic is not None:
+            sq = _fit(pic.convert('RGB'), 512, 512)
+            f = tmp / f'{key}.png'
+            sq.save(f)
+            jobs.append({'key': key, 'image': str(f), 'rim': pal['primary'], 'side': pal['deep']})
+            avatars[key] = sq
+        looks[key] = {'pal': pal, 'coin': coin, 'banner': ban}
+    if jobs and (SRC / 'tools' / 'node_modules' / 'three').exists():
+        (tmp / 'jobs.json').write_text(json.dumps(jobs))
+        try:
+            subprocess.run(['node', str(SRC / 'tools' / 'og_coin.js'), str(tmp / 'jobs.json'), str(tmp / 'coins')], check=True, timeout=300, cwd=str(SRC / 'tools'))
+        except Exception as e:
+            print(f'  (3D coins skipped: {e})')
+    for j in jobs:
+        c = tmp / 'coins' / f'{j["key"]}.png'
+        if c.exists():
+            im = Image.open(c).convert('RGBA')
+            looks[j['key']]['coin'] = im.crop(im.getbbox()) if im.getbbox() else im
+        else:  # no WebGL here: a flat round picture with a ring in their colour
+            sq = avatars[j['key']].resize((300, 300)).convert('RGBA')
+            m = Image.new('L', (300, 300), 0)
+            ImageDraw.Draw(m).ellipse((6, 6, 294, 294), fill=255)
+            ring = Image.new('RGBA', (320, 320), (0, 0, 0, 0))
+            ImageDraw.Draw(ring).ellipse((0, 0, 319, 319), fill=looks[j['key']]['pal']['primary'])
+            ring.paste(sq, (10, 10), m)
+            looks[j['key']]['coin'] = ring
+    looks.setdefault('_default', {'pal': palette(None), 'coin': Image.open(SRC / 'assets' / 'logo-3d.png') if (SRC / 'assets' / 'logo-3d.png').exists() else None, 'banner': None})
+    return looks
 
 
 def main():
@@ -244,6 +389,7 @@ def main():
         packs += [dict(p, _src='community') for p in comm['packs']]
         print(f'community packs: {len(comm["packs"])}')
     seen, urls = set(), []
+    looks = creator_looks(packs)
 
     # ---- pack pages ----
     for p in packs:
@@ -280,7 +426,8 @@ def main():
             except Exception:
                 local_icon = None
         og_path = ROOT / 'og' / f'{slug}.png'
-        has_og = og_image(og_path, name, noun, local_icon, p.get('size') or '', author)
+        look = looks.get(creator_key(p), looks.get('_default'))
+        has_og = og_image(og_path, name, noun, local_icon, p.get('size') or '', author, look['pal'], look['coin'], look['banner'])
         if icon_tmp and icon_tmp.exists():
             icon_tmp.unlink()
         image = f'{SITE}/og/{slug}.png' if has_og else abs_url(icon_rel) or f'{SITE}/assets/pepe-profile.png'

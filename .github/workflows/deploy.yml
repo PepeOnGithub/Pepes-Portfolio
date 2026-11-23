@@ -80,6 +80,19 @@ jobs:
             --exclude='.gitattributes' --exclude='README.md' --exclude='worker' \
             --exclude='*.mcpack' --exclude='*.mcaddon' ./ _site/
 
+      - name: Set up Node (renders the 3D profile-picture coins for link previews)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install the 3D renderer
+        # three.js + headless Chromium (software WebGL). If this fails the previews fall back to a flat round picture.
+        continue-on-error: true
+        working-directory: tools
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
       - name: Build SEO pages, link previews, sitemap and robots.txt
         # /pack/<slug> is a route of the single-page app, so GitHub Pages answers it with a 404 status. This writes a
         # real page per pack (title, description, canonical, Open Graph, JSON-LD) plus og images, sitemap.xml and robots.txt.
