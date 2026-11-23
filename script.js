@@ -734,6 +734,12 @@ class PackLibrary {
 
     const shelves = document.getElementById('lib-shelves');
     if (shelves) shelves.addEventListener('click', (e) => {
+      if (e.target.closest('[data-clear-viewed]')) {
+        try { localStorage.removeItem('recentlyViewedPacks'); localStorage.removeItem('recentlyViewedAt'); } catch (err) { /* ignore */ }
+        this.renderShelves();
+        this.showToast('Recently viewed cleared.');
+        return;
+      }
       const more = e.target.closest('[data-more-sort]');
       if (more) {
         this.currentFilter.sort = more.dataset.moreSort;
@@ -2061,27 +2067,38 @@ class PackLibrary {
     const day = 86400000;
     const time = (v) => Date.parse(v || '') || 0;
     const scores = new Map(pool.map(p => [p.id, this.packScore(p, [])]));
+    // Recently viewed: only on this device, newest first, with a Clear button.
+    let viewed = [];
+    try {
+      if (getBoolSetting('trackRecentlyViewed')) {
+        const ids = JSON.parse(localStorage.getItem('recentlyViewedPacks') || '[]');
+        const at = JSON.parse(localStorage.getItem('recentlyViewedAt') || '{}');
+        viewed = ids.map(id => this.packs.find(p => p.id === id)).filter(Boolean).slice(0, 10)
+          .map(p => ({ pack: p, when: at[p.id] ? this.timeAgo(new Date(at[p.id]).toISOString()) : '' }));
+      }
+    } catch (e) { viewed = []; }
     const shelves = [
+      ...(viewed.length ? [{ key: 'viewed', title: 'Recently viewed', clear: true, packs: viewed.map(v => v.pack), when: viewed }] : []),
       { key: 'popular', title: 'Popular', sort: 'popular',
         packs: [...pool].sort((a, b) => scores.get(b.id) - scores.get(a.id)) },
       { key: 'new', title: 'New Releases', sort: 'newest',
         packs: [...pool].sort((a, b) => time(b.addedAt || b.updatedAt) - time(a.addedAt || a.updatedAt)) },
       { key: 'updated', title: 'Recently Updated', sort: 'recent',
         packs: pool.filter(p => time(p.updatedAt) - time(p.addedAt) > day).sort((a, b) => time(b.updatedAt) - time(a.updatedAt)) }
-    ].map(sh => ({ ...sh, packs: sh.packs.slice(0, 12) })).filter(sh => sh.packs.length >= 3);
+    ].map(sh => ({ ...sh, packs: sh.packs.slice(0, 12) })).filter(sh => sh.packs.length >= (sh.key === 'viewed' ? 1 : 3));
     if (!shelves.length) { box.classList.add('hidden'); box.innerHTML = ''; return; }
     box.classList.remove('hidden');
     box.innerHTML = shelves.map(sh => `
       <section class="lib-shelf" data-shelf="${sh.key}">
         <div class="lib-shelf-head">
           <h2>${sh.title}</h2>
-          <button type="button" class="lib-shelf-more" data-more-sort="${sh.sort}">More</button>
+          ${sh.clear ? '<button type="button" class="lib-shelf-clear" data-clear-viewed><i class="fas fa-trash-can" aria-hidden="true"></i> Clear</button>' : `<button type="button" class="lib-shelf-more" data-more-sort="${sh.sort}">More</button>`}
           <span class="lib-shelf-arrows">
             <button type="button" class="lib-shelf-arrow" data-dir="-1" aria-label="Scroll ${sh.title} left"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
             <button type="button" class="lib-shelf-arrow" data-dir="1" aria-label="Scroll ${sh.title} right"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
           </span>
         </div>
-        <div class="lib-shelf-track">${sh.packs.map(p => this.createPackCard(p)).join('')}</div>
+        <div class="lib-shelf-track">${sh.packs.map((p, i) => this.createPackCard(p).replace('<div class="pack-meta">', sh.when && sh.when[i].when ? `<div class="pack-viewed">Viewed ${sh.when[i].when}</div><div class="pack-meta">` : '<div class="pack-meta">')).join('')}</div>
       </section>`).join('') + '<h2 class="lib-all-title">All packs</h2>';
   }
 
@@ -2464,6 +2481,9 @@ class PackLibrary {
     ids.unshift(pack.id);
     try {
       localStorage.setItem('recentlyViewedPacks', JSON.stringify(ids.slice(0, 20)));
+      const at = JSON.parse(localStorage.getItem('recentlyViewedAt') || '{}');
+      at[pack.id] = Date.now();
+      localStorage.setItem('recentlyViewedAt', JSON.stringify(Object.fromEntries(ids.slice(0, 20).map(id => [id, at[id]]).filter(([, t]) => t)))); 
     } catch (e) { /* storage full or unavailable */ }
   }
 
