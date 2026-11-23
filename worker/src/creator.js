@@ -107,9 +107,14 @@ export async function ensureCreator(env, user) {
   ).bind(String(user.id), displayName(user), now).run();
 }
 
+// Read first, and only write when the creator has no row yet or changed their
+// name, so opening the page doesn't cost a database write every time.
 async function creatorRow(ctx, user) {
+  const select = () => ctx.env.DB.prepare('SELECT * FROM creators WHERE user_id = ?').bind(String(user.id)).first();
+  const row = await select();
+  if (row && row.username === displayName(user)) return row;
   await ensureCreator(ctx.env, user);
-  return ctx.env.DB.prepare('SELECT * FROM creators WHERE user_id = ?').bind(String(user.id)).first();
+  return select();
 }
 
 function settingsView(row, user, env) {

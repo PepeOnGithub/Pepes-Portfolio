@@ -63,9 +63,19 @@ class UploadsPage {
       headers['Content-Type'] = 'application/json';
       payload = JSON.stringify(json);
     }
-    const res = await fetch(`${UPLOADS_API}${path}`, { method, headers, body: payload });
+    // Give up after 25 seconds so the page shows "Try again" instead of spinning forever.
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 25000);
+    let res;
     let data = null;
-    try { data = await res.json(); } catch (e) { /* empty body */ }
+    try {
+      res = await fetch(`${UPLOADS_API}${path}`, { method, headers, body: payload, signal: ctrl.signal });
+      try { data = await res.json(); } catch (e) { /* empty body */ }
+    } catch (e) {
+      throw new Error(e && e.name === 'AbortError' ? 'The upload service took too long to answer.' : ((e && e.message) || 'Request failed'));
+    } finally {
+      clearTimeout(timer);
+    }
     if (!res.ok) throw new Error((data && data.error) || `Request failed (${res.status})`);
     return data;
   }
@@ -105,6 +115,14 @@ class UploadsPage {
     this.loadedFor = this.token();
     this.showState('loading');
     try {
+      // These don't depend on each other, so ask for all of them at once rather
+      // than one after the other. If you aren't signed in the last two answer
+      // "sign in", which is ignored because /me says so first.
+      const signedIn = !!this.token();
+      const mineRequest = signedIn ? this.api('/api/community/mine') : null;
+      const settingsRequest = signedIn ? this.api('/api/community/creator') : null;
+      [mineRequest, settingsRequest].forEach(p => { if (p) p.catch(() => {}); });
+
       const me = await this.api('/api/community/me');
       this.me = me.user;
       this.isAdmin = !!me.isAdmin;
@@ -113,9 +131,9 @@ class UploadsPage {
         return;
       }
       const [mine, queue, settings] = await Promise.all([
-        this.api('/api/community/mine'),
+        mineRequest,
         this.isAdmin ? this.api('/api/community/queue') : Promise.resolve({ packs: [] }),
-        this.api('/api/community/creator')
+        settingsRequest
       ]);
       this.mine = mine.packs || [];
       this.queue = queue.packs || [];

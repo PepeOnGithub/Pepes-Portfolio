@@ -93,7 +93,6 @@ export async function getUser(ctx) {
     if (data && data.user && data.user.id != null) {
       ctx._user = data.user;
       ctx._user.isOwner = await isSiteOwner(ctx.env, data.user.id);
-      if (ctx._user.isOwner) await rememberOwner(ctx.env, data.user.id);
     }
   } catch (e) {
     console.error('session check failed', e);
@@ -118,12 +117,26 @@ export function isAdmin(ctx, user) {
 // Is this account the site owner? The accounts worker already knows (its
 // OWNER_USER_ID drives the verified badge and shows as isAuthor on
 // /api/users/<id>), so ask it instead of keeping a second copy of the id.
-// Works in cron jobs too. Answers are cached per isolate for 10 minutes;
-// failed lookups aren't cached and count as "not the owner".
+//
+// That lookup is slow (a second worker and three queries), so once the
+// owner's id is stored (site_meta) answers come from that instead, and the
+// lookup only runs to learn or re-check it: the owner's own requests re-check
+// it daily, and everyone else's re-check it weekly. If the owner account ever
+// changes, delete the 'owner_id' row in site_meta to relearn it at once.
+const OWNER_RECHECK_SELF_MS = 24 * 3600 * 1000;
+const OWNER_RECHECK_OTHERS_MS = 7 * 24 * 3600 * 1000;
 const ownerCache = new Map();
 export async function isSiteOwner(env, userId) {
   if (userId == null || userId === '') return false;
   const id = String(userId);
+
+  const rec = await ownerRecord(env);
+  if (rec.id) {
+    const age = Date.now() - rec.checked;
+    if (rec.id === id && age < OWNER_RECHECK_SELF_MS) return true;
+    if (rec.id !== id && age < OWNER_RECHECK_OTHERS_MS) return false;
+  }
+
   const hit = ownerCache.get(id);
   if (hit && Date.now() - hit.at < 10 * 60 * 1000) return hit.owner;
   try {
@@ -137,6 +150,8 @@ export async function isSiteOwner(env, userId) {
     // Lookups match a username too, so make sure it's this exact account.
     const owner = !!(data && data.user && String(data.user.id) === id && data.user.isAuthor);
     ownerCache.set(id, { owner, at: Date.now() });
+    if (owner) await rememberOwner(env, id);
+    else if (rec.id === id) await forgetOwner(env);
     return owner;
   } catch (e) {
     console.error('owner check failed', e);
@@ -145,29 +160,46 @@ export async function isSiteOwner(env, userId) {
 }
 
 // The owner's account id, learned the first time the owner makes a signed-in
-// request and kept in site_meta. Lets lists and messages badge the owner
-// without one accounts-worker lookup per person.
-let ownerMemo = { id: undefined, at: 0 };
-export async function ownerId(env) {
-  if (ownerMemo.id !== undefined && Date.now() - ownerMemo.at < 5 * 60 * 1000) return ownerMemo.id;
+// request and kept in site_meta with the time it was last confirmed. Lets
+// lists, messages and every request answer "is this the owner?" without
+// asking the accounts worker.
+let ownerMemo = { id: undefined, checked: 0, at: 0 };
+async function ownerRecord(env) {
+  if (ownerMemo.id !== undefined && Date.now() - ownerMemo.at < 5 * 60 * 1000) return ownerMemo;
   try {
-    const row = await env.DB.prepare("SELECT value FROM site_meta WHERE key = 'owner_id'").first();
-    ownerMemo = { id: row ? row.value : null, at: Date.now() };
+    const { results } = await env.DB.prepare("SELECT key, value FROM site_meta WHERE key IN ('owner_id', 'owner_checked')").all();
+    const m = new Map(results.map(r => [r.key, r.value]));
+    ownerMemo = { id: m.get('owner_id') || null, checked: Date.parse(m.get('owner_checked') || '') || 0, at: Date.now() };
   } catch (e) {
-    ownerMemo = { id: null, at: Date.now() - 4 * 60 * 1000 }; // table not there yet; retry soon
+    ownerMemo = { id: null, checked: 0, at: Date.now() - 4 * 60 * 1000 }; // table not there yet; retry soon
   }
-  return ownerMemo.id;
+  return ownerMemo;
+}
+
+export async function ownerId(env) {
+  return (await ownerRecord(env)).id;
 }
 
 export async function rememberOwner(env, id) {
   const value = String(id);
-  if ((await ownerId(env)) === value) return;
+  const now = new Date().toISOString();
   try {
-    await env.DB.prepare("INSERT INTO site_meta (key, value) VALUES ('owner_id', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value")
-      .bind(value).run();
-    ownerMemo = { id: value, at: Date.now() };
+    await env.DB.batch([
+      env.DB.prepare("INSERT INTO site_meta (key, value) VALUES ('owner_id', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").bind(value),
+      env.DB.prepare("INSERT INTO site_meta (key, value) VALUES ('owner_checked', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").bind(now)
+    ]);
+    ownerMemo = { id: value, checked: Date.parse(now), at: Date.now() };
   } catch (e) {
     console.error('could not remember the owner', e);
+  }
+}
+
+async function forgetOwner(env) {
+  try {
+    await env.DB.prepare("DELETE FROM site_meta WHERE key IN ('owner_id', 'owner_checked')").run();
+    ownerMemo = { id: null, checked: 0, at: Date.now() };
+  } catch (e) {
+    console.error('could not forget the owner', e);
   }
 }
 
