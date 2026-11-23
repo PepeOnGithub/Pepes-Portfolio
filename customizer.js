@@ -86,7 +86,7 @@
 
   let openDropdown = null;
   function dropdown({ id, label, options, value, disabled, onChange }) {
-    let current = value, active = -1, listEl = null, typed = '', typedTimer = 0;
+    let current = value, active = -1, listEl = null, scrim = null, openedAt = 0, openW = 0, typed = '', typedTimer = 0;
     const btn = el('button', { type: 'button', class: 'cz-dd-btn', id, role: 'combobox', 'aria-haspopup': 'listbox', 'aria-expanded': 'false', 'aria-label': label || null, disabled: !!disabled });
     const text = el('span', { class: 'cz-dd-text' });
     btn.append(text, el('i', { class: 'fas fa-chevron-down cz-dd-chev', 'aria-hidden': 'true' }));
@@ -98,6 +98,7 @@
     function close(focus) {
       if (!listEl) return;
       listEl.remove(); listEl = null; btn.setAttribute('aria-expanded', 'false');
+      if (scrim) { scrim.remove(); scrim = null; }
       btn.removeAttribute('aria-activedescendant'); btn.removeAttribute('aria-controls');
       window.removeEventListener('scroll', onAway, true); window.removeEventListener('resize', onAway);
       document.removeEventListener('pointerdown', onOutside, true);
@@ -105,12 +106,24 @@
       if (focus) btn.focus();
     }
     // scrolling the list itself (wheel, touch, or scrollIntoView on arrow keys) must not close it
-    const onAway = (e) => { if (listEl && e && e.target instanceof Node && listEl.contains(e.target)) return; close(false); };
+    // Phones fire scroll/resize on their own (address bar hiding, scrollIntoView, rotation settling):
+    // those must not close the list. Only a real scroll of the page after it has settled does.
+    const onAway = (e) => {
+      if (!listEl) return;
+      if (e && e.target instanceof Node && listEl.contains(e.target)) return;
+      if (performance.now() - openedAt < 350) return;
+      if (e && e.type === 'resize' && innerWidth === openW) return;
+      if (sheetMode()) return;                       // a sheet stays until a choice, the backdrop or Escape
+      close(false);
+    };
+    const sheetMode = () => !!listEl && listEl.classList.contains('cz-dd-sheet');
     const onOutside = (e) => { if (!listEl.contains(e.target) && !btn.contains(e.target)) close(false); };
     function highlight(i) {
       active = Math.max(0, Math.min(options.length - 1, i));
       [...listEl.children].forEach((li, n) => li.classList.toggle('active', n === active));
-      listEl.children[active].scrollIntoView({ block: 'nearest' });
+      const li = listEl.children[active];
+      if (li.offsetTop < listEl.scrollTop) listEl.scrollTop = li.offsetTop - 4;
+      else if (li.offsetTop + li.offsetHeight > listEl.scrollTop + listEl.clientHeight) listEl.scrollTop = li.offsetTop + li.offsetHeight - listEl.clientHeight + 4;
       btn.setAttribute('aria-activedescendant', listEl.children[active].id);
     }
     function choose(i) {
@@ -123,11 +136,26 @@
         role: 'option', id: `${id}-o${i}`, class: o.value === current ? 'sel' : '', 'aria-selected': String(o.value === current),
         onclick: () => choose(i), onmousemove: () => highlight(i),
       }, o.label)));
-      const r = btn.getBoundingClientRect();
-      Object.assign(listEl.style, { position: 'fixed', left: r.left + 'px', minWidth: r.width + 'px', zIndex: 9999 });
-      document.body.append(listEl);
-      const h = listEl.offsetHeight, below = innerHeight - r.bottom;
-      listEl.style.top = (below < h + 8 && r.top > below ? Math.max(8, r.top - h - 4) : r.bottom + 4) + 'px';
+      openedAt = performance.now(); openW = innerWidth;
+      const sheet = matchMedia('(pointer: coarse)').matches || innerWidth <= 768;
+      if (sheet) {
+        // Phones: a bottom sheet with a backdrop, like a native picker. Big targets, never off screen.
+        listEl.classList.add('cz-dd-sheet');
+        listEl.dataset.title = label || '';
+        scrim = el('div', { class: 'cz-dd-scrim' });
+        scrim.addEventListener('pointerdown', (e) => { e.preventDefault(); close(true); });
+        document.body.append(scrim, listEl);
+      } else {
+        const r = btn.getBoundingClientRect();
+        Object.assign(listEl.style, { position: 'fixed', left: r.left + 'px', minWidth: r.width + 'px', zIndex: 9999 });
+        document.body.append(listEl);
+        const room = innerHeight - 16;
+        listEl.style.maxHeight = Math.min(260, room) + 'px';
+        const h = listEl.offsetHeight, below = innerHeight - r.bottom;
+        listEl.style.top = (below < h + 8 && r.top > below ? Math.max(8, r.top - h - 4) : Math.min(r.bottom + 4, Math.max(8, innerHeight - h - 8))) + 'px';
+        const lr = listEl.getBoundingClientRect();
+        if (lr.right > innerWidth - 8) listEl.style.left = Math.max(8, innerWidth - 8 - lr.width) + 'px';
+      }
       btn.setAttribute('aria-expanded', 'true'); btn.setAttribute('aria-controls', `${id}-list`); openDropdown = self;
       highlight(Math.max(0, options.findIndex((o) => o.value === current)));
       window.addEventListener('scroll', onAway, true); window.addEventListener('resize', onAway);
