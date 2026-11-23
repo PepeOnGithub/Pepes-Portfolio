@@ -115,3 +115,14 @@ CREATE TABLE IF NOT EXISTS site_meta (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL
 );
+
+-- Which version of the terms a user agreed to when uploading (one row per
+-- user and version). The version must match TERMS_VERSION in src/index.js and
+-- upload.js, and the date shown on the terms page.
+CREATE TABLE IF NOT EXISTS consents (
+  user_id TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  version TEXT NOT NULL,
+  accepted_at TEXT NOT NULL,
+  PRIMARY KEY (user_id, kind, version)
+);

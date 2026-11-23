@@ -275,6 +275,9 @@ a.hm-pc:hover .hm-more { color: var(--color-text-primary); }
 .ft-ext a { width: 44px; padding: 0; font-size: 18px; }
 .ft-bottom { max-width: 1120px; margin: 0 auto; padding: 8px 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .ft-copy { margin: 0; font-size: 14px; }
+.ft-legal { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; }
+.ft-legal a { color: var(--color-text-secondary); text-decoration: none; }
+.ft-legal a:hover, .ft-legal a:focus-visible { color: var(--color-accent); text-decoration: underline; }
 .ft-top { min-height: 44px; padding: 0 12px; display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; border-radius: 8px; cursor: pointer; color: var(--color-text-secondary); font: 400 14px var(--font-family); }
 .ft-top:hover { color: var(--color-text-primary); background: var(--color-bg-secondary); }
 .site-footer :focus-visible { outline: 2px solid var(--color-accent-dark); outline-offset: 2px; }

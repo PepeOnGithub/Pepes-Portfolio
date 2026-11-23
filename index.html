@@ -118,6 +118,7 @@
           <button type="button" class="auth-provider-btn" id="auth-login-google"><i class="fab fa-google"></i> Continue with Google</button>
           <button type="button" class="auth-provider-btn" id="auth-login-github"><i class="fab fa-github"></i> Continue with GitHub</button>
           <button type="button" class="auth-provider-btn" id="auth-login-email-btn"><i class="fas fa-envelope"></i> Continue with Email</button>
+          <p class="auth-legal">By continuing you agree to the <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and confirm you are 13 or older.</p>
         </div>
 
         <div class="auth-menu hidden" id="auth-account-menu">
@@ -688,6 +689,7 @@
         <input type="email" id="auth-email-input" placeholder="Email" aria-label="Email" autocomplete="email" required>
         <input type="password" id="auth-password-input" placeholder="Password" aria-label="Password" autocomplete="current-password" required>
         <p class="auth-form-error hidden" id="auth-form-error"></p>
+        <p class="auth-legal">By continuing you agree to the <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and confirm you are 13 or older.</p>
         <button type="submit" class="btn-download btn-download-full" id="auth-form-submit-btn">Login</button>
       </form>
       <button type="button" class="auth-form-toggle" id="auth-form-toggle-btn">Don't have an account? Sign up</button>
@@ -1858,7 +1860,7 @@
                   <p class="up-help">Every upload is checked before it shows up in the library. Changing the name, icon or links of a live pack sends it back for a check.</p>
                   <label class="up-check">
                     <input type="checkbox" name="rights">
-                    <span>I made this pack or have permission to share it, and it contains nothing harmful.</span>
+                    <span>I made this pack or have permission to share it, it contains nothing harmful, and I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms</a> and <a href="guidelines.html" target="_blank" rel="noopener">Community Guidelines</a>.</span>
                   </label>
                 </div>
 
@@ -2102,6 +2104,13 @@
     </div>
     <div class="ft-bottom">
       <p class="ft-copy">&copy; <span id="footer-year">2026</span> Pepe. Every pack is free forever.</p>
+      <nav class="ft-legal" aria-label="Legal">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="guidelines.html">Guidelines</a>
+        <a href="copyright.html">Copyright</a>
+        <a href="disclaimer.html">Disclaimer</a>
+      </nav>
       <button type="button" class="ft-top" id="footer-top-btn">Back to top <i class="fas fa-arrow-up" aria-hidden="true"></i></button>
     </div>
   </footer>

@@ -832,3 +832,9 @@ body {
   .assets-modal-overlay .assets-modal-remember .custom-checkbox::after { content: ''; position: absolute; inset: -12px; }
   .assets-modal-overlay .profile-field input, .assets-modal-overlay .auth-password-form input { font-size: 16px; }
 }
+
+/* Terms and privacy notice under the sign-in options */
+.auth-legal { margin: 10px 0 0; font-size: 12px; line-height: 1.45; color: var(--color-text-secondary); text-align: left; }
+.auth-legal a { color: var(--color-accent); }
+.auth-menu .auth-legal { padding: 0 12px 8px; }
+.up-check a { color: var(--color-accent); }

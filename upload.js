@@ -2,6 +2,11 @@
 // and the owner's review log). Talks to the uploads worker (worker/ in this
 // repo) at UPLOADS_API, using the same session token as comments and ratings.
 
+// The version of the terms (the "Last updated" date on terms.html) that the
+// upload form asks people to agree to. Must match TERMS_VERSION in
+// worker/src/index.js; change both when the terms change.
+const TERMS_VERSION = '2026-11-23';
+
 // Social platforms creators can link (same list the worker accepts).
 window.SOCIAL_META = {
   discord: ['Discord', 'fab fa-discord'],
@@ -345,6 +350,7 @@ class UploadsPage {
     data.append('file', document.getElementById('up-file').files[0]);
     const icon = document.getElementById('up-icon').files[0];
     if (icon) data.append('icon', icon);
+    data.append('terms', TERMS_VERSION); // they ticked the agreement above
 
     submit.disabled = true;
     submit.innerHTML = '<i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> Uploading…';

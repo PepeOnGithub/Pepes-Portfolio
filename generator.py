@@ -754,6 +754,13 @@ def generate_sitemap(packs_json_path):
         sitemap += '    <priority>1.0</priority>\n'
         sitemap += '  </url>\n'
 
+        # Legal pages (static files in the repo root)
+        for legal in ('privacy', 'terms', 'guidelines', 'copyright', 'disclaimer'):
+            sitemap += '  <url>\n'
+            sitemap += f'    <loc>{base}/{legal}.html</loc>\n'
+            sitemap += '    <priority>0.3</priority>\n'
+            sitemap += '  </url>\n'
+
         # Add pack pages (clean /pack/<slug> URLs, matching packSlug() in script.js)
         for pack in packs:
             slug = re.sub(r'^-+|-+$', '', re.sub(r'[^a-z0-9]+', '-', pack['name'].lower())) or f'pack-{pack["id"]}'

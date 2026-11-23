@@ -286,7 +286,7 @@ export async function reviewProfile(env, userId) {
         system: PROFILE_PROMPT,
         schema: PROFILE_SCHEMA,
         parts: [{
-          text: `Review this creator profile. Creator: ${row.username || row.user_id}\nData (JSON):\n${JSON.stringify({ bio: ok.bio, links: socials, videos }, null, 1)}`
+          text: `Review this creator profile. Creator: ${row.username || 'unnamed'}\nData (JSON):\n${JSON.stringify({ bio: ok.bio, links: socials, videos }, null, 1)}`
         }]
       });
       if (!data) throw new Error('Gemini gave an answer the site could not read.');

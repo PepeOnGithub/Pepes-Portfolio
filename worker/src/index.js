@@ -24,6 +24,11 @@ import {
   socialInfo, setFollow, followList, setBlock, avatar, unreadCount, conversations, thread, sendMessage
 } from './social.js';
 
+// The version of the terms (the "Last updated" date on terms.html) that the
+// upload form asks people to agree to. Change it in upload.js too whenever
+// the terms change in a way people should agree to again.
+const TERMS_VERSION = '2026-11-23';
+
 const CATEGORIES = ['packs', 'cosmetics', 'utility', 'addons', 'other'];
 // .brarchive is Minecraft's own packed-JSON archive; everything else is a zip.
 const PACK_EXTENSIONS = ['.mcpack', '.mcaddon', '.brarchive', '.mcworld', '.mctemplate', '.zip'];
@@ -166,6 +171,12 @@ async function createPack(ctx) {
   checkBodySize(ctx.request, MAX_PACK_BYTES + MAX_ICON_BYTES + 64 * 1024);
 
   const form = await readForm(ctx.request);
+  if (String(form.get('terms') || '') !== TERMS_VERSION) {
+    throw new HttpError(400, 'Please reload the page, agree to the terms and upload again.');
+  }
+  await ctx.env.DB.prepare(
+    "INSERT OR IGNORE INTO consents (user_id, kind, version, accepted_at) VALUES (?, 'upload-terms', ?, ?)"
+  ).bind(ownerId, TERMS_VERSION, new Date().toISOString()).run();
   const meta = readMeta(form, { requireAll: true });
   const version = readVersion(form);
   const file = await readPackFile(form.get('file'));
