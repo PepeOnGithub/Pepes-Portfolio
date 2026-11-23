@@ -415,6 +415,7 @@ class UploadsPage {
 
   bindCreator() {
     document.getElementById('up-earn-form').addEventListener('submit', (e) => { e.preventDefault(); this.saveEarnings(); });
+    document.getElementById('up-lv-test').addEventListener('click', () => this.testLinkvertise());
     document.getElementById('up-loot-remove').addEventListener('click', () => {
       if (confirm('Remove your LootLabs token? Your LootLabs download links will stop being made and existing ones are removed.')) this.saveEarnings({ removeToken: true });
     });
@@ -638,6 +639,16 @@ class UploadsPage {
         if (wasPending && res.settings.profile.status !== 'pending') this._settingsPolls = 0;
       } catch (e) { /* try again */ }
     }, 3000);
+  }
+
+  // Opens a real earning link (to the library) the way a download would, so
+  // a creator can see whether Linkvertise accepts it for their account.
+  testLinkvertise() {
+    const err = document.getElementById('up-earn-error');
+    const lv = document.getElementById('up-lv-id').value.trim();
+    if (!/^\d{1,12}$/.test(lv)) { err.textContent = 'Type your Linkvertise user id first (a number, like 123456).'; err.classList.remove('hidden'); return; }
+    err.classList.add('hidden');
+    window.open(getLinkvertiseUrl(`${location.origin}/library`, lv), '_blank', 'noopener');
   }
 
   async saveEarnings({ removeToken = false } = {}) {
