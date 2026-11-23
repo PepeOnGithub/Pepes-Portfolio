@@ -44,3 +44,18 @@ database_id = "377d1f3c-be1a-473b-985b-b7be5e1a1db2"
 [[r2_buckets]]
 binding = "FILES"
 bucket_name = "pepes-portfolio-uploads"
+
+# Workers Logs, so sign-in and upload errors show up in the dashboard.
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = false
+head_sampling_rate = 1
+persist = true
+
+[observability.issue_detection]
+enabled = false
