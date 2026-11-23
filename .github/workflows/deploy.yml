@@ -80,6 +80,16 @@ jobs:
             --exclude='.gitattributes' --exclude='README.md' --exclude='worker' \
             --exclude='*.mcpack' --exclude='*.mcaddon' ./ _site/
 
+      - name: Version the page's scripts and styles
+        # The Cloudflare purge below may be unavailable, and Cloudflare/browsers
+        # keep script.js and friends for hours. Tagging each local script and
+        # stylesheet with the commit makes every deploy a new URL, so visitors
+        # get the new files at once.
+        run: |
+          v="${GITHUB_SHA::8}"
+          sed -i -E "s#(src|href)=\"((css/)?[A-Za-z0-9_.-]+\.(css|js))\"#\1=\"\2?v=$v\"#g" _site/*.html
+          grep -o 'script.js?v=[0-9a-f]*' _site/index.html | head -1
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
