@@ -2349,6 +2349,30 @@ class PackLibrary {
     } catch (e) { /* storage full or unavailable */ }
   }
 
+  // Community pack pages use the author's own profile picture and banner.
+  async applyAuthorLook(pack) {
+    if (!pack.authorId) return;
+    await null; // let showDetail finish setting currentPack
+    this.authorLooks = this.authorLooks || new Map();
+    let user = this.authorLooks.get(pack.authorId);
+    if (!user) {
+      try {
+        const res = await this.authFetch(`/api/users/${encodeURIComponent(pack.authorId)}`);
+        if (res.ok) user = (await res.json()).user;
+      } catch (e) { /* keep the initial */ }
+      if (user) this.authorLooks.set(pack.authorId, user);
+    }
+    if (!user || this.currentPack !== pack) return;
+    if (user.avatarUrl) document.getElementById('detail-avatar').src = user.avatarUrl;
+    const bg = document.querySelector('#detail-banner img.detail-banner-bg');
+    if (user.bannerUrl && bg) {
+      const pic = bg.closest('picture');
+      if (pic) pic.querySelectorAll('source').forEach(src => src.remove());
+      bg.src = user.bannerUrl;
+      bg.style.display = '';
+    }
+  }
+
   showDetail(pack, { push = true } = {}) {
     this.trackRecentlyViewed(pack);
     this.markPackUpdateSeen(pack);
@@ -2436,8 +2460,9 @@ class PackLibrary {
       const hue = [...(pack.author || '')].reduce((n, c) => (n * 31 + c.charCodeAt(0)) % 360, 0);
       const fallback = 'data:image/svg+xml,' + encodeURIComponent(
         `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="hsl(${hue},45%,40%)"/><text x="32" y="43" font-family="Arial,sans-serif" font-size="32" font-weight="700" text-anchor="middle" fill="#fff">${this.escapeHtml(letter)}</text></svg>`);
-      detailAvatar.onerror = () => { detailAvatar.onerror = null; detailAvatar.src = fallback; };
-      detailAvatar.src = pack.authorId ? `${UPLOADS_API}/api/community/avatars/${encodeURIComponent(pack.authorId)}` : fallback;
+      detailAvatar.onerror = null;
+      detailAvatar.src = fallback;
+      this.applyAuthorLook(pack);
     } else {
       detailAvatar.onerror = null;
       detailAvatar.src = 'assets/pepe-profile.png';
