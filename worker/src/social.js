@@ -68,14 +68,24 @@ async function relation(env, v, o) {
       EXISTS(SELECT 1 FROM follows WHERE follower_id = ? AND followee_id = ?) AS following,
       EXISTS(SELECT 1 FROM follows WHERE follower_id = ? AND followee_id = ?) AS followed_by,
       EXISTS(SELECT 1 FROM blocks WHERE blocker_id = ? AND blocked_id = ?) AS blocking,
-      EXISTS(SELECT 1 FROM blocks WHERE blocker_id = ? AND blocked_id = ?) AS blocked_by`
-  ).bind(v, o, o, v, v, o, o, v).first();
+      EXISTS(SELECT 1 FROM blocks WHERE blocker_id = ? AND blocked_id = ?) AS blocked_by,
+      COALESCE((SELECT followers_only FROM dm_settings WHERE user_id = ?), 0) AS followers_only`
+  ).bind(v, o, o, v, v, o, o, v, o).first();
+  const open = !r.blocking && !r.blocked_by;
   return {
     isFollowing: !!r.following,
     followsYou: !!r.followed_by,
     blockedByYou: !!r.blocking,
-    canMessage: !r.blocking && !r.blocked_by
+    // canMessage = nobody blocked anybody (also gates following); canDM adds their privacy setting.
+    canMessage: open,
+    canDM: open && (!r.followers_only || !!r.following),
+    dmFollowersOnly: !!r.followers_only
   };
+}
+
+async function approvedPackCount(env, id) {
+  const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM packs WHERE owner_id = ? AND status = 'approved'").bind(id).first();
+  return (r && r.n) || 0;
 }
 
 async function counts(env, id) {
@@ -97,8 +107,10 @@ export async function socialInfo(ctx, key) {
     user: { ...summary(target), verified: !!stats.verified, owner: !!stats.owner },
     ...(await counts(ctx.env, id)),
     self: v === id,
-    isFollowing: false, followsYou: false, blockedByYou: false, canMessage: false
+    isFollowing: false, followsYou: false, blockedByYou: false, canMessage: false, canDM: false, dmFollowersOnly: false
   };
+  out.packs = await approvedPackCount(ctx.env, id);
+  out.downloads = stats.downloads || 0;
   // Your own progress toward the verified tick.
   if (out.self) {
     out.verification = {
@@ -201,13 +213,21 @@ export async function conversations(ctx) {
   ).bind(v).all();
   const unread = new Map(unreadRows.map(r => [String(r.sender_id), r.n]));
   const otherOf = (m) => (String(m.sender_id) === v ? String(m.recipient_id) : String(m.sender_id));
-  const people = await summaries(ctx.env, [...new Set(last.map(otherOf))]);
+  const otherIds = [...new Set(last.map(otherOf))];
+  const people = await summaries(ctx.env, otherIds);
+  const creators = new Set();
+  if (otherIds.length) {
+    const { results: owners } = await ctx.env.DB.prepare(
+      `SELECT DISTINCT owner_id FROM packs WHERE status = 'approved' AND owner_id IN (${otherIds.map(() => '?').join(',')})`
+    ).bind(...otherIds).all();
+    owners.forEach(r => creators.add(String(r.owner_id)));
+  }
   return json({
     unread: unreadRows.reduce((n, r) => n + r.n, 0),
     conversations: last.map(m => {
       const o = otherOf(m);
       return {
-        user: people.get(o) || { id: o, username: '', name: 'Deleted account', verified: false, owner: false },
+        user: { ...(people.get(o) || { id: o, username: '', name: 'Deleted account', verified: false, owner: false }), creator: creators.has(o) || !!(people.get(o) && people.get(o).owner) },
         last: { text: clip(m.text, 120), mine: String(m.sender_id) === v, createdAt: m.created_at },
         unread: unread.get(o) || 0
       };
@@ -245,7 +265,9 @@ export async function sendMessage(ctx, key) {
   const text = String((body && body.text) || '').replace(/\r\n?/g, '\n').trim();
   if (!text) throw new HttpError(400, 'Write a message first.');
   if (text.length > MAX_MESSAGE) throw new HttpError(400, `Messages can be up to ${MAX_MESSAGE} characters.`);
-  if (!(await relation(ctx.env, v, o)).canMessage) throw new HttpError(403, "You can't message this account.");
+  const rel = await relation(ctx.env, v, o);
+  if (!rel.canMessage) throw new HttpError(403, "You can't message this account.");
+  if (!rel.canDM) throw new HttpError(403, 'This account only takes messages from people who follow them.');
 
   const since = new Date(Date.now() - SEND_WINDOW_MIN * 60000).toISOString();
   const recent = await ctx.env.DB.prepare('SELECT COUNT(*) AS n FROM messages WHERE sender_id = ? AND created_at > ?')
@@ -257,4 +279,31 @@ export async function sendMessage(ctx, key) {
     'INSERT INTO messages (pair, sender_id, recipient_id, text, created_at) VALUES (?, ?, ?, ?, ?)'
   ).bind(pairOf(v, o), v, o, text, now).run();
   return json({ message: { id: res.meta.last_row_id, mine: true, text, createdAt: now } });
+}
+
+// ===== Messaging privacy and the blocked list =====
+
+export async function getDmSettings(ctx) {
+  const user = await requireUser(ctx);
+  const r = await ctx.env.DB.prepare('SELECT followers_only FROM dm_settings WHERE user_id = ?').bind(String(user.id)).first();
+  return json({ followersOnly: !!(r && r.followers_only) });
+}
+
+export async function setDmSettings(ctx) {
+  const user = await requireUser(ctx);
+  const body = await ctx.request.json().catch(() => null);
+  const on = !!(body && body.followersOnly);
+  await ctx.env.DB.prepare(
+    'INSERT INTO dm_settings (user_id, followers_only) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET followers_only = excluded.followers_only'
+  ).bind(String(user.id), on ? 1 : 0).run();
+  return json({ followersOnly: on });
+}
+
+export async function blockedList(ctx) {
+  const user = await requireUser(ctx);
+  const { results } = await ctx.env.DB.prepare('SELECT blocked_id FROM blocks WHERE blocker_id = ? ORDER BY created_at DESC LIMIT 200')
+    .bind(String(user.id)).all();
+  const ids = results.map(r => String(r.blocked_id));
+  const people = await summaries(ctx.env, ids);
+  return json({ users: ids.map(id => people.get(id)).filter(Boolean) });
 }

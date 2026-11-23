@@ -735,6 +735,7 @@
           <div class="dm-chips" role="group" aria-label="Filter conversations">
             <button type="button" class="dm-chip active" data-dm-filter="all" aria-pressed="true">All</button>
             <button type="button" class="dm-chip" data-dm-filter="unread" aria-pressed="false">Unread</button>
+            <button type="button" class="dm-chip" data-dm-filter="creators" aria-pressed="false">Creators</button>
           </div>
         </div>
         <div class="dm-list" id="dm-list"></div>
@@ -1001,6 +1002,9 @@
               </button>
               <button class="category-row" data-settings-category="downloads">
                 <span><i class="fas fa-download"></i> Downloads</span>
+              </button>
+              <button class="category-row" data-settings-category="messages">
+                <span><i class="fas fa-paper-plane"></i> Messages</span>
               </button>
               <button class="category-row" data-settings-category="data">
                 <span><i class="fas fa-database"></i> Data</span>
@@ -1619,6 +1623,37 @@
 
         </div>
 
+        <div class="settings-panel" data-settings-panel="messages">
+          <div class="settings-panel-header">
+            <span class="settings-panel-header-icon"><i class="fas fa-paper-plane"></i></span>
+            <div>
+              <h3 class="settings-panel-title">Messages</h3>
+              <p class="settings-panel-desc">Who can message you. Saved to your account.</p>
+            </div>
+          </div>
+          <div class="settings-list">
+            <label class="setting-row">
+              <span class="setting-row-icon"><i class="fas fa-user-group"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Only followers can message me</p>
+                <p class="setting-desc" id="dm-privacy-desc">Sign in to change this.</p>
+              </div>
+              <span class="custom-checkbox">
+                <input type="checkbox" id="dm-followers-only" class="setting-input" autocomplete="off" disabled>
+                <span class="custom-checkbox-box"><i class="fas fa-check"></i></span>
+              </span>
+            </label>
+            <button type="button" class="setting-row setting-row-action" id="dm-blocked-btn">
+              <span class="setting-row-icon"><i class="fas fa-ban"></i></span>
+              <div class="setting-row-text">
+                <p class="setting-name">Blocked accounts</p>
+                <p class="setting-desc" id="dm-blocked-desc">People you block can't message or follow you.</p>
+              </div>
+              <span class="setting-action-label">Manage</span>
+            </button>
+          </div>
+        </div>
+
         <div class="settings-panel" data-settings-panel="data">
           <div class="settings-panel-header">
             <span class="settings-panel-header-icon"><i class="fas fa-database"></i></span>
@@ -2014,6 +2049,8 @@
           <p class="user-profile-joined" id="user-profile-joined"></p>
           <p class="user-profile-stats" id="user-profile-stats"></p>
           <p class="user-profile-follow hidden" id="user-profile-follow">
+            <span class="user-profile-count user-profile-tile" id="user-profile-packs-tile"><b id="user-profile-packs-count">0</b> packs</span>
+            <span class="user-profile-count user-profile-tile" id="user-profile-downloads-tile"><b id="user-profile-downloads-count">0</b> downloads</span>
             <button type="button" class="user-profile-count" data-follow-list="followers"><b id="user-profile-followers">0</b> followers</button>
             <button type="button" class="user-profile-count" data-follow-list="following"><b id="user-profile-following">0</b> following</button>
           </p>

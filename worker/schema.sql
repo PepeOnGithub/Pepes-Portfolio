@@ -126,3 +126,10 @@ CREATE TABLE IF NOT EXISTS consents (
   accepted_at TEXT NOT NULL,
   PRIMARY KEY (user_id, kind, version)
 );
+
+-- Messaging privacy: followers_only = 1 means only people who follow this
+-- account can start or continue a conversation with them.
+CREATE TABLE IF NOT EXISTS dm_settings (
+  user_id TEXT PRIMARY KEY,
+  followers_only INTEGER NOT NULL DEFAULT 0
+);

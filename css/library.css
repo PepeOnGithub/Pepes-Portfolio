@@ -918,3 +918,8 @@ body.light-mode #page-library .pack-card:hover { box-shadow: 0 12px 28px rgba(0,
   #page-library .packs-grid.list-view .pack-card { padding: 8px 10px; }
   #page-library .packs-grid.list-view .pack-card:not(.x) .pack-thumbnail { width: 48px; height: 48px; }
 }
+
+/* Already downloaded on this device: quieter button, still clickable to download again */
+#page-library .pack-card.is-downloaded .pack-dl-btn { background: var(--color-bg-tertiary); color: var(--color-text-primary); }
+#page-library .pack-card.is-downloaded .pack-dl-btn i { color: var(--color-accent); }
+#page-library .pack-card.is-downloaded:hover .pack-dl-btn { background: var(--color-bg-elevated); }

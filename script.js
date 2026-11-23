@@ -1150,6 +1150,7 @@ class PackLibrary {
         navigator.clipboard.writeText(pack.name).catch(() => {});
       }
 
+      this.markDownloaded(pack);
       if (!getBoolSetting('trackDownloadCounts', true)) return;
 
       this.incrementDownloads(pack, version).then(count => {
@@ -2308,7 +2309,7 @@ class PackLibrary {
     // One markup for both layouts (grid cards and list rows); library.css
     // decides what each view shows.
     return `
-      <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}" data-pack-id="${pack.id}">
+      <div class="pack-card ${pack.pinned ? 'pack-card-pinned' : ''}${this.downloadedIds().has(pack.id) ? ' is-downloaded' : ''}" data-pack-id="${pack.id}">
         <div class="pack-thumbnail"><span class="pack-icon-badge">${iconContent}</span><span class="pack-cat-chip">${this.escapeHtml(this.capitalizeFirst(pack.category))}</span></div>
         ${this.favoriteButton(pack)}
         <div class="pack-content">
@@ -2325,7 +2326,7 @@ class PackLibrary {
         </div>
         <div class="pack-footer">
           <span class="downloads" data-pack-id="${pack.id}">${this.formatCount(this.liveDownloadCounts.get(pack.id) ?? pack.downloads)}</span>
-          <span class="pack-dl-btn"><i class="fas fa-download"></i> Download</span>
+          <span class="pack-dl-btn">${this.downloadedIds().has(pack.id) ? '<i class="fas fa-check"></i> Downloaded' : '<i class="fas fa-download"></i> Download'}</span>
         </div>
       </div>
     `;
@@ -3740,7 +3741,26 @@ class PackLibrary {
     }, this.activeDownloadFetches === 0 && this.downloadFetchQueue.length === 1 ? 0 : STAGGER_MS);
   }
 
+  // Packs downloaded on this device (ids only, kept in this browser) so cards can say "Downloaded".
+  downloadedIds() {
+    try { const a = JSON.parse(localStorage.getItem('downloadedPacks') || '[]'); return new Set(Array.isArray(a) ? a : []); } catch (e) { return new Set(); }
+  }
+
+  markDownloaded(pack) {
+    const ids = this.downloadedIds();
+    ids.add(pack.id);
+    try { localStorage.setItem('downloadedPacks', JSON.stringify([...ids].slice(-500))); } catch (e) { /* storage full or blocked */ }
+    document.querySelectorAll(`.pack-card[data-pack-id="${pack.id}"]`).forEach(c => this.paintDownloaded(c));
+  }
+
+  paintDownloaded(card) {
+    card.classList.add('is-downloaded');
+    const btn = card.querySelector('.pack-dl-btn');
+    if (btn) btn.innerHTML = '<i class="fas fa-check"></i> Downloaded';
+  }
+
   async incrementDownloads(pack, version) {
+    this.markDownloaded(pack);
     if (pack.community) return (version ? version.downloads : pack.downloads) || 0;
     const fallback = (version ? 0 : pack.downloads) + 1;
     try {

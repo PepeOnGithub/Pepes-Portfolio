@@ -302,3 +302,21 @@ img.sk-img { color: transparent; }
   .up-tabs-bar { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; margin-top: 20px; }
   .up-tab-btn { padding: 0; }
 }
+
+/* Pack link in a message, shown as a card */
+.dm-pack-card {
+  display: flex; align-items: center; gap: 12px; width: min(320px, 100%); margin-top: 4px; padding: 10px; border-radius: 16px;
+  background: var(--color-bg-secondary); border: 1px solid var(--color-border); color: var(--color-text-primary); text-decoration: none; text-align: left;
+}
+.dm-pack-card:hover { border-color: var(--color-accent-dark); }
+.dm-pack-art { width: 52px; height: 52px; flex: none; display: grid; place-items: center; border-radius: 10px; background: var(--lib-slot, var(--color-bg-primary)); overflow: hidden; }
+.dm-pack-art img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+.dm-pack-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.dm-pack-text b { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dm-pack-text small { font-size: 12px; color: var(--color-text-secondary); }
+.dm-pack-open { font-size: 13px; font-weight: 600; color: var(--color-accent); }
+.dm-msg.is-mine .dm-pack-card { margin-left: auto; }
+#page-user .user-profile-tile { cursor: default; }
+#page-user .user-profile-tile:hover { background: var(--color-bg-secondary); }
+#page-user .user-profile-tile b { display: block; }
+.follow-row .dm-chip { margin-left: auto; flex: none; }

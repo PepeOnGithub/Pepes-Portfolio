@@ -17,6 +17,7 @@ class Social {
     this.bindFollowList();
     this.bindPanel();
     this.wrapAuth();
+    this.bindSettings();
     this.refreshUnread();
     setInterval(() => { if (!document.hidden) this.refreshUnread(); }, DM_POLL_UNREAD_MS);
   }
@@ -89,6 +90,16 @@ class Social {
 
   renderProfile() {
     const p = this.profile;
+    let packs = p.packs || 0, downloads = p.downloads || 0;
+    if (p.user.owner) { // the owner's packs come from packs.json
+      const mine = (this.lib.packs || []).filter(x => !x.community && /^pepe/i.test(x.author || ''));
+      packs = mine.length;
+      downloads = mine.reduce((n, x) => n + (this.lib.liveDownloadCounts.get(x.id) ?? x.downloads ?? 0), 0);
+    }
+    document.getElementById('user-profile-packs-tile').classList.toggle('hidden', !packs);
+    document.getElementById('user-profile-downloads-tile').classList.toggle('hidden', !packs || !downloads);
+    document.getElementById('user-profile-packs-count').textContent = this.lib.formatCount(packs);
+    document.getElementById('user-profile-downloads-count').textContent = this.lib.formatCount(downloads);
     document.getElementById('user-profile-followers').textContent = this.lib.formatCount(p.followers);
     document.getElementById('user-profile-following').textContent = this.lib.formatCount(p.following);
     document.querySelector('[data-follow-list="followers"]').lastChild.textContent = p.followers === 1 ? ' follower' : ' followers';
@@ -111,7 +122,8 @@ class Social {
       : `<i class="fas fa-user-plus"></i> ${p.followsYou ? 'Follow back' : 'Follow'}`;
     followBtn.disabled = this.signedIn() && !p.isFollowing && !p.canMessage;
     msgBtn.classList.remove('hidden');
-    msgBtn.disabled = this.signedIn() && !p.canMessage && !p.blockedByYou;
+    msgBtn.disabled = this.signedIn() && !p.canDM && !p.blockedByYou;
+    msgBtn.title = this.signedIn() && !p.canDM && p.canMessage ? `${p.user.name} only takes messages from followers. Follow them first.` : '';
   }
 
   // Your own progress toward the verified tick, shown on your own profile.
@@ -162,7 +174,17 @@ class Social {
       const btn = e.target.closest('[data-follow-list]');
       if (btn && this.profile) this.openFollowList(btn.dataset.followList);
     });
-    document.getElementById('follow-list').addEventListener('click', (e) => {
+    document.getElementById('follow-list').addEventListener('click', async (e) => {
+      const un = e.target.closest('[data-unblock]');
+      if (un) {
+        un.disabled = true;
+        try {
+          await this.api(`${this.userPath(un.dataset.unblock)}/block`, { method: 'DELETE' });
+          un.closest('.follow-row').remove();
+          if (!document.querySelector('#follow-list .follow-row')) document.getElementById('follow-list').innerHTML = '<p class="follow-list-empty">You haven\'t blocked anyone.</p>';
+        } catch (err) { un.disabled = false; this.lib.showToast(err.message); }
+        return;
+      }
       const row = e.target.closest('[data-user]');
       if (!row) return;
       close();
@@ -314,7 +336,7 @@ class Social {
     const box = document.getElementById('dm-list');
     const all = this.convs || [];
     const q = this.dmQuery || '';
-    const rows = all.filter(c => (this.dmFilter !== 'unread' || c.unread) &&
+    const rows = all.filter(c => (this.dmFilter !== 'unread' || c.unread) && (this.dmFilter !== 'creators' || c.user.creator) &&
       (!q || `${c.user.name} ${c.user.username || ''} ${c.last.text}`.toLowerCase().includes(q)));
     box.innerHTML = rows.length
       ? rows.map(c => `
@@ -361,7 +383,7 @@ class Social {
       return;
     }
     if (this.peer !== peer) return;
-    Object.assign(peer, data.user, { canMessage: data.canMessage, blockedByYou: data.blockedByYou });
+    Object.assign(peer, data.user, { canMessage: data.canMessage, canDM: data.canDM, blockedByYou: data.blockedByYou });
     this.renderWho();
     const box = document.getElementById('dm-msgs');
     const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 40;
@@ -374,11 +396,43 @@ class Social {
               <time datetime="${this.esc(m.createdAt)}">${this.esc(this.when(m.createdAt))}</time>
             </div>`).join('')
         : `<p class="dm-empty">Say hi to ${this.esc(peer.name)}.</p>`;
+      this.packCards(box);
       if (first || atBottom) box.scrollTop = box.scrollHeight;
       this._lastId = lastId;
     }
     this.renderThreadState();
     if (first) { this.loadList(); this.refreshUnread(); }
+  }
+
+  // A link to a pack on this site becomes a small card (icon, name, author, Open) under the message.
+  packCards(root) {
+    const lib = this.lib;
+    root.querySelectorAll('.dm-text a[href]').forEach(a => {
+      let u;
+      try { u = new URL(a.href); } catch (e) { return; }
+      const m = /^\/pack\/([^/]+)\/?$/.exec(u.pathname);
+      if (!m || !(u.hostname === location.hostname || u.hostname === 'pepe.glacierclient.xyz')) return;
+      const slug = decodeURIComponent(m[1]);
+      const pack = (lib.packs || []).find(p => lib.packSlug(p) === slug);
+      if (!pack || a.dataset.carded) return;
+      a.dataset.carded = '1';
+      const card = document.createElement('a');
+      card.className = 'dm-pack-card';
+      card.href = `/pack/${encodeURIComponent(slug)}`;
+      const img = lib.isImagePath(pack.thumbnail) ? `<img src="${this.esc(pack.thumbnail)}" alt="" loading="lazy">` : '<i class="fas fa-box-open" aria-hidden="true"></i>';
+      card.innerHTML = `<span class="dm-pack-art">${img}</span><span class="dm-pack-text"><b>${this.esc(pack.name)}</b><small>${this.esc(lib.capitalizeFirst(pack.category))} · ${this.esc(pack.author || 'Pepe')}</small></span><span class="dm-pack-open">Open</span>`;
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.closePanel();
+        window.router.show('library', { push: false });
+        lib.showDetail(pack);
+      });
+      const wrap = a.closest('.dm-msg');
+      // Link alone in the message: show only the card; otherwise keep the text and add the card.
+      const onlyLink = a.closest('.dm-text').textContent.trim() === a.textContent.trim();
+      if (onlyLink) { a.closest('.dm-text').replaceWith(card); } else { a.closest('.dm-text').after(card); }
+      if (wrap) wrap.classList.add('has-pack-card');
+    });
   }
 
   renderWho() {
@@ -398,9 +452,11 @@ class Social {
       note.textContent = `You blocked ${p.name}. Unblock to message each other again.`;
     } else if (!p.canMessage) {
       note.textContent = "You can't message this account.";
+    } else if (!p.canDM) {
+      note.textContent = `${p.name} only takes messages from followers. Follow them to message.`;
     }
-    note.classList.toggle('hidden', !!p.canMessage);
-    compose.classList.toggle('hidden', !p.canMessage);
+    note.classList.toggle('hidden', !!p.canDM);
+    compose.classList.toggle('hidden', !p.canDM);
   }
 
   async toggleBlock() {
@@ -444,6 +500,62 @@ class Social {
     }
   }
 
+  // ===== Settings > Messages: who can message you, blocked accounts =====
+
+  bindSettings() {
+    const box = document.getElementById('dm-followers-only');
+    if (!box) return;
+    box.addEventListener('change', async () => {
+      const want = box.checked;
+      box.disabled = true;
+      try {
+        const res = await this.api('/api/community/messages/settings', { method: 'PUT', json: { followersOnly: want } });
+        box.checked = res.followersOnly;
+        this.lib.showToast(res.followersOnly ? 'Only followers can message you now.' : 'Anyone can message you now.');
+      } catch (e) {
+        box.checked = !want;
+        this.lib.showToast(e.message);
+      }
+      box.disabled = false;
+    });
+    document.getElementById('dm-blocked-btn').addEventListener('click', () => this.openBlocked());
+    this.refreshPrivacy();
+  }
+
+  async refreshPrivacy() {
+    const box = document.getElementById('dm-followers-only');
+    const desc = document.getElementById('dm-privacy-desc');
+    if (!box) return;
+    if (!this.signedIn()) { box.disabled = true; box.checked = false; desc.textContent = 'Sign in to change this.'; return; }
+    desc.textContent = 'People who don\'t follow you can\'t start a conversation. You can still message them.';
+    try {
+      const res = await this.api('/api/community/messages/settings');
+      box.checked = !!res.followersOnly;
+      box.disabled = false;
+    } catch (e) { box.disabled = true; desc.textContent = e.message; }
+  }
+
+  async openBlocked() {
+    if (!this.signedIn()) return this.signIn();
+    document.getElementById('follow-list-title').textContent = 'Blocked accounts';
+    const list = document.getElementById('follow-list');
+    list.innerHTML = this.skRows(3, 40);
+    document.getElementById('follow-list-overlay').classList.remove('hidden');
+    try {
+      const { users } = await this.api('/api/community/blocks');
+      list.innerHTML = users.length
+        ? users.map(u => `
+            <div class="follow-row" data-blocked="${this.esc(u.id)}">
+              ${this.avatar(u, 'follow-row-avatar')}
+              <span class="follow-row-text"><b>${this.esc(u.name)}</b>${u.username ? `<small>@${this.esc(u.username)}</small>` : ''}</span>
+              <button type="button" class="dm-chip" data-unblock="${this.esc(u.id)}">Unblock</button>
+            </div>`).join('')
+        : '<p class="follow-list-empty">You haven\'t blocked anyone.</p>';
+    } catch (e) {
+      list.innerHTML = `<p class="follow-list-empty">${this.esc(e.message)}</p>`;
+    }
+  }
+
   // ===== Unread badge =====
 
   wrapAuth() {
@@ -451,6 +563,7 @@ class Social {
     this.lib.renderAuthUI = (...args) => {
       const out = renderAuthUI(...args);
       this.refreshUnread();
+      this.refreshPrivacy();
       return out;
     };
   }

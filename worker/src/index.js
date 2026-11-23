@@ -21,7 +21,8 @@ import {
 } from './creator.js';
 import { ensureLootForVersion, retryMissingLoot } from './loot.js';
 import {
-  socialInfo, setFollow, followList, setBlock, avatar, unreadCount, conversations, thread, sendMessage
+  socialInfo, setFollow, followList, setBlock, avatar, unreadCount, conversations, thread, sendMessage,
+  getDmSettings, setDmSettings, blockedList
 } from './social.js';
 
 // The version of the terms (the "Last updated" date on terms.html) that the
@@ -102,6 +103,11 @@ async function route(request, env, exec) {
   if ((m = path.match(/^\/api\/community\/avatars\/([^/]+)$/)) && method === 'GET') return avatar(ctx, m[1]);
   if (path === '/api/community/messages' && method === 'GET') return conversations(ctx);
   if (path === '/api/community/messages/unread' && method === 'GET') return unreadCount(ctx);
+  if (path === '/api/community/messages/settings') {
+    if (method === 'GET') return getDmSettings(ctx);
+    if (method === 'PUT') return setDmSettings(ctx);
+  }
+  if (path === '/api/community/blocks' && method === 'GET') return blockedList(ctx);
   if ((m = path.match(/^\/api\/community\/messages\/([^/]+)$/))) {
     if (method === 'GET') return thread(ctx, m[1]);
     if (method === 'POST') return sendMessage(ctx, m[1]);
