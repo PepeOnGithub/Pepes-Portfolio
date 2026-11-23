@@ -427,3 +427,7 @@ img.sk-img { color: transparent; }
   #page-user .up-profile-pack .up-item-icon img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
   #page-user .versions-block:not(#user-profile-packs-block):not(#user-profile-videos-block) { padding: 8px 16px; }
 }
+
+#page-user .up-empty { margin: 24px 0; padding: 28px 16px; text-align: center; color: var(--color-text-secondary); font-size: 14px; border: 1px dashed var(--color-border); border-radius: 14px; }
+#page-user .up-empty.hidden { display: none; }
+@media (max-width: 768px) { #page-user .up-empty { grid-column: 1 / -1; order: 9; margin: 8px 0; } }

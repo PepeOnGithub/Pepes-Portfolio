@@ -318,18 +318,22 @@ class MobileNav {
   function render() {
     const bar = document.getElementById('user-profile-tabs');
     if (!bar) return;
-    const avail = SECTIONS.filter(([, , id], i) => has(id, i));
-    if (avail.length < 2) {
-      bar.classList.add('hidden');
-      SECTIONS.forEach(([, , id], i) => block(id, i)?.classList.remove('tab-off'));
-      return;
-    }
-    if (!avail.some(([k]) => k === current)) current = avail[0][0];
+    // Videos is always a tab (an empty one says so); Packs only when there are packs.
+    const avail = SECTIONS.filter(([k, , id], i) => k === 'videos' || has(id, i));
+    if (!avail.some(([k]) => k === current)) current = (SECTIONS.find(([, , id], i) => has(id, i)) || avail[0])[0];
     const html = avail.map(([k, label]) =>
       `<button type="button" role="tab" class="up-tab-btn${k === current ? ' active' : ''}" aria-selected="${k === current}" data-tab="${k}">${label}</button>`).join('');
     if (bar.dataset.html !== html) { bar.dataset.html = html; bar.innerHTML = html; } // no rewrite = no observer loop
     bar.classList.remove('hidden');
     SECTIONS.forEach(([k, , id], i) => block(id, i)?.classList.toggle('tab-off', k !== current));
+    const empty = document.getElementById('user-profile-videos-empty');
+    if (empty) {
+      const lib = window.packLibrary;
+      const mine = lib && lib.currentUser && lib.viewedProfile && String(lib.currentUser.id) === String(lib.viewedProfile.id);
+      const text = mine ? 'No featured videos yet. Add YouTube videos under Edit profile.' : 'No videos yet.';
+      if (empty.textContent !== text) empty.textContent = text;
+      empty.classList.toggle('hidden', !(current === 'videos' && !has('user-profile-videos-block', 1)));
+    }
   }
 
   function start() {
